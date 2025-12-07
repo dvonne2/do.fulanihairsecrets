@@ -70,7 +70,13 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
     { icon: "🎯", name: "Personalized Hair Plan", value: "₦15,000", desc: "Custom routine for YOUR hair" },
   ];
 
-  const podCities = ['Lagos', 'Abuja', 'Port Harcourt', 'Ibadan', 'Kano', 'Kaduna', 'Benin', 'Warri', 'Enugu', 'Owerri'];
+  const podStates = [
+    'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 
+    'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT Abuja', 'Gombe', 
+    'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 
+    'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 
+    'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'
+  ];
 
   const getWhatsAppLink = (pkg: string, isPOD: boolean) => {
     const message = isPOD 
@@ -347,15 +353,14 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
             </div>
           )}
 
-          {/* POD Cities */}
-          <div className="max-w-xl mx-auto text-center">
-            <p className="font-sans text-xs text-muted-foreground mb-2">Pay on Delivery available in:</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {podCities.map((city, i) => (
-                <span key={i} className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs text-gold">{city}</span>
+          {/* POD States */}
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="font-sans text-sm text-gold font-semibold mb-3">🇳🇬 Pay on Delivery available NATIONWIDE in all 36 states + FCT:</p>
+            <div className="flex flex-wrap justify-center gap-1.5">
+              {podStates.map((state, i) => (
+                <span key={i} className="px-2 py-0.5 rounded-full bg-gold/10 border border-gold/30 text-xs text-gold">{state}</span>
               ))}
             </div>
-            <p className="font-sans text-xs text-muted-foreground mt-2">Other locations: Bank transfer with express shipping</p>
           </div>
         </div>
 
