@@ -1,6 +1,9 @@
 import shampooImg from '@/assets/products/shampoo.jpg';
 import conditionerImg from '@/assets/products/conditioner.jpg';
 import pomadeImg from '@/assets/products/pomade.png';
+import aminaImg from '@/assets/testimonials/amina.png';
+import blessingImg from '@/assets/testimonials/blessing.jpg';
+import hajiaFatimaImg from '@/assets/testimonials/hajia-fatima.jpg';
 
 export const ProductSystem = () => {
   const products = [
@@ -32,9 +35,9 @@ export const ProductSystem = () => {
   ];
 
   const transformations = [
-    { name: "Amina O.", location: "Lagos", result: "8 weeks, edges are BACK!" },
-    { name: "Hajia Fatima B.", location: "Abuja", result: "3 months, husband can't stop touching my hair!" },
-    { name: "Blessing E.", location: "Port Harcourt", result: "Shoulder to mid-back in 6 months!" },
+    { name: "Amina O.", location: "Lagos", result: "8 weeks, edges are BACK!", image: aminaImg },
+    { name: "Blessing E.", location: "Port Harcourt", result: "Shoulder to mid-back in 6 months!", image: blessingImg },
+    { name: "Hajia Fatima B.", location: "Abuja", result: "3 months, husband can't stop touching my hair!", image: hajiaFatimaImg },
   ];
 
   return (
@@ -105,8 +108,12 @@ export const ProductSystem = () => {
                 alt="Fulani Hair Gro Pomade"
                 className="absolute -bottom-2 -right-2 w-12 h-12 object-contain opacity-30"
               />
-              <div className="w-16 h-16 mx-auto rounded-full gold-gradient flex items-center justify-center text-2xl mb-3">
-                👩🏾
+              <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-gold mb-3 shadow-lg">
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <p className="font-cinzel text-base text-gold">{item.name}</p>
               <p className="font-sans text-xs text-muted-foreground mb-2">{item.location}</p>
