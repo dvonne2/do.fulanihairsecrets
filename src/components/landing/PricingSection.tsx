@@ -216,7 +216,10 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         <div className="mb-8 rounded-3xl overflow-hidden border-2 border-destructive" style={{ boxShadow: '0 0 40px hsl(0 84% 60% / 0.3)' }}>
           <div className="bg-gradient-to-r from-destructive via-red-500 to-destructive py-4 px-6 text-center">
             <p className="font-cinzel text-lg md:text-xl text-foreground animate-pulse">
-              🎁 ORDER IN THE NEXT {countdown.hours}h {countdown.minutes}m AND GET ALL THIS FREE! 🎁
+              🎁 ORDER & PAY IN THE NEXT {countdown.hours}h {countdown.minutes}m AND GET ALL THIS FREE! 🎁
+            </p>
+            <p className="font-sans text-xs text-foreground/80 mt-1">
+              *Bonuses only available when you complete your order and payment within the countdown
             </p>
           </div>
           <div className="p-6 bg-card">
