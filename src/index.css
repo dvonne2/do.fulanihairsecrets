@@ -2,96 +2,266 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Fulani Hair Gro™ Design System - Nigerian Luxury Aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Colors */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Gold Palette - The Luxury Accent */
+    --gold: 43 74% 49%;
+    --gold-bright: 51 100% 50%;
+    --gold-dark: 43 76% 35%;
+    --gold-light: 48 100% 90%;
+    
+    /* Royal Blue Palette - Heritage Background */
+    --royal-blue: 229 73% 16%;
+    --royal-blue-light: 224 69% 33%;
+    --navy: 224 69% 33%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Status Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* UI Colors */
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 43 74% 49%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 229 73% 16%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 43 74% 49%;
+    --accent-foreground: 0 0% 0%;
+    --border: 43 74% 49%;
+    --input: 0 0% 15%;
+    --ring: 43 74% 49%;
+    --radius: 0.75rem;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar - Dark Luxury */
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 229 73% 16%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 43 74% 49%;
+    --sidebar-ring: 43 74% 49%;
   }
+}
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+/* Typography Classes */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+.font-sans {
+  font-family: 'Montserrat', sans-serif;
+}
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+/* Animations */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px hsl(43 74% 49% / 0.6), 0 0 40px hsl(43 74% 49% / 0.4), 0 0 60px hsl(43 74% 49% / 0.2); }
+  50% { box-shadow: 0 0 40px hsl(43 74% 49% / 0.8), 0 0 80px hsl(43 74% 49% / 0.6), 0 0 120px hsl(43 74% 49% / 0.4); }
+}
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(0 84% 60% / 0.7); }
+  70% { box-shadow: 0 0 0 15px hsl(0 84% 60% / 0); }
+}
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes countdown-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Animation Utility Classes */
+.animate-shimmer {
+  background: linear-gradient(90deg, hsl(var(--gold-dark)) 0%, hsl(var(--gold)) 20%, hsl(var(--gold-bright)) 40%, hsl(var(--gold-light)) 50%, hsl(var(--gold-bright)) 60%, hsl(var(--gold)) 80%, hsl(var(--gold-dark)) 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.animate-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-red {
+  animation: pulse-red 2s infinite;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-countdown {
+  animation: countdown-pulse 1s ease-in-out infinite;
+}
+
+/* Gradient Backgrounds */
+.gold-gradient {
+  background: linear-gradient(135deg, hsl(var(--gold-dark)) 0%, hsl(var(--gold)) 25%, hsl(var(--gold-bright)) 50%, hsl(var(--gold)) 75%, hsl(var(--gold-dark)) 100%);
+}
+
+.gold-gradient-animated {
+  background: linear-gradient(90deg, hsl(var(--gold-dark)), hsl(var(--gold)), hsl(var(--gold-bright)), hsl(var(--gold-light)), hsl(var(--gold-bright)), hsl(var(--gold)), hsl(var(--gold-dark)));
+  background-size: 400% 100%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.royal-blue-gradient {
+  background: linear-gradient(135deg, hsl(var(--royal-blue)) 0%, hsl(var(--royal-blue-light)) 50%, hsl(224 69% 40%) 100%);
+}
+
+/* Pattern Backgrounds */
+.arabian-pattern {
+  background-image: linear-gradient(30deg, hsl(var(--gold) / 0.1) 12%, transparent 12.5%, transparent 87%, hsl(var(--gold) / 0.1) 87.5%),
+    linear-gradient(150deg, hsl(var(--gold) / 0.1) 12%, transparent 12.5%, transparent 87%, hsl(var(--gold) / 0.1) 87.5%),
+    linear-gradient(30deg, hsl(var(--gold) / 0.1) 12%, transparent 12.5%, transparent 87%, hsl(var(--gold) / 0.1) 87.5%),
+    linear-gradient(150deg, hsl(var(--gold) / 0.1) 12%, transparent 12.5%, transparent 87%, hsl(var(--gold) / 0.1) 87.5%);
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+}
+
+.moroccan-tile {
+  background-color: hsl(var(--royal-blue));
+  background-image: radial-gradient(circle at 0% 50%, transparent 9%, hsl(var(--gold) / 0.15) 10%, hsl(var(--gold) / 0.15) 15%, transparent 16%),
+    radial-gradient(circle at 100% 50%, transparent 9%, hsl(var(--gold) / 0.15) 10%, hsl(var(--gold) / 0.15) 15%, transparent 16%),
+    radial-gradient(circle at 50% 0%, transparent 9%, hsl(var(--gold) / 0.15) 10%, hsl(var(--gold) / 0.15) 15%, transparent 16%),
+    radial-gradient(circle at 50% 100%, transparent 9%, hsl(var(--gold) / 0.15) 10%, hsl(var(--gold) / 0.15) 15%, transparent 16%);
+  background-size: 60px 60px;
+}
+
+/* Card Styles */
+.luxury-card {
+  background: linear-gradient(145deg, hsl(var(--gold) / 0.15) 0%, hsl(var(--royal-blue) / 0.1) 50%, hsl(0 0% 0% / 0.95) 100%);
+  border: 2px solid hsl(var(--gold) / 0.5);
+  box-shadow: 0 10px 40px hsl(var(--gold) / 0.2), inset 0 1px 0 hsl(var(--gold-bright) / 0.3);
+}
+
+.luxury-card:hover {
+  border-color: hsl(var(--gold-bright));
+  box-shadow: 0 20px 60px hsl(var(--gold) / 0.4);
+}
+
+/* Effects */
+.mega-glow {
+  box-shadow: 0 0 30px hsl(var(--gold) / 0.5), 0 0 60px hsl(var(--gold) / 0.3), 0 0 90px hsl(var(--gold) / 0.2);
+}
+
+.gold-text-shadow {
+  text-shadow: 0 0 10px hsl(var(--gold) / 0.5), 0 0 20px hsl(var(--gold) / 0.3);
+}
+
+.ornate-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, hsl(var(--gold)), hsl(var(--gold-bright)), hsl(var(--gold)), transparent);
+}
+
+/* Button Effects */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.btn-luxury:hover::before {
+  left: 100%;
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, hsl(var(--gold)), hsl(var(--gold-bright)));
+  z-index: 9999;
+  transition: width 0.1s;
+}
+
+/* Stock Meter */
+.stock-meter {
+  height: 8px;
+  background: hsl(0 0% 20%);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stock-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, hsl(0 84% 60%), hsl(25 95% 53%));
+  transition: width 0.5s;
+}
+
+/* Product Showcase */
+.product-showcase {
+  filter: drop-shadow(0 0 30px hsl(var(--gold) / 0.5));
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--gold));
+  color: hsl(0 0% 0%);
 }
 
 @layer base {
@@ -100,6 +270,6 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-serif;
   }
 }
