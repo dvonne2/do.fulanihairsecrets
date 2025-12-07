@@ -332,7 +332,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
                 <p className="font-sans text-xs text-foreground font-bold">MOST POPULAR</p>
               </div>
               <p className="font-cinzel text-lg text-gold mb-1">🚚 Pay on Delivery</p>
-              <p className="font-sans text-xs text-muted-foreground">Inspect the package, confirm. Available nationwide</p>
+              <p className="font-sans text-xs text-muted-foreground">Inspect the products, confirm everything is perfect, THEN pay. No upfront payment required!</p>
               <p className="font-sans text-xs text-gold mt-2">✓ Zero risk · 100% safe</p>
             </button>
           </div>
