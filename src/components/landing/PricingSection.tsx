@@ -292,7 +292,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
           <h3 className="font-cinzel text-xl text-center mb-6 text-gold">🚚 Choose Your Delivery</h3>
           <div className="grid grid-cols-3 gap-2 md:gap-4 max-w-2xl mx-auto">
             {[
-              { id: 'same-day', label: '⚡ Same Day VIP', price: '₦5,000', desc: 'Get it TODAY (Lagos)', color: 'text-destructive' },
+              { id: 'same-day', label: '⚡ Same Day VIP', price: '₦5,000', desc: 'Get it TODAY (Nationwide)', color: 'text-destructive' },
               { id: 'standard', label: '📦 Standard', price: '₦3,000', desc: '3-5 days nationwide', color: 'text-gold' },
               { id: 'express', label: '🚀 Express', price: '₦4,000', desc: '1-2 days nationwide', color: 'text-success' },
             ].map((option) => (
