@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import shampooImg from '@/assets/products/shampoo.jpg';
+import conditionerImg from '@/assets/products/conditioner.jpg';
+import pomadeImg from '@/assets/products/pomade.png';
 
 interface PricingSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
@@ -21,6 +24,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       description: 'Step 3 only — not recommended',
       includes: ['Growth Pomade (150g)'],
       featured: false,
+      image: pomadeImg,
     },
     {
       id: 'complete',
@@ -42,6 +46,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         'Personalized Hair Plan (₦15,000 value)',
       ],
       featured: true,
+      images: [shampooImg, conditionerImg, pomadeImg],
     },
     {
       id: 'single',
@@ -52,6 +57,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       description: 'Single 3-step set',
       includes: ['Heritage Shampoo', 'Voluminous Conditioner', 'Growth Pomade'],
       featured: false,
+      images: [shampooImg, conditionerImg, pomadeImg],
     },
   ];
 
@@ -109,12 +115,38 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
               className={`rounded-2xl p-6 relative ${pkg.featured ? 'scale-105 mega-glow border-2 border-gold bg-card' : 'bg-card/80 border border-gold/30'}`}
             >
               {pkg.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-destructive text-foreground text-xs font-bold rounded-full whitespace-nowrap animate-pulse">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-destructive text-foreground text-xs font-bold rounded-full whitespace-nowrap animate-pulse z-10">
                   {pkg.badge}
                 </div>
               )}
               
               <div className="text-center pt-4">
+                {/* Product Image(s) */}
+                <div className={`h-32 md:h-40 flex items-center justify-center mb-4 ${pkg.featured ? 'pomade-glow' : ''}`}>
+                  {'images' in pkg && pkg.images ? (
+                    <div className="flex items-end justify-center gap-1">
+                      {pkg.images.map((img, idx) => (
+                        <img 
+                          key={idx}
+                          src={img} 
+                          alt={`Product ${idx + 1}`}
+                          className={`object-contain transition-transform duration-300 hover:scale-105 ${
+                            idx === 1 ? 'h-24 md:h-32 -mx-2 z-10' : 'h-20 md:h-28'
+                          }`}
+                          style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <img 
+                      src={pkg.image} 
+                      alt={pkg.name}
+                      className="max-h-full object-contain transition-transform duration-300 hover:scale-105"
+                      style={{ filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.3))' }}
+                    />
+                  )}
+                </div>
+                
                 <p className="font-cinzel text-lg text-gold mb-1">{pkg.name}</p>
                 <p className="font-sans text-xs text-muted-foreground mb-4">{pkg.subtitle}</p>
                 

@@ -1,3 +1,5 @@
+import pomadeImg from '@/assets/products/pomade.png';
+
 interface HeroSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
   stockCount: number;
@@ -119,13 +121,14 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
           {/* Right Column - Product Display */}
           <div className="relative hidden lg:block">
             <div className="relative">
-              {/* Product Placeholder */}
-              <div className="w-full aspect-square bg-gradient-to-br from-gold/20 to-royal/50 rounded-3xl flex items-center justify-center border-2 border-gold/50 mega-glow">
-                <div className="text-center">
-                  <div className="text-8xl mb-4">✨</div>
-                  <p className="font-cinzel text-2xl text-gold">The Heritage Collection</p>
-                  <p className="font-sans text-sm text-muted-foreground">3-Step Hair Growth System</p>
-                </div>
+              {/* Product Image */}
+              <div className="w-full aspect-square rounded-3xl flex items-center justify-center mega-glow pomade-glow p-8">
+                <img 
+                  src={pomadeImg}
+                  alt="Fulani Hair Gro Growth Pomade"
+                  className="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105"
+                  style={{ filter: 'drop-shadow(0 30px 50px rgba(0,0,0,0.5))' }}
+                />
               </div>
               
               {/* Stock Badge */}
