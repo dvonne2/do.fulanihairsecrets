@@ -1,3 +1,7 @@
+import shampooImg from '@/assets/products/shampoo.jpg';
+import conditionerImg from '@/assets/products/conditioner.jpg';
+import pomadeImg from '@/assets/products/pomade.png';
+
 export const ProductSystem = () => {
   const products = [
     {
@@ -6,7 +10,7 @@ export const ProductSystem = () => {
       size: "500ml · Sulfate-free",
       origin: "🇳🇬 Made in Maiduguri, Nigeria",
       price: "₦15,000",
-      icon: "🧴",
+      image: shampooImg,
     },
     {
       step: "Step 2: Nourish",
@@ -14,7 +18,7 @@ export const ProductSystem = () => {
       size: "500ml · Deep moisture",
       origin: "🇳🇪 Wodaabe herbs from Niger",
       price: "₦15,000",
-      icon: "🧴",
+      image: conditionerImg,
     },
     {
       step: "Step 3: Restore",
@@ -22,7 +26,7 @@ export const ProductSystem = () => {
       size: "150g · The magic",
       origin: "🇹🇩🇳🇬 Chad + Nigeria blend",
       price: "₦32,000",
-      icon: "✨",
+      image: pomadeImg,
       bestseller: true,
     },
   ];
@@ -62,15 +66,20 @@ export const ProductSystem = () => {
           {products.map((product, i) => (
             <div 
               key={i} 
-              className={`luxury-card rounded-2xl p-6 hover:scale-[1.02] transition-transform relative ${product.bestseller ? 'mega-glow' : ''}`}
+              className={`luxury-card rounded-2xl p-6 transition-transform duration-300 hover:scale-[1.02] relative ${product.bestseller ? 'mega-glow border-2 border-gold' : ''}`}
             >
               {product.bestseller && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-destructive text-foreground text-xs font-bold rounded-full">
-                  BESTSELLER
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-destructive text-foreground text-xs font-bold rounded-full z-10 flex items-center gap-1">
+                  ⭐ BESTSELLER
                 </div>
               )}
-              <div className="h-32 md:h-48 flex items-center justify-center mb-4">
-                <span className="text-6xl md:text-8xl">{product.icon}</span>
+              <div className={`h-48 md:h-56 flex items-center justify-center mb-4 relative ${product.bestseller ? 'pomade-glow' : ''}`}>
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105"
+                  style={{ filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.4))' }}
+                />
               </div>
               <p className="font-sans text-xs tracking-[0.2em] uppercase text-gold mb-2">{product.step}</p>
               <h3 className="font-cinzel text-lg md:text-xl text-foreground mb-2">{product.name}</h3>
@@ -89,7 +98,13 @@ export const ProductSystem = () => {
         
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           {transformations.map((item, i) => (
-            <div key={i} className="p-4 md:p-6 rounded-xl bg-background/30 border border-gold/30 text-center">
+            <div key={i} className="p-4 md:p-6 rounded-xl bg-background/30 border border-gold/30 text-center relative overflow-hidden">
+              {/* Small product image in corner */}
+              <img 
+                src={pomadeImg} 
+                alt="Fulani Hair Gro Pomade"
+                className="absolute -bottom-2 -right-2 w-12 h-12 object-contain opacity-30"
+              />
               <div className="w-16 h-16 mx-auto rounded-full gold-gradient flex items-center justify-center text-2xl mb-3">
                 👩🏾
               </div>
