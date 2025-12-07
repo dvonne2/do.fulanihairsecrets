@@ -124,26 +124,30 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
                 {/* Product Image(s) */}
                 <div className={`h-32 md:h-40 flex items-center justify-center mb-4 ${pkg.featured ? 'pomade-glow' : ''}`}>
                   {'images' in pkg && pkg.images ? (
-                    <div className="flex items-end justify-center gap-1">
+                    <div className="flex items-end justify-center gap-2">
                       {pkg.images.map((img, idx) => (
-                        <img 
+                        <div 
                           key={idx}
-                          src={img} 
-                          alt={`Product ${idx + 1}`}
-                          className={`object-contain transition-transform duration-300 hover:scale-105 ${
-                            idx === 1 ? 'h-24 md:h-32 -mx-2 z-10' : 'h-20 md:h-28'
+                          className={`bg-background/90 rounded-lg p-2 ${
+                            idx === 1 ? 'h-28 md:h-36 -mx-1 z-10' : 'h-24 md:h-32'
                           }`}
-                          style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.3))' }}
-                        />
+                        >
+                          <img 
+                            src={img} 
+                            alt={`Product ${idx + 1}`}
+                            className="h-full w-auto object-contain transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
                       ))}
                     </div>
                   ) : (
-                    <img 
-                      src={pkg.image} 
-                      alt={pkg.name}
-                      className="max-h-full object-contain transition-transform duration-300 hover:scale-105"
-                      style={{ filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.3))' }}
-                    />
+                    <div className="bg-background/90 rounded-lg p-3 h-28 md:h-36">
+                      <img 
+                        src={pkg.image} 
+                        alt={pkg.name}
+                        className="h-full w-auto object-contain transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
                   )}
                 </div>
                 
