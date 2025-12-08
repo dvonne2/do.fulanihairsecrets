@@ -6,6 +6,7 @@ import { TrustLogos } from '@/components/landing/TrustLogos';
 import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { ProductSystem } from '@/components/landing/ProductSystem';
+import { BundleSection } from '@/components/landing/BundleSection';
 import { PricingSection } from '@/components/landing/PricingSection';
 import { Guarantee } from '@/components/landing/Guarantee';
 import { Testimonials } from '@/components/landing/Testimonials';
@@ -148,6 +149,7 @@ const Index = () => {
         <ProblemAgitation />
         <FounderStory />
         <ProductSystem />
+        <BundleSection />
         <Testimonials 
           activeIndex={activeTestimonial} 
           onSetActive={setActiveTestimonial} 
