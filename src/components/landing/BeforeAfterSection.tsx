@@ -8,8 +8,8 @@ import result8 from '@/assets/results/result-8.jpg';
 import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result14 from '@/assets/results/result-14.jpg';
-import result15 from '@/assets/results/result-15.jpg';
 import result16 from '@/assets/results/result-16.jpg';
+import result17 from '@/assets/results/result-17.png';
 import result19 from '@/assets/results/result-19.jpg';
 import result20 from '@/assets/results/result-20.jpg';
 import result22 from '@/assets/results/result-22.jpg';
@@ -25,8 +25,8 @@ const transformations = [
   { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "2.5 months" },
   { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "2 months" },
   { after: result14, name: "Chiamaka D.", problem: "Overall thinning", duration: "4 months" },
-  { after: result15, name: "Mrs. Folake T.", problem: "Hormonal hair loss", duration: "4.5 months" },
-  { after: result16, name: "Zainab O.", problem: "Styling damage repair", duration: "3.5 months" },
+  { after: result16, name: "Mrs. Folake T.", problem: "Hormonal hair loss", duration: "4.5 months" },
+  { after: result17, name: "Zainab O.", problem: "Styling damage repair", duration: "3.5 months" },
   { after: result19, name: "Nkechi I.", problem: "Breakage from extensions", duration: "2.5 months" },
   { after: result20, name: "Ifeoma C.", problem: "Dry, brittle hair", duration: "3 months" },
   { after: result22, name: "Adaora M.", problem: "Natural hair growth", duration: "5 months" },

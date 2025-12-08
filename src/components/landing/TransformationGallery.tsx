@@ -33,7 +33,7 @@ const transformations = [
   { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "2 months", highlight: "Sleek edges" },
   { image: result13, name: "Bimpe K.", location: "Benin", duration: "7 months", highlight: "Kinks growth" },
   { image: result14, name: "Chiamaka D.", location: "Warri", duration: "4 months", highlight: "Full afro" },
-  { image: result15, name: "Mrs. Folake T.", location: "Ikoyi", duration: "5 months", highlight: "Elegant fullness" },
+  { image: result17, name: "Mrs. Folake T.", location: "Ikoyi", duration: "5 months", highlight: "Elegant fullness" },
   { image: result16, name: "Zainab O.", location: "Abuja", duration: "4 months", highlight: "Luxurious volume" },
   { image: result17, name: "Temi A.", location: "Lekki", duration: "6 months", highlight: "Silky length" },
   { image: result18, name: "Adeola N.", location: "Lagos", duration: "3 months", highlight: "Edge restoration" },
