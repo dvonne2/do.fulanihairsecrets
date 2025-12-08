@@ -10,6 +10,10 @@ import result10 from '@/assets/results/result-10.jpg';
 import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result14 from '@/assets/results/result-14.jpg';
+import result15 from '@/assets/results/result-15.jpg';
+import result16 from '@/assets/results/result-16.jpg';
+import result19 from '@/assets/results/result-19.jpg';
+import result20 from '@/assets/results/result-20.jpg';
 
 interface TestimonialsProps {
   activeIndex: number;
@@ -29,6 +33,10 @@ const testimonials = [
   { name: "Yetunde Martins", location: "Ogun", text: "Perfect for protective styling. My locs are growing faster and my scalp is so healthy now.", image: result11 },
   { name: "Funke Akindele", location: "V.I. Lagos", text: "My edges are laid and my hairline is back! I can finally do sleek buns without worrying.", image: result12 },
   { name: "Chiamaka Dike", location: "Warri", text: "My afro is so full now that people ask if it's real. Yes it is, thanks to Fulani Hair Gro!", image: result14 },
+  { name: "Mrs. Folake Taiwo", location: "Ikoyi", text: "The elegance and class this product brings! I feel like royalty every time I style my hair.", image: result15 },
+  { name: "Zainab Okonkwo", location: "Abuja", text: "My hair has never looked this luxurious. The compliments I get at every event are endless!", image: result16 },
+  { name: "Nkechi Iweala", location: "Onitsha", text: "I love holding these products! You can feel the quality. My natural hair is thriving!", image: result19 },
+  { name: "Ifeoma Chukwu", location: "Enugu", text: "Best investment I've made for my hair. The complete system works wonders!", image: result20 },
 ];
 
 export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) => {
