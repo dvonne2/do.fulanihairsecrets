@@ -3,7 +3,7 @@ import { Navigation } from '@/components/landing/Navigation';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
-import { HairLossTypesDiagram } from '@/components/landing/HairLossTypesDiagram';
+import { HairLossTypesGuide } from '@/components/landing/HairLossTypesGuide';
 import { MaiduguriSecret } from '@/components/landing/MaiduguriSecret';
 import { GrandmothersPermission } from '@/components/landing/GrandmothersPermission';
 import { LimitedStockWarning } from '@/components/landing/LimitedStockWarning';
@@ -165,8 +165,8 @@ const Index = () => {
         {/* DISQUALIFICATION WARNING - Right after hero (biggest impact) */}
         <DisqualificationWarning stockCount={stockCount} />
         
-        {/* HAIR LOSS TYPES DIAGRAM - Self-diagnosis */}
-        <HairLossTypesDiagram />
+        {/* 7 HAIR LOSS TYPES GUIDE - Educational self-diagnosis */}
+        <HairLossTypesGuide />
         
         {/* THE MAIDUGURI SECRET - Emotional heart */}
         <MaiduguriSecret />
