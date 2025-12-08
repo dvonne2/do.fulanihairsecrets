@@ -10,6 +10,12 @@ import result10 from '@/assets/results/result-10.jpg';
 import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result14 from '@/assets/results/result-14.jpg';
+import result15 from '@/assets/results/result-15.jpg';
+import result16 from '@/assets/results/result-16.jpg';
+import result19 from '@/assets/results/result-19.jpg';
+import result20 from '@/assets/results/result-20.jpg';
+import result21 from '@/assets/results/result-21.jpg';
+import result22 from '@/assets/results/result-22.jpg';
 
 const transformations = [
   { after: result1, name: "Amina K.", problem: "Severe traction alopecia from braids", duration: "12 weeks" },
@@ -24,6 +30,12 @@ const transformations = [
   { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "10 weeks" },
   { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "8 weeks" },
   { after: result14, name: "Chiamaka D.", problem: "Overall thinning", duration: "16 weeks" },
+  { after: result15, name: "Mrs. Folake T.", problem: "Hormonal hair loss", duration: "18 weeks" },
+  { after: result16, name: "Zainab O.", problem: "Styling damage repair", duration: "14 weeks" },
+  { after: result19, name: "Nkechi I.", problem: "Breakage from extensions", duration: "10 weeks" },
+  { after: result20, name: "Ifeoma C.", problem: "Dry, brittle hair", duration: "12 weeks" },
+  { after: result21, name: "Ngozi P.", problem: "Thinning crown area", duration: "16 weeks" },
+  { after: result22, name: "Adaora M.", problem: "Natural hair growth", duration: "20 weeks" },
 ];
 
 export const BeforeAfterSection = () => {

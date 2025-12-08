@@ -12,6 +12,16 @@ import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result13 from '@/assets/results/result-13.jpg';
 import result14 from '@/assets/results/result-14.jpg';
+import result15 from '@/assets/results/result-15.jpg';
+import result16 from '@/assets/results/result-16.jpg';
+import result17 from '@/assets/results/result-17.png';
+import result18 from '@/assets/results/result-18.jpg';
+import result19 from '@/assets/results/result-19.jpg';
+import result20 from '@/assets/results/result-20.jpg';
+import result21 from '@/assets/results/result-21.jpg';
+import result22 from '@/assets/results/result-22.jpg';
+import result23 from '@/assets/results/result-23.jpg';
+import result24 from '@/assets/results/result-24.jpg';
 
 const transformations = [
   { image: result1, name: "Amina K.", location: "Lagos", duration: "3 months", highlight: "Edges fully restored" },
@@ -26,8 +36,18 @@ const transformations = [
   { image: result10, name: "Adaeze U.", location: "Owerri", duration: "4 months", highlight: "Massive volume" },
   { image: result11, name: "Yetunde M.", location: "Ogun", duration: "6 months", highlight: "Protective styling" },
   { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "3 months", highlight: "Sleek edges" },
-  { image: result13, name: "Bimpe K.", location: "Benin", duration: "7 months", highlight: "Loc growth" },
+  { image: result13, name: "Bimpe K.", location: "Benin", duration: "7 months", highlight: "Kinks growth" },
   { image: result14, name: "Chiamaka D.", location: "Warri", duration: "4 months", highlight: "Full afro" },
+  { image: result15, name: "Mrs. Folake T.", location: "Ikoyi", duration: "5 months", highlight: "Elegant fullness" },
+  { image: result16, name: "Zainab O.", location: "Abuja", duration: "4 months", highlight: "Luxurious volume" },
+  { image: result17, name: "Temi A.", location: "Lekki", duration: "6 months", highlight: "Silky length" },
+  { image: result18, name: "Adeola N.", location: "Lagos", duration: "3 months", highlight: "Edge restoration" },
+  { image: result19, name: "Nkechi I.", location: "Onitsha", duration: "4 months", highlight: "Natural thickness" },
+  { image: result20, name: "Ifeoma C.", location: "Enugu", duration: "5 months", highlight: "Healthy shine" },
+  { image: result21, name: "Ngozi P.", location: "Owerri", duration: "3 months", highlight: "Complete system" },
+  { image: result22, name: "Adaora M.", location: "Lagos", duration: "6 months", highlight: "Massive afro" },
+  { image: result23, name: "Chika E.", location: "Benin", duration: "4 months", highlight: "Volume boost" },
+  { image: result24, name: "Nnenna O.", location: "Calabar", duration: "8 months", highlight: "Length goals" },
 ];
 
 export const TransformationGallery = () => {

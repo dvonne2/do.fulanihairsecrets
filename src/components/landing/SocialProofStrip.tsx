@@ -12,6 +12,16 @@ import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result13 from '@/assets/results/result-13.jpg';
 import result14 from '@/assets/results/result-14.jpg';
+import result15 from '@/assets/results/result-15.jpg';
+import result16 from '@/assets/results/result-16.jpg';
+import result17 from '@/assets/results/result-17.png';
+import result18 from '@/assets/results/result-18.jpg';
+import result19 from '@/assets/results/result-19.jpg';
+import result20 from '@/assets/results/result-20.jpg';
+import result21 from '@/assets/results/result-21.jpg';
+import result22 from '@/assets/results/result-22.jpg';
+import result23 from '@/assets/results/result-23.jpg';
+import result24 from '@/assets/results/result-24.jpg';
 
 const customers = [
   { image: result1, name: "Amina K.", location: "Lagos" },
@@ -28,6 +38,16 @@ const customers = [
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
   { image: result14, name: "Chiamaka D.", location: "Warri" },
+  { image: result15, name: "Mrs. Folake T.", location: "Ikoyi" },
+  { image: result16, name: "Zainab O.", location: "Abuja" },
+  { image: result17, name: "Temi A.", location: "Lekki" },
+  { image: result18, name: "Adeola N.", location: "Lagos" },
+  { image: result19, name: "Nkechi I.", location: "Onitsha" },
+  { image: result20, name: "Ifeoma C.", location: "Enugu" },
+  { image: result21, name: "Ngozi P.", location: "Owerri" },
+  { image: result22, name: "Adaora M.", location: "Lagos" },
+  { image: result23, name: "Chika E.", location: "Benin" },
+  { image: result24, name: "Nnenna O.", location: "Calabar" },
   // Duplicate for seamless scroll
   { image: result1, name: "Amina K.", location: "Lagos" },
   { image: result2, name: "Fatima A.", location: "Abuja" },
@@ -43,6 +63,16 @@ const customers = [
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
   { image: result14, name: "Chiamaka D.", location: "Warri" },
+  { image: result15, name: "Mrs. Folake T.", location: "Ikoyi" },
+  { image: result16, name: "Zainab O.", location: "Abuja" },
+  { image: result17, name: "Temi A.", location: "Lekki" },
+  { image: result18, name: "Adeola N.", location: "Lagos" },
+  { image: result19, name: "Nkechi I.", location: "Onitsha" },
+  { image: result20, name: "Ifeoma C.", location: "Enugu" },
+  { image: result21, name: "Ngozi P.", location: "Owerri" },
+  { image: result22, name: "Adaora M.", location: "Lagos" },
+  { image: result23, name: "Chika E.", location: "Benin" },
+  { image: result24, name: "Nnenna O.", location: "Calabar" },
 ];
 
 export const SocialProofStrip = () => {
