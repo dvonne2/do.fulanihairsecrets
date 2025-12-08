@@ -5,8 +5,6 @@ import result4 from '@/assets/results/result-4.jpg';
 import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
 import result8 from '@/assets/results/result-8.jpg';
-import result9 from '@/assets/results/result-9.jpg';
-import result10 from '@/assets/results/result-10.jpg';
 import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result14 from '@/assets/results/result-14.jpg';
@@ -14,7 +12,6 @@ import result15 from '@/assets/results/result-15.jpg';
 import result16 from '@/assets/results/result-16.jpg';
 import result19 from '@/assets/results/result-19.jpg';
 import result20 from '@/assets/results/result-20.jpg';
-import result21 from '@/assets/results/result-21.jpg';
 import result22 from '@/assets/results/result-22.jpg';
 
 const transformations = [
@@ -25,8 +22,6 @@ const transformations = [
   { after: result5, name: "Chioma E.", problem: "Stress-induced hair loss", duration: "1.5 months" },
   { after: result6, name: "Aisha B.", problem: "Crown thinning from styling", duration: "3.5 months" },
   { after: result8, name: "Mama Titi", problem: "Menopausal hair changes", duration: "5 months" },
-  { after: result9, name: "Hauwa B.", problem: "Heat damage recovery", duration: "3 months" },
-  { after: result10, name: "Adaeze U.", problem: "TWA growth journey", duration: "6 months" },
   { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "2.5 months" },
   { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "2 months" },
   { after: result14, name: "Chiamaka D.", problem: "Overall thinning", duration: "4 months" },
@@ -34,7 +29,6 @@ const transformations = [
   { after: result16, name: "Zainab O.", problem: "Styling damage repair", duration: "3.5 months" },
   { after: result19, name: "Nkechi I.", problem: "Breakage from extensions", duration: "2.5 months" },
   { after: result20, name: "Ifeoma C.", problem: "Dry, brittle hair", duration: "3 months" },
-  { after: result21, name: "Ngozi P.", problem: "Thinning crown area", duration: "4 months" },
   { after: result22, name: "Adaora M.", problem: "Natural hair growth", duration: "5 months" },
 ];
 

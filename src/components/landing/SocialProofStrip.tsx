@@ -6,8 +6,6 @@ import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
 import result7 from '@/assets/results/result-7.jpg';
 import result8 from '@/assets/results/result-8.jpg';
-import result9 from '@/assets/results/result-9.jpg';
-import result10 from '@/assets/results/result-10.jpg';
 import result11 from '@/assets/results/result-11.jpg';
 import result12 from '@/assets/results/result-12.jpg';
 import result13 from '@/assets/results/result-13.jpg';
@@ -18,7 +16,6 @@ import result17 from '@/assets/results/result-17.png';
 import result18 from '@/assets/results/result-18.jpg';
 import result19 from '@/assets/results/result-19.jpg';
 import result20 from '@/assets/results/result-20.jpg';
-import result21 from '@/assets/results/result-21.jpg';
 import result22 from '@/assets/results/result-22.jpg';
 import result23 from '@/assets/results/result-23.jpg';
 import result24 from '@/assets/results/result-24.jpg';
@@ -32,8 +29,6 @@ const customers = [
   { image: result6, name: "Aisha B.", location: "Kaduna" },
   { image: result7, name: "Grace O.", location: "Ibadan" },
   { image: result8, name: "Mama Titi", location: "Ikoyi" },
-  { image: result9, name: "Hauwa B.", location: "Kaduna" },
-  { image: result10, name: "Adaeze U.", location: "Owerri" },
   { image: result11, name: "Yetunde M.", location: "Ogun" },
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
@@ -44,7 +39,6 @@ const customers = [
   { image: result18, name: "Adeola N.", location: "Lagos" },
   { image: result19, name: "Nkechi I.", location: "Onitsha" },
   { image: result20, name: "Ifeoma C.", location: "Enugu" },
-  { image: result21, name: "Ngozi P.", location: "Owerri" },
   { image: result22, name: "Adaora M.", location: "Lagos" },
   { image: result23, name: "Chika E.", location: "Benin" },
   { image: result24, name: "Nnenna O.", location: "Calabar" },
@@ -57,8 +51,6 @@ const customers = [
   { image: result6, name: "Aisha B.", location: "Kaduna" },
   { image: result7, name: "Grace O.", location: "Ibadan" },
   { image: result8, name: "Mama Titi", location: "Ikoyi" },
-  { image: result9, name: "Hauwa B.", location: "Kaduna" },
-  { image: result10, name: "Adaeze U.", location: "Owerri" },
   { image: result11, name: "Yetunde M.", location: "Ogun" },
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
@@ -69,7 +61,6 @@ const customers = [
   { image: result18, name: "Adeola N.", location: "Lagos" },
   { image: result19, name: "Nkechi I.", location: "Onitsha" },
   { image: result20, name: "Ifeoma C.", location: "Enugu" },
-  { image: result21, name: "Ngozi P.", location: "Owerri" },
   { image: result22, name: "Adaora M.", location: "Lagos" },
   { image: result23, name: "Chika E.", location: "Benin" },
   { image: result24, name: "Nnenna O.", location: "Calabar" },
