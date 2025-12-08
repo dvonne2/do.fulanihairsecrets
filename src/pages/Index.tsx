@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Navigation } from '@/components/landing/Navigation';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
+import { HairLossTypesDiagram } from '@/components/landing/HairLossTypesDiagram';
 import { MaiduguriSecret } from '@/components/landing/MaiduguriSecret';
 import { GrandmothersPermission } from '@/components/landing/GrandmothersPermission';
 import { LimitedStockWarning } from '@/components/landing/LimitedStockWarning';
@@ -14,9 +16,12 @@ import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { ProductSystem } from '@/components/landing/ProductSystem';
 import { ProtectedRecipe } from '@/components/landing/ProtectedRecipe';
+import { WhyWeRestrict } from '@/components/landing/WhyWeRestrict';
 import { BundleSection } from '@/components/landing/BundleSection';
 import { LuckyFewSection } from '@/components/landing/LuckyFewSection';
 import { TheOffer } from '@/components/landing/TheOffer';
+import { QualificationGate } from '@/components/landing/QualificationGate';
+import { ApplicationProcess } from '@/components/landing/ApplicationProcess';
 import { PricingSection } from '@/components/landing/PricingSection';
 import { Guarantee } from '@/components/landing/Guarantee';
 import { Testimonials } from '@/components/landing/Testimonials';
@@ -24,13 +29,14 @@ import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { ExitIntentPopup } from '@/components/landing/ExitIntentPopup';
+
 const purchaseNotifications = [
-  { name: "Hajia F.", location: "Banana Island", product: "Self Love Plus", time: "2 mins ago" },
+  { name: "Hajia F.", location: "Banana Island", product: "6-Month Supply", time: "2 mins ago" },
   { name: "Alhaja M.", location: "Maitama, Abuja", product: "Complete Set", time: "5 mins ago" },
   { name: "Mrs. A.", location: "Lekki Phase 1", product: "Growth Pomade", time: "8 mins ago" },
-  { name: "Dr. O.", location: "Victoria Island", product: "Self Love Plus", time: "12 mins ago" },
-  { name: "Princess Z.", location: "Kano", product: "Buy 2 Get 1", time: "15 mins ago" },
-  { name: "Chief Mrs. N.", location: "Ikoyi", product: "Self Love Plus", time: "18 mins ago" },
+  { name: "Dr. O.", location: "Victoria Island", product: "6-Month Supply", time: "12 mins ago" },
+  { name: "Princess Z.", location: "Kano", product: "Complete System", time: "15 mins ago" },
+  { name: "Chief Mrs. N.", location: "Ikoyi", product: "6-Month Supply", time: "18 mins ago" },
   { name: "Hajia B.", location: "Asokoro", product: "Complete Set", time: "23 mins ago" },
   { name: "Mrs. K.", location: "Ikeja GRA", product: "Growth Pomade", time: "27 mins ago" },
 ];
@@ -40,7 +46,7 @@ const Index = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [hasShownExit, setHasShownExit] = useState(false);
-  const [stockCount, setStockCount] = useState(23);
+  const [stockCount, setStockCount] = useState(43);
   const [viewerCount, setViewerCount] = useState(47);
   const [showPurchaseNotif, setShowPurchaseNotif] = useState(false);
   const [currentNotif, setCurrentNotif] = useState(0);
@@ -48,6 +54,7 @@ const Index = () => {
   const [countdown, setCountdown] = useState({ hours: 2, minutes: 47, seconds: 33 });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
 
   // Countdown Timer
   useEffect(() => {
@@ -155,7 +162,13 @@ const Index = () => {
           viewerCount={viewerCount} 
         />
         
-        {/* THE MAIDUGURI SECRET - Right after hero (emotional heart) */}
+        {/* DISQUALIFICATION WARNING - Right after hero (biggest impact) */}
+        <DisqualificationWarning stockCount={stockCount} />
+        
+        {/* HAIR LOSS TYPES DIAGRAM - Self-diagnosis */}
+        <HairLossTypesDiagram />
+        
+        {/* THE MAIDUGURI SECRET - Emotional heart */}
         <MaiduguriSecret />
         
         {/* GRANDMOTHER'S PERMISSION */}
@@ -176,7 +189,13 @@ const Index = () => {
         {/* PROTECTED RECIPE - After products/ingredients */}
         <ProtectedRecipe />
         
+        {/* WHY WE RESTRICT SALES */}
+        <WhyWeRestrict />
+        
         <BundleSection />
+        
+        {/* APPLICATION PROCESS */}
+        <ApplicationProcess stockCount={stockCount} />
         
         {/* YOU'RE ONE OF THE LUCKY FEW - Before pricing */}
         <LuckyFewSection stockCount={stockCount} />
@@ -188,12 +207,20 @@ const Index = () => {
           activeIndex={activeTestimonial} 
           onSetActive={setActiveTestimonial} 
         />
-        <PricingSection 
-          countdown={countdown}
-          stockCount={stockCount}
-          commitmentChecks={commitmentChecks}
-          onCommitmentChange={handleCommitmentCheck}
-        />
+        
+        {/* QUALIFICATION GATE - Before pricing */}
+        <QualificationGate onQualified={() => setShowPricing(true)} />
+        
+        {/* Only show pricing after qualification */}
+        {showPricing && (
+          <PricingSection 
+            countdown={countdown}
+            stockCount={stockCount}
+            commitmentChecks={commitmentChecks}
+            onCommitmentChange={handleCommitmentCheck}
+          />
+        )}
+        
         <Guarantee />
         <FAQ />
       </main>

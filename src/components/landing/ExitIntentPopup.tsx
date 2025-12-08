@@ -4,6 +4,14 @@ interface ExitIntentPopupProps {
 }
 
 export const ExitIntentPopup = ({ show, onClose }: ExitIntentPopupProps) => {
+  const handleChatClick = () => {
+    const message = encodeURIComponent(
+      `Hi! I was looking at Fulani Hair Gro™ but I'm not sure if I qualify.\n\nCan you help me with a FREE hair assessment?\n\n[I'll send photos of my problem areas]`
+    );
+    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+    onClose();
+  };
+
   if (!show) return null;
 
   return (
@@ -19,38 +27,76 @@ export const ExitIntentPopup = ({ show, onClose }: ExitIntentPopupProps) => {
 
         {/* Content */}
         <div className="text-center">
-          <div className="text-6xl md:text-7xl mb-6">😢</div>
+          <h2 className="font-cinzel text-xl md:text-2xl text-gold mb-2">Wait — Before You Leave...</h2>
           
-          <h2 className="font-cinzel text-2xl md:text-3xl text-gold mb-2">WAIT!</h2>
-          <p className="font-cinzel text-lg md:text-xl text-foreground mb-4">Don't Leave Empty-Handed</p>
-          <p className="font-sans text-sm text-muted-foreground mb-6">
-            We noticed you're about to leave. Here's an exclusive offer just for you:
+          {/* Divider */}
+          <div className="w-full h-px bg-gold/40 my-6" />
+          
+          <p className="font-cinzel text-lg text-foreground mb-6">
+            Are you sure you don't qualify?
           </p>
-
-          {/* Discount Box */}
-          <div className="bg-destructive/20 border-2 border-destructive rounded-2xl p-6 mb-6">
-            <p className="font-cinzel text-xl md:text-2xl text-foreground mb-3">EXTRA 10% OFF</p>
-            <p className="font-sans text-base text-foreground/80">
-              Use code: <span className="text-gold font-bold text-xl">LASTCHANCE10</span>
+          
+          <div className="space-y-4 text-left mb-8">
+            <p className="font-serif text-foreground/90">
+              Many women <span className="text-gold">THINK</span> their hair loss is "not that bad."
             </p>
-            <p className="font-sans text-sm text-destructive mt-3">⏰ Expires in 10 minutes!</p>
+            <p className="font-serif text-muted-foreground">
+              Then they see photos of Type 3 loss and realize:
+              <br />
+              <span className="text-gold italic">"Oh. That's exactly what I have."</span>
+            </p>
+            
+            <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 mt-4">
+              <p className="font-serif text-foreground/90 text-sm">
+                <span className="text-destructive">If you're hiding your edges...</span>
+                <br />
+                <span className="text-destructive">If you avoid certain hairstyles...</span>
+                <br />
+                <span className="text-destructive">If you've cried about your hair...</span>
+              </p>
+              <p className="font-cinzel text-gold mt-3 font-semibold">
+                You probably qualify.
+              </p>
+            </div>
           </div>
 
+          {/* Divider */}
+          <div className="w-full h-px bg-gold/40 mb-6" />
+
+          <p className="font-serif text-muted-foreground text-sm mb-6">
+            Let our specialist take a look. It's free. No obligation.
+          </p>
+
           {/* CTA Button */}
-          <a 
-            href="#order"
-            onClick={onClose}
+          <button 
+            onClick={handleChatClick}
             className="block w-full gold-gradient-animated text-background font-sans text-sm tracking-widest uppercase py-4 rounded-xl font-bold btn-luxury mb-4"
           >
-            👑 YES! I WANT THIS 👑
-          </a>
+            💬 Chat Now — Free Hair Assessment
+          </button>
+
+          {/* Benefits */}
+          <div className="space-y-2 text-left text-sm text-muted-foreground">
+            <p className="flex items-center gap-2">
+              <span>⏱️</span>
+              <span>Takes only 5 minutes</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <span>📸</span>
+              <span>Just send a photo of your problem areas</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <span>✅</span>
+              <span>Get honest feedback (we'll tell you if you DON'T need it)</span>
+            </p>
+          </div>
 
           {/* Decline Link */}
           <button 
             onClick={onClose}
-            className="font-sans text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="font-sans text-xs text-muted-foreground hover:text-foreground transition-colors mt-6"
           >
-            No thanks, I'll pay full price later
+            No thanks, I'll leave
           </button>
         </div>
       </div>
