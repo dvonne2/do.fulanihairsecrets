@@ -5,57 +5,29 @@ import result4 from '@/assets/results/result-4.jpg';
 import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
 import result7 from '@/assets/results/result-7.jpg';
+import result8 from '@/assets/results/result-8.jpg';
+import result9 from '@/assets/results/result-9.jpg';
+import result10 from '@/assets/results/result-10.jpg';
+import result11 from '@/assets/results/result-11.jpg';
+import result12 from '@/assets/results/result-12.jpg';
+import result13 from '@/assets/results/result-13.jpg';
+import result14 from '@/assets/results/result-14.jpg';
 
 const transformations = [
-  { 
-    image: result1, 
-    name: "Amina K.", 
-    location: "Lagos",
-    duration: "3 months",
-    highlight: "Edges fully restored"
-  },
-  { 
-    image: result2, 
-    name: "Fatima A.", 
-    location: "Abuja",
-    duration: "6 months",
-    highlight: "Triple the volume"
-  },
-  { 
-    image: result3, 
-    name: "Blessing N.", 
-    location: "Port Harcourt",
-    duration: "4 months",
-    highlight: "Length retention"
-  },
-  { 
-    image: result4, 
-    name: "Hajia Maryam", 
-    location: "Kano",
-    duration: "5 months",
-    highlight: "Healthy gray growth"
-  },
-  { 
-    image: result5, 
-    name: "Chioma E.", 
-    location: "Enugu",
-    duration: "3 months",
-    highlight: "Thickness restored"
-  },
-  { 
-    image: result6, 
-    name: "Aisha B.", 
-    location: "Kaduna",
-    duration: "4 months",
-    highlight: "Crown fullness"
-  },
-  { 
-    image: result7, 
-    name: "Grace O.", 
-    location: "Ibadan",
-    duration: "2 months",
-    highlight: "Breakage stopped"
-  },
+  { image: result1, name: "Amina K.", location: "Lagos", duration: "3 months", highlight: "Edges fully restored" },
+  { image: result2, name: "Fatima A.", location: "Abuja", duration: "6 months", highlight: "Triple the volume" },
+  { image: result3, name: "Blessing N.", location: "Port Harcourt", duration: "4 months", highlight: "Length retention" },
+  { image: result4, name: "Hajia Maryam", location: "Kano", duration: "5 months", highlight: "Healthy gray growth" },
+  { image: result5, name: "Chioma E.", location: "Enugu", duration: "3 months", highlight: "Thickness restored" },
+  { image: result6, name: "Aisha B.", location: "Kaduna", duration: "4 months", highlight: "Crown fullness" },
+  { image: result7, name: "Grace O.", location: "Ibadan", duration: "2 months", highlight: "Breakage stopped" },
+  { image: result8, name: "Mama Titi", location: "Ikoyi", duration: "8 months", highlight: "Silver queen goals" },
+  { image: result9, name: "Nneka P.", location: "Lekki", duration: "5 months", highlight: "Gray hair thriving" },
+  { image: result10, name: "Adaeze U.", location: "Owerri", duration: "4 months", highlight: "Massive volume" },
+  { image: result11, name: "Yetunde M.", location: "Ogun", duration: "6 months", highlight: "Protective styling" },
+  { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "3 months", highlight: "Sleek edges" },
+  { image: result13, name: "Bimpe K.", location: "Benin", duration: "7 months", highlight: "Loc growth" },
+  { image: result14, name: "Chiamaka D.", location: "Warri", duration: "4 months", highlight: "Full afro" },
 ];
 
 export const TransformationGallery = () => {

@@ -1,33 +1,17 @@
 import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
+import result5 from '@/assets/results/result-5.jpg';
+import result8 from '@/assets/results/result-8.jpg';
+import result10 from '@/assets/results/result-10.jpg';
+import result12 from '@/assets/results/result-12.jpg';
+import result14 from '@/assets/results/result-14.jpg';
 
 const stages = [
-  { 
-    week: "Week 2", 
-    image: result1, 
-    title: "Shedding Stops",
-    description: "Hair fall reduces by 70%. Scalp feels healthier."
-  },
-  { 
-    week: "Week 4", 
-    image: result2, 
-    title: "Baby Hairs Appear",
-    description: "New growth visible at edges and crown."
-  },
-  { 
-    week: "Week 8", 
-    image: result3, 
-    title: "Visible Thickness",
-    description: "Hair feels fuller. Others start noticing."
-  },
-  { 
-    week: "Month 6", 
-    image: result4, 
-    title: "Full Transformation",
-    description: "Complete restoration. Confidence restored."
-  },
+  { week: "Week 2", image: result1, title: "Shedding Stops", description: "Hair fall reduces by 70%. Scalp feels healthier." },
+  { week: "Week 4", image: result5, title: "Baby Hairs Appear", description: "New growth visible at edges and crown." },
+  { week: "Week 8", image: result12, title: "Visible Thickness", description: "Hair feels fuller. Others start noticing." },
+  { week: "Week 12", image: result10, title: "Major Growth", description: "Significant length and volume gains." },
+  { week: "Month 5", image: result8, title: "Full Coverage", description: "Thin spots filled in completely." },
+  { week: "Month 6+", image: result14, title: "Full Transformation", description: "Complete restoration. Confidence restored." },
 ];
 
 export const ProgressTimeline = () => {
@@ -51,7 +35,7 @@ export const ProgressTimeline = () => {
         </div>
 
         {/* Timeline Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
           {stages.map((stage, i) => (
             <div 
               key={i}
