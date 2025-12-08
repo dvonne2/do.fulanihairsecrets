@@ -24,7 +24,7 @@ const testimonials = [
   { name: "Princess Zainab Sanusi", location: "Kano / Dubai", text: "I split my time between Nigeria and UAE. Trust me, nothing in Dubai Mall compares. My edges are FULL again.", image: result5 },
   { name: "Otunba (Mrs.) Nike Adeyemi", location: "Victoria Island", text: "At my age, I thought my hair glory days were over. This pomade proved me wrong. My grandchildren say I look 20 years younger!", image: result6 },
   { name: "Mama Titi Johnson", location: "Ikoyi, Lagos", text: "My gray hair has never looked this healthy and full. I'm 62 and getting more compliments than I did at 40!", image: result8 },
-  { name: "Nneka Peters", location: "Lekki, Lagos", text: "Embracing my silver has been beautiful. This product makes my gray hair shine like actual silver threads.", image: result9 },
+  { name: "Hauwa Bello", location: "Kaduna", text: "Embracing my silver has been beautiful. This product makes my gray hair shine like actual silver threads.", image: result9 },
   { name: "Adaeze Umeh", location: "Owerri", text: "From TWA to this massive afro in just months. My hair has never been this thick or healthy!", image: result10 },
   { name: "Yetunde Martins", location: "Ogun", text: "Perfect for protective styling. My locs are growing faster and my scalp is so healthy now.", image: result11 },
   { name: "Funke Akindele", location: "V.I. Lagos", text: "My edges are laid and my hairline is back! I can finally do sleek buns without worrying.", image: result12 },

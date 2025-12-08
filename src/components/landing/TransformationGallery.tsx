@@ -22,7 +22,7 @@ const transformations = [
   { image: result6, name: "Aisha B.", location: "Kaduna", duration: "4 months", highlight: "Crown fullness" },
   { image: result7, name: "Grace O.", location: "Ibadan", duration: "2 months", highlight: "Breakage stopped" },
   { image: result8, name: "Mama Titi", location: "Ikoyi", duration: "8 months", highlight: "Silver queen goals" },
-  { image: result9, name: "Nneka P.", location: "Lekki", duration: "5 months", highlight: "Gray hair thriving" },
+  { image: result9, name: "Hauwa B.", location: "Kaduna", duration: "5 months", highlight: "Gray hair thriving" },
   { image: result10, name: "Adaeze U.", location: "Owerri", duration: "4 months", highlight: "Massive volume" },
   { image: result11, name: "Yetunde M.", location: "Ogun", duration: "6 months", highlight: "Protective styling" },
   { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "3 months", highlight: "Sleek edges" },

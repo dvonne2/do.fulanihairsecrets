@@ -19,7 +19,7 @@ const transformations = [
   { after: result5, name: "Chioma E.", problem: "Stress-induced hair loss", duration: "6 weeks" },
   { after: result6, name: "Aisha B.", problem: "Crown thinning from styling", duration: "14 weeks" },
   { after: result8, name: "Mama Titi", problem: "Menopausal hair changes", duration: "20 weeks" },
-  { after: result9, name: "Nneka P.", problem: "Heat damage recovery", duration: "12 weeks" },
+  { after: result9, name: "Hauwa B.", problem: "Heat damage recovery", duration: "12 weeks" },
   { after: result10, name: "Adaeze U.", problem: "TWA growth journey", duration: "24 weeks" },
   { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "10 weeks" },
   { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "8 weeks" },
