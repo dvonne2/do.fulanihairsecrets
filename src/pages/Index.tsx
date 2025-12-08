@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Navigation } from '@/components/landing/Navigation';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { SocialProofStrip } from '@/components/landing/SocialProofStrip';
 import { TrustLogos } from '@/components/landing/TrustLogos';
+import { TransformationGallery } from '@/components/landing/TransformationGallery';
 import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { ProductSystem } from '@/components/landing/ProductSystem';
@@ -145,12 +147,14 @@ const Index = () => {
           stockCount={stockCount} 
           viewerCount={viewerCount} 
         />
+        <SocialProofStrip />
         <TrustLogos />
         <ProblemAgitation />
         <FounderStory />
         <ProductSystem />
         <BundleSection />
-        <Testimonials 
+        <TransformationGallery />
+        <Testimonials
           activeIndex={activeTestimonial} 
           onSetActive={setActiveTestimonial} 
         />
