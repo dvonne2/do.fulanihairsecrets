@@ -5,6 +5,13 @@ import result4 from '@/assets/results/result-4.jpg';
 import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
 import result7 from '@/assets/results/result-7.jpg';
+import result8 from '@/assets/results/result-8.jpg';
+import result9 from '@/assets/results/result-9.jpg';
+import result10 from '@/assets/results/result-10.jpg';
+import result11 from '@/assets/results/result-11.jpg';
+import result12 from '@/assets/results/result-12.jpg';
+import result13 from '@/assets/results/result-13.jpg';
+import result14 from '@/assets/results/result-14.jpg';
 
 const customers = [
   { image: result1, name: "Amina K.", location: "Lagos" },
@@ -14,6 +21,13 @@ const customers = [
   { image: result5, name: "Chioma E.", location: "Enugu" },
   { image: result6, name: "Aisha B.", location: "Kaduna" },
   { image: result7, name: "Grace O.", location: "Ibadan" },
+  { image: result8, name: "Mama Titi", location: "Ikoyi" },
+  { image: result9, name: "Nneka P.", location: "Lekki" },
+  { image: result10, name: "Adaeze U.", location: "Owerri" },
+  { image: result11, name: "Yetunde M.", location: "Ogun" },
+  { image: result12, name: "Funke A.", location: "V.I. Lagos" },
+  { image: result13, name: "Bimpe K.", location: "Benin" },
+  { image: result14, name: "Chiamaka D.", location: "Warri" },
   // Duplicate for seamless scroll
   { image: result1, name: "Amina K.", location: "Lagos" },
   { image: result2, name: "Fatima A.", location: "Abuja" },
@@ -22,6 +36,13 @@ const customers = [
   { image: result5, name: "Chioma E.", location: "Enugu" },
   { image: result6, name: "Aisha B.", location: "Kaduna" },
   { image: result7, name: "Grace O.", location: "Ibadan" },
+  { image: result8, name: "Mama Titi", location: "Ikoyi" },
+  { image: result9, name: "Nneka P.", location: "Lekki" },
+  { image: result10, name: "Adaeze U.", location: "Owerri" },
+  { image: result11, name: "Yetunde M.", location: "Ogun" },
+  { image: result12, name: "Funke A.", location: "V.I. Lagos" },
+  { image: result13, name: "Bimpe K.", location: "Benin" },
+  { image: result14, name: "Chiamaka D.", location: "Warri" },
 ];
 
 export const SocialProofStrip = () => {

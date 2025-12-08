@@ -4,44 +4,26 @@ import result3 from '@/assets/results/result-3.jpg';
 import result4 from '@/assets/results/result-4.jpg';
 import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
+import result8 from '@/assets/results/result-8.jpg';
+import result9 from '@/assets/results/result-9.jpg';
+import result10 from '@/assets/results/result-10.jpg';
+import result11 from '@/assets/results/result-11.jpg';
+import result12 from '@/assets/results/result-12.jpg';
+import result14 from '@/assets/results/result-14.jpg';
 
 const transformations = [
-  { 
-    after: result1, 
-    name: "Amina K.",
-    problem: "Severe traction alopecia from braids",
-    duration: "12 weeks"
-  },
-  { 
-    after: result2, 
-    name: "Fatima A.",
-    problem: "Postpartum hair loss",
-    duration: "8 weeks"
-  },
-  { 
-    after: result3, 
-    name: "Blessing N.",
-    problem: "Chemical damage from relaxer",
-    duration: "16 weeks"
-  },
-  { 
-    after: result4, 
-    name: "Hajia Maryam",
-    problem: "Age-related thinning",
-    duration: "10 weeks"
-  },
-  { 
-    after: result5, 
-    name: "Chioma E.",
-    problem: "Stress-induced hair loss",
-    duration: "6 weeks"
-  },
-  { 
-    after: result6, 
-    name: "Aisha B.",
-    problem: "Crown thinning from styling",
-    duration: "14 weeks"
-  },
+  { after: result1, name: "Amina K.", problem: "Severe traction alopecia from braids", duration: "12 weeks" },
+  { after: result2, name: "Fatima A.", problem: "Postpartum hair loss", duration: "8 weeks" },
+  { after: result3, name: "Blessing N.", problem: "Chemical damage from relaxer", duration: "16 weeks" },
+  { after: result4, name: "Hajia Maryam", problem: "Age-related thinning", duration: "10 weeks" },
+  { after: result5, name: "Chioma E.", problem: "Stress-induced hair loss", duration: "6 weeks" },
+  { after: result6, name: "Aisha B.", problem: "Crown thinning from styling", duration: "14 weeks" },
+  { after: result8, name: "Mama Titi", problem: "Menopausal hair changes", duration: "20 weeks" },
+  { after: result9, name: "Nneka P.", problem: "Heat damage recovery", duration: "12 weeks" },
+  { after: result10, name: "Adaeze U.", problem: "TWA growth journey", duration: "24 weeks" },
+  { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "10 weeks" },
+  { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "8 weeks" },
+  { after: result14, name: "Chiamaka D.", problem: "Overall thinning", duration: "16 weeks" },
 ];
 
 export const BeforeAfterSection = () => {

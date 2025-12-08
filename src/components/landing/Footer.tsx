@@ -5,8 +5,15 @@ import result4 from '@/assets/results/result-4.jpg';
 import result5 from '@/assets/results/result-5.jpg';
 import result6 from '@/assets/results/result-6.jpg';
 import result7 from '@/assets/results/result-7.jpg';
+import result8 from '@/assets/results/result-8.jpg';
+import result9 from '@/assets/results/result-9.jpg';
+import result10 from '@/assets/results/result-10.jpg';
+import result11 from '@/assets/results/result-11.jpg';
+import result12 from '@/assets/results/result-12.jpg';
+import result13 from '@/assets/results/result-13.jpg';
+import result14 from '@/assets/results/result-14.jpg';
 
-const footerImages = [result1, result2, result3, result4, result5, result6, result7];
+const footerImages = [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13, result14];
 
 export const Footer = () => {
   return (
