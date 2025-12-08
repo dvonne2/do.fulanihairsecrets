@@ -35,7 +35,7 @@ const transformations = [
   { image: result9, name: "Hauwa B.", location: "Kaduna", duration: "5 months", highlight: "Gray hair thriving" },
   { image: result10, name: "Adaeze U.", location: "Owerri", duration: "4 months", highlight: "Massive volume" },
   { image: result11, name: "Yetunde M.", location: "Ogun", duration: "6 months", highlight: "Protective styling" },
-  { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "3 months", highlight: "Sleek edges" },
+  { image: result12, name: "Funke A.", location: "V.I. Lagos", duration: "2 months", highlight: "Sleek edges" },
   { image: result13, name: "Bimpe K.", location: "Benin", duration: "7 months", highlight: "Kinks growth" },
   { image: result14, name: "Chiamaka D.", location: "Warri", duration: "4 months", highlight: "Full afro" },
   { image: result15, name: "Mrs. Folake T.", location: "Ikoyi", duration: "5 months", highlight: "Elegant fullness" },
