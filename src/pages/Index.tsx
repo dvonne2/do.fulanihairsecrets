@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Navigation } from '@/components/landing/Navigation';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { HeroSection } from '@/components/landing/HeroSection';
+import { MaiduguriSecret } from '@/components/landing/MaiduguriSecret';
+import { GrandmothersPermission } from '@/components/landing/GrandmothersPermission';
+import { LimitedStockWarning } from '@/components/landing/LimitedStockWarning';
 import { SocialProofStrip } from '@/components/landing/SocialProofStrip';
 import { TrustLogos } from '@/components/landing/TrustLogos';
 import { TransformationGallery } from '@/components/landing/TransformationGallery';
@@ -10,7 +13,10 @@ import { ProgressTimeline } from '@/components/landing/ProgressTimeline';
 import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { ProductSystem } from '@/components/landing/ProductSystem';
+import { ProtectedRecipe } from '@/components/landing/ProtectedRecipe';
 import { BundleSection } from '@/components/landing/BundleSection';
+import { LuckyFewSection } from '@/components/landing/LuckyFewSection';
+import { TheOffer } from '@/components/landing/TheOffer';
 import { PricingSection } from '@/components/landing/PricingSection';
 import { Guarantee } from '@/components/landing/Guarantee';
 import { Testimonials } from '@/components/landing/Testimonials';
@@ -18,7 +24,6 @@ import { FAQ } from '@/components/landing/FAQ';
 import { Footer } from '@/components/landing/Footer';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { ExitIntentPopup } from '@/components/landing/ExitIntentPopup';
-
 const purchaseNotifications = [
   { name: "Hajia F.", location: "Banana Island", product: "Self Love Plus", time: "2 mins ago" },
   { name: "Alhaja M.", location: "Maitama, Abuja", product: "Complete Set", time: "5 mins ago" },
@@ -149,6 +154,16 @@ const Index = () => {
           stockCount={stockCount} 
           viewerCount={viewerCount} 
         />
+        
+        {/* THE MAIDUGURI SECRET - Right after hero (emotional heart) */}
+        <MaiduguriSecret />
+        
+        {/* GRANDMOTHER'S PERMISSION */}
+        <GrandmothersPermission />
+        
+        {/* EXTREMELY LIMITED STOCK */}
+        <LimitedStockWarning stockCount={stockCount} />
+        
         <SocialProofStrip />
         <TrustLogos />
         <TransformationGallery />
@@ -157,7 +172,18 @@ const Index = () => {
         <ProblemAgitation />
         <FounderStory />
         <ProductSystem />
+        
+        {/* PROTECTED RECIPE - After products/ingredients */}
+        <ProtectedRecipe />
+        
         <BundleSection />
+        
+        {/* YOU'RE ONE OF THE LUCKY FEW - Before pricing */}
+        <LuckyFewSection stockCount={stockCount} />
+        
+        {/* THE OFFER - Before pricing */}
+        <TheOffer stockCount={stockCount} />
+        
         <Testimonials
           activeIndex={activeTestimonial} 
           onSetActive={setActiveTestimonial} 
