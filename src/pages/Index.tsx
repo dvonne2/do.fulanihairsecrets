@@ -5,6 +5,8 @@ import { HeroSection } from '@/components/landing/HeroSection';
 import { SocialProofStrip } from '@/components/landing/SocialProofStrip';
 import { TrustLogos } from '@/components/landing/TrustLogos';
 import { TransformationGallery } from '@/components/landing/TransformationGallery';
+import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection';
+import { ProgressTimeline } from '@/components/landing/ProgressTimeline';
 import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { ProductSystem } from '@/components/landing/ProductSystem';
@@ -149,11 +151,13 @@ const Index = () => {
         />
         <SocialProofStrip />
         <TrustLogos />
+        <TransformationGallery />
+        <BeforeAfterSection />
+        <ProgressTimeline />
         <ProblemAgitation />
         <FounderStory />
         <ProductSystem />
         <BundleSection />
-        <TransformationGallery />
         <Testimonials
           activeIndex={activeTestimonial} 
           onSetActive={setActiveTestimonial} 

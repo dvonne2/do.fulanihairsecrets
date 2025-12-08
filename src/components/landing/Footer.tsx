@@ -1,7 +1,38 @@
+import result1 from '@/assets/results/result-1.jpg';
+import result2 from '@/assets/results/result-2.jpg';
+import result3 from '@/assets/results/result-3.jpg';
+import result4 from '@/assets/results/result-4.jpg';
+import result5 from '@/assets/results/result-5.jpg';
+import result6 from '@/assets/results/result-6.jpg';
+import result7 from '@/assets/results/result-7.jpg';
+
+const footerImages = [result1, result2, result3, result4, result5, result6, result7];
+
 export const Footer = () => {
   return (
     <footer className="py-12 bg-background border-t border-gold/20">
       <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
+        {/* Result Images Row */}
+        <div className="mb-8">
+          <p className="font-serif text-sm text-gold/80 italic mb-4">Your transformation starts today</p>
+          <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
+            {footerImages.map((img, i) => (
+              <div 
+                key={i} 
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-gold/40 hover:border-gold transition-colors duration-300"
+              >
+                <img 
+                  src={img} 
+                  alt={`Happy customer ${i + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="ornate-divider mb-6"></div>
+        
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full gold-gradient flex items-center justify-center">
