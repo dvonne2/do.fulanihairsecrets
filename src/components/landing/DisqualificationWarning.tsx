@@ -45,8 +45,8 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
               DO NOT BUY <span className="text-gold">Fulani Hair Gro™</span>...
             </h3>
             
-            <p className="font-serif text-lg md:text-xl text-foreground/90">
-              Unless you have been diagnosed with <span className="text-destructive font-semibold">Type 3 or Type 4 Hair Loss</span>.
+            <p className="font-serif text-xl md:text-2xl text-foreground/90">
+              Unless you have <span className="text-destructive font-semibold">severe Hair Loss</span>.
             </p>
             
             <p className="font-serif text-lg text-muted-foreground">
