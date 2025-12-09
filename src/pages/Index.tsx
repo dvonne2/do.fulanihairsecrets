@@ -208,10 +208,10 @@ const Index = () => {
           onSetActive={setActiveTestimonial} 
         />
         
-        {/* QUALIFICATION GATE - Before pricing */}
+        {/* ORDER SECTION - Show packages */}
         <QualificationGate onQualified={() => setShowPricing(true)} />
         
-        {/* Only show pricing after qualification */}
+        {/* Show pricing - always visible after clicking */}
         {showPricing && (
           <PricingSection 
             countdown={countdown}
