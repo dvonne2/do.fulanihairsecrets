@@ -6,9 +6,9 @@ interface DisqualificationWarningProps {
 }
 
 export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningProps) => {
-  const handleChatClick = () => {
+  const handleOrderClick = () => {
     const message = encodeURIComponent(
-      `Hi! I'd like to apply for a jar of Fulani Hair Gro™.\n\nI believe I have Type ____ hair loss.\n\nPlease let me know if I qualify.`
+      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages.`
     );
     window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
   };
@@ -31,7 +31,7 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
           <div className="flex items-center justify-center gap-3 mb-6">
             <AlertTriangle className="w-6 h-6 md:w-8 md:h-8 text-destructive animate-pulse" />
             <h2 className="font-sans text-lg md:text-xl font-bold tracking-widest uppercase text-destructive">
-              Important Warning
+              Important Notice
             </h2>
             <AlertTriangle className="w-6 h-6 md:w-8 md:h-8 text-destructive animate-pulse" />
           </div>
@@ -42,22 +42,22 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
           {/* Main warning content */}
           <div className="text-center space-y-6">
             <h3 className="font-cinzel text-2xl md:text-3xl lg:text-4xl text-foreground">
-              DO NOT BUY <span className="text-gold">Fulani Hair Gro™</span>...
+              <span className="text-gold">Fulani Hair Gro™</span> Is For Women With...
             </h3>
             
             <p className="font-serif text-xl md:text-2xl text-foreground/90">
-              Unless you have <span className="text-destructive font-semibold">severe Hair Loss</span>.
+              <span className="text-destructive font-semibold">Serious Hair Loss</span> Who Want Real Results
             </p>
             
             <p className="font-serif text-lg text-muted-foreground">
-              Our potent Maiduguri formula is <span className="text-gold font-semibold">TOO STRONG</span> for casual use.
+              Our potent Maiduguri formula delivers <span className="text-gold font-semibold">MAXIMUM STRENGTH</span> hair restoration.
             </p>
 
             <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 md:p-6">
               <p className="font-serif text-foreground/90">
                 We currently have <span className="text-gold font-bold">{stockCount} jars</span> remaining from this batch.
                 <br />
-                We are only releasing them to women who <span className="text-destructive font-semibold">actually NEED them</span>.
+                <span className="text-gold font-semibold">Order now before they sell out!</span>
               </p>
             </div>
           </div>
@@ -65,29 +65,29 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
           {/* Divider */}
           <div className="w-full h-px bg-destructive/40 my-8" />
 
-          {/* Qualification section */}
+          {/* CTA section */}
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-2 text-gold">
-              <span className="text-2xl">📋</span>
+              <span className="text-2xl">🛒</span>
               <h4 className="font-sans text-sm md:text-base font-bold tracking-widest uppercase">
-                Qualification Required
+                Ready To Transform Your Hair?
               </h4>
             </div>
 
             <p className="font-serif text-lg text-foreground/90">
-              Before ordering, you must speak with a <span className="text-gold">Hair Loss Specialist</span>
+              Get your jar of <span className="text-gold">Fulani Hair Gro™</span> today
               <br className="hidden md:block" />
-              to determine if you qualify for a jar from this batch.
+              and start your transformation journey.
             </p>
 
             {/* CTA Button */}
             <Button
-              onClick={handleChatClick}
+              onClick={handleOrderClick}
               size="lg"
               className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4),0_0_60px_rgba(220,38,38,0.2)]"
             >
               <span className="mr-2">💬</span>
-              Chat With A Specialist To See If You Qualify
+              Order Now on WhatsApp
             </Button>
 
             {/* Response time */}

@@ -5,9 +5,9 @@ interface ApplicationProcessProps {
 }
 
 export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
-  const handleStartApplication = () => {
+  const handleOrderClick = () => {
     const message = encodeURIComponent(
-      `Hi! I'd like to apply for a jar of Fulani Hair Gro™.\n\nI believe I have Type ____ hair loss.\n\nHere are photos of my current hair situation:\n[Please attach photos]`
+      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages and pricing.`
     );
     window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
   };
@@ -16,20 +16,20 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
     {
       number: "STEP 1",
       icon: "📱",
-      title: "Chat with our Hair Specialist",
-      description: "Send photos of your hair loss for assessment"
+      title: "Message Us on WhatsApp",
+      description: "Tell us which package you want"
     },
     {
       number: "STEP 2",
       icon: "✅",
-      title: "Get approved (takes 5 mins)",
-      description: "We confirm you qualify for the formula"
+      title: "Confirm Your Order",
+      description: "We'll confirm availability and delivery details"
     },
     {
       number: "STEP 3",
       icon: "📦",
-      title: "Receive your numbered jar",
-      description: "Your jar is reserved and shipped"
+      title: "Receive Your Jar",
+      description: "Pay on delivery - inspect before you pay"
     }
   ];
 
@@ -66,15 +66,15 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
           ))}
         </div>
 
-        {/* Warning box */}
-        <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-6 mb-10 text-center">
-          <p className="font-sans text-sm font-bold text-destructive mb-2">
-            ⚠️ We reject approximately 30% of applicants.
+        {/* Info box */}
+        <div className="bg-gold/10 border border-gold/30 rounded-xl p-6 mb-10 text-center">
+          <p className="font-sans text-sm font-bold text-gold mb-2">
+            🚚 Pay On Delivery Available Nationwide
           </p>
           <p className="font-serif text-muted-foreground">
-            If you don't qualify, we'll tell you honestly.
+            Inspect your products before you pay.
             <br />
-            We'd rather lose a sale than waste a jar.
+            Same-day delivery in Lagos, 2-3 days nationwide.
           </p>
         </div>
 
@@ -84,18 +84,18 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
         {/* CTA Section */}
         <div className="text-center">
           <Button
-            onClick={handleStartApplication}
+            onClick={handleOrderClick}
             size="lg"
             className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-10 py-6 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4)]"
           >
             <span className="mr-2">💬</span>
-            Start Your Application
+            Order Now on WhatsApp
           </Button>
 
           <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
               <span>⏱️</span>
-              Current wait time: Under 5 minutes
+              Response time: Under 5 minutes
             </span>
             <span className="hidden md:inline">|</span>
             <span className="flex items-center gap-2">

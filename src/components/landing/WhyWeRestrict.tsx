@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 
 export const WhyWeRestrict = () => {
-  const handleApplyClick = () => {
+  const handleOrderClick = () => {
     const message = encodeURIComponent(
-      `Hi! I'd like to apply for a jar of Fulani Hair Gro™.\n\nI understand you're selective about who gets this formula. I believe I qualify.\n\nPlease let me know what information you need.`
+      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages.`
     );
     window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
   };
@@ -16,18 +16,18 @@ export const WhyWeRestrict = () => {
     },
     {
       number: "2️⃣",
-      title: "POTENCY CONCERNS",
-      content: "Our formula contains concentrated compounds that stimulate aggressive follicle regeneration. For someone with mild thinning, this is overkill. For someone with Type 3-4 loss, it's exactly what's needed."
+      title: "MAXIMUM POTENCY",
+      content: "Our formula contains concentrated compounds that stimulate aggressive follicle regeneration. This is the strongest natural hair growth formula available."
     },
     {
       number: "3️⃣",
-      title: "REPUTATION PROTECTION",
-      content: "When someone with Type 1 thinning uses our product, they might say \"it didn't do much.\" But they didn't NEED much. When someone with Type 4 loss uses it, they're AMAZED. We'd rather have 100 amazed customers than 1,000 lukewarm ones."
+      title: "PROVEN RESULTS",
+      content: "We have over 5,247 verified success stories. Women with serious hair loss see the most dramatic transformations with our formula."
     },
     {
       number: "4️⃣",
-      title: "MY GRANDMOTHER'S INSTRUCTIONS",
-      content: "\"Don't give this to people who don't need it. Give it to those who are suffering.\" I honor her words.",
+      title: "MY GRANDMOTHER'S LEGACY",
+      content: "\"Give this to women who are suffering and need real help.\" I honor her words by delivering real results.",
       isQuote: true
     }
   ];
@@ -39,14 +39,14 @@ export const WhyWeRestrict = () => {
       <div className="max-w-3xl mx-auto px-4 md:px-6 relative z-10">
         {/* Header */}
         <h2 className="font-cinzel text-2xl md:text-3xl text-center text-gold mb-4">
-          "Why Don't You Just Sell to Everyone?"
+          Why Is This Formula So Special?
         </h2>
         
         {/* Divider */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-10" />
 
         <p className="font-serif text-lg text-center text-muted-foreground mb-10">
-          We get asked this a lot. Here's the honest answer:
+          Here's what makes Fulani Hair Gro™ different:
         </p>
 
         {/* Reasons list */}
@@ -74,18 +74,16 @@ export const WhyWeRestrict = () => {
         {/* Closing message */}
         <div className="text-center space-y-6">
           <p className="font-serif text-lg text-foreground/90">
-            If you truly need this formula, <span className="text-gold font-semibold">we want YOU to have it</span>.
-            <br />
-            Not someone who will let it sit in their bathroom unused.
+            Ready to experience the difference? <span className="text-gold font-semibold">Order yours today</span>.
           </p>
 
           <Button
-            onClick={handleApplyClick}
+            onClick={handleOrderClick}
             size="lg"
             className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300"
           >
             <span className="mr-2">💬</span>
-            Apply For A Jar — Chat With Specialist
+            Order Now on WhatsApp
           </Button>
         </div>
       </div>

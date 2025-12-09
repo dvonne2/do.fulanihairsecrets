@@ -174,7 +174,7 @@ export const HairLossTypesGuide = () => {
                 {type.qualifies && (
                   <div className="flex items-center gap-2 text-gold">
                     <Check className="w-5 h-5" />
-                    <span className="font-sans text-sm font-bold">You Qualify for Treatment</span>
+                    <span className="font-sans text-sm font-bold">Treatable with Fulani Hair Gro™</span>
                   </div>
                 )}
               </div>

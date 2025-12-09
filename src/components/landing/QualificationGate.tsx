@@ -1,38 +1,18 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface QualificationGateProps {
   onQualified: () => void;
 }
 
 export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
-  const [checks, setChecks] = useState([false, false, false]);
-  const allChecked = checks.every(Boolean);
-
-  const handleChatClick = () => {
+  const handleOrderClick = () => {
     const message = encodeURIComponent(
-      `Hi! I'm not sure if I qualify for Fulani Hair Gro™.\n\nCan you help me determine if this product is right for my hair loss situation?`
+      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages and pricing.`
     );
     window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
   };
 
-  const qualifications = [
-    {
-      id: "type3-4",
-      label: "Yes, I have Type 3 or Type 4 hair loss"
-    },
-    {
-      id: "tried-products",
-      label: "Yes, I have tried multiple products with no results"
-    },
-    {
-      id: "committed",
-      label: "Yes, I am committed to the full 90-day protocol"
-    }
-  ];
-
-  const conditions = [
+  const benefits = [
     "Type 3 Hair Loss (Visible scalp through thinning)",
     "Type 4 Hair Loss (Significant bald patches)",
     "Chronic traction alopecia",
@@ -42,118 +22,65 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
   ];
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden" id="qualify">
-      {/* Dark warning background */}
+    <section className="py-16 md:py-24 relative overflow-hidden" id="order">
+      {/* Dark background */}
       <div 
         className="absolute inset-0"
         style={{ background: 'linear-gradient(to bottom, hsl(var(--background)), #0a0505, hsl(var(--background)))' }}
       />
 
       <div className="max-w-3xl mx-auto px-4 md:px-6 relative z-10">
-        {/* Stop icon */}
+        {/* Crown icon */}
         <div className="text-center mb-6">
-          <span className="text-6xl md:text-7xl">🚫</span>
+          <span className="text-6xl md:text-7xl">👑</span>
         </div>
 
         {/* Header */}
-        <h2 className="font-cinzel text-2xl md:text-4xl text-center text-destructive mb-4">
-          STOP Before You Order
+        <h2 className="font-cinzel text-2xl md:text-4xl text-center text-gold mb-4">
+          Ready To Transform Your Hair?
         </h2>
 
         {/* Divider */}
-        <div className="w-full h-px bg-destructive/40 mb-10" />
+        <div className="w-full h-px bg-gold/40 mb-10" />
 
-        {/* Warning message */}
+        {/* Message */}
         <div className="text-center space-y-6 mb-10">
           <p className="font-serif text-lg md:text-xl text-foreground">
-            <span className="text-gold">Fulani Hair Gro™</span> is <span className="text-destructive font-semibold">NOT</span> for everyone.
-          </p>
-          
-          <p className="font-serif text-lg text-muted-foreground">
-            This formula was designed for women with <span className="text-destructive">SERIOUS</span> hair loss:
+            <span className="text-gold">Fulani Hair Gro™</span> works best for women with:
           </p>
 
-          {/* Conditions list */}
+          {/* Benefits list */}
           <div className="bg-card/50 border border-gold/20 rounded-xl p-6 text-left max-w-md mx-auto">
-            {conditions.map((condition, i) => (
+            {benefits.map((benefit, i) => (
               <div key={i} className="flex items-center gap-3 py-2">
                 <span className="text-gold">✓</span>
-                <span className="font-serif text-foreground/90">{condition}</span>
+                <span className="font-serif text-foreground/90">{benefit}</span>
               </div>
             ))}
           </div>
 
-          <p className="font-serif text-lg text-muted-foreground italic">
-            If you only have "slightly thin" hair or just want "a bit more volume,"
-            <br className="hidden md:block" />
-            this product is <span className="text-destructive font-semibold">TOO POTENT</span> for you.
-          </p>
-
-          <p className="font-serif text-destructive">
-            We don't want to waste a jar on someone who doesn't truly need it.
+          <p className="font-serif text-lg text-gold font-semibold">
+            If this sounds like you, order now and start your transformation!
           </p>
         </div>
 
         {/* Divider */}
         <div className="w-full h-px bg-gold/40 mb-10" />
 
-        {/* Qualification checkboxes */}
-        <div className="bg-card border-2 border-gold/40 rounded-2xl p-6 md:p-8">
-          <h3 className="font-sans text-sm md:text-base font-bold tracking-widest uppercase text-gold text-center mb-8">
-            Do You Qualify?
+        {/* CTA Box */}
+        <div className="bg-card border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center">
+          <h3 className="font-sans text-sm md:text-base font-bold tracking-widest uppercase text-gold mb-6">
+            Choose Your Package
           </h3>
 
-          <div className="space-y-4 mb-8">
-            {qualifications.map((qual, index) => (
-              <div 
-                key={qual.id}
-                className="flex items-center gap-4 p-4 bg-background/50 rounded-xl border border-border/50 hover:border-gold/40 transition-colors cursor-pointer"
-                onClick={() => {
-                  const newChecks = [...checks];
-                  newChecks[index] = !newChecks[index];
-                  setChecks(newChecks);
-                }}
-              >
-                <Checkbox 
-                  id={qual.id}
-                  checked={checks[index]}
-                  onCheckedChange={(checked) => {
-                    const newChecks = [...checks];
-                    newChecks[index] = checked as boolean;
-                    setChecks(newChecks);
-                  }}
-                  className="border-gold data-[state=checked]:bg-gold data-[state=checked]:border-gold"
-                />
-                <label 
-                  htmlFor={qual.id}
-                  className="font-serif text-foreground cursor-pointer flex-1"
-                >
-                  {qual.label}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          {/* Note */}
-          {!allChecked && (
-            <p className="text-center text-muted-foreground text-sm mb-6 italic">
-              [All boxes must be checked to proceed]
-            </p>
-          )}
-
-          {/* Primary CTA */}
+          {/* Primary CTA - Show Packages */}
           <Button
             onClick={onQualified}
-            disabled={!allChecked}
             size="lg"
-            className={`w-full font-sans text-sm md:text-base tracking-widest uppercase py-6 transition-all duration-300 ${
-              allChecked 
-                ? 'gold-gradient text-background hover:scale-105 shadow-[0_0_30px_rgba(218,165,32,0.4)]' 
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
-            }`}
+            className="w-full gold-gradient text-background hover:scale-105 shadow-[0_0_30px_rgba(218,165,32,0.4)] font-sans text-sm md:text-base tracking-widest uppercase py-6 transition-all duration-300 mb-4"
           >
-            <span className="mr-2">{allChecked ? '✅' : '🔒'}</span>
-            {allChecked ? "I Qualify — Show Me The Packages" : "Complete All Requirements Above"}
+            <span className="mr-2">👑</span>
+            View Packages & Pricing
           </Button>
 
           {/* Divider */}
@@ -163,15 +90,15 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
             <div className="h-px w-16 bg-border" />
           </div>
 
-          {/* Secondary CTA */}
+          {/* Secondary CTA - WhatsApp */}
           <Button
-            onClick={handleChatClick}
+            onClick={handleOrderClick}
             variant="outline"
             size="lg"
             className="w-full border-gold/40 text-gold hover:bg-gold/10 font-sans text-sm tracking-widest uppercase py-6"
           >
             <span className="mr-2">💬</span>
-            Not Sure? Chat With A Specialist First
+            Order Directly on WhatsApp
           </Button>
         </div>
       </div>

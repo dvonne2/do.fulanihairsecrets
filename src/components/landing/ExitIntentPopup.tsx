@@ -7,9 +7,9 @@ interface ExitIntentPopupProps {
 }
 
 export const ExitIntentPopup = ({ show, onClose }: ExitIntentPopupProps) => {
-  const handleChatClick = () => {
+  const handleOrderClick = () => {
     const message = encodeURIComponent(
-      `Hi! I'd like a FREE hair assessment to see if I qualify for Fulani Hair Gro™.`
+      `Hi! I'd like to order Fulani Hair Gro™. Please send me the available packages.`
     );
     window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
     onClose();
@@ -55,33 +55,33 @@ export const ExitIntentPopup = ({ show, onClose }: ExitIntentPopupProps) => {
           </h2>
           
           <p className="font-cinzel text-lg text-foreground mt-4 mb-4">
-            Are you sure you don't qualify?
+            Don't miss out on your transformation!
           </p>
           
           <div className="text-left space-y-1 mb-4 px-2">
             <p className="font-serif text-foreground/80">
-              <span className="text-destructive">If you're hiding your edges...</span>
+              <span className="text-gold">✓ 5,247+ happy customers</span>
             </p>
             <p className="font-serif text-foreground/80">
-              <span className="text-destructive">If you've cried about your hair...</span>
+              <span className="text-gold">✓ 365-day money-back guarantee</span>
             </p>
           </div>
           
           <p className="font-cinzel text-gold font-semibold mb-6">
-            You probably qualify.
+            Order now — limited stock available!
           </p>
 
           {/* CTA Button */}
           <button 
-            onClick={handleChatClick}
+            onClick={handleOrderClick}
             className="w-full gold-gradient text-background font-sans text-sm tracking-widest uppercase py-4 rounded-xl font-bold hover:scale-105 transition-transform"
           >
-            💬 Chat Now — Free Assessment
+            💬 Order Now on WhatsApp
           </button>
 
           {/* Response time */}
           <p className="text-muted-foreground text-sm mt-3 mb-4">
-            ⏱️ Takes only 5 minutes
+            ⏱️ Response in under 5 minutes
           </p>
 
           {/* Decline Link */}
