@@ -11,21 +11,21 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    /* Gold Palette - The Luxury Accent */
-    --gold: 43 74% 49%;
-    --gold-bright: 51 100% 50%;
-    --gold-dark: 43 76% 35%;
-    --gold-light: 48 100% 90%;
+    /* Gold Palette - MAXIMUM BRIGHTNESS */
+    --gold: 45 100% 55%;
+    --gold-bright: 50 100% 60%;
+    --gold-dark: 42 100% 45%;
+    --gold-light: 48 100% 95%;
     
-    /* Royal Blue Palette - Heritage Background */
-    --royal-blue: 229 73% 16%;
-    --royal-blue-light: 224 69% 33%;
-    --navy: 224 69% 33%;
+    /* Royal Blue Palette - VIVID */
+    --royal-blue: 230 100% 25%;
+    --royal-blue-light: 225 100% 50%;
+    --navy: 225 100% 50%;
 
-    /* Status Colors */
-    --destructive: 0 84% 60%;
+    /* Status Colors - MAXIMUM SATURATION */
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 71% 45%;
+    --success: 140 100% 50%;
     --success-foreground: 0 0% 100%;
 
     /* UI Colors */
@@ -33,28 +33,28 @@
     --card-foreground: 0 0% 100%;
     --popover: 0 0% 4%;
     --popover-foreground: 0 0% 100%;
-    --primary: 43 74% 49%;
+    --primary: 45 100% 55%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 229 73% 16%;
+    --secondary: 230 100% 25%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 64%;
-    --accent: 43 74% 49%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 45 100% 55%;
     --accent-foreground: 0 0% 0%;
-    --border: 43 74% 49%;
+    --border: 45 100% 55%;
     --input: 0 0% 15%;
-    --ring: 43 74% 49%;
+    --ring: 45 100% 55%;
     --radius: 0.75rem;
 
     /* Sidebar - Dark Luxury */
     --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary: 45 100% 55%;
     --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 229 73% 16%;
+    --sidebar-accent: 230 100% 25%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 43 74% 49%;
-    --sidebar-ring: 43 74% 49%;
+    --sidebar-border: 45 100% 55%;
+    --sidebar-ring: 45 100% 55%;
   }
 }
 
