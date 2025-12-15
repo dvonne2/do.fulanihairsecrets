@@ -13,23 +13,114 @@ import result17 from '@/assets/results/result-17.png';
 import result19 from '@/assets/results/result-19.jpg';
 import result20 from '@/assets/results/result-20.jpg';
 import result22 from '@/assets/results/result-22.jpg';
+import fourteenDayCollage from '@/assets/products/before-and-after-14-days-2013x2048.webp';
 
 const transformations = [
-  { after: result1, name: "Amina K.", problem: "Severe traction alopecia from braids", duration: "3 months" },
-  { after: result2, name: "Fatima A.", problem: "Postpartum hair loss", duration: "2 months" },
-  { after: result3, name: "Blessing N.", problem: "Chemical damage from relaxer", duration: "4 months" },
-  { after: result4, name: "Hajia Maryam", problem: "Age-related thinning", duration: "2.5 months" },
-  { after: result5, name: "Chioma E.", problem: "Stress-induced hair loss", duration: "1.5 months" },
-  { after: result6, name: "Aisha B.", problem: "Crown thinning from styling", duration: "3.5 months" },
-  { after: result8, name: "Mama Titi", problem: "Menopausal hair changes", duration: "5 months" },
-  { after: result11, name: "Yetunde M.", problem: "Edge restoration", duration: "2.5 months" },
-  { after: result12, name: "Funke A.", problem: "Edges from tight styles", duration: "2 months" },
-  { after: result14, name: "Chiamaka D.", problem: "Overall thinning", duration: "4 months" },
-  { after: result16, name: "Mrs. Folake T.", problem: "Hormonal hair loss", duration: "4.5 months" },
-  { after: result17, name: "Zainab O.", problem: "Styling damage repair", duration: "3.5 months" },
-  { after: result19, name: "Nkechi I.", problem: "Breakage from extensions", duration: "2.5 months" },
-  { after: result20, name: "Ifeoma C.", problem: "Dry, brittle hair", duration: "3 months" },
-  { after: result22, name: "Adaora M.", problem: "Natural hair growth", duration: "5 months" },
+  {
+    after: result1,
+    name: "Amina K.",
+    problem: "Severe traction alopecia from braids",
+    duration: "3 months",
+    caption: "Edges filled back in after 3 months of gentle Fulani Hair Gro routine."
+  },
+  {
+    after: result2,
+    name: "Fatima A.",
+    problem: "Postpartum hair loss",
+    duration: "2 months",
+    caption: "Post-baby shedding calmed and volume returned in just 2 months."
+  },
+  {
+    after: result3,
+    name: "Blessing N.",
+    problem: "Chemical damage from relaxer",
+    duration: "4 months",
+    caption: "Relaxer-damaged hair looks fuller and healthier after 4 months."
+  },
+  {
+    after: result4,
+    name: "Hajia Maryam",
+    problem: "Age-related thinning",
+    duration: "2.5 months",
+    caption: "Age-related thinning softened and density improved in 2½ months."
+  },
+  {
+    after: result5,
+    name: "Chioma E.",
+    problem: "Stress-induced hair loss",
+    duration: "1.5 months",
+    caption: "Stress breakage reduced and hairline looks stronger in 6 weeks."
+  },
+  {
+    after: result6,
+    name: "Aisha B.",
+    problem: "Crown thinning from styling",
+    duration: "3.5 months",
+    caption: "Thin crown filled in gradually over 3½ months of consistent use."
+  },
+  {
+    after: result8,
+    name: "Mama Titi",
+    problem: "Menopausal hair changes",
+    duration: "5 months",
+    caption: "Menopause-related thinning improved with steady growth over 5 months."
+  },
+  {
+    after: result11,
+    name: "Yetunde M.",
+    problem: "Edge restoration",
+    duration: "2.5 months",
+    caption: "Bald edges now covered with new growth in about 10 weeks."
+  },
+  {
+    after: result12,
+    name: "Funke A.",
+    problem: "Edges from tight styles",
+    duration: "2 months",
+    caption: "Tight-style damage reversed and edges look fuller in 2 months."
+  },
+  {
+    after: result14,
+    name: "Chiamaka D.",
+    problem: "Overall thinning",
+    duration: "4 months",
+    caption: "Overall thinning replaced with thicker strands over 4 months."
+  },
+  {
+    after: result16,
+    name: "Mrs. Folake T.",
+    problem: "Hormonal hair loss",
+    duration: "4.5 months",
+    caption: "Hormonal shedding slowed and fullness returned in 4½ months."
+  },
+  {
+    after: result17,
+    name: "Zainab O.",
+    problem: "Styling damage repair",
+    duration: "3.5 months",
+    caption: "Broken, over-styled hair looks smoother and denser after 3½ months."
+  },
+  {
+    after: result19,
+    name: "Nkechi I.",
+    problem: "Breakage from extensions",
+    duration: "2.5 months",
+    caption: "Extension breakage reduced and length retained in about 10 weeks."
+  },
+  {
+    after: result20,
+    name: "Ifeoma C.",
+    problem: "Dry, brittle hair",
+    duration: "3 months",
+    caption: "Dry, brittle strands now softer and fuller after 3 months."
+  },
+  {
+    after: result22,
+    name: "Adaora M.",
+    problem: "Natural hair growth",
+    duration: "5 months",
+    caption: "Slow natural growth sped up with visible length in 5 months."
+  },
 ];
 
 export const BeforeAfterSection = () => {
@@ -51,6 +142,20 @@ export const BeforeAfterSection = () => {
           <p className="font-sans text-lg text-muted-foreground max-w-2xl mx-auto">
             Real transformations. No filters. No photoshop. Just pure results.
           </p>
+        </div>
+
+        {/* Featured 14-day transformation */}
+        <div className="mb-8 md:mb-10">
+          <div className="rounded-2xl overflow-hidden border-2 border-gold/60 bg-background/10">
+            <img
+              src={fourteenDayCollage}
+              alt="Dramatic 14-day before and after hair growth transformation collage"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              width={1200}
+              height={600}
+            />
+          </div>
         </div>
 
         {/* Before/After Grid */}
@@ -79,7 +184,10 @@ export const BeforeAfterSection = () => {
                     <img 
                       src={item.after} 
                       alt={`${item.name} after transformation`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      width={600}
+                      height={600}
                     />
                     <div className="absolute top-2 right-2 px-2 py-1 bg-success text-background text-[10px] font-bold rounded">
                       AFTER
@@ -101,6 +209,9 @@ export const BeforeAfterSection = () => {
                     <span key={j} className="text-gold text-sm">★</span>
                   ))}
                 </div>
+                <p className="font-serif text-xs md:text-sm text-foreground/90 mt-3 max-w-xs mx-auto">
+                  {item.caption}
+                </p>
               </div>
             </div>
           ))}
@@ -112,11 +223,11 @@ export const BeforeAfterSection = () => {
             Your "after" photo is waiting to be taken
           </p>
           <a 
-            href="#order"
-            className="inline-flex items-center gap-2 gold-gradient-animated text-background font-sans text-sm tracking-wider uppercase px-8 py-3 rounded-xl font-bold btn-luxury"
+            href="#order-form"
+            data-form-cta="true"
+            className="inline-flex items-center gap-2 gold-gradient text-background font-sans text-sm tracking-wider uppercase px-8 py-3 rounded-xl font-bold btn-luxury"
           >
-            <span>GET MY TRANSFORMATION</span>
-            <span>→</span>
+            <span>See If This Works for My Hair</span>
           </a>
         </div>
       </div>

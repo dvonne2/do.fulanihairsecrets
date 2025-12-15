@@ -28,15 +28,16 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
             {/* Live Viewers */}
             <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-destructive/20 border border-destructive/50">
               <span className="w-2 h-2 rounded-full bg-destructive animate-pulse"></span>
-              <span className="font-sans text-xs text-destructive">{viewerCount} people viewing</span>
+              <span className="font-sans text-xs text-white">{viewerCount} people viewing</span>
             </div>
             
             {/* CTA Button */}
             <a 
-              href="#order" 
-              className="gold-gradient-animated text-background px-4 md:px-8 py-2 md:py-3 btn-luxury font-sans text-xs tracking-widest font-bold animate-glow rounded-lg"
+              href="#order-form" 
+              data-form-cta="true"
+              className="gold-gradient text-background px-4 md:px-8 py-2 md:py-3 btn-luxury font-sans text-xs tracking-widest font-bold rounded-lg"
             >
-              👑 SHOP NOW
+              👑 Check Availability in Your Area
             </a>
           </div>
         </div>

@@ -173,7 +173,7 @@ export const MaiduguriSecret = () => {
           </blockquote>
 
           <div className="space-y-1">
-            <p className="font-cinzel text-gold text-lg">— Hajia Zainab</p>
+            <p className="font-cinzel text-gold text-lg">— Hajia Hajara</p>
             <p className="text-muted-foreground text-sm">Founder, Fulani Hair Gro™</p>
             <p className="text-gold/60 text-xs tracking-widest">Est. 1625 · Maiduguri</p>
           </div>

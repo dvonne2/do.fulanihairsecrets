@@ -15,7 +15,7 @@ If our secret helps other women feel beautiful, then you have my blessing.'
 
 That conversation changed everything.
 
-Now, every jar I make honors her words."`;
+Now, every bundle I make honors her words."`;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,7 +57,7 @@ Now, every jar I make honors her words."`;
   return (
     <section 
       ref={sectionRef}
-      className="relative py-16 md:py-24 overflow-hidden bg-background"
+      className="relative py-16 md:py-24 overflow-hidden bg-[#333333]"
     >
       {/* Soft gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-gold/5" />
@@ -78,7 +78,7 @@ Now, every jar I make honors her words."`;
           <div className="bg-card/50 backdrop-blur-sm rounded-xl p-8 md:p-12 border border-gold/10">
             {/* Quote content with typewriter effect */}
             <div 
-              className="font-dancing text-xl md:text-2xl text-foreground/90 leading-relaxed whitespace-pre-line min-h-[400px]"
+              className="font-serif text-xl md:text-2xl text-foreground/90 leading-relaxed whitespace-pre-line min-h-[400px]"
               style={{ fontStyle: 'italic' }}
             >
               {isVisible ? (
@@ -92,7 +92,7 @@ Now, every jar I make honors her words."`;
             </div>
 
             {/* Memorial section */}
-            <div className={`mt-12 pt-8 border-t border-gold/20 text-center transition-all duration-1000 delay-[8000ms] ${typedText.length >= fullQuote.length ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`mt-12 pt-8 border-t border-gold/20 text-center transition-all duration-1000 delay-\[8000ms\] ${typedText.length >= fullQuote.length ? 'opacity-100' : 'opacity-0'}`}>
               <p className="font-serif text-muted-foreground text-sm mb-2">In loving memory of</p>
               <p className="font-cinzel text-gold text-xl md:text-2xl mb-1">
                 Hajia Aissata Cissé 👑❤️

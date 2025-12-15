@@ -77,8 +77,17 @@ export const Footer = () => {
         <p className="font-sans text-xs text-muted-foreground mb-2">
           © 2025 Fulani Hair Gro™. All Rights Reserved.
         </p>
-        <p className="font-sans text-xs text-destructive font-bold">
+        <p className="font-sans text-xs text-destructive font-bold mb-4">
           ⚠️ BEWARE OF IMITATIONS. Only purchase from official channels.
+        </p>
+
+        <p className="font-sans text-[0.7rem] text-muted-foreground mb-1 leading-snug">
+          The contents of this website, text, images, products are sold or distributed by VITALVIDA.NG and protected under the Nigeria
+          Copyright Act pursuant to Nigeria and International Copyright Laws. Copy/Edit/Use of our contents without my express written
+          permission and you WILL be subject to the maximum fine/penalty imposed by the Law.
+        </p>
+        <p className="font-sans text-[0.5rem] text-muted-foreground leading-snug">
+          This website is not a part of the Facebook website or Facebook Inc. FACEBOOK is a trademark of FACEBOOK, Inc.
         </p>
       </div>
     </footer>

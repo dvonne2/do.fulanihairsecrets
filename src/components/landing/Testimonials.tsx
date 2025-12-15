@@ -12,6 +12,10 @@ import result16 from '@/assets/results/result-16.jpg';
 import result17 from '@/assets/results/result-17.png';
 import result19 from '@/assets/results/result-19.jpg';
 import result20 from '@/assets/results/result-20.jpg';
+import hajiaMaryamTestimonial from '@/assets/testimonials/Hajia Maryam Testimonial.png';
+import hajiaMaryam2 from '@/assets/testimonials/Hajia-Maryam-2.png';
+import mamaTitiTestimonial1 from '@/assets/testimonials/Mama Titi Testimonial1.png';
+import mamaTiti2 from '@/assets/testimonials/Mama Titi 2.png';
 
 interface TestimonialsProps {
   activeIndex: number;
@@ -29,10 +33,11 @@ const testimonials = [
   { name: "Yetunde Martins", location: "Ogun", text: "Perfect for protective styling. My locs are growing faster and my scalp is so healthy now.", image: result11 },
   { name: "Funke Akindele", location: "V.I. Lagos", text: "My edges are laid and my hairline is back! I can finally do sleek buns without worrying.", image: result12 },
   { name: "Chiamaka Dike", location: "Warri", text: "My afro is so full now that people ask if it's real. Yes it is, thanks to Fulani Hair Gro!", image: result14 },
-  { name: "Mrs. Folake T.", location: "Ikoyi", text: "The elegance and class this product brings! I feel like royalty every time I style my hair.", image: result16 },
+  { name: "Mrs. Folake T.", location: "Victoria Island, Lagos", text: "The elegance and class this product brings! I feel like royalty every time I style my hair.", image: result16 },
   { name: "Zainab O.", location: "Abuja", text: "My hair has never looked this luxurious. The compliments I get at every event are endless!", image: result17 },
   { name: "Nkechi Iweala", location: "Onitsha", text: "I love holding these products! You can feel the quality. My natural hair is thriving!", image: result19 },
   { name: "Ifeoma Chukwu", location: "Enugu", text: "Best investment I've made for my hair. The complete system works wonders!", image: result20 },
+  { name: "Hajia Maryam", location: "Nigeria", text: "Before Fulani Hair Gro, I was always hiding my head under wigs and scarves because my bald edges embarrassed me. After using the full system, my hair started coming back small small. Now I can remove my wig and sit confidently in front of people at the salon. May God bless you real good for this product.", image: result3 },
 ];
 
 export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) => {
@@ -48,17 +53,8 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           <p className="font-sans text-gold/60 mt-2">Verified purchases only</p>
         </div>
 
-        {/* Featured Review */}
+        {/* Featured Review (no headshot image) */}
         <div className="luxury-card rounded-3xl p-8 md:p-12 mb-8 text-center mega-glow">
-          <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gold">
-              <img 
-                src={testimonials[activeIndex].image} 
-                alt={testimonials[activeIndex].name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
           <div className="flex justify-center gap-1 mb-4">
             {Array(5).fill(0).map((_, j) => <span key={j} className="text-gold text-2xl">★</span>)}
           </div>
@@ -80,18 +76,11 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           </div>
         </div>
 
-        {/* Grid with photos */}
+        {/* Grid (no headshot images) */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {testimonials.map((review, i) => (
             <div key={i} className="luxury-card rounded-xl p-6 hover:scale-[1.02] transition-transform">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gold/50">
-                  <img 
-                    src={review.image} 
-                    alt={review.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
                 <div>
                   <p className="font-cinzel text-sm text-gold">{review.name}</p>
                   <p className="font-sans text-xs text-gold/50">{review.location}</p>
@@ -104,7 +93,45 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
             </div>
           ))}
         </div>
+
+        {/* WhatsApp Proof Strip */}
+        <div className="mt-10">
+          <p className="font-cinzel text-sm tracking-[0.3em] uppercase text-gold mb-4 text-center">
+            WhatsApp Proof From Real Queens
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
+              <img 
+                src={hajiaMaryamTestimonial} 
+                alt="WhatsApp testimonial from Hajia Maryam about her edges and confidence"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
+              <img 
+                src={hajiaMaryam2} 
+                alt="Second WhatsApp testimonial from Hajia Maryam showing product and regrowth update"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
+              <img 
+                src={mamaTitiTestimonial1} 
+                alt="WhatsApp testimonial from Mama Titi about her hair transformation"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
+              <img 
+                src={mamaTiti2} 
+                alt="Second WhatsApp testimonial from Mama Titi showing continued results"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
-};
+}
+;

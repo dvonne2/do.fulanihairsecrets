@@ -121,14 +121,14 @@ export const HairLossTypesDiagram = () => {
 
         {/* CTA Section */}
         <div className="text-center">
-          <p className="font-serif text-lg text-foreground/90 mb-6">
+          <p className="font-serif text-lg text-foreground/90 mb-4">
             Not sure which type you have?
           </p>
 
           <Button
             onClick={handleDiagnoseClick}
             size="lg"
-            className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300"
+            className="border border-gold text-gold bg-transparent font-sans text-sm md:text-base tracking-widest uppercase px-8 py-4 hover:bg-gold/10 transition-transform duration-300"
           >
             <span className="mr-2">📸</span>
             Send Us A Photo of Your Hair — We'll Diagnose FREE

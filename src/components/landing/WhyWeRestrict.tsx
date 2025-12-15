@@ -1,18 +1,18 @@
 import { Button } from '@/components/ui/button';
 
 export const WhyWeRestrict = () => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages.`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const reasons = [
     {
       number: "1️⃣",
       title: "LIMITED SUPPLY",
-      content: "Each batch takes 6-8 weeks to prepare using traditional methods. We can only produce approximately 150 jars per batch. Demand far exceeds supply."
+      content: "Each batch takes 6-8 weeks to prepare using traditional methods. We can only produce approximately 150 bundles per batch. Demand far exceeds supply."
     },
     {
       number: "2️⃣",
@@ -78,12 +78,12 @@ export const WhyWeRestrict = () => {
           </p>
 
           <Button
-            onClick={handleOrderClick}
+            onClick={scrollToOrderForm}
             size="lg"
             className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300"
           >
-            <span className="mr-2">💬</span>
-            Order Now on WhatsApp
+            <span className="mr-2">🛒</span>
+            Order Now — ₦66,750
           </Button>
         </div>
       </div>

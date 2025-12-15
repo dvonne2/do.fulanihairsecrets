@@ -19,11 +19,11 @@ export const ProblemAgitation = () => {
           {problems.map((item, i) => (
             <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-background/30 border border-destructive/30">
               <span className="text-2xl">{item.split(' ')[0]}</span>
-              <p className="font-sans text-sm text-foreground/80 text-left">{item.substring(item.indexOf(' ') + 1)}</p>
+              <p className="font-sans text-base md:text-lg text-foreground/80 text-left">{item.substring(item.indexOf(' ') + 1)}</p>
             </div>
           ))}
         </div>
-        <p className="font-serif text-lg md:text-xl text-gold italic">
+        <p className="font-serif text-xl md:text-2xl text-gold italic">
           "If you said yes to any of these, you're exactly who we created Fulani Hair Gro™ for..."
         </p>
       </div>

@@ -19,10 +19,47 @@
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
     <link rel="canonical" href="https://fulanihairgro.com" />
+
+    <!-- Google Tag Manager (HEAD) -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id=' + i + dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-P7F7447');
+    </script>
+    <!-- End Google Tag Manager (HEAD) -->
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-P7F7447"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Generate unique order_id for Fulani Hair Gro
+        const orderID = 'FHG' + Date.now().toString();
+
+        // Poll until WPForms has fully loaded
+        const interval = setInterval(function () {
+          var orderField = document.querySelector('input[name="order_id"]');
+          if (orderField) {
+            orderField.value = orderID; // inject unique order_id
+            clearInterval(interval);
+          }
+        }, 300);
+      });
+    </script>
   </body>
 </html>

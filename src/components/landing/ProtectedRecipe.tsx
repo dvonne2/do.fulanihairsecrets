@@ -4,7 +4,7 @@ export const ProtectedRecipe = () => {
     "Traditional fermentation process (21 days minimum)",
     "Infused under specific conditions",
     "Blessed according to family tradition",
-    "Each batch personally approved by Hajia Zainab"
+    "Each batch personally approved by Hajia Hajara"
   ];
 
   return (
@@ -69,7 +69,7 @@ export const ProtectedRecipe = () => {
 
             {/* Explanation */}
             <div className="text-center space-y-2 font-serif text-muted-foreground italic">
-              <p>This is why every jar is numbered.</p>
+              <p>This is why we still hand-make it till today.</p>
               <p>This is why we can never mass-produce.</p>
               <p className="text-gold not-italic font-semibold">This is why it actually works.</p>
             </div>

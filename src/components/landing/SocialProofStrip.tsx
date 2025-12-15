@@ -33,7 +33,7 @@ const customers = [
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
   { image: result14, name: "Chiamaka D.", location: "Warri" },
-  { image: result16, name: "Mrs. Folake T.", location: "Ikoyi" },
+  { image: result16, name: "Mrs. Folake T.", location: "Victoria Island, Lagos" },
   { image: result17, name: "Zainab O.", location: "Abuja" },
   { image: result18, name: "Adeola N.", location: "Lagos" },
   { image: result19, name: "Nkechi I.", location: "Onitsha" },
@@ -54,7 +54,7 @@ const customers = [
   { image: result12, name: "Funke A.", location: "V.I. Lagos" },
   { image: result13, name: "Bimpe K.", location: "Benin" },
   { image: result14, name: "Chiamaka D.", location: "Warri" },
-  { image: result16, name: "Mrs. Folake T.", location: "Ikoyi" },
+  { image: result16, name: "Mrs. Folake T.", location: "Victoria Island, Lagos" },
   { image: result17, name: "Zainab O.", location: "Abuja" },
   { image: result18, name: "Adeola N.", location: "Lagos" },
   { image: result19, name: "Nkechi I.", location: "Onitsha" },
@@ -66,11 +66,25 @@ const customers = [
 
 export const SocialProofStrip = () => {
   return (
-    <section className="py-6 md:py-8 bg-background border-y border-gold/20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <p className="text-center font-sans text-sm text-muted-foreground mb-4">
+    <section className="py-8 md:py-10 bg-background border-y border-gold/20 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 mb-4 md:mb-6">
+        <p className="text-center font-sans text-sm text-muted-foreground mb-2">
           <span className="text-gold font-semibold">5,247+ Nigerian women</span> have transformed their hair with us
         </p>
+        <div className="max-w-3xl mx-auto rounded-2xl border border-gold/30 bg-black/60 px-4 py-3 md:px-6 md:py-4">
+          <p className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-gold text-center mb-2 md:mb-3">
+            The Numbers That Prove Everything
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-[11px] md:text-sm text-gray-200 font-sans">
+            <p>⚫ 91% saw reduced shedding within 2 weeks</p>
+            <p>⚫ 84% noticed new "baby hairs" by week 4</p>
+            <p>⚫ 78% reported significantly thicker hair by week 12</p>
+            <p>⚫ 88% said it was easier to use than previous treatments</p>
+          </div>
+          <p className="mt-2 text-[11px] md:text-xs text-gray-300 text-center">
+            Overall, <span className="text-gold font-semibold">84% of women</span> reported a visible improvement in their hair.
+          </p>
+        </div>
       </div>
       
       {/* Auto-scrolling customer photos */}

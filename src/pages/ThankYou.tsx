@@ -9,12 +9,23 @@ import result3 from '@/assets/results/result-3.jpg';
 import shampoo from '@/assets/products/shampoo.jpg';
 import conditioner from '@/assets/products/conditioner.jpg';
 import pomade from '@/assets/products/pomade.png';
-import hajiaFatima from '@/assets/testimonials/hajia-fatima.jpg';
+import founderImg from '@/assets/products/hajara.png';
 import amina from '@/assets/testimonials/amina.png';
 import blessing from '@/assets/testimonials/blessing.jpg';
 
 const ThankYou = () => {
-  const [orderNumber] = useState(() => `FHG-2024-${Math.floor(10000 + Math.random() * 90000)}`);
+  const [orderNumber] = useState(() => {
+    if (typeof window !== 'undefined') {
+      // Use entry_id from URL (WPForms Entry ID) as the single source of truth
+      const params = new URLSearchParams(window.location.search);
+      const entryId = params.get('entry_id');
+      if (entryId && entryId.trim().length > 0) {
+        return entryId;
+      }
+    }
+    // Fallback when no entry_id is available
+    return 'UNKNOWN';
+  });
   const [savingsAnimated, setSavingsAnimated] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
@@ -58,6 +69,15 @@ const ThankYou = () => {
       if (progress < 1) requestAnimationFrame(animateSavings);
     };
     setTimeout(animateSavings, 1000);
+  }, []);
+
+  // Force GTM + Pixel pageview on SPA navigation to /thank-you
+  useEffect(() => {
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    (window as any).dataLayer.push({
+      event: 'virtualPageview',
+      page: '/thank-you',
+    });
   }, []);
 
   const formatCurrency = (amount: number) => {
@@ -109,7 +129,7 @@ const ThankYou = () => {
           <p className="text-xl text-gray-300 mb-4">"You Just Made the Best Decision for Your Hair"</p>
           
           <div className="text-gray-400 mb-8">
-            <p>Order #{orderNumber}</p>
+            <p>Order ID: {orderNumber}</p>
             <p>{new Date().toLocaleDateString('en-NG', { month: 'long', day: 'numeric', year: 'numeric' })} • {new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
 
@@ -119,7 +139,7 @@ const ThankYou = () => {
 
           <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            You're now 1 of 5,248 Nigerian Queens with amazing hair incoming!
+            You're now 1 of 15,248 Nigerian Queens with amazing hair incoming!
           </div>
         </div>
       </section>
@@ -184,7 +204,7 @@ const ThankYou = () => {
 
           <div className="border-t border-gray-700 pt-6 mb-6">
             <div className="flex justify-between items-center text-xl">
-              <span className="text-white">What you invested today:</span>
+              <span className="text-white">Your investment today:</span>
               <span className="text-green-400 font-bold">₦66,750</span>
             </div>
           </div>
@@ -342,14 +362,18 @@ const ThankYou = () => {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#111] border border-gold/30 rounded-3xl p-8">
             <div className="flex flex-col md:flex-row items-center gap-8">
-              <img src={hajiaFatima} alt="Hajia Zainab" className="w-32 h-32 rounded-full border-4 border-gold object-cover" />
+              <img 
+                src={founderImg}
+                alt="Hajiya Hajara - Founder, Fulani Hair Gro"
+                className="w-32 h-32 rounded-full border-4 border-gold object-cover" 
+              />
               <div>
                 <p className="text-2xl text-gold mb-4">"Welcome, Queen! 👑</p>
                 <p className="text-gray-300 mb-4">You're not just a customer — you're family now.</p>
                 <p className="text-gray-300 mb-4">We're personally invested in YOUR transformation. That's why we offer 365-day guarantees, VIP WhatsApp support, and check in on your progress.</p>
                 <p className="text-gray-300 mb-4">Your hair journey matters to us. We can't wait to see your results!</p>
                 <p className="text-gray-400 italic">With love,</p>
-                <p className="text-gold font-cinzel text-xl">Hajia Zainab</p>
+                <p className="text-gold font-cinzel text-xl">Hajiya Hajara</p>
                 <p className="text-gray-400 text-sm">Founder, Fulani Hair Gro™</p>
               </div>
             </div>
@@ -372,34 +396,7 @@ const ThankYou = () => {
         </div>
       </section>
 
-      {/* SECTION 8: VIP ACCESS */}
-      <section className="py-16 px-4 bg-green-500/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-cinzel text-gold mb-8">🔓 Unlock Your VIP Benefits NOW</h2>
-          
-          <div className="bg-[#111] border-2 border-green-500/50 rounded-3xl p-8">
-            <h3 className="text-xl font-bold text-green-400 mb-4">📱 JOIN OUR VIP QUEENS WHATSAPP GROUP</h3>
-            <p className="text-gray-300 mb-6">Get exclusive access to:</p>
-            
-            <div className="text-left space-y-3 mb-8 max-w-md mx-auto">
-              {['Direct support from our hair experts', 'Weekly tips for faster results', 'First access to new products & sales', 'Community of 547 queens on the same journey', 'Share your progress & get motivation'].map((item, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
-                  <span className="text-gray-300">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            <Button className="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white text-lg py-6 px-8">
-              👑 JOIN VIP GROUP NOW 👑
-            </Button>
-            
-            <p className="text-green-400 mt-4 text-sm">547 queens are already inside waiting for you!</p>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 9: DIGITAL BONUSES */}
+      {/* SECTION 8: DIGITAL BONUSES */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-cinzel text-center text-gold mb-4">📲 Your Digital Bonuses Are Ready</h2>
@@ -441,7 +438,7 @@ const ThankYou = () => {
             {[
               { img: amina, name: 'Hajia Amina B.', loc: 'Kano, Nigeria', quote: "I was nervous after ordering. Was this really going to work? 4 months later, I'm SO glad I trusted my gut. Best decision ever." },
               { img: blessing, name: 'Mrs. Blessing O.', loc: 'Lagos, Nigeria', quote: "The moment I got my package, I knew this was different. The quality, the smell, everything screams PREMIUM." },
-              { img: hajiaFatima, name: 'Chidinma E.', loc: 'Port Harcourt, Nigeria', quote: "I've ordered 3 times now. First for myself, then my mom, then my sister. We're all obsessed!" }
+              { img: founderImg, name: 'Chidinma E.', loc: 'Port Harcourt, Nigeria', quote: "I've ordered 3 times now. First for myself, then my mom, then my sister. We're all obsessed!" }
             ].map((t, i) => (
               <div key={i} className="bg-[#0a0a0a] border border-gold/30 rounded-2xl p-6">
                 <div className="text-amber-400 mb-4">★★★★★</div>
@@ -487,7 +484,7 @@ const ThankYou = () => {
             <div className="bg-[#111] border border-gold/30 rounded-2xl p-6 text-center">
               <Mail className="w-12 h-12 text-gold mx-auto mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">EMAIL</h3>
-              <p className="text-gray-400 mb-2">support@fulaniharigro.com</p>
+              <p className="text-gray-400 mb-2">admin@fulanihairsecrets.com</p>
               <p className="text-amber-400 text-sm">Response: Within 24hrs</p>
             </div>
 
@@ -631,7 +628,7 @@ const ThankYou = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-[#111] border-t border-gold/30 p-4 z-50">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-gray-400">
-            📦 Order #{orderNumber} • Est. Delivery: Dec 10-12
+            📦 Order ID: {orderNumber} • Est. Delivery: Dec 10-12
           </div>
           <div className="flex gap-2">
             <Button size="sm" variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black text-xs">

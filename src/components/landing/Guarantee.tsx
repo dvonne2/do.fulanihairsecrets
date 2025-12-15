@@ -14,9 +14,12 @@ export const Guarantee = () => {
           </div>
           
           <h2 className="font-cinzel text-2xl md:text-3xl text-gold mb-4">DOUBLE Money-Back Guarantee</h2>
-          <p className="font-sans text-foreground/80 mb-8 max-w-2xl mx-auto">
+          <p className="font-sans text-foreground/80 mb-4 max-w-2xl mx-auto">
             Try Fulani Hair Gro™ risk-free for 365 days. If you don't see visible hair growth, 
             we'll give you DOUBLE your money back.
+          </p>
+          <p className="font-sans text-foreground/80 mb-8 max-w-2xl mx-auto">
+            We take this risk because we've seen it work on thousands of Nigerian women — including cases worse than yours.
           </p>
           
           <div className="grid md:grid-cols-3 gap-4 mb-8">

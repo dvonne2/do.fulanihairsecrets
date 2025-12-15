@@ -68,57 +68,18 @@ export const LuckyFewSection = ({ stockCount }: LuckyFewSectionProps) => {
           </p>
         </div>
 
-        {/* Availability card */}
-        <div className="bg-card border-2 border-gold/30 rounded-2xl p-6 md:p-8 max-w-lg mx-auto mb-10">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">📊</span>
-            <h3 className="font-sans text-sm font-bold tracking-widest uppercase text-gold">
-              Current Availability:
-            </h3>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b border-border/50">
-              <span className="font-serif text-foreground">Starter Sets:</span>
-              <span className="font-mono text-gold bg-gold/10 px-3 py-1 rounded-full text-sm">
-                [{availability.starter} remaining]
-              </span>
-            </div>
-            <div className="flex items-center justify-between py-2 border-b border-border/50">
-              <span className="font-serif text-foreground">Complete Systems:</span>
-              <span className="font-mono text-gold bg-gold/10 px-3 py-1 rounded-full text-sm">
-                [{availability.complete} remaining]
-              </span>
-            </div>
-            <div className="flex items-center justify-between py-2 border-b border-border/50">
-              <span className="font-serif text-foreground">6-Month Supply:</span>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-destructive bg-destructive/10 px-3 py-1 rounded-full text-sm">
-                  [{availability.sixMonth} remaining]
-                </span>
-                <span className="text-xs text-destructive animate-pulse">← Almost gone</span>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-center text-muted-foreground text-xs mt-4 flex items-center justify-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            These numbers update in real-time
-          </p>
-        </div>
-
         {/* Warning message */}
         <div className="text-center space-y-4 font-serif text-lg text-foreground/80">
           <p>
-            Don't be the woman who "comes back later" and finds the page
+            Don&apos;t be the woman who "comes back later" and finds the page
             <br className="hidden md:block" />
-            showing <span className="text-destructive font-bold">"SOLD OUT - Join Waitlist."</span>
+            showing <span className="text-destructive font-bold">"PROMO HAS ENDED"</span>
           </p>
           <p className="text-muted-foreground italic">
-            That woman emails us every single day asking when the next batch will be ready.
+            That woman messages us every single day asking when the next promo will be.
           </p>
           <p className="text-gold font-semibold text-xl">
-            Don't be her. Secure yours now.
+            Don&apos;t be her. Secure yours now.
           </p>
         </div>
 

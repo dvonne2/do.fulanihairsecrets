@@ -8,6 +8,10 @@ import cicatricialAlopecia from '@/assets/hair-types/cicatricial-alopecia.webp';
 import tractionAlopecia from '@/assets/hair-types/traction-alopecia.webp';
 import nutritionalDeficiency from '@/assets/hair-types/nutritional-deficiency.webp';
 import telogenEffluvium from '@/assets/hair-types/telogen-effluvium.jpg';
+import bundleImg from '@/assets/products/bundle-system.png';
+import follicleBeforeAfter from '@/assets/products/jj-768x756-1.webp';
+import hairStrandRepair from '@/assets/products/jjj-768x735-1.webp';
+import denseScalp from '@/assets/products/jjjj-768x748-1.webp';
 
 export const HairLossTypesGuide = () => {
   const handleChatClick = () => {
@@ -119,6 +123,31 @@ export const HairLossTypesGuide = () => {
           <div className="w-32 h-px bg-gold/40 mx-auto mt-6" />
         </div>
 
+        {/* Medical diagram strip */}
+        <div className="mb-10 md:mb-12 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
+            <img
+              src={follicleBeforeAfter}
+              alt="Illustration showing a weak follicle transforming into a strong, healthy follicle"
+              className="w-full max-w-xs object-contain"
+            />
+          </div>
+          <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
+            <img
+              src={hairStrandRepair}
+              alt="Diagram of a repaired, stronger hair strand"
+              className="w-full max-w-xs object-contain"
+            />
+          </div>
+          <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
+            <img
+              src={denseScalp}
+              alt="Illustration of a scalp filled with many healthy hair strands"
+              className="w-full max-w-xs object-contain"
+            />
+          </div>
+        </div>
+
         {/* Hair Loss Types Grid */}
         <div className="space-y-8 md:space-y-12 mb-16">
           {hairLossTypes.map((type, index) => (
@@ -153,19 +182,19 @@ export const HairLossTypesGuide = () => {
 
                 <div className="space-y-3">
                   <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4">
-                    <p className="font-sans text-xs uppercase tracking-wider text-destructive mb-1 font-bold">
+                    <p className="font-sans text-sm md:text-base uppercase tracking-wider text-destructive mb-1 font-bold">
                       Why It Happens
                     </p>
-                    <p className="font-serif text-sm text-foreground/90">
+                    <p className="font-serif text-base md:text-lg text-foreground/90">
                       {type.cause}
                     </p>
                   </div>
 
-                  <div className="bg-gold/10 border border-gold/30 rounded-lg p-4">
-                    <p className="font-sans text-xs uppercase tracking-wider text-gold mb-1 font-bold">
+                  <div className="bg-gold/10 border border-gold/40 rounded-lg p-4">
+                    <p className="font-sans text-sm md:text-base uppercase tracking-wider text-gold mb-1 font-bold">
                       How Fulani Hair Gro Supports
                     </p>
-                    <p className="font-serif text-sm text-foreground/90">
+                    <p className="font-serif text-base md:text-lg text-foreground/90">
                       {type.solution}
                     </p>
                   </div>
@@ -174,7 +203,14 @@ export const HairLossTypesGuide = () => {
                 {type.qualifies && (
                   <div className="flex items-center gap-2 text-gold">
                     <Check className="w-5 h-5" />
-                    <span className="font-sans text-sm font-bold">Treatable with Fulani Hair Gro™</span>
+                    <span className="font-sans text-sm font-bold flex items-center gap-2">
+                      Treatable with Fulani Hair Gro™
+                      <img
+                        src={bundleImg}
+                        alt="Fulani Hair Gro product"
+                        className="w-8 h-8 object-contain rounded-lg shadow-[0_0_10px_rgba(218,165,32,0.5)]"
+                      />
+                    </span>
                   </div>
                 )}
               </div>
@@ -226,14 +262,14 @@ export const HairLossTypesGuide = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Care Tips */}
           <div className="bg-card/50 border border-border/50 rounded-2xl p-6">
-            <h3 className="font-cinzel text-lg text-gold mb-4">
+            <h3 className="font-cinzel text-xl md:text-2xl text-gold mb-4">
               Gentle Hair Care Practices
             </h3>
             <ul className="space-y-3">
               {careTips.map((tip, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                  <span className="font-serif text-sm text-foreground/90">{tip}</span>
+                  <span className="font-serif text-base md:text-lg text-foreground/90">{tip}</span>
                 </li>
               ))}
             </ul>
@@ -241,19 +277,19 @@ export const HairLossTypesGuide = () => {
 
           {/* Expectations */}
           <div className="bg-gold/5 border border-gold/20 rounded-2xl p-6">
-            <h3 className="font-cinzel text-lg text-gold mb-4">
+            <h3 className="font-cinzel text-xl md:text-2xl text-gold mb-4">
               What to Expect
             </h3>
             <ul className="space-y-3">
               {expectations.map((exp, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <span className="text-gold">✓</span>
-                  <span className="font-serif text-sm text-foreground/90">{exp}</span>
+                  <span className="font-serif text-base md:text-lg text-foreground/90">{exp}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-4 p-3 bg-gold/10 rounded-lg">
-              <p className="font-sans text-xs text-gold font-bold text-center">
+              <p className="font-sans text-sm md:text-base text-gold font-bold text-center">
                 ⏱️ Consistency is Key — No hair growth solution works overnight!
               </p>
             </div>

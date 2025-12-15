@@ -3,24 +3,22 @@ import conditionerImg from '@/assets/products/conditioner.jpg';
 import pomadeImg from '@/assets/products/pomade.png';
 import aminaImg from '@/assets/testimonials/amina.png';
 import blessingImg from '@/assets/testimonials/blessing.jpg';
-import hajiaFatimaImg from '@/assets/testimonials/hajia-fatima.jpg';
+import founderImg from '@/assets/products/hajara.png';
 
 export const ProductSystem = () => {
   const products = [
     {
-      step: "Step 1: Cleanse",
+      step: "STEP 1: CLEANSE",
       name: "Heritage Shampoo",
       size: "500ml · Sulfate-free",
       origin: "🇳🇬 Made in Maiduguri, Nigeria",
-      price: "₦15,000",
       image: shampooImg,
     },
     {
-      step: "Step 2: Nourish",
+      step: "STEP 2: NOURISH",
       name: "Voluminous Conditioner",
       size: "500ml · Deep moisture",
       origin: "🇳🇪 Wodaabe herbs from Niger",
-      price: "₦15,000",
       image: conditionerImg,
     },
     {
@@ -28,7 +26,6 @@ export const ProductSystem = () => {
       name: "Growth Pomade",
       size: "150g · The magic",
       origin: "🇹🇩🇳🇬 Chad + Nigeria blend",
-      price: "₦32,000",
       image: pomadeImg,
       bestseller: true,
     },
@@ -36,8 +33,8 @@ export const ProductSystem = () => {
 
   const transformations = [
     { name: "Amina O.", location: "Lagos", result: "8 weeks, edges are BACK!", image: aminaImg },
-    { name: "Blessing E.", location: "Port Harcourt", result: "Shoulder to mid-back in 6 months!", image: blessingImg },
-    { name: "Hajia Fatima B.", location: "Abuja", result: "3 months, husband can't stop touching my hair!", image: hajiaFatimaImg },
+    { name: "Mrs. Folake T.", location: "Victoria Island, Lagos", result: "Shoulder to mid-back in 6 months!", image: blessingImg },
+    { name: "Hajia Fatima B.", location: "Abuja", result: "3 months, husband can't stop touching my hair!", image: founderImg },
   ];
 
   return (
@@ -88,9 +85,68 @@ export const ProductSystem = () => {
               <h3 className="font-cinzel text-lg md:text-xl text-foreground mb-2">{product.name}</h3>
               <p className="font-sans text-xs text-muted-foreground mb-2">{product.size}</p>
               <p className="font-sans text-xs text-muted-foreground mb-4">{product.origin}</p>
-              <p className="font-cinzel text-xl text-gold">{product.price}</p>
+              <p className="font-sans text-xs text-gold font-semibold uppercase tracking-[0.18em] mb-1">Part of the Complete System</p>
+              <p className="font-sans text-[11px] text-muted-foreground italic">🔗 Best results when all 3 steps are used together</p>
             </div>
           ))}
+        </div>
+
+        {/* System importance callout */}
+        <div className="max-w-3xl mx-auto mb-8 md:mb-10">
+          <div className="rounded-2xl border border-gold/40 bg-card/80 px-6 py-6 md:px-8 md:py-8 shadow-[0_0_40px_rgba(212,175,55,0.18)]">
+            <p className="font-cinzel text-base md:text-lg text-gold mb-3 flex items-center gap-2">
+              <span className="text-lg">⚠️</span>
+              IMPORTANT: These 3 products are designed to work together as a COMPLETE SYSTEM.
+            </p>
+            <ul className="font-sans text-base md:text-lg text-muted-foreground space-y-1 mb-4 list-disc list-inside">
+              <li>Step 1 <span className="font-semibold">CLEANSES</span> and opens follicles</li>
+              <li>Step 2 <span className="font-semibold">NOURISHES</span> and strengthens</li>
+              <li>Step 3 <span className="font-semibold">RESTORES</span> and activates growth</li>
+            </ul>
+            <p className="font-sans text-base md:text-lg text-destructive mb-4">
+              Using them separately reduces effectiveness by about 60%.
+            </p>
+            <p className="font-cinzel text-base text-foreground mb-4">
+              👑 Get the <span className="text-gold">Complete Bundle</span> for maximum results.
+            </p>
+            <div className="text-center">
+              <a 
+                href="#order-form"
+                data-form-cta="true"
+                className="inline-flex items-center justify-center gap-2 gold-gradient text-background font-sans text-sm md:text-base tracking-wider uppercase px-8 md:px-10 py-3 md:py-3.5 rounded-xl font-bold btn-luxury"
+              >
+                <span>Check Availability in Your Area</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* 60-second ritual */}
+        <div className="max-w-3xl mx-auto mb-12 md:mb-16">
+          <div className="rounded-2xl border border-gold/30 bg-black/70 px-6 py-6 md:px-8 md:py-8 shadow-[0_0_35px_rgba(218,165,32,0.25)]">
+            <h3 className="font-cinzel text-lg md:text-2xl text-gold mb-3 md:mb-4 text-center">
+              The 60-Second Ritual That Changes Everything
+            </h3>
+            <p className="font-serif text-sm md:text-base text-gray-200 mb-4 text-center">
+              Here&apos;s exactly how simple your nightly routine is:
+            </p>
+            <ol className="list-decimal list-inside space-y-2 font-serif text-sm md:text-base text-gray-100 text-left">
+              <li>
+                Before bed, take a little Fulani Hair Gro™ pomade and apply it directly onto the areas of concern (edges,
+                crown, thinning spots).
+              </li>
+              <li>
+                Massage gently with your fingertips for about 30 seconds to help the herbs penetrate the scalp.
+              </li>
+              <li>
+                Cover your head with a silk scarf, silk bonnet, or sleep on a silk pillowcase to reduce friction and
+                protect your strands.
+              </li>
+              <li>
+                Go to sleep — no rinsing needed. Wake up one day closer to thicker, fuller hair.
+              </li>
+            </ol>
+          </div>
         </div>
 
         {/* Transformations */}
@@ -125,10 +181,11 @@ export const ProductSystem = () => {
         {/* CTA */}
         <div className="text-center">
           <a 
-            href="#order"
-            className="inline-block gold-gradient-animated text-background font-sans text-sm tracking-widest uppercase px-8 md:px-12 py-4 rounded-xl font-bold btn-luxury animate-glow"
+            href="#order-form"
+            data-form-cta="true"
+            className="inline-block gold-gradient text-background font-sans text-sm tracking-widest uppercase px-8 md:px-12 py-4 rounded-xl font-bold btn-luxury"
           >
-            👑 START MY TRANSFORMATION 👑
+            See If This Works for My Hair
           </a>
         </div>
       </div>

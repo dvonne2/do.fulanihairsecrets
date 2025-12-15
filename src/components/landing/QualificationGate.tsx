@@ -5,11 +5,11 @@ interface QualificationGateProps {
 }
 
 export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages and pricing.`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const benefits = [
@@ -50,7 +50,7 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
           </p>
 
           {/* Benefits list */}
-          <div className="bg-card/50 border border-gold/20 rounded-xl p-6 text-left max-w-md mx-auto">
+          <div className="bg-card/50 border border-gold/20 rounded-xl p-6 text-left max-w-md mx-auto mb-6">
             {benefits.map((benefit, i) => (
               <div key={i} className="flex items-center gap-3 py-2">
                 <span className="text-gold">✓</span>
@@ -59,7 +59,35 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
             ))}
           </div>
 
-          <p className="font-serif text-lg text-gold font-semibold">
+          {/* Eligibility block */}
+          <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 text-left">
+            <div className="bg-card/60 border border-gold/30 rounded-xl p-5">
+              <h3 className="font-cinzel text-sm md:text-base tracking-[0.25em] uppercase text-gold mb-3">
+                Perfect For
+              </h3>
+              <ul className="font-serif text-sm md:text-base text-foreground/90 space-y-1.5">
+                <li>⚫ Women 25+ experiencing hormone-related thinning</li>
+                <li>⚫ Thinning all over the scalp or crown thinning</li>
+                <li>⚫ Widening parts or shrinking ponytails</li>
+                <li>⚫ Excessive shedding (more than 100 hairs daily)</li>
+                <li>⚫ Women who&apos;ve failed with other treatments</li>
+              </ul>
+            </div>
+
+            <div className="bg-card/40 border border-destructive/40 rounded-xl p-5">
+              <h3 className="font-cinzel text-sm md:text-base tracking-[0.25em] uppercase text-destructive mb-3">
+                Not Recommended For
+              </h3>
+              <ul className="font-serif text-sm md:text-base text-foreground/90 space-y-1.5">
+                <li>⚫ Complete baldness (no follicles left to save)</li>
+                <li>⚫ Alopecia areata (autoimmune condition)</li>
+                <li>⚫ Chemotherapy-related hair loss</li>
+                <li>⚫ Women under 25 (often different causes)</li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="font-serif text-lg text-gold font-semibold mt-6">
             If this sounds like you, order now and start your transformation!
           </p>
         </div>
@@ -75,7 +103,7 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
 
           {/* Primary CTA - Show Packages */}
           <Button
-            onClick={onQualified}
+            onClick={scrollToOrderForm}
             size="lg"
             className="w-full gold-gradient text-background hover:scale-105 shadow-[0_0_30px_rgba(218,165,32,0.4)] font-sans text-sm md:text-base tracking-widest uppercase py-6 transition-all duration-300 mb-4"
           >
@@ -90,15 +118,15 @@ export const QualificationGate = ({ onQualified }: QualificationGateProps) => {
             <div className="h-px w-16 bg-border" />
           </div>
 
-          {/* Secondary CTA - WhatsApp */}
+          {/* Secondary CTA - Direct Order */}
           <Button
-            onClick={handleOrderClick}
+            onClick={scrollToOrderForm}
             variant="outline"
             size="lg"
             className="w-full border-gold/40 text-gold hover:bg-gold/10 font-sans text-sm tracking-widest uppercase py-6"
           >
-            <span className="mr-2">💬</span>
-            Order Directly on WhatsApp
+            <span className="mr-2">🛒</span>
+            Order Now — ₦66,750
           </Button>
         </div>
       </div>

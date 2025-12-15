@@ -6,11 +6,11 @@ interface DisqualificationWarningProps {
 }
 
 export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningProps) => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages.`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -55,10 +55,42 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
 
             <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 md:p-6">
               <p className="font-serif text-foreground/90">
-                We currently have <span className="text-gold font-bold">{stockCount} jars</span> remaining from this batch.
+                We currently have <span className="text-gold font-bold">{stockCount} bundles</span> remaining from this batch.
                 <br />
                 <span className="text-gold font-semibold">Order now before they sell out!</span>
               </p>
+            </div>
+
+            {/* Symptoms grid */}
+            <div className="mt-8 text-left">
+              <h4 className="font-cinzel text-lg md:text-xl text-gold text-center mb-4">
+                Reverse It Quick... Here Are Some Symptoms You Might Experience!
+              </h4>
+              <div className="grid md:grid-cols-3 gap-4 text-sm text-foreground/90">
+                {[
+                  'Excessive hair shedding',
+                  'Thinning hair',
+                  'Receding hairline',
+                  'Bald patches',
+                  'Widening part',
+                  'Miniaturized hair',
+                  'Scalp visibility',
+                  'Hair breakage',
+                  'Itchy scalp',
+                  'Scalp tenderness',
+                  'Excessive dandruff',
+                  'Changes in hair texture',
+                  'Slowed hair growth',
+                  'Loose hair strands',
+                  'Hair loss on other body parts',
+                  'Emotional distress',
+                ].map((symptom) => (
+                  <div key={symptom} className="flex items-start gap-2">
+                    <span className="mt-[2px] text-destructive">•</span>
+                    <span className="font-serif">{symptom}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -75,19 +107,19 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
             </div>
 
             <p className="font-serif text-lg text-foreground/90">
-              Get your jar of <span className="text-gold">Fulani Hair Gro™</span> today
+              Get your bundle of <span className="text-gold">Fulani Hair Gro™</span> today
               <br className="hidden md:block" />
               and start your transformation journey.
             </p>
 
             {/* CTA Button */}
             <Button
-              onClick={handleOrderClick}
+              onClick={scrollToOrderForm}
               size="lg"
               className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4),0_0_60px_rgba(220,38,38,0.2)]"
             >
-              <span className="mr-2">💬</span>
-              Order Now on WhatsApp
+              <span className="mr-2">�</span>
+              Order Now — ₦66,750
             </Button>
 
             {/* Response time */}

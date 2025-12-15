@@ -10,9 +10,9 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
   const percentRemaining = Math.round((stockCount / totalInBatch) * 100);
 
   return (
-    <section className="relative py-12 md:py-16 overflow-hidden">
-      {/* Warning gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-destructive/5 via-background to-gold/5" />
+    <section className="relative py-12 md:py-16 overflow-hidden bg-[#333333]">
+      {/* Warning background */}
+      <div className="absolute inset-0" />
 
       <div className="max-w-4xl mx-auto px-6 md:px-8 relative z-10">
         {/* Warning header */}
@@ -25,10 +25,34 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
         </div>
 
         {/* Decorative line */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-destructive/40 to-transparent mb-8" />
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-destructive/40 to-transparent mb-6" />
+
+        {/* Caution banner */}
+        <div className="mb-10 flex justify-center">
+          <div className="relative inline-flex items-center gap-4 rounded-2xl border-[3px] border-yellow-400 bg-gradient-to-r from-yellow-100/60 via-yellow-50 to-yellow-100/40 px-4 py-3 md:px-6 md:py-4 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
+            {/* Icon */}
+            <div className="flex items-center justify-center">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-yellow-300/30">
+                <span className="text-2xl" role="img" aria-label="Caution">
+                  ⚠️
+                </span>
+              </div>
+            </div>
+
+            {/* Text */}
+            <div className="text-left">
+              <div className="font-sans text-sm md:text-base font-extrabold tracking-[0.25em] uppercase text-red-600 mb-1">
+                Caution
+              </div>
+              <div className="font-sans text-sm md:text-base text-black">
+                Only {stockCount} bundles available — order now to avoid delays.
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Explanation text */}
-        <div className="space-y-4 font-serif text-lg text-foreground/90 leading-relaxed text-center mb-10">
+        <div className="space-y-4 font-serif text-lg text-foreground/90 leading-relaxed text-center mb-6 md:mb-8">
           <p>
             Because the herbs must be <span className="text-gold font-semibold">hand-selected and infused slowly</span>
             <br className="hidden md:block" />
@@ -44,8 +68,41 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
           </p>
         </div>
 
+        {/* Media exposure warning */}
+        <div className="max-w-3xl mx-auto mb-10">
+          <div className="bg-destructive/10 border border-destructive/40 rounded-2xl px-5 py-4 md:px-6 md:py-5 text-center shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+            <p className="font-sans text-sm md:text-base uppercase tracking-[0.25em] text-destructive mb-2">
+              Due to Recent TV &amp; News Appearances
+            </p>
+            <p className="font-serif text-base md:text-lg text-foreground/90 mb-1">
+              Stock is extremely limited right now.
+            </p>
+            <p className="font-serif text-sm md:text-base text-foreground/80">
+              Warning: Due to recent media exposure, this page may be taken down to prevent server overload. If you&apos;re
+              seeing this message, stock is still available — but not for long.
+            </p>
+          </div>
+        </div>
+
+        {/* Exclusive offer banner */}
+        <div className="max-w-3xl mx-auto mb-10">
+          <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-gold/70 border border-gold/60 rounded-2xl p-5 md:p-6 text-center shadow-[0_18px_40px_rgba(0,0,0,0.6)]">
+            <p className="font-sans text-base md:text-lg tracking-[0.3em] uppercase text-gold mb-3">
+              Exclusive Offer
+            </p>
+            <p className="font-serif text-lg md:text-xl text-white mb-3">
+              We're presently offering <span className="font-semibold text-gold">Same Day Delivery</span> and
+              <span className="font-semibold text-gold"> Payment On Delivery</span> nationwide!
+            </p>
+            <p className="font-serif text-base md:text-lg text-amber-100">
+              Plus you get up to <span className="font-semibold">30% discount</span> if you order in the next 24 hours.
+              <span className="font-semibold text-amber-300"> Don't miss out!</span>
+            </p>
+          </div>
+        </div>
+
         {/* Batch status card */}
-        <div className="bg-card border-2 border-gold/30 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
+        <div className="bg-[#333333] border-2 border-gold/30 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-3xl">🫙</span>
             <h3 className="font-cinzel text-xl md:text-2xl text-gold">Current Batch Status:</h3>
@@ -62,15 +119,15 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_2s_ease-in-out_infinite]" />
               </div>
             </div>
-            <div className="flex justify-between mt-2 text-sm">
+            <div className="flex justify-between mt-2 text-base md:text-lg">
               <span className="text-muted-foreground">0</span>
-              <span className="text-gold font-bold text-lg">{stockCount} jars remaining</span>
+              <span className="text-gold font-bold text-xl md:text-2xl">{stockCount} bundles remaining</span>
               <span className="text-muted-foreground">{totalInBatch}</span>
             </div>
           </div>
 
           {/* Batch details */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-base md:text-lg text-muted-foreground">
             <div className="flex items-center gap-2">
               <span className="text-gold">Batch #{batchNumber}</span>
               <span>·</span>
@@ -82,10 +139,6 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
           </div>
         </div>
 
-        {/* Authenticity note */}
-        <p className="text-center text-muted-foreground text-sm mt-6 italic">
-          Each jar is numbered. Your jar number will be included with your order as proof of authenticity.
-        </p>
       </div>
     </section>
   );

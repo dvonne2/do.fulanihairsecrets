@@ -5,32 +5,38 @@ interface ApplicationProcessProps {
 }
 
 export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages and pricing.`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const steps = [
     {
-      number: "STEP 1",
-      icon: "📱",
-      title: "Message Us on WhatsApp",
-      description: "Tell us which package you want"
+      number: 'STEP 1',
+      icon: '🛒',
+      title: 'Order Right Now To Get Yours',
+      description: 'Place your order today while stock is still available.',
     },
     {
-      number: "STEP 2",
-      icon: "✅",
-      title: "Confirm Your Order",
-      description: "We'll confirm availability and delivery details"
+      number: 'STEP 2',
+      icon: '📞',
+      title: "We'll Call You To Confirm Your Order",
+      description: 'Our team will call you to confirm your details and answer any questions.',
     },
     {
-      number: "STEP 3",
-      icon: "📦",
-      title: "Receive Your Jar",
-      description: "Pay on delivery - inspect before you pay"
-    }
+      number: 'STEP 3',
+      icon: '📦',
+      title: "We'll Process & Send Your Product",
+      description: 'Your Fulani Hair Gro™ bundle is carefully packed and dispatched.',
+    },
+    {
+      number: 'STEP 4',
+      icon: '🚚',
+      title: 'Receive Your Product (1-2 Days)',
+      description: 'Receive your order, inspect it, and pay on delivery.',
+    },
   ];
 
   return (
@@ -43,14 +49,17 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
           <div className="flex items-center justify-center gap-2 mb-4">
             <span className="text-3xl">📋</span>
             <h2 className="font-cinzel text-2xl md:text-3xl text-gold">
-              How To Get Your Jar
+              How We Work
             </h2>
           </div>
+          <p className="font-serif text-sm md:text-base text-muted-foreground mb-3">
+            How To Get Your Fulani Hair Gro™ — 400 Years Old Hair Grow Secret Today (BEFORE WE RUN OUT OF STOCK)
+          </p>
           <div className="w-32 h-px bg-gold/40 mx-auto" />
         </div>
 
         {/* Steps */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-4 gap-6 mb-12">
           {steps.map((step, index) => (
             <div 
               key={index}
@@ -69,12 +78,10 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
         {/* Info box */}
         <div className="bg-gold/10 border border-gold/30 rounded-xl p-6 mb-10 text-center">
           <p className="font-sans text-sm font-bold text-gold mb-2">
-            🚚 Pay On Delivery Available Nationwide
+            🚚 Pay on Delivery Available
           </p>
           <p className="font-serif text-muted-foreground">
-            Inspect your products before you pay.
-            <br />
-            Same-day delivery in Lagos, 2-3 days nationwide.
+            (Inspect package before you pay. Zero risk.)
           </p>
         </div>
 
@@ -84,12 +91,12 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
         {/* CTA Section */}
         <div className="text-center">
           <Button
-            onClick={handleOrderClick}
+            onClick={scrollToOrderForm}
             size="lg"
-            className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-10 py-6 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4)]"
+            className="gold-gradient text-background font-sans text-base md:text-lg tracking-widest uppercase px-10 py-6 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4)]"
           >
-            <span className="mr-2">💬</span>
-            Order Now on WhatsApp
+            <span className="mr-2">🛒</span>
+            Click Here To Order Now
           </Button>
 
           <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
@@ -100,7 +107,7 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
             <span className="hidden md:inline">|</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-              Jars remaining: {stockCount}
+              Bundles remaining: {stockCount}
             </span>
           </div>
         </div>

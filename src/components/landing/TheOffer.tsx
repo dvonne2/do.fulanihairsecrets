@@ -5,18 +5,18 @@ interface TheOfferProps {
 }
 
 export const TheOffer = ({ stockCount }: TheOfferProps) => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I want to order the Full Authentic Fulani Hair Gro™ System. I saw there are only ${stockCount} jars remaining and I don't want to miss out!`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const bonuses = [
     {
       icon: "✨",
       title: "FREE Luxury Silk Bonnet",
-      description: "Protects your hair while the formula works overnight"
+      description: "Protects your hair while the formula works overnight (for orders paid before delivery)"
     },
     {
       icon: "✨",
@@ -26,17 +26,12 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
     {
       icon: "✨",
       title: "FREE Express Shipping",
-      description: "On 6-Month Supply orders"
+      description: "On ₦66,750 & ₦215,000 bundles only"
     },
     {
       icon: "✨",
       title: "Pay on Delivery Available",
       description: "Inspect before you pay. Zero risk."
-    },
-    {
-      icon: "✨",
-      title: "Numbered Jar Certificate",
-      description: "Proof your jar is from an authentic batch"
     }
   ];
 
@@ -57,7 +52,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="text-4xl">🎁</span>
             <h2 className="font-cinzel text-3xl md:text-4xl lg:text-5xl text-gold">
-              THE OFFER
+              YOUR BONUS
             </h2>
             <span className="text-4xl">🎁</span>
           </div>
@@ -95,14 +90,37 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mb-10" />
 
         {/* Tagline */}
-        <p className="text-center font-serif text-xl md:text-2xl text-foreground/90 italic mb-10">
+        <p className="text-center font-serif text-xl md:text-2xl text-foreground/90 italic mb-6 md:mb-8">
           "Experience my family's 400-year-old hair growth ritual."
         </p>
+
+        {/* Price justification story */}
+        <div className="max-w-3xl mx-auto mb-8 md:mb-10">
+          <div className="bg-card/70 border border-gold/30 rounded-2xl px-6 py-5 md:px-8 md:py-6 text-left space-y-3 font-serif text-sm md:text-base text-foreground/90">
+            <h3 className="font-cinzel text-sm md:text-base tracking-[0.35em] uppercase text-gold mb-1">
+              The Price They Said Was "Too Low"
+            </h3>
+            <p>
+              When I first shared the price for Fulani Hair Gro™, my co-founder told me I was crazy. "We could charge
+              <span className="font-semibold"> ₦200,000 per set</span> for this formula," she said.
+            </p>
+            <p>
+              And she wasn&apos;t wrong. A single hair transplant in Turkey can cost
+              <span className="font-semibold"> ₦15,000,000 or more</span>. Similar DHT-focused treatments in medical spas
+              regularly go for <span className="font-semibold">₦550,000–₦1,500,000 per month</span>.
+            </p>
+            <p>
+              But I didn&apos;t bring Fulani Hair Gro™ out of my family cupboard just to get rich. I exposed it to the world
+              because women deserve an <span className="font-semibold">affordable solution that actually works</span>—not
+              another treatment that keeps them trapped in an expensive cycle.
+            </p>
+          </div>
+        </div>
 
         {/* CTA Button */}
         <div className="text-center">
           <Button 
-            onClick={handleOrderClick}
+            onClick={scrollToOrderForm}
             size="lg"
             className="gold-gradient text-background font-cinzel text-lg md:text-xl px-8 md:px-12 py-6 md:py-8 hover:scale-105 transition-transform duration-300 shadow-[0_0_30px_rgba(218,165,32,0.4)]"
           >
@@ -115,20 +133,8 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
           <div className="mt-6 inline-flex items-center gap-2 bg-destructive/10 border border-destructive/30 rounded-full px-4 py-2">
             <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
             <span className="text-destructive font-semibold text-sm">
-              Only {stockCount} jars left in this batch
+              Only {stockCount} bundles left in this batch
             </span>
-          </div>
-        </div>
-
-        {/* Batch badge */}
-        <div className="flex justify-center mt-8">
-          <div className="bg-card border-2 border-gold/40 rounded-lg px-6 py-4 text-center">
-            <p className="font-cinzel text-gold text-sm">BATCH #47</p>
-            <div className="w-12 h-px bg-gold/40 mx-auto my-2" />
-            <p className="text-muted-foreground text-xs">Dec 2025</p>
-            <p className="font-mono text-gold text-xs mt-1">
-              🫙 #XXX of 150
-            </p>
           </div>
         </div>
       </div>

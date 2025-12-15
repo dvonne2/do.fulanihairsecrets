@@ -16,11 +16,11 @@ export const StickyElements = ({
   currentNotif,
   scrollProgress 
 }: StickyElementsProps) => {
-  const handleOrderClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like to order Fulani Hair Gro™.\n\nPlease send me the available packages and pricing.`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+  const scrollToOrderForm = () => {
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
@@ -39,17 +39,18 @@ export const StickyElements = ({
           <div className="hidden md:flex items-center gap-4">
             <div className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="w-5 h-5" />
-              <span className="font-sans text-sm font-bold">{stockCount} jars remaining</span>
+              <span className="font-sans text-sm font-bold">{stockCount} bundles remaining</span>
             </div>
             <span className="text-gold/50">|</span>
             <span className="font-sans text-sm text-gold">Limited batch available</span>
           </div>
           <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-end">
             <button 
-              onClick={handleOrderClick}
-              className="gold-gradient text-background font-sans text-xs tracking-widest uppercase px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform whitespace-nowrap shadow-[0_0_20px_rgba(218,165,32,0.3)]"
+              onClick={scrollToOrderForm}
+              data-form-cta="true"
+              className="gold-gradient text-background font-sans text-xs tracking-widest uppercase px-6 py-3 rounded-lg font-bold whitespace-nowrap shadow-[0_0_14px_rgba(218,165,32,0.25)]"
             >
-              💬 Order Now on WhatsApp
+              🛒 Check Availability in Your Area
             </button>
           </div>
         </div>
@@ -71,16 +72,28 @@ export const StickyElements = ({
         </div>
       )}
 
-      {/* Floating WhatsApp Button - Only show when sticky bar is NOT visible */}
+      {/* Chat with Hair Specialist - Always available, above sticky CTA */}
+      <a
+        href="https://web.whatsapp.com/send?phone=2348101594734&text=Hello!%20I%27ll%20like%20to%20make%20a%20purchase%20of%20Fulani%20hair%20Gro.%20How%20do%20I%20proceed%3F%20https%3A%2F%2Ffulanihairsecrets.com%2Forder-form"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-24 right-4 md:right-6 z-40 flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-3 md:px-5 md:py-3 rounded-full shadow-2xl transition-transform hover:scale-105"
+      >
+        <span className="text-xl">💬</span>
+        <span className="font-sans text-xs md:text-sm font-semibold tracking-wide whitespace-nowrap">
+          Chat with Hair Growth Specialist
+        </span>
+      </a>
+
+      {/* Floating Order Button - Only show when sticky bar is NOT visible */}
       {!showStickyBar && (
         <a
-          href="https://wa.me/2348101594734?text=Hi!%20I'd%20like%20to%20order%20Fulani%20Hair%20Gro%E2%84%A2."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-4 md:right-6 z-40 flex items-center gap-3 bg-success hover:bg-success/90 text-foreground px-4 md:px-6 py-3 md:py-4 rounded-full shadow-2xl transition-all hover:scale-105"
+          href="#order-form"
+          data-form-cta="true"
+          className="fixed bottom-6 right-4 md:right-6 z-40 flex items-center gap-3 bg-success hover:bg-success/90 text-foreground px-4 md:px-6 py-3 md:py-4 rounded-full shadow-xl"
         >
-          <span className="text-xl md:text-2xl">💬</span>
-          <span className="font-sans text-sm font-bold hidden md:block">Order Now</span>
+          <span className="text-xl md:text-2xl">🛒</span>
+          <span className="font-sans text-sm font-bold hidden md:block">Check Availability</span>
           <span className="absolute -top-2 -right-2 w-5 h-5 bg-destructive rounded-full flex items-center justify-center">
             <span className="font-sans text-xs text-foreground font-bold">1</span>
           </span>
