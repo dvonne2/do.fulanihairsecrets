@@ -42,7 +42,7 @@ export const ProtectedRecipe = () => {
             </div>
 
             {/* Main text */}
-            <div className="space-y-6 font-serif text-lg text-foreground/90 leading-relaxed text-center mb-10">
+            <div className="space-y-6 font-serif text-lg md:text-2xl text-foreground/90 leading-relaxed text-center mb-10">
               <p className="text-gold font-semibold">
                 This formula cannot be replicated by any factory.
               </p>
@@ -62,13 +62,13 @@ export const ProtectedRecipe = () => {
               {features.map((feature, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <span className="text-gold text-lg">✦</span>
-                  <span className="font-serif text-foreground/90">{feature}</span>
+                  <span className="font-serif text-lg md:text-2xl text-foreground/90">{feature}</span>
                 </div>
               ))}
             </div>
 
             {/* Explanation */}
-            <div className="text-center space-y-2 font-serif text-muted-foreground italic">
+            <div className="text-center space-y-2 font-serif text-lg md:text-2xl text-muted-foreground italic">
               <p>This is why we still hand-make it till today.</p>
               <p>This is why we can never mass-produce.</p>
               <p className="text-gold not-italic font-semibold">This is why it actually works.</p>

@@ -93,11 +93,11 @@ Now, every bundle I make honors her words."`;
 
             {/* Memorial section */}
             <div className={`mt-12 pt-8 border-t border-gold/20 text-center transition-all duration-1000 delay-\[8000ms\] ${typedText.length >= fullQuote.length ? 'opacity-100' : 'opacity-0'}`}>
-              <p className="font-serif text-muted-foreground text-sm mb-2">In loving memory of</p>
+              <p className="font-serif text-muted-foreground text-base md:text-lg mb-2">In loving memory of</p>
               <p className="font-cinzel text-gold text-xl md:text-2xl mb-1">
                 Hajia Aissata Cissé 👑❤️
               </p>
-              <p className="font-serif text-muted-foreground italic">
+              <p className="font-serif text-muted-foreground italic text-base md:text-lg">
                 My grandmother. My teacher. My reason.
               </p>
             </div>

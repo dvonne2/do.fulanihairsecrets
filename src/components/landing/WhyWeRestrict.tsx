@@ -56,10 +56,10 @@ export const WhyWeRestrict = () => {
               <div className="flex items-start gap-4">
                 <span className="text-2xl">{reason.number}</span>
                 <div>
-                  <h3 className="font-sans text-sm font-bold tracking-widest uppercase text-gold mb-3">
+                  <h3 className="font-sans text-sm md:text-base font-bold tracking-widest uppercase text-gold mb-3">
                     {reason.title}
                   </h3>
-                  <p className={`font-serif text-foreground/90 leading-relaxed ${reason.isQuote ? 'italic text-gold' : ''}`}>
+                  <p className={`font-serif text-lg md:text-2xl text-foreground/90 leading-relaxed ${reason.isQuote ? 'italic text-gold' : ''}`}>
                     {reason.content}
                   </p>
                 </div>
@@ -83,7 +83,7 @@ export const WhyWeRestrict = () => {
             className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300"
           >
             <span className="mr-2">🛒</span>
-            Order Now — ₦66,750
+            Order Now
           </Button>
         </div>
       </div>

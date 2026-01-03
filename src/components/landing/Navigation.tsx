@@ -37,7 +37,7 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
               data-form-cta="true"
               className="gold-gradient text-background px-4 md:px-8 py-2 md:py-3 btn-luxury font-sans text-xs tracking-widest font-bold rounded-lg"
             >
-              👑 Check Availability in Your Area
+              👑 Order Now
             </a>
           </div>
         </div>

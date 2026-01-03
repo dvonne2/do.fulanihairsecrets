@@ -23,7 +23,7 @@ export const ProblemAgitation = () => {
             </div>
           ))}
         </div>
-        <p className="font-serif text-xl md:text-2xl text-gold italic">
+        <p className="font-serif text-lg md:text-xl text-gold italic">
           "If you said yes to any of these, you're exactly who we created Fulani Hair Gro™ for..."
         </p>
       </div>

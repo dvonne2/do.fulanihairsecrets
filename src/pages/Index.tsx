@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navigation } from '@/components/landing/Navigation';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
-import { HeroSection } from '@/components/landing/HeroSection';
 import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
 import { HairLossTypesGuide } from '@/components/landing/HairLossTypesGuide';
 import { MaiduguriSecret } from '@/components/landing/MaiduguriSecret';
@@ -16,21 +15,42 @@ import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
 import { FounderStory } from '@/components/landing/FounderStory';
 import { IndustryTruth } from '@/components/landing/IndustryTruth';
 import { ProductSystem } from '@/components/landing/ProductSystem';
-import { IngredientsSection } from '@/components/landing/IngredientsSection';
-import { ProtectedRecipe } from '@/components/landing/ProtectedRecipe';
-import { WhyWeRestrict } from '@/components/landing/WhyWeRestrict';
-import { BundleSection } from '@/components/landing/BundleSection';
-import { LuckyFewSection } from '@/components/landing/LuckyFewSection';
-import { TheOffer } from '@/components/landing/TheOffer';
-import { ApplicationProcess } from '@/components/landing/ApplicationProcess';
-import { PricingSection } from '@/components/landing/PricingSection';
-import { Guarantee } from '@/components/landing/Guarantee';
-import { Testimonials } from '@/components/landing/Testimonials';
-import { FAQ } from '@/components/landing/FAQ';
+
+const IngredientsSection = lazy(() =>
+  import('@/components/landing/IngredientsSection').then((m) => ({ default: m.IngredientsSection }))
+);
+const ProtectedRecipe = lazy(() =>
+  import('@/components/landing/ProtectedRecipe').then((m) => ({ default: m.ProtectedRecipe }))
+);
+const WhyWeRestrict = lazy(() =>
+  import('@/components/landing/WhyWeRestrict').then((m) => ({ default: m.WhyWeRestrict }))
+);
+const BundleSection = lazy(() =>
+  import('@/components/landing/BundleSection').then((m) => ({ default: m.BundleSection }))
+);
+const LuckyFewSection = lazy(() =>
+  import('@/components/landing/LuckyFewSection').then((m) => ({ default: m.LuckyFewSection }))
+);
+const TheOffer = lazy(() =>
+  import('@/components/landing/TheOffer').then((m) => ({ default: m.TheOffer }))
+);
+const ApplicationProcess = lazy(() =>
+  import('@/components/landing/ApplicationProcess').then((m) => ({ default: m.ApplicationProcess }))
+);
+const PricingSection = lazy(() =>
+  import('@/components/landing/PricingSection').then((m) => ({ default: m.PricingSection }))
+);
+const Guarantee = lazy(() =>
+  import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
+);
+const Testimonials = lazy(() =>
+  import('@/components/landing/Testimonials').then((m) => ({ default: m.Testimonials }))
+);
+const FAQ = lazy(() => import('@/components/landing/FAQ').then((m) => ({ default: m.FAQ })));
 import { Footer } from '@/components/landing/Footer';
 import { StickyElements } from '@/components/landing/StickyElements';
-import { ExitIntentPopup } from '@/components/landing/ExitIntentPopup';
-import { PreFormNotice } from '@/components/landing/PreFormNotice';
+import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
+import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import cashOnDeliveryImg from '@/assets/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
 import pointingGif from '@/assets/products/RtaIrAk.gif';
 
@@ -67,8 +87,6 @@ const getCountdownToMidnight = () => {
 const Index = () => {
   // State management
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [showExitIntent, setShowExitIntent] = useState(false);
-  const [hasShownExit, setHasShownExit] = useState(false);
   const [stockCount, setStockCount] = useState(43);
   const [viewerCount, setViewerCount] = useState(427);
   const [showPurchaseNotif, setShowPurchaseNotif] = useState(false);
@@ -77,6 +95,8 @@ const Index = () => {
   const [countdown, setCountdown] = useState(getCountdownToMidnight());
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [showTopIntent, setShowTopIntent] = useState(false);
+  const [hasShownTopIntent, setHasShownTopIntent] = useState(false);
 
   // Countdown Timer - always counts down to local midnight today
   useEffect(() => {
@@ -138,23 +158,6 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Exit intent (desktop only)
-  useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      // Ignore on mobile/tablet
-      if (window.innerWidth < 1024) return;
-      if (hasShownExit) return;
-
-      if (e.clientY <= 0) {
-        setShowExitIntent(true);
-        setHasShownExit(true);
-      }
-    };
-
-    document.addEventListener('mouseleave', handleMouseLeave);
-    return () => document.removeEventListener('mouseleave', handleMouseLeave);
-  }, [hasShownExit]);
-
   // Scroll progress + sticky bar
   useEffect(() => {
     const handleScroll = () => {
@@ -169,39 +172,39 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll trigger for popup at 55%
+  // Transactional popup gating (mobile-first): show only after 8s OR 50% scroll depth
   useEffect(() => {
+    if (hasShownTopIntent) return;
+
+    const fireTopIntent = () => {
+      if (hasShownTopIntent) return;
+      setShowTopIntent(true);
+      setHasShownTopIntent(true);
+    };
+
+    const timer = window.setTimeout(fireTopIntent, 8000);
+
     const handleScroll = () => {
-      if (hasShownExit) return;
+      if (hasShownTopIntent) return;
 
       const scrollY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
 
-      if (progress >= 55) {
-        setShowExitIntent(true);
-        setHasShownExit(true);
+      if (progress >= 50) {
+        fireTopIntent();
         window.removeEventListener('scroll', handleScroll);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasShownExit]);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasShownTopIntent]);
 
-  // Time trigger at 22 seconds
-  useEffect(() => {
-    if (hasShownExit) return;
 
-    const timer = setTimeout(() => {
-      if (!hasShownExit) {
-        setShowExitIntent(true);
-        setHasShownExit(true);
-      }
-    }, 22000);
-
-    return () => clearTimeout(timer);
-  }, [hasShownExit]);
 
   // FormStart tracking - fires once per session on first CTA or form interaction
   useEffect(() => {
@@ -238,8 +241,22 @@ const Index = () => {
       }
     };
 
+    const handleFocus = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      const input = target.closest('[data-form-input="true"]');
+      if (input) {
+        fireFormStart();
+      }
+    };
+
     document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
+    document.addEventListener('focusin', handleFocus);
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('focusin', handleFocus);
+    };
   }, []);
 
   const handleCommitmentCheck = (index: number) => {
@@ -259,30 +276,13 @@ const Index = () => {
         scrollProgress={scrollProgress}
       />
       
-      <Navigation viewerCount={viewerCount} />
       <UrgencyBanner countdown={countdown} />
       
       <main>
-        <HeroSection 
-          countdown={countdown} 
-          stockCount={stockCount} 
-          viewerCount={viewerCount} 
-        />
-        
-        {/* DISQUALIFICATION WARNING - Right after hero (biggest impact) */}
+        <TopStoryBanner />
+
+        {/* DISQUALIFICATION WARNING - After the form */}
         <DisqualificationWarning stockCount={stockCount} />
-        
-        {/* Pre-form notice + embedded order form (pulled near top for faster access) */}
-        <PreFormNotice />
-        <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto">
-          <iframe
-            id="order-form"
-            src="https://fulanihairsecrets.com/order-form/"
-            style={{ width: '100%', border: 'none' }}
-            scrolling="yes"
-            title="Order Form"
-          />
-        </div>
 
         {/* 7 HAIR LOSS TYPES GUIDE - Educational self-diagnosis */}
         <HairLossTypesGuide />
@@ -305,14 +305,14 @@ const Index = () => {
             <p className="font-cinzel text-xl md:text-2xl text-gold mb-2">
               Ready to stop hiding your hairline?
             </p>
-            <p className="font-serif text-sm md:text-base text-foreground/90 mb-4">
+            <p className="font-serif text-lg md:text-2xl text-foreground/90 mb-4">
               Join thousands of Nigerian women quietly filling in thinning edges and bald spots with the complete Fulani Hair Gro system.
             </p>
             <a
               href="#order-form"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-xs md:text-sm tracking-widest uppercase px-8 md:px-12 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-2xl md:text-3xl tracking-widest uppercase px-8 md:px-12 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
             >
-              Click Here To Order Fulani Hair Gro Now — Cash on Delivery Available
+              Order Now — Cash on Delivery Available
             </a>
           </div>
         </section>
@@ -330,41 +330,36 @@ const Index = () => {
             <p className="font-cinzel text-xl md:text-2xl text-gold mb-2">
               Now you know why this works.
             </p>
-            <p className="font-serif text-sm md:text-base text-foreground/90 mb-4">
+            <p className="font-serif text-lg md:text-3xl text-foreground/90 mb-4">
               The 3-step system is designed to calm your scalp, block DHT, and feed your follicles so your edges can grow back thicker and stronger.
             </p>
             <a
               href="#order-form"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-xs md:text-sm tracking-widest uppercase px-8 md:px-12 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
             >
-              Click Here To Get The Complete Fulani Hair Gro Bundle Today
+              Order Now — Get The Complete Fulani Hair Gro Bundle
             </a>
           </div>
         </section>
 
-        <IngredientsSection />
-        
-        {/* PROTECTED RECIPE - After products/ingredients */}
-        <ProtectedRecipe />
-        
-        {/* WHY WE RESTRICT SALES */}
-        <WhyWeRestrict />
-        
-        <BundleSection />
-        
-        {/* APPLICATION PROCESS */}
-        <ApplicationProcess stockCount={stockCount} />
-        
-        {/* YOU'RE ONE OF THE LUCKY FEW - Before pricing */}
-        <LuckyFewSection stockCount={stockCount} />
-        
-        {/* THE OFFER - Before pricing */}
-        <TheOffer stockCount={stockCount} />
-        
-        <Testimonials
-          activeIndex={activeTestimonial} 
-          onSetActive={setActiveTestimonial} 
-        />
+        <Suspense fallback={null}>
+          <IngredientsSection />
+          {/* PROTECTED RECIPE - After products/ingredients */}
+          <ProtectedRecipe />
+          {/* WHY WE RESTRICT SALES */}
+          <WhyWeRestrict />
+          <BundleSection />
+          {/* APPLICATION PROCESS */}
+          <ApplicationProcess stockCount={stockCount} />
+          {/* YOU'RE ONE OF THE LUCKY FEW - Before pricing */}
+          <LuckyFewSection stockCount={stockCount} />
+          {/* THE OFFER - Before pricing */}
+          <TheOffer stockCount={stockCount} />
+          <Testimonials
+            activeIndex={activeTestimonial}
+            onSetActive={setActiveTestimonial}
+          />
+        </Suspense>
 
         {/* Decision point section - leads into pricing */}
         <section className="py-12 md:py-16 bg-background px-4">
@@ -463,12 +458,14 @@ const Index = () => {
         </section>
 
         {/* Pricing and embedded order form - always visible */}
-        <PricingSection 
-          countdown={countdown}
-          stockCount={stockCount}
-          commitmentChecks={commitmentChecks}
-          onCommitmentChange={handleCommitmentCheck}
-        />
+        <Suspense fallback={null}>
+          <PricingSection 
+            countdown={countdown}
+            stockCount={stockCount}
+            commitmentChecks={commitmentChecks}
+            onCommitmentChange={handleCommitmentCheck}
+          />
+        </Suspense>
 
         {/* Cash on delivery visuals (text + banner) */}
         <section className="bg-background pb-4 px-4">
@@ -487,7 +484,9 @@ const Index = () => {
           </div>
         </section>
 
-        <Guarantee />
+        <Suspense fallback={null}>
+          <Guarantee />
+        </Suspense>
 
         <section className="py-10 bg-background px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -501,7 +500,7 @@ const Index = () => {
               href="#order-form"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-xs md:text-sm tracking-widest uppercase px-8 md:px-12 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
             >
-              Click Here To Order Now While Bundles Are Still In Stock
+              Order Now While Bundles Are Still In Stock
             </a>
           </div>
         </section>
@@ -518,19 +517,21 @@ const Index = () => {
               href="#order-form"
               className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-xs md:text-sm tracking-widest uppercase px-8 md:px-12 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
             >
-              Skip Ahead And Complete Your Order Now
+              Order Now
             </a>
           </div>
         </section>
 
-        <FAQ />
+        <Suspense fallback={null}>
+          <FAQ />
+        </Suspense>
       </main>
       
       <Footer />
       
-      <ExitIntentPopup 
-        show={showExitIntent} 
-        onClose={() => setShowExitIntent(false)} 
+      <TopIntentPopup
+        show={showTopIntent}
+        onClose={() => setShowTopIntent(false)}
       />
     </div>
   );

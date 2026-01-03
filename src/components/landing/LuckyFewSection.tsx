@@ -86,7 +86,7 @@ export const LuckyFewSection = ({ stockCount }: LuckyFewSectionProps) => {
         {/* Waitlist warning badge */}
         <div className="mt-8 text-center">
           <div className="inline-block bg-destructive/10 border border-destructive/30 rounded-lg px-4 py-2">
-            <p className="text-destructive text-sm font-semibold">
+            <p className="text-destructive text-lg font-semibold">
               ⚠️ If this batch sells out, the waitlist is currently 847 women long.
               <br />
               <span className="text-muted-foreground font-normal">Average wait time: 4-6 weeks.</span>

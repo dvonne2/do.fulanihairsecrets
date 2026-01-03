@@ -1,16 +1,20 @@
-import shampooImg from '@/assets/products/shampoo.jpg';
-import conditionerImg from '@/assets/products/conditioner.jpg';
-import pomadeImg from '@/assets/products/pomade.png';
-import fullBundleImg from '@/assets/products/66750-bundle.png';
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
-import result5 from '@/assets/results/result-5.jpg';
-import result6 from '@/assets/results/result-6.jpg';
-import result7 from '@/assets/results/result-7.jpg';
+import shampooImg from '@/assets/products/shampoo.webp';
+import conditionerImg from '@/assets/products/conditioner.webp';
+import pomadeImg from '@/assets/products/pomade.webp';
+import fullBundleImg from '@/assets/products/66750-bundle.webp';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import result4 from '@/assets/results/result-4.webp';
+import result5 from '@/assets/results/result-5.webp';
+import result6 from '@/assets/results/result-6.webp';
+import result7 from '@/assets/results/result-7.webp';
+import { OptimizedImage } from '@/components/OptimizedImage';
+import { usePrefetch } from '@/hooks/usePrefetch';
 
 export const BundleSection = () => {
+  const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
+
   const results = [
     { image: result1, caption: "Length retention goals" },
     { image: result2, caption: "Thickness & definition" },
@@ -55,11 +59,13 @@ export const BundleSection = () => {
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-royal text-gold text-xs font-bold rounded-full border border-gold/30">
                   STEP 1
                 </div>
-                <img 
-                  src={shampooImg} 
+                <OptimizedImage
+                  src={shampooImg}
                   alt="Heritage Shampoo"
                   className="w-32 h-40 md:w-40 md:h-52 object-contain drop-shadow-2xl mx-auto"
                   style={{ filter: 'drop-shadow(0 20px 40px rgba(212,175,55,0.2))' }}
+                  width={160}
+                  height={208}
                 />
                 <p className="font-cinzel text-sm text-foreground text-center mt-3">Heritage Shampoo</p>
                 <p className="font-sans text-xs text-gold text-center">Cleanse</p>
@@ -73,11 +79,13 @@ export const BundleSection = () => {
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-royal text-gold text-xs font-bold rounded-full flex items-center gap-1.5 shadow-lg border border-gold/40">
                   STEP 2
                 </div>
-                <img 
-                  src={conditionerImg} 
+                <OptimizedImage
+                  src={conditionerImg}
                   alt="Voluminous Conditioner"
                   className="w-40 h-40 md:w-44 md:h-44 object-contain drop-shadow-2xl mx-auto"
                   style={{ filter: 'drop-shadow(0 30px 50px rgba(212,175,55,0.4))' }}
+                  width={176}
+                  height={176}
                 />
                 <p className="font-cinzel text-lg text-foreground text-center mt-4">Voluminous Conditioner</p>
                 <p className="font-sans text-sm text-gold text-center">Nourish</p>
@@ -91,11 +99,13 @@ export const BundleSection = () => {
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-royal text-gold text-xs font-bold rounded-full border border-gold/30">
                   STEP 3
                 </div>
-                <img 
-                  src={pomadeImg} 
+                <OptimizedImage
+                  src={pomadeImg}
                   alt="Growth Pomade"
                   className="w-32 h-40 md:w-40 md:h-52 object-contain drop-shadow-2xl mx-auto"
                   style={{ filter: 'drop-shadow(0 20px 40px rgba(212,175,55,0.2))' }}
+                  width={160}
+                  height={208}
                 />
                 <p className="font-cinzel text-sm text-foreground text-center mt-3">Growth Pomade</p>
                 <p className="font-sans text-xs text-gold text-center">Restore & Activate Growth</p>
@@ -113,10 +123,12 @@ export const BundleSection = () => {
           ].map((item, i) => (
             <div key={i} className="text-center p-6 rounded-xl bg-muted/30 border border-gold/10 hover:border-gold/30 transition-colors">
               <div className="mb-3 flex justify-center">
-                <img
+                <OptimizedImage
                   src={item.image}
                   alt={item.alt}
                   className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-2xl"
+                  width={80}
+                  height={80}
                 />
               </div>
               <h4 className="font-cinzel text-lg text-gold mb-2">{item.title}</h4>
@@ -143,10 +155,12 @@ export const BundleSection = () => {
                   className="flex-shrink-0 w-32 md:w-full snap-center group"
                 >
                   <div className="relative overflow-hidden rounded-xl border-2 border-gold/20 group-hover:border-gold/60 transition-all duration-300 aspect-[3/4]">
-                    <img 
-                      src={result.image} 
+                    <OptimizedImage
+                      src={result.image}
                       alt={result.caption}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      width={300}
+                      height={400}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <p className="absolute bottom-2 left-2 right-2 text-xs text-gold font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
@@ -170,10 +184,12 @@ export const BundleSection = () => {
           {/* 3-Month Supply Image */}
           <div className="flex justify-center mb-4">
             <div className="bg-background/90 rounded-2xl p-3 border border-gold/40 inline-block">
-              <img
+              <OptimizedImage
                 src={fullBundleImg}
                 alt="Fulani Hair Gro 3-Month Supply Bundle"
                 className="h-32 md:h-40 w-auto object-contain drop-shadow-2xl mx-auto"
+                width={400}
+                height={200}
               />
             </div>
           </div>
@@ -194,10 +210,11 @@ export const BundleSection = () => {
             <a 
               href="#order-form"
               data-form-cta="true"
+              {...thankYouPrefetch}
               className="inline-flex items-center gap-3 gold-gradient text-background font-sans text-base tracking-wider uppercase px-10 py-4 rounded-xl font-bold btn-luxury"
             >
               <span>👑</span>
-              <span>Check Availability in Your Area</span>
+              <span>Order Now</span>
               <span>👑</span>
             </a>
           </div>

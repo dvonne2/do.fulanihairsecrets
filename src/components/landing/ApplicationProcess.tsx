@@ -70,7 +70,7 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
               </p>
               <span className="text-4xl md:text-5xl block mb-4">{step.icon}</span>
               <h3 className="font-cinzel text-lg text-gold mb-2">{step.title}</h3>
-              <p className="font-serif text-sm text-muted-foreground">{step.description}</p>
+              <p className="font-serif text-sm md:text-xl text-muted-foreground">{step.description}</p>
             </div>
           ))}
         </div>
@@ -99,7 +99,7 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
             Click Here To Order Now
           </Button>
 
-          <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-4 mt-6 text-lg text-muted-foreground">
             <span className="flex items-center gap-2">
               <span>⏱️</span>
               Response time: Under 5 minutes

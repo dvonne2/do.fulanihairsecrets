@@ -106,7 +106,11 @@ export const IngredientsSection: React.FC = () => {
       <div className="absolute inset-0 arabian-pattern opacity-10" />
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-10 md:mb-14">
-          <p className="font-cinzel text-sm tracking-[0.4em] uppercase text-gold mb-3">INGREDIENTS</p>
+          <p className="font-cinzel text-sm md:text-base tracking-[0.4em] uppercase mb-3">
+            <span className="inline-block bg-[#DAA520] text-black px-4 md:px-6 py-1">
+              INGREDIENTS
+            </span>
+          </p>
           <h2 className="font-cinzel text-2xl md:text-4xl text-[#333333] mb-3">
             The Power Inside Every Bottle
           </h2>
@@ -130,12 +134,12 @@ export const IngredientsSection: React.FC = () => {
               <h3 className="text-gold font-cinzel font-bold text-base md:text-lg mb-2">
                 {ingredient.name}
               </h3>
-              <ul className="text-gray-100 text-xs md:text-sm space-y-1.5 mb-4">
+              <ul className="text-gray-100 text-sm md:text-lg space-y-2 mb-4">
                 {ingredient.benefits.map((benefit, i) => (
                   <li key={i}>• {benefit}</li>
                 ))}
               </ul>
-              <p className="text-gold/70 text-xs md:text-sm font-serif italic">
+              <p className="text-gold/70 text-sm md:text-lg font-serif italic">
                 "{ingredient.tagline}"
               </p>
             </div>
@@ -147,11 +151,11 @@ export const IngredientsSection: React.FC = () => {
             <h3 className="font-cinzel text-lg md:text-2xl text-gold mb-3 md:mb-4 text-center">
               Reactivate Dormant Follicles
             </h3>
-            <p className="font-serif text-sm md:text-base text-gray-100 mb-3">
+            <p className="font-serif text-lg md:text-3xl text-gray-100 mb-3">
               With DHT blocked and the scalp deeply nourished, follicles that have been "sleeping" can return to their
               normal growth cycle, producing thicker, stronger hair.
             </p>
-            <p className="font-serif text-sm md:text-base text-gray-100">
+            <p className="font-serif text-lg md:text-3xl text-gray-100">
               This means your scalp can finally grow <span className="font-semibold">and keep</span> hair—and every new
               strand that comes in has the chance to be thicker, longer, and stronger than before.
             </p>
@@ -173,7 +177,7 @@ export const IngredientsSection: React.FC = () => {
             href="#order-form"
             className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-sm md:text-base tracking-widest uppercase px-8 md:px-12 py-4 rounded-xl font-bold hover:scale-105 transition-transform shadow-[0_0_30px_rgba(218,165,32,0.35)]"
           >
-            <span>👑 Get The Complete System — ₦66,750</span>
+            <span>👑 Order Now</span>
           </a>
         </div>
       </div>

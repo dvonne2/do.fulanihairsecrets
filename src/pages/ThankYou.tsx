@@ -3,15 +3,15 @@ import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Copy, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import shampoo from '@/assets/products/shampoo.jpg';
-import conditioner from '@/assets/products/conditioner.jpg';
-import pomade from '@/assets/products/pomade.png';
-import founderImg from '@/assets/products/hajara.png';
-import amina from '@/assets/testimonials/amina.png';
-import blessing from '@/assets/testimonials/blessing.jpg';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import shampoo from '@/assets/products/shampoo.webp';
+import conditioner from '@/assets/products/conditioner.webp';
+import pomade from '@/assets/products/pomade.webp';
+import founderImg from '@/assets/products/hajara.webp';
+import amina from '@/assets/testimonials/amina.webp';
+import blessing from '@/assets/testimonials/blessing.webp';
 
 const ThankYou = () => {
   const [orderNumber] = useState(() => {
@@ -69,6 +69,16 @@ const ThankYou = () => {
       if (progress < 1) requestAnimationFrame(animateSavings);
     };
     setTimeout(animateSavings, 1000);
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (window.top !== window.self) {
+        window.top.location.href = window.location.href;
+      }
+    } catch {
+      // ignore
+    }
   }, []);
 
   // Force GTM + Pixel pageview on SPA navigation to /thank-you

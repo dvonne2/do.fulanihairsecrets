@@ -1,26 +1,19 @@
-import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 
-import alopeciaAreata from '@/assets/hair-types/alopecia-areata.jpg';
-import anagenEffluvium from '@/assets/hair-types/anagen-effluvium.jpg';
-import androgenicAlopecia from '@/assets/hair-types/androgenic-alopecia.jpg';
+import alopeciaAreata from '@/assets/hair-types/alopecia-areata.webp';
+import anagenEffluvium from '@/assets/hair-types/anagen-effluvium.webp';
+import androgenicAlopecia from '@/assets/hair-types/androgenic-alopecia.webp';
 import cicatricialAlopecia from '@/assets/hair-types/cicatricial-alopecia.webp';
 import tractionAlopecia from '@/assets/hair-types/traction-alopecia.webp';
 import nutritionalDeficiency from '@/assets/hair-types/nutritional-deficiency.webp';
-import telogenEffluvium from '@/assets/hair-types/telogen-effluvium.jpg';
-import bundleImg from '@/assets/products/bundle-system.png';
+import telogenEffluvium from '@/assets/hair-types/telogen-effluvium.webp';
+import bundleImg from '@/assets/products/bundle-system.webp';
 import follicleBeforeAfter from '@/assets/products/jj-768x756-1.webp';
 import hairStrandRepair from '@/assets/products/jjj-768x735-1.webp';
 import denseScalp from '@/assets/products/jjjj-768x748-1.webp';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 export const HairLossTypesGuide = () => {
-  const handleChatClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like a FREE hair loss diagnosis.\n\nI think I might have one of these types of hair loss. Here are photos of my current situation:\n\n[Please attach photos]`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
-  };
-
   const hairLossTypes = [
     {
       id: 1,
@@ -105,19 +98,17 @@ export const HairLossTypesGuide = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-background">
-      <div className="absolute inset-0 arabian-pattern opacity-10" />
-      
-      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+    <section className="py-16 md:py-24 bg-white fhg-helvetica">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-gold/80 mb-3">
+          <p className="font-sans font-extrabold text-xs tracking-[0.3em] uppercase text-gold/80 mb-3">
             Educational Guide
           </p>
-          <h2 className="font-cinzel text-2xl md:text-4xl text-gold mb-4">
+          <h2 className="font-cinzel text-2xl md:text-4xl text-[#FF0000] mb-4">
             7 Types of Hair Loss & How Fulani Hair Gro Helps
           </h2>
-          <p className="font-serif text-lg text-foreground/80 max-w-3xl mx-auto">
+          <p className="font-serif text-lg text-[#333333] max-w-3xl mx-auto">
             Hair loss comes in many forms, each with its own triggers. Our formula is enriched with 400-year-old secret herbs, used for generations by the Fulani tribe in Maiduguri.
           </p>
           <div className="w-32 h-px bg-gold/40 mx-auto mt-6" />
@@ -126,24 +117,30 @@ export const HairLossTypesGuide = () => {
         {/* Medical diagram strip */}
         <div className="mb-10 md:mb-12 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
-            <img
+            <OptimizedImage
               src={follicleBeforeAfter}
               alt="Illustration showing a weak follicle transforming into a strong, healthy follicle"
               className="w-full max-w-xs object-contain"
+              width={480}
+              height={472}
             />
           </div>
           <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
-            <img
+            <OptimizedImage
               src={hairStrandRepair}
               alt="Diagram of a repaired, stronger hair strand"
               className="w-full max-w-xs object-contain"
+              width={480}
+              height={459}
             />
           </div>
           <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
-            <img
+            <OptimizedImage
               src={denseScalp}
               alt="Illustration of a scalp filled with many healthy hair strands"
               className="w-full max-w-xs object-contain"
+              width={480}
+              height={468}
             />
           </div>
         </div>
@@ -153,7 +150,7 @@ export const HairLossTypesGuide = () => {
           {hairLossTypes.map((type, index) => (
             <div 
               key={type.id}
-              className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-6 md:gap-10 items-center bg-card/30 rounded-2xl p-6 md:p-8 border border-gold/20`}
+              className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-6 md:gap-10 items-center bg-white rounded-2xl p-6 md:p-8 border border-gold/40 shadow-sm`}
             >
               {/* Image */}
               <div className="w-full md:w-2/5 flex-shrink-0">
@@ -161,10 +158,12 @@ export const HairLossTypesGuide = () => {
                   <div className="absolute top-3 left-3 bg-gold text-background px-3 py-1 rounded-full font-sans text-xs font-bold z-10">
                     TYPE {type.id}
                   </div>
-                  <img 
-                    src={type.image} 
+                  <OptimizedImage
+                    src={type.image}
                     alt={type.name}
                     className="w-full h-48 md:h-64 object-cover"
+                    width={640}
+                    height={512}
                   />
                 </div>
               </div>
@@ -172,45 +171,53 @@ export const HairLossTypesGuide = () => {
               {/* Content */}
               <div className="w-full md:w-3/5 space-y-4">
                 <div>
-                  <h3 className="font-cinzel text-xl md:text-2xl text-gold">
-                    {type.name}
+                  <h3 className="font-cinzel text-2xl md:text-3xl">
+                    <span className="inline-block bg-[#DAA520] text-white px-3 md:px-4 py-1">
+                      {type.name}
+                    </span>
                   </h3>
-                  <p className="font-sans text-sm text-muted-foreground">
+                  <p className="font-sans text-sm md:text-base text-[#333333]/80">
                     {type.subtitle}
                   </p>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4">
-                    <p className="font-sans text-sm md:text-base uppercase tracking-wider text-destructive mb-1 font-bold">
+                  <div className="bg-destructive/20 border border-destructive/40 rounded-lg p-5 md:p-6">
+                    <p className="font-sans text-base md:text-lg uppercase tracking-wider text-destructive mb-2 font-bold">
                       Why It Happens
                     </p>
-                    <p className="font-serif text-base md:text-lg text-foreground/90">
+                    <p className="font-serif text-xl md:text-2xl text-[#333333]">
                       {type.cause}
                     </p>
                   </div>
 
-                  <div className="bg-gold/10 border border-gold/40 rounded-lg p-4">
-                    <p className="font-sans text-sm md:text-base uppercase tracking-wider text-gold mb-1 font-bold">
+                  <div className="bg-gold/20 border border-gold/50 rounded-lg p-5 md:p-6">
+                    <p className="font-sans text-base md:text-lg uppercase tracking-wider text-gold mb-2 font-bold">
                       How Fulani Hair Gro Supports
                     </p>
-                    <p className="font-serif text-base md:text-lg text-foreground/90">
+                    <p className="font-serif text-xl md:text-3xl text-[#333333]">
                       {type.solution}
                     </p>
                   </div>
                 </div>
 
                 {type.qualifies && (
-                  <div className="flex items-center gap-2 text-gold">
-                    <Check className="w-5 h-5" />
-                    <span className="font-sans text-sm font-bold flex items-center gap-2">
-                      Treatable with Fulani Hair Gro™
-                      <img
-                        src={bundleImg}
-                        alt="Fulani Hair Gro product"
-                        className="w-8 h-8 object-contain rounded-lg shadow-[0_0_10px_rgba(218,165,32,0.5)]"
-                      />
-                    </span>
+                  <div className="mt-4 flex items-center gap-3">
+                    <span className="text-[#F2B705] text-xl">✓</span>
+                    <div className="flex items-center gap-3">
+                      <span className="inline-block bg-[#FDC52D] text-black font-sans font-bold text-sm md:text-base px-4 py-1">
+                        Treatable with Fulani Hair Gro™
+                      </span>
+                      <div className="w-9 h-9 rounded-full bg-white shadow-[0_0_18px_rgba(218,165,32,0.55)] flex items-center justify-center">
+                        <OptimizedImage
+                          src={bundleImg}
+                          alt="Fulani Hair Gro product"
+                          className="w-7 h-7 object-contain rounded-full"
+                          width={28}
+                          height={28}
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -222,46 +229,49 @@ export const HairLossTypesGuide = () => {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-12" />
 
         {/* Why Choose Fulani Hair Gro */}
-        <div className="bg-gold/5 border border-gold/20 rounded-2xl p-6 md:p-10 mb-12">
-          <h3 className="font-cinzel text-xl md:text-2xl text-gold text-center mb-8">
-            Why Choose Fulani Hair Gro?
+        <div className="bg-white border border-gold/20 rounded-2xl p-6 md:p-10 mb-12">
+          <h3 className="font-cinzel font-extrabold text-xl md:text-2xl text-center mb-8">
+            <span className="inline-block bg-[#DAA520] text-black px-4 md:px-6 py-1">
+              Why Choose Fulani Hair Gro?
+            </span>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <span className="text-gold text-xl">🌿</span>
               <div>
-                <p className="font-sans text-sm font-bold text-foreground">Powered by Ancient Wisdom</p>
-                <p className="font-serif text-sm text-muted-foreground">Rooted in 400 years of tradition using proven Fulani herbs</p>
+                <p className="font-sans text-sm font-bold text-[#333333]">Powered by Ancient Wisdom</p>
+                <p className="font-serif text-lg md:text-3xl text-[#333333]">
+                  Rooted in 400 years of tradition using proven Fulani herbs
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-gold text-xl">✨</span>
               <div>
-                <p className="font-sans text-sm font-bold text-foreground">All-Natural Ingredients</p>
-                <p className="font-serif text-sm text-muted-foreground">No harmful chemicals, safe for all hair types</p>
+                <p className="font-sans text-sm font-bold text-[#333333]">All-Natural Ingredients</p>
+                <p className="font-serif text-lg md:text-3xl text-[#333333]">No harmful chemicals, safe for all hair types</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-gold text-xl">📈</span>
               <div>
-                <p className="font-sans text-sm font-bold text-foreground">Results You Can See</p>
-                <p className="font-serif text-sm text-muted-foreground">Notice the difference within weeks</p>
+                <p className="font-sans text-sm font-bold text-[#333333]">Results You Can See</p>
+                <p className="font-serif text-lg md:text-3xl text-[#333333]">Notice the difference within weeks</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-gold text-xl">💪</span>
               <div>
-                <p className="font-sans text-sm font-bold text-foreground">Gentle Yet Powerful</p>
-                <p className="font-serif text-sm text-muted-foreground">Gentle care with potent results</p>
+                <p className="font-sans text-sm font-bold text-[#333333]">Gentle Yet Powerful</p>
+                <p className="font-serif text-lg md:text-3xl text-[#333333]">Gentle care with potent results</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Care Tips & Expectations in 2 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Care Tips */}
-          <div className="bg-card/50 border border-border/50 rounded-2xl p-6">
+          <div className="bg-white border border-border/50 rounded-2xl p-6">
             <h3 className="font-cinzel text-xl md:text-2xl text-gold mb-4">
               Gentle Hair Care Practices
             </h3>
@@ -269,7 +279,7 @@ export const HairLossTypesGuide = () => {
               {careTips.map((tip, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                  <span className="font-serif text-base md:text-lg text-foreground/90">{tip}</span>
+                  <span className="font-serif text-lg md:text-xl text-[#333333]">{tip}</span>
                 </li>
               ))}
             </ul>
@@ -284,12 +294,12 @@ export const HairLossTypesGuide = () => {
               {expectations.map((exp, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <span className="text-gold">✓</span>
-                  <span className="font-serif text-base md:text-lg text-foreground/90">{exp}</span>
+                  <span className="font-serif text-lg md:text-xl text-[#333333]">{exp}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-4 p-3 bg-gold/10 rounded-lg">
-              <p className="font-sans text-sm md:text-base text-gold font-bold text-center">
+              <p className="font-sans text-lg md:text-3xl text-gold font-bold text-center">
                 ⏱️ Consistency is Key — No hair growth solution works overnight!
               </p>
             </div>
@@ -298,18 +308,18 @@ export const HairLossTypesGuide = () => {
 
         {/* CTA */}
         <div className="text-center">
-          <p className="font-serif text-lg text-foreground/90 mb-4">
+          <p className="font-serif text-lg text-[#333333] mb-4">
             Not sure which type you have?
           </p>
-          <Button
-            onClick={handleChatClick}
-            size="lg"
-            className="gold-gradient text-background font-sans text-sm md:text-base tracking-widest uppercase px-8 py-6 hover:scale-105 transition-transform duration-300"
+          <a
+            href="#order-form"
+            data-form-cta="true"
+            className="inline-flex items-center justify-center bg-gradient-to-r from-[#8ad56d] to-[#4cae4e] text-background fhg-helvetica text-sm md:text-base tracking-widest uppercase px-8 py-6 rounded-md hover:scale-105 transition-transform duration-300 border border-[#4cae4e]"
           >
             <span className="mr-2">📸</span>
-            Send Us A Photo — FREE Diagnosis
-          </Button>
-          <p className="font-sans text-xs text-muted-foreground mt-3">
+            Continue To Order Form
+          </a>
+          <p className="font-sans text-xs text-[#333333] mt-3">
             Takes only 5 minutes • Get honest feedback
           </p>
         </div>

@@ -1,4 +1,4 @@
-import bundleImg from '@/assets/products/bundle-system.png';
+import bundleImg from '@/assets/products/bundle-system.webp';
 
 interface HeroSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
@@ -16,16 +16,6 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Column - Content */}
           <div className="text-center lg:text-left">
-            {/* Badges */}
-            <div className="flex flex-wrap gap-2 md:gap-3 justify-center lg:justify-start mb-6">
-              <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full gold-gradient text-background font-sans text-xs font-bold">
-                🏆 #1 Rated Hair Growth in Nigeria
-              </span>
-              <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full border-2 border-gold text-gold font-sans text-xs font-bold">
-                🏛️ Est. 1625
-              </span>
-            </div>
-            
             {/* Pre-headline */}
             <p className="inline-block font-sans text-base md:text-lg mb-4 bg-[#DAA520] text-black px-3 py-1.5 rounded">
               Tired of watching your edges disappear? 😔
@@ -115,7 +105,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
               data-form-cta="true"
               className="block w-full gold-gradient text-background font-sans text-base md:text-lg tracking-widest uppercase py-4 md:py-5 rounded-xl font-bold btn-luxury text-center mb-6"
             >
-              Check Availability in Your Area
+              Order Now
             </a>
 
             {/* Mobile product image (shown early) */}

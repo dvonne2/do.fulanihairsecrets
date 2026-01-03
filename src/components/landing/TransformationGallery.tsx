@@ -1,24 +1,24 @@
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
-import result5 from '@/assets/results/result-5.jpg';
-import result6 from '@/assets/results/result-6.jpg';
-import result7 from '@/assets/results/result-7.jpg';
-import result8 from '@/assets/results/result-8.jpg';
-import result11 from '@/assets/results/result-11.jpg';
-import result12 from '@/assets/results/result-12.jpg';
-import result13 from '@/assets/results/result-13.jpg';
-import result14 from '@/assets/results/result-14.jpg';
-import result15 from '@/assets/results/result-15.jpg';
-import result16 from '@/assets/results/result-16.jpg';
-import result17 from '@/assets/results/result-17.png';
-import result18 from '@/assets/results/result-18.jpg';
-import result19 from '@/assets/results/result-19.jpg';
-import result20 from '@/assets/results/result-20.jpg';
-import result22 from '@/assets/results/result-22.jpg';
-import result23 from '@/assets/results/result-23.jpg';
-import result24 from '@/assets/results/result-24.jpg';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import result4 from '@/assets/results/result-4.webp';
+import result5 from '@/assets/results/result-5.webp';
+import result6 from '@/assets/results/result-6.webp';
+import result7 from '@/assets/results/result-7.webp';
+import result8 from '@/assets/results/result-8.webp';
+import result11 from '@/assets/results/result-11.webp';
+import result12 from '@/assets/results/result-12.webp';
+import result13 from '@/assets/results/result-13.webp';
+import result14 from '@/assets/results/result-14.webp';
+import result15 from '@/assets/results/result-15.webp';
+import result16 from '@/assets/results/result-16.webp';
+import result17 from '@/assets/results/result-17.webp';
+import result18 from '@/assets/results/result-18.webp';
+import result19 from '@/assets/results/result-19.webp';
+import result20 from '@/assets/results/result-20.webp';
+import result22 from '@/assets/results/result-22.webp';
+import result23 from '@/assets/results/result-23.webp';
+import result24 from '@/assets/results/result-24.webp';
 
 const transformations = [
   { image: result1, name: "Amina K.", location: "Lagos", duration: "3 months", highlight: "Edges fully restored" },
@@ -129,7 +129,8 @@ export const TransformationGallery = () => {
             Ready to be our next success story?
           </p>
           <a 
-            href="#order"
+            href="#order-form"
+            data-form-cta="true"
             className="inline-flex items-center gap-3 gold-gradient-animated text-background font-sans text-base tracking-wider uppercase px-10 py-4 rounded-xl font-bold btn-luxury animate-glow"
           >
             <span>👑</span>

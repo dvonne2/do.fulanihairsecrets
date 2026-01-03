@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import shampooImg from '@/assets/products/shampoo.jpg';
-import conditionerImg from '@/assets/products/conditioner.jpg';
-import pomadeImg from '@/assets/products/pomade.png';
-import fullBundleImg from '@/assets/products/66750-bundle.png';
+import shampooImg from '@/assets/products/shampoo.webp';
+import conditionerImg from '@/assets/products/conditioner.webp';
+import pomadeImg from '@/assets/products/pomade.webp';
+import fullBundleImg from '@/assets/products/66750-bundle.webp';
 
 interface PricingSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
@@ -32,10 +32,10 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
           data-form-cta="true"
           className="inline-block bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold text-xl px-12 py-5 rounded-xl hover:scale-105 transition-transform shadow-2xl"
         >
-          🛒 COMPLETE YOUR ORDER — ₦66,750
+          🛒 Order Now
         </a>
-        <p className="text-sm text-[#333333] mt-6">
-          ✓ Pay on Delivery Available &nbsp;•&nbsp; ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping
+        <p className="text-xl text-[#333333] mt-6">
+          ✓ Pay on Delivery Available &nbsp;•&nbsp; ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦66,750 &amp; ₦215,000 bundles
         </p>
       </div>
     </section>

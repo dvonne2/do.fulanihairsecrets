@@ -66,7 +66,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
 
         {/* What's included */}
         <div className="text-center mb-10">
-          <p className="font-cinzel text-lg md:text-xl text-gold mb-8">Every order comes with:</p>
+          <p className="font-cinzel text-lg md:text-xl text-gold mb-8">Every order paid before delivery comes with:</p>
           
           <div className="space-y-4 max-w-lg mx-auto">
             {bonuses.map((bonus, i) => (
@@ -96,7 +96,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
 
         {/* Price justification story */}
         <div className="max-w-3xl mx-auto mb-8 md:mb-10">
-          <div className="bg-card/70 border border-gold/30 rounded-2xl px-6 py-5 md:px-8 md:py-6 text-left space-y-3 font-serif text-sm md:text-base text-foreground/90">
+          <div className="bg-card/70 border border-gold/30 rounded-2xl px-6 py-5 md:px-8 md:py-6 text-left space-y-3 font-serif text-lg md:text-2xl text-foreground/90">
             <h3 className="font-cinzel text-sm md:text-base tracking-[0.35em] uppercase text-gold mb-1">
               The Price They Said Was "Too Low"
             </h3>
@@ -132,7 +132,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
           {/* Stock warning */}
           <div className="mt-6 inline-flex items-center gap-2 bg-destructive/10 border border-destructive/30 rounded-full px-4 py-2">
             <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
-            <span className="text-destructive font-semibold text-sm">
+            <span className="text-destructive font-semibold text-xl">
               Only {stockCount} bundles left in this batch
             </span>
           </div>

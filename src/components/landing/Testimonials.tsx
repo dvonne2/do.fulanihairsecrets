@@ -1,21 +1,18 @@
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
-import result5 from '@/assets/results/result-5.jpg';
-import result6 from '@/assets/results/result-6.jpg';
-import result8 from '@/assets/results/result-8.jpg';
-import result11 from '@/assets/results/result-11.jpg';
-import result12 from '@/assets/results/result-12.jpg';
-import result14 from '@/assets/results/result-14.jpg';
-import result16 from '@/assets/results/result-16.jpg';
-import result17 from '@/assets/results/result-17.png';
-import result19 from '@/assets/results/result-19.jpg';
-import result20 from '@/assets/results/result-20.jpg';
-import hajiaMaryamTestimonial from '@/assets/testimonials/Hajia Maryam Testimonial.png';
-import hajiaMaryam2 from '@/assets/testimonials/Hajia-Maryam-2.png';
-import mamaTitiTestimonial1 from '@/assets/testimonials/Mama Titi Testimonial1.png';
-import mamaTiti2 from '@/assets/testimonials/Mama Titi 2.png';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import result4 from '@/assets/results/result-4.webp';
+import result5 from '@/assets/results/result-5.webp';
+import result6 from '@/assets/results/result-6.webp';
+import result8 from '@/assets/results/result-8.webp';
+import result11 from '@/assets/results/result-11.webp';
+import result12 from '@/assets/results/result-12.webp';
+import result14 from '@/assets/results/result-14.webp';
+import result16 from '@/assets/results/result-16.webp';
+import result17 from '@/assets/results/result-17.webp';
+import result19 from '@/assets/results/result-19.webp';
+import result20 from '@/assets/results/result-20.webp';
+import fulaniGreenTestimonials from '@/assets/products/Gemini_Generated_Image_pt40ctpt40ctpt40.webp';
 
 interface TestimonialsProps {
   activeIndex: number;
@@ -58,11 +55,11 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           <div className="flex justify-center gap-1 mb-4">
             {Array(5).fill(0).map((_, j) => <span key={j} className="text-gold text-2xl">★</span>)}
           </div>
-          <p className="font-serif text-xl md:text-2xl italic text-foreground/90 mb-6 max-w-3xl mx-auto">
+          <p className="font-serif text-xl md:text-2xl italic text-white mb-6 max-w-3xl mx-auto">
             "{testimonials[activeIndex].text}"
           </p>
           <p className="font-cinzel text-lg text-gold">{testimonials[activeIndex].name}</p>
-          <p className="font-sans text-xs text-gold/60">{testimonials[activeIndex].location}</p>
+          <p className="font-sans text-xs text-white">{testimonials[activeIndex].location}</p>
           <p className="font-sans text-xs text-success mt-2">✓ Verified Purchase</p>
           
           <div className="flex justify-center gap-3 mt-6">
@@ -83,52 +80,24 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
               <div className="flex items-center gap-3 mb-4">
                 <div>
                   <p className="font-cinzel text-sm text-gold">{review.name}</p>
-                  <p className="font-sans text-xs text-gold/50">{review.location}</p>
+                  <p className="font-sans text-xs text-white">{review.location}</p>
                 </div>
               </div>
               <div className="flex gap-1 mb-3">{Array(5).fill(0).map((_, j) => <span key={j} className="text-gold">★</span>)}</div>
-              <p className="font-sans text-sm text-muted-foreground mb-4">"{review.text}"</p>
+              <p className="font-sans text-sm text-white mb-4">"{review.text}"</p>
               <div className="ornate-divider mb-3"></div>
               <span className="text-xs text-success">✓ Verified Purchase</span>
             </div>
           ))}
         </div>
 
-        {/* WhatsApp Proof Strip */}
-        <div className="mt-10">
-          <p className="font-cinzel text-sm tracking-[0.3em] uppercase text-gold mb-4 text-center">
-            WhatsApp Proof From Real Queens
-          </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
-              <img 
-                src={hajiaMaryamTestimonial} 
-                alt="WhatsApp testimonial from Hajia Maryam about her edges and confidence"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
-              <img 
-                src={hajiaMaryam2} 
-                alt="Second WhatsApp testimonial from Hajia Maryam showing product and regrowth update"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
-              <img 
-                src={mamaTitiTestimonial1} 
-                alt="WhatsApp testimonial from Mama Titi about her hair transformation"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
-              <img 
-                src={mamaTiti2} 
-                alt="Second WhatsApp testimonial from Mama Titi showing continued results"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-          </div>
+        <div className="mt-10 max-w-5xl mx-auto">
+          <img
+            src={fulaniGreenTestimonials}
+            alt="Real testimonials for Fulani Hair Gro"
+            className="w-full h-auto"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>

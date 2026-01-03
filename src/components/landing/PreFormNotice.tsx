@@ -1,6 +1,4 @@
 import React from 'react';
-import cashOnDeliveryImg from '@/assets/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
-import pointingGif from '@/assets/products/RtaIrAk.gif';
 
 export const PreFormNotice: React.FC = () => {
   return (
@@ -22,20 +20,6 @@ export const PreFormNotice: React.FC = () => {
         <p className="font-sans text-base md:text-lg font-bold text-foreground mb-4">
           Regrow thinning edges and bald spots — or get 2× your money back.
         </p>
-        <div className="flex flex-col items-center gap-3 md:gap-4">
-          <div className="bg-white rounded-md px-4 py-2 mb-1 inline-flex items-center justify-center">
-            <img
-              src={cashOnDeliveryImg}
-              alt="Cash on Delivery available — inspect your package before you pay"
-              className="w-full max-w-md object-contain"
-            />
-          </div>
-          <img
-            src={pointingGif}
-            alt="Animated hand and eyes pointing down toward the order form"
-            className="w-full max-w-md object-contain"
-          />
-        </div>
       </div>
     </section>
   );

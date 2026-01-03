@@ -16,7 +16,7 @@ export const IndustryTruth: React.FC = () => {
             <h3 className="font-cinzel text-lg md:text-2xl text-gold mb-2 text-center">
               Why Fulani Hair Gro Works When Others Fail
             </h3>
-            <ul className="list-none space-y-2 font-serif text-sm md:text-base text-foreground/90 text-left md:text-center">
+            <ul className="list-none space-y-2 font-serif text-xl md:text-2xl text-foreground/90 text-left md:text-center">
               <li>🌿 <span className="font-semibold">Targets follicle dormancy</span> — goes beyond the hair strand to where growth is controlled.</li>
               <li>🔥 <span className="font-semibold">Activates blood flow at thinning edges</span> so weak follicles start receiving fresh nourishment again.</li>
               <li>🧬 <span className="font-semibold">Restores the scalp environment for regrowth</span> by calming irritation and reducing DHT pressure.</li>
@@ -33,7 +33,7 @@ export const IndustryTruth: React.FC = () => {
             the follicles at your hairline and crown, it slowly chokes them, causing thinning, shedding, and eventually patches that
             refuse to grow back.
           </p>
-          <p className="font-serif text-base md:text-lg text-gold/90">
+          <p className="font-serif text-xl md:text-2xl text-gold/90">
             In simple terms: <span className="font-semibold">DHT is the quiet hormone that keeps telling your hair to fall out and not grow back.</span>
           </p>
 

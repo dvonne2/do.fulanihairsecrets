@@ -122,7 +122,9 @@ export const MaiduguriSecret = () => {
           </ul>
 
           <p className={`transition-all duration-700 ${visibleParagraphs.includes(5) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <span className="text-destructive/80">No chemicals. No lab tricks.</span>
+            <span className="inline-block bg-[#FDC52D] text-black px-2 py-1">
+              No chemicals. No lab tricks.
+            </span>
             <br />
             Just the same ancient process, repeated generation after generation.
           </p>
@@ -174,8 +176,8 @@ export const MaiduguriSecret = () => {
 
           <div className="space-y-1">
             <p className="font-cinzel text-gold text-lg">— Hajia Hajara</p>
-            <p className="text-muted-foreground text-sm">Founder, Fulani Hair Gro™</p>
-            <p className="text-gold/60 text-xs tracking-widest">Est. 1625 · Maiduguri</p>
+            <p className="text-muted-foreground text-base md:text-lg">Founder, Fulani Hair Gro™</p>
+            <p className="text-gold/60 text-sm md:text-lg tracking-widest">Est. 1625 · Maiduguri</p>
           </div>
         </div>
       </div>

@@ -2,10 +2,12 @@ import { Button } from '@/components/ui/button';
 
 export const HairLossTypesDiagram = () => {
   const handleDiagnoseClick = () => {
-    const message = encodeURIComponent(
-      `Hi! I'd like a FREE hair loss diagnosis.\n\nI'm not sure what type of hair loss I have. Here are photos of my current hair situation:\n\n[Please attach photos of your edges and any thinning areas]`
-    );
-    window.open(`https://wa.me/2348101594734?text=${message}`, '_blank');
+    const el = document.getElementById('order-form');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.location.hash = '#order-form';
+    }
   };
 
   const hairLossTypes = [
@@ -131,7 +133,7 @@ export const HairLossTypesDiagram = () => {
             className="border border-gold text-gold bg-transparent font-sans text-sm md:text-base tracking-widest uppercase px-8 py-4 hover:bg-gold/10 transition-transform duration-300"
           >
             <span className="mr-2">📸</span>
-            Send Us A Photo of Your Hair — We'll Diagnose FREE
+            Continue To Order Form
           </Button>
         </div>
       </div>

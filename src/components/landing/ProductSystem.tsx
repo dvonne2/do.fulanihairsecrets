@@ -1,9 +1,9 @@
-import shampooImg from '@/assets/products/shampoo.jpg';
-import conditionerImg from '@/assets/products/conditioner.jpg';
-import pomadeImg from '@/assets/products/pomade.png';
-import aminaImg from '@/assets/testimonials/amina.png';
-import blessingImg from '@/assets/testimonials/blessing.jpg';
-import founderImg from '@/assets/products/hajara.png';
+import shampooImg from '@/assets/products/shampoo.webp';
+import conditionerImg from '@/assets/products/conditioner.webp';
+import pomadeImg from '@/assets/products/pomade.webp';
+import aminaImg from '@/assets/testimonials/amina.webp';
+import blessingImg from '@/assets/testimonials/blessing.webp';
+import founderImg from '@/assets/products/hajara.webp';
 
 export const ProductSystem = () => {
   const products = [
@@ -58,7 +58,7 @@ export const ProductSystem = () => {
               </div>
             ))}
           </div>
-          <p className="font-sans text-xs text-muted-foreground italic">Ingredients sourced from across the Sahel region</p>
+          <p className="font-sans text-xs text-white italic">Ingredients sourced from across the Sahel region</p>
         </div>
 
         {/* Products Grid */}
@@ -103,7 +103,7 @@ export const ProductSystem = () => {
               <li>Step 2 <span className="font-semibold">NOURISHES</span> and strengthens</li>
               <li>Step 3 <span className="font-semibold">RESTORES</span> and activates growth</li>
             </ul>
-            <p className="font-sans text-base md:text-lg text-destructive mb-4">
+            <p className="font-sans text-base md:text-lg font-extrabold text-destructive mb-4">
               Using them separately reduces effectiveness by about 60%.
             </p>
             <p className="font-cinzel text-base text-foreground mb-4">
@@ -115,7 +115,7 @@ export const ProductSystem = () => {
                 data-form-cta="true"
                 className="inline-flex items-center justify-center gap-2 gold-gradient text-background font-sans text-sm md:text-base tracking-wider uppercase px-8 md:px-10 py-3 md:py-3.5 rounded-xl font-bold btn-luxury"
               >
-                <span>Check Availability in Your Area</span>
+                <span>Order Now</span>
               </a>
             </div>
           </div>
@@ -123,14 +123,14 @@ export const ProductSystem = () => {
 
         {/* 60-second ritual */}
         <div className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <div className="rounded-2xl border border-gold/30 bg-black/70 px-6 py-6 md:px-8 md:py-8 shadow-[0_0_35px_rgba(218,165,32,0.25)]">
-            <h3 className="font-cinzel text-lg md:text-2xl text-gold mb-3 md:mb-4 text-center">
-              The 60-Second Ritual That Changes Everything
+          <div className="rounded-2xl border border-gold/30 bg-white px-6 py-6 md:px-8 md:py-8 shadow-[0_0_35px_rgba(218,165,32,0.25)]">
+            <h3 className="font-cinzel text-lg md:text-2xl text-gold mb-3 md:mb-4 text-center font-black">
+              The 60-Second Protocol That Changes Everything
             </h3>
-            <p className="font-serif text-sm md:text-base text-gray-200 mb-4 text-center">
+            <p className="font-serif text-lg md:text-2xl text-[#333333] mb-4 text-center">
               Here&apos;s exactly how simple your nightly routine is:
             </p>
-            <ol className="list-decimal list-inside space-y-2 font-serif text-sm md:text-base text-gray-100 text-left">
+            <ol className="list-decimal list-inside space-y-2 font-serif text-lg md:text-2xl text-[#333333] text-left">
               <li>
                 Before bed, take a little Fulani Hair Gro™ pomade and apply it directly onto the areas of concern (edges,
                 crown, thinning spots).
@@ -185,7 +185,7 @@ export const ProductSystem = () => {
             data-form-cta="true"
             className="inline-block gold-gradient text-background font-sans text-sm tracking-widest uppercase px-8 md:px-12 py-4 rounded-xl font-bold btn-luxury"
           >
-            See If This Works for My Hair
+            Order Now
           </a>
         </div>
       </div>

@@ -1,17 +1,17 @@
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
-import result5 from '@/assets/results/result-5.jpg';
-import result6 from '@/assets/results/result-6.jpg';
-import result7 from '@/assets/results/result-7.jpg';
-import result8 from '@/assets/results/result-8.jpg';
-import result9 from '@/assets/results/result-9.jpg';
-import result10 from '@/assets/results/result-10.jpg';
-import result11 from '@/assets/results/result-11.jpg';
-import result12 from '@/assets/results/result-12.jpg';
-import result13 from '@/assets/results/result-13.jpg';
-import result14 from '@/assets/results/result-14.jpg';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import result4 from '@/assets/results/result-4.webp';
+import result5 from '@/assets/results/result-5.webp';
+import result6 from '@/assets/results/result-6.webp';
+import result7 from '@/assets/results/result-7.webp';
+import result8 from '@/assets/results/result-8.webp';
+import result9 from '@/assets/results/result-9.webp';
+import result10 from '@/assets/results/result-10.webp';
+import result11 from '@/assets/results/result-11.webp';
+import result12 from '@/assets/results/result-12.webp';
+import result13 from '@/assets/results/result-13.webp';
+import result14 from '@/assets/results/result-14.webp';
 
 const footerImages = [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13, result14];
 
@@ -21,7 +21,7 @@ export const Footer = () => {
       <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
         {/* Result Images Row */}
         <div className="mb-8">
-          <p className="font-serif text-sm text-gold/80 italic mb-4">Your transformation starts today</p>
+          <p className="font-serif text-lg text-gold/80 italic mb-4">Your transformation starts today</p>
           <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
             {footerImages.map((img, i) => (
               <div 
@@ -58,18 +58,23 @@ export const Footer = () => {
         <p className="font-serif text-gold italic mb-6">In honour of Hajia Aissata Cissé 👑❤️</p>
         
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
-          <a 
-            href="https://wa.me/2348101594734"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-sans text-sm text-success hover:text-success/80 transition-colors"
-          >
-            📱 WhatsApp: 08101594734
-          </a>
+          <p className="font-sans text-sm text-muted-foreground">
+            📱 WhatsApp: temporarily unavailable
+          </p>
           <span className="hidden md:inline text-muted-foreground">|</span>
           <p className="font-sans text-sm text-muted-foreground">
             🏦 Moniepoint: 5633783114
           </p>
+        </div>
+
+        <div className="flex items-center justify-center mb-8">
+          <a
+            href="#order-form"
+            data-form-cta="true"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-amber-500 text-black font-cinzel text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold shadow-[0_0_25px_rgba(218,165,32,0.3)] hover:scale-105 transition-transform"
+          >
+            Go To Order Form
+          </a>
         </div>
         
         <div className="ornate-divider mb-6"></div>

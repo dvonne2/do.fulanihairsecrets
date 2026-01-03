@@ -1,18 +1,18 @@
-import result1 from '@/assets/results/result-1.jpg';
-import result2 from '@/assets/results/result-2.jpg';
-import result3 from '@/assets/results/result-3.jpg';
-import result4 from '@/assets/results/result-4.jpg';
-import result5 from '@/assets/results/result-5.jpg';
-import result6 from '@/assets/results/result-6.jpg';
-import result8 from '@/assets/results/result-8.jpg';
-import result11 from '@/assets/results/result-11.jpg';
-import result12 from '@/assets/results/result-12.jpg';
-import result14 from '@/assets/results/result-14.jpg';
-import result16 from '@/assets/results/result-16.jpg';
-import result17 from '@/assets/results/result-17.png';
-import result19 from '@/assets/results/result-19.jpg';
-import result20 from '@/assets/results/result-20.jpg';
-import result22 from '@/assets/results/result-22.jpg';
+import result1 from '@/assets/results/result-1.webp';
+import result2 from '@/assets/results/result-2.webp';
+import result3 from '@/assets/results/result-3.webp';
+import result4 from '@/assets/results/result-4.webp';
+import result5 from '@/assets/results/result-5.webp';
+import result6 from '@/assets/results/result-6.webp';
+import result8 from '@/assets/results/result-8.webp';
+import result11 from '@/assets/results/result-11.webp';
+import result12 from '@/assets/results/result-12.webp';
+import result14 from '@/assets/results/result-14.webp';
+import result16 from '@/assets/results/result-16.webp';
+import result17 from '@/assets/results/result-17.webp';
+import result19 from '@/assets/results/result-19.webp';
+import result20 from '@/assets/results/result-20.webp';
+import result22 from '@/assets/results/result-22.webp';
 import fourteenDayCollage from '@/assets/products/before-and-after-14-days-2013x2048.webp';
 
 const transformations = [
@@ -196,7 +196,7 @@ export const BeforeAfterSection = () => {
                 </div>
                 
                 {/* Duration badge */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-4 py-2 bg-gold text-background text-xs font-bold rounded-full shadow-lg z-10">
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-4 py-2 bg-gold text-background text-2xl md:text-3xl font-bold rounded-full shadow-lg z-10">
                   {item.duration}
                 </div>
               </div>
@@ -209,7 +209,7 @@ export const BeforeAfterSection = () => {
                     <span key={j} className="text-gold text-sm">★</span>
                   ))}
                 </div>
-                <p className="font-serif text-xs md:text-sm text-foreground/90 mt-3 max-w-xs mx-auto">
+                <p className="font-serif text-lg md:text-xl text-foreground/90 mt-3 max-w-xs mx-auto">
                   {item.caption}
                 </p>
               </div>
@@ -227,7 +227,7 @@ export const BeforeAfterSection = () => {
             data-form-cta="true"
             className="inline-flex items-center gap-2 gold-gradient text-background font-sans text-sm tracking-wider uppercase px-8 py-3 rounded-xl font-bold btn-luxury"
           >
-            <span>See If This Works for My Hair</span>
+            <span>Order Now</span>
           </a>
         </div>
       </div>

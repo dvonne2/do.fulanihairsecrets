@@ -1,9 +1,52 @@
 /* Fulani Hair Gro™ Design System - Nigerian Luxury Aesthetic */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import './fonts.generated.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.jandes-eyebrow {
+  font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+@media (min-width: 768px) {
+  .jandes-eyebrow {
+    font-size: 22px;
+  }
+}
+
+.jandes-headline {
+  font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 800;
+}
+
+.jandes-quote {
+  font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+/* Helvetica / Arial stack for special sections and CTAs */
+.fhg-helvetica {
+  font-family: 'Helvetica', Arial, sans-serif;
+}
+
+/* Fulani gold heading/body sizes for "This works for" section */
+.fhg-gold-heading {
+  font-size: 35px;
+  color: #DAA520;
+}
+
+.fhg-gold-body {
+  font-size: 30px;
+  color: #333333;
+}
+
+/* Soften all "black" text site-wide to #333333 while keeping Tailwind API */
+.text-black {
+  color: #333333 !important;
+}
 
 @layer base {
   :root {

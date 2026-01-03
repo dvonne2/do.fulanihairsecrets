@@ -34,7 +34,7 @@ const FatimaStory = () => {
               href="#order-form"
               className="block w-full md:w-auto text-center mx-auto gold-gradient-animated text-background font-sans text-sm md:text-base tracking-widest uppercase py-4 md:py-4 px-8 rounded-xl font-bold btn-luxury animate-glow"
             >
-              Order Fulani Hair Gro Now + Same Day Nationwide Delivery
+              Order Now — Same Day Nationwide Delivery
             </a>
           </div>
 
@@ -174,7 +174,7 @@ const FatimaStory = () => {
                 href="#order-form"
                 className="block w-full md:w-auto text-center mx-auto gold-gradient-animated text-background font-sans text-sm md:text-base tracking-widest uppercase py-4 md:py-4 px-8 rounded-xl font-bold btn-luxury animate-glow"
               >
-                Order Fulani Hair Gro Now + Buy 2 Get 1 Free + Same Day Nationwide Delivery Anywhere In Nigeria
+                Order Now — Buy 2 Get 1 Free + Same Day Nationwide Delivery
               </a>
             </div>
           </div>
@@ -184,13 +184,13 @@ const FatimaStory = () => {
               href="#order-form"
               className="w-full text-center gold-gradient-animated text-background font-sans text-xs md:text-sm tracking-widest uppercase py-4 px-4 rounded-xl font-bold btn-luxury animate-glow"
             >
-              Click Here To Secure Your 3 in 1 Fulani Hair Gro System Now + Buy 2 Get 1 Free
+              Order Now — Secure Your 3 in 1 Fulani Hair Gro System
             </a>
             <a
               href="#order-form"
               className="w-full text-center bg-transparent border border-gold text-gold font-sans text-xs md:text-sm tracking-widest uppercase py-4 px-4 rounded-xl font-bold hover:bg-gold hover:text-background transition-colors"
             >
-              Order Fulani Hair Gro With Same Day Delivery Anywhere In Nigeria
+              Order Now — Same Day Delivery Anywhere In Nigeria
             </a>
           </div>
         </div>
