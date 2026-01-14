@@ -539,7 +539,7 @@ function OrderFormEmbed() {
                   } else {
                     console.log('Step indicator not found');
                   }
-                }, 100);
+                }, 50); // Reduced from 100ms to 50ms for faster response
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -819,7 +819,7 @@ function OrderFormEmbed() {
                   } else {
                     console.log('Step indicator not found');
                   }
-                }, 100);
+                }, 50); // Reduced from 100ms to 50ms for faster response
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
