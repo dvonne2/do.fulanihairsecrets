@@ -37,14 +37,17 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6">
           <picture>
+            {/* Mobile: Use static image for faster loading */}
             <source media="(max-width: 768px)" srcSet="/hero-fulani.png" />
-            <source media="(min-width: 769px)" srcSet="/hero-fulani.png" />
+            {/* Desktop: Use animated GIF */}
+            <source media="(min-width: 769px)" srcSet="/hero-animated.gif" />
+            {/* Fallback to animated GIF */}
             <img
-              src="/hero-fulani.png"
+              src="/hero-animated.gif"
               alt="Fulani Hair Gro system packshot"
               className="w-full h-auto"
               loading="eager"
-              decoding="sync"
+              decoding="async"
               width={1200}
               height={1219}
             />
