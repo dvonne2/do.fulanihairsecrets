@@ -38,10 +38,10 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6">
           <picture>
-            <source media="(max-width: 768px)" srcSet="/hero-mobile.webp" />
-            <source media="(min-width: 769px)" srcSet="/hero.webp" />
+            <source media="(max-width: 768px)" srcSet="/hero-fulani.png" />
+            <source media="(min-width: 769px)" srcSet="/hero-fulani.png" />
             <img
-              src="/hero.webp"
+              src="/hero-fulani.png"
               alt="Fulani Hair Gro system packshot"
               className="w-full h-auto"
               loading="eager"
