@@ -527,12 +527,21 @@ function OrderFormEmbed() {
                 requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
+                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
+                    // Force scroll to top as backup
+                    requestAnimationFrame(() => {
+                      window.scrollTo({ top: 0, behavior: 'auto' });
+                    });
+                  } else {
+                    console.log('Step indicator not found');
+                    // Backup: scroll to top anyway
+                    window.scrollTo({ top: 0, behavior: 'auto' });
                   }
-                }); // Removed setTimeout for instant response
+                }); // Using requestAnimationFrame for instant response
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -800,12 +809,21 @@ function OrderFormEmbed() {
                 requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
+                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
+                    // Force scroll to top as backup
+                    requestAnimationFrame(() => {
+                      window.scrollTo({ top: 0, behavior: 'auto' });
+                    });
+                  } else {
+                    console.log('Step indicator not found');
+                    // Backup: scroll to top anyway
+                    window.scrollTo({ top: 0, behavior: 'auto' });
                   }
-                }); // Removed setTimeout for instant response
+                }); // Using requestAnimationFrame for instant response
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
