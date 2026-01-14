@@ -527,19 +527,12 @@ function OrderFormEmbed() {
                 setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
-                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
-                      behavior: 'smooth', 
+                      behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
-                    // Force scroll to top as backup
-                    setTimeout(() => {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 50);
-                  } else {
-                    console.log('Step indicator not found');
                   }
-                }, 50); // Reduced from 100ms to 50ms for faster response
+                }, 30); // Reduced from 50ms to 30ms for faster response on mobile data
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -807,19 +800,12 @@ function OrderFormEmbed() {
                 setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
-                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
-                      behavior: 'smooth', 
+                      behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
-                    // Force scroll to top as backup
-                    setTimeout(() => {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 50);
-                  } else {
-                    console.log('Step indicator not found');
                   }
-                }, 50); // Reduced from 100ms to 50ms for faster response
+                }, 30); // Reduced from 50ms to 30ms for faster response on mobile data
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
