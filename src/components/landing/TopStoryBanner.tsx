@@ -30,7 +30,7 @@ export const TopStoryBanner = () => {
         </div>
 
         <p className="mt-6 jandes-quote text-lg md:text-xl text-black max-w-3xl mx-auto leading-relaxed">
-          I spent money on expensive trichologists in Lagos—nothing worked. Then this ancient Fulani Hair Gro system filled in my edges in just 14 days.
+          Cheaper Than A Hair Transplant In Turkey
         </p>
 
         <div className="mt-6">
