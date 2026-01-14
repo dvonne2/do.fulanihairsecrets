@@ -1,5 +1,61 @@
 import { useState, useEffect, CSSProperties } from 'react';
 
+const FULANI_API_URL = 'https://script.google.com/macros/s/AKfycbx1dHWosMwJcMNNWQfNEyLZNMI3bbBW9wtFD58l_eP8Uo7A5p755RVBJsCIwAm2syEB/exec';
+const FULANI_SECRET = 'fhg_orders_2024_secret';
+
+const submitToFulani = async (formData) => {
+  const payload = {
+    secret: FULANI_SECRET,
+    customerFullName: formData.name || formData.customerName || formData.fullName,
+    phoneNumber: formData.phone || formData.phoneNumber || formData.tel,
+    alternativePhone: formData.whatsapp || formData.altPhone || formData.phone,
+    email: formData.email || '',
+    packageSelected: formData.package || formData.packageName || formData.selectedPackage,
+    state: formData.state || '',
+    lga: formData.lga || formData.city || formData.area || '',
+    fullAddress: formData.address || formData.fullAddress || formData.deliveryAddress || '',
+    landmark: formData.landmark || formData.nearestLandmark || '',
+    deliveryFee: formData.deliveryFee || formData.shipping || 3000,
+    preferredDeliveryDate: formData.deliveryDate || formData.date || '',
+    preferredDeliveryTime: formData.deliveryTimeWindow || formData.deliveryTime || formData.time || '',
+    paymentMethod: formData.paymentMethod || formData.payment || 'Pay on Delivery',
+    comment: formData.comment || formData.notes || formData.message || ''
+  };
+
+  const body = new URLSearchParams(
+    Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
+  );
+
+  try {
+    await fetch(FULANI_API_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Fulani API error:', error);
+    return { success: false, error };
+  }
+};
+
+const packageMapping: Record<string, string> = {
+  'PKG-001': 'SELF LOVE PLUS',
+  'PKG-002': 'SELF LOVE RETURN',
+  'PKG-003': 'SELF LOVE B2GOF',
+  'PKG-004': 'SELF LOVE PLUS B2GOF',
+  'PKG-005': 'FAMILY SAVES'
+};
+
+const PACKAGE_CONTENTS: Record<string, string[]> = {
+  'SELF LOVE PLUS': ['1 Shampoo', '1 Pomade', '1 Conditioner'],
+  'SELF LOVE RETURN': ['3 Pomade'],
+  'SELF LOVE B2GOF': ['3 Shampoo', '3 Pomade'],
+  'SELF LOVE PLUS B2GOF': ['3 Shampoo', '3 Pomade', '3 Conditioner'],
+  'FAMILY SAVES': ['10 Shampoo', '10 Pomade', '10 Conditioner']
+};
+
 const nigerianStates = ['Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT', 'Gombe', 'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'];
 
 const lgasByState: { [key: string]: string[] } = {
@@ -19,15 +75,15 @@ const packages = [
   { id: 'PKG-005', name: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ 🎁 FREE: 4 Shampoos + 4 Pomades + 4 Conditioners', isPopular: false },
 ];
 
-// Generate unique Order ID
+// Generate unique Order ID - YYMMDDHHmm format
 const generateOrderId = (): string => {
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let random = '';
-  for (let i = 0; i < 5; i++) {
-    random += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return `FHG-${date}-${random}`;
+  const now = new Date();
+  const yy = String(now.getFullYear()).slice(-2);  // 26
+  const mm = String(now.getMonth() + 1).padStart(2, '0');  // 01
+  const dd = String(now.getDate()).padStart(2, '0');  // 13
+  const hh = String(now.getHours()).padStart(2, '0');  // 05
+  const min = String(now.getMinutes()).padStart(2, '0');  // 56
+  return yy + mm + dd + hh + min;  // 2601130556
 };
 
 // All styles as objects
@@ -75,15 +131,150 @@ export default function OrderFormEmbed() {
     name: '', 
     phone: '', 
     pkg: '', 
-    state: '', 
-    lga: '', 
-    address: '', 
+    email: '',
+    whatsapp: '',
+    state: '',
+    lga: '',
+    address: '',
     landmark: '',
+    deliveryFee: 3000 as 3000 | 5000,
+    heardAboutUs: '',
+    deliveryDate: '',
+    deliveryTimeWindow: '',
+    paymentMethod: 'Pay on Delivery',
+    comment: '',
+    agreeToTerms: false,
     orderId: '' // Unique Order ID
   });
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [sent, setSent] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
+
+  // Partial entry function
+  const savePartialEntry = async (formData) => {
+    const orderId = formData.orderId || generateOrderId();
+    
+    const payload = {
+      secret: FULANI_SECRET,
+      type: 'partial',
+      orderId: orderId,
+      phoneNumber: formData.phone || formData.phoneNumber,
+      customerFullName: formData.name || formData.customerFullName || '',
+      email: formData.email || '',
+      state: formData.state || '',
+      lga: formData.lga || '',
+      fullAddress: formData.address || formData.fullAddress || '',
+      landmark: formData.landmark || '',
+      packageSelected: formData.package || formData.packageSelected || ''
+    };
+
+    const body = new URLSearchParams(
+      Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
+    );
+
+    console.log('Sending partial entry:', payload);
+    console.log('Partial entry POST URL:', FULANI_API_URL);
+    console.log('Partial entry body:', body.toString());
+
+    try {
+      let response: Response | undefined;
+      try {
+        response = await fetch(FULANI_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: body.toString()
+        });
+        console.log('Partial entry response:', response);
+      } catch (corsError) {
+        console.error('Partial entry fetch error (likely CORS). Retrying with no-cors:', corsError);
+        await fetch(FULANI_API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: body.toString()
+        });
+        console.log('Partial entry sent with no-cors fallback (no response available).');
+      }
+
+      console.log('Partial entry saved:', orderId);
+      return { success: true, orderId };
+    } catch (error) {
+      console.error('Partial entry error:', error);
+      return { success: false, error };
+    }
+  };
+
+  // Handle phone input - save partial when 11 digits
+  const handlePhoneChange = async (e) => {
+    const value = e.target.value;
+    const digits = value.replace(/\D/g, '');
+
+    // Validate phone according to the new requirements
+    const validatePhone = (phone) => {
+      const digits = phone.replace(/\D/g, '');
+      
+      if (digits.length === 0) return '';  // No error, empty field
+      if (digits.length < 11) return `Enter ${11 - digits.length} more digits`;
+      if (digits.length > 11) return 'Phone number cannot exceed 11 digits';
+      if (!digits.startsWith('0')) return 'Must start with 0';
+      
+      const validPrefixes = ['070', '071', '080', '081', '090', '091'];
+      if (!validPrefixes.includes(digits.substring(0, 3))) {
+        return 'Invalid phone prefix';
+      }
+      
+      return '';  // ✅ Valid - NO error message
+    };
+
+    const nextPhoneError = validatePhone(value);
+    setPhoneError(nextPhoneError);
+
+    console.log('Phone input changed:', {
+      raw: value,
+      digits,
+      digitsLength: digits.length,
+      sent,
+      hasName: Boolean(form.name)
+    });
+    
+    setForm(prev => ({ ...prev, phone: value }));
+    
+    // Save partial when phone is valid (exactly 11 digits) AND not already saved
+    if (digits.length === 11 && !sent && !nextPhoneError) {
+      console.log('Triggering partial save (11 digits).');
+      // Prevent duplicate sends (fast typing / paste) before awaiting network.
+      setSent(true);
+
+      const orderId = form.orderId || generateOrderId();
+      if (!form.orderId) {
+        setForm(prev => ({ ...prev, orderId }));
+      }
+
+      const result = await savePartialEntry({
+        orderId,
+        phone: digits,
+        name: form.name,
+        email: form.email || '',
+        state: '',
+        lga: '',
+        address: '',
+        landmark: '',
+        packageSelected: form.pkg ? (packageMapping[form.pkg] || form.pkg) : ''
+      });
+      
+      if (result.success) {
+        // Ensure we keep the same orderId from partial through completion.
+        if (!form.orderId) {
+          setForm(prev => ({ ...prev, orderId: result.orderId }));
+        }
+      } else {
+        // Allow retry if the request truly failed.
+        setSent(false);
+      }
+    } else if (digits.length === 11) {
+      console.log('11 digits reached but partial save NOT triggered due to conditions:', { sent, nextPhoneError });
+    }
+  };
 
   // Generate Order ID on first name entry
   useEffect(() => {
@@ -92,79 +283,79 @@ export default function OrderFormEmbed() {
     }
   }, [form.name, form.orderId]);
 
-  // Send progressive updates
-  const sendUpdate = async (progress: string, data: any = {}) => {
-    const pkg = packages.find(p => p.id === form.pkg);
-    const payload = {
-      order_id: form.orderId,
-      phone: form.phone,
-      name: form.name,
-      package: pkg ? { id: pkg.id, name: pkg.name, price: pkg.price } : null,
-      status: success ? 'complete' : 'partial',
-      progress,
-      captured_at: new Date().toISOString(),
-      ...data
-    };
-
-    try {
-      await fetch('https://systemforce.ng/wp-json/systemforce/v1/telesales/partial-leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      console.log(`Update sent: ${progress}`, payload);
-    } catch (error) {
-      console.error('Failed to send update:', error);
-    }
-  };
-
-  // Phone captured - create lead
   useEffect(() => {
-    const digits = form.phone.replace(/\D/g, '');
-    if (digits.length === 11 && !sent && form.name && form.orderId) {
-      sendUpdate('phone_captured');
-      setSent(true);
+    if (step === 2 && !form.state) {
+      setForm(prev => ({ ...prev, state: 'Abia' }));
     }
-  }, [form.phone, form.name, sent, form.orderId]);
+  }, [step, form.state]);
 
-  // Package selected - update lead
-  useEffect(() => {
-    if (form.pkg && sent && form.orderId) {
-      sendUpdate('package_selected');
-    }
-  }, [form.pkg, sent, form.orderId]);
-
+  
   const submit = async () => {
     setSubmitting(true);
+    
     try {
-      await sendUpdate('order_completed', {
+      const orderId = form.orderId || generateOrderId();
+      const formData = {
+        name: form.name,
+        phone: form.phone,
+        package: packageMapping[form.pkg] || form.pkg,
+        email: form.email,
+        whatsapp: form.whatsapp,
         state: form.state,
         lga: form.lga,
         address: form.address,
-        landmark: form.landmark
-      });
-      setSuccess(true);
+        landmark: form.landmark,
+        deliveryFee: form.deliveryFee,
+        heardAboutUs: form.heardAboutUs,
+        deliveryDate: form.deliveryDate,
+        deliveryTimeWindow: form.deliveryTimeWindow,
+        paymentMethod: form.paymentMethod,
+        comment: form.comment,
+      };
+
+      const payload = {
+        secret: FULANI_SECRET,
+        type: 'complete',
+        orderId: orderId,
+        customerFullName: formData.name,
+        phoneNumber: formData.phone,
+        alternativePhone: formData.whatsapp || formData.phone,
+        email: formData.email || '',
+        packageSelected: formData.package,
+        state: formData.state,
+        lga: formData.lga,
+        fullAddress: formData.address,
+        landmark: formData.landmark || '',
+        deliveryFee: formData.deliveryFee,
+        preferredDeliveryDate: formData.deliveryDate || '',
+        preferredDeliveryTime: formData.deliveryTimeWindow || '',
+        paymentMethod: formData.paymentMethod || 'Pay on Delivery',
+        comment: formData.comment || '',
+        heardAboutUs: formData.heardAboutUs || ''
+      };
+
+      const body = new URLSearchParams(
+        Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
+      );
+
+      fetch(FULANI_API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body
+      }).catch(e => console.error('Order submission request failed (fire-and-forget):', e));
+
+      setTimeout(() => {
+        window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
+      }, 500);
+      
     } catch (e) {
+      console.error('Order submission failed:', e);
       alert('Error submitting order. Please try again.');
     }
+    
     setSubmitting(false);
   };
-
-  if (success) {
-    return (
-      <div style={S.container}>
-        <div style={S.box}>
-          <div style={S.suc}>
-            <div style={S.sucIcon}>✓</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 12px' }}>Order Received!</h2>
-            <p style={{ color: '#666', margin: '0 0 8px' }}>Our team will call you shortly to confirm delivery.</p>
-            <p style={{ fontSize: 14, fontWeight: 600, color: '#36CA37', margin: '0 0 16px' }}>📞 Expect our call within 30 minutes</p>
-            <p style={{ fontSize: 12, color: '#888', margin: 0 }}>Order ID: <strong>{form.orderId}</strong></p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={S.container}>
@@ -189,11 +380,18 @@ export default function OrderFormEmbed() {
             {/* Phone */}
             <label style={S.label}>PHONE NUMBER <span style={S.req}>*</span></label>
             <input
-              style={S.input}
+              style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
+              type="tel"
+              inputMode="numeric"
               placeholder="08012345678"
               value={form.phone}
-              onChange={e => setForm({ ...form, phone: e.target.value })}
+              onChange={handlePhoneChange}
             />
+            {phoneError && (
+              <p style={{ margin: '6px 0 0', color: '#ff3b30', fontSize: 12, fontWeight: 800 }}>
+                ⚠️ {phoneError}
+              </p>
+            )}
             <p style={S.hint}>We call you before delivery"</p>
 
             {/* Packages */}
@@ -245,10 +443,22 @@ export default function OrderFormEmbed() {
 
             {/* Continue button */}
             <button
-              style={S.btn}
+              style={{
+                ...S.btn,
+                ...((phoneError || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.pkg) ? S.btnDis : {})
+              }}
+              disabled={Boolean(phoneError) || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.pkg}
               onClick={() => {
+                const phoneDigits = form.phone.replace(/\D/g, '');
+                const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0') && !phoneError;
+
                 if (!form.name || !form.phone || !form.pkg) {
                   alert('Please fill all required fields');
+                  return;
+                }
+
+                if (!phoneOk) {
+                  alert('Please enter a valid 11-digit phone number');
                   return;
                 }
                 setStep(2);
@@ -261,61 +471,253 @@ export default function OrderFormEmbed() {
 
         {step === 2 && (
           <>
-            {/* State */}
-            <label style={S.label}>STATE <span style={S.req}>*</span></label>
-            <select
+            {/* Email */}
+            <label style={S.label}>EMAIL <span style={S.req}>*</span></label>
+            <input
               style={S.input}
-              value={form.state}
-              onChange={e => setForm({ ...form, state: e.target.value, lga: '' })}
-              aria-label="Select your state"
-            >
-              <option value="">Select State</option>
-              {nigerianStates.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+              placeholder="Enter your email"
+              aria-label="Email"
+              value={form.email}
+              onChange={e => setForm({ ...form, email: e.target.value })}
+            />
 
-            {/* LGA */}
-            <label style={S.label}>LGA <span style={S.req}>*</span></label>
-            <select
+            {/* Alternative phone */}
+            <label style={S.label}>ALTERNATIVE PHONE NUMBER (WHATSAPP)</label>
+            <input
               style={S.input}
-              value={form.lga}
-              onChange={e => setForm({ ...form, lga: e.target.value })}
-              disabled={!form.state}
-              aria-label="Select your local government area"
-            >
-              <option value="">Select LGA</option>
-              {(lgasByState[form.state] || []).map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
+              placeholder="WhatsApp number (optional)"
+              aria-label="Alternative phone number (WhatsApp)"
+              value={form.whatsapp}
+              onChange={e => setForm({ ...form, whatsapp: e.target.value })}
+            />
 
-            {/* Address */}
-            <label style={S.label}>DELIVERY ADDRESS <span style={S.req}>*</span></label>
+            {/* Full address */}
+            <label style={S.label}>FULL ADDRESS <span style={S.req}>*</span></label>
             <textarea
-              style={{ ...S.input, minHeight: 80, resize: 'vertical' as const }}
-              placeholder="Full delivery address"
+              style={{ ...S.input, minHeight: 100, resize: 'vertical' as const }}
+              placeholder="Full address"
+              aria-label="Full address"
               value={form.address}
               onChange={e => setForm({ ...form, address: e.target.value })}
             />
 
             {/* Landmark */}
-            <label style={S.label}>LANDMARK (Optional)</label>
+            <label style={S.label}>ANY LANDMARK</label>
             <input
               style={S.input}
-              placeholder="Near GTBank, Opposite Shell..."
+              placeholder="Any landmark (optional)"
+              aria-label="Any landmark"
               value={form.landmark}
               onChange={e => setForm({ ...form, landmark: e.target.value })}
             />
+            <p style={S.hint}>e.g my house is on the road beside Agip filling station</p>
+
+            {/* State */}
+            <label style={S.label}>STATE OF RESIDENCE <span style={S.req}>*</span></label>
+            <select
+              style={S.input}
+              value={form.state || 'Abia'}
+              onChange={e => setForm({ ...form, state: e.target.value })}
+              aria-label="Select state of residence"
+            >
+              {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'FCT Abuja' : s}</option>)}
+            </select>
+
+            {/* Delivery fee & speed */}
+            <label style={S.label}>DELIVERY FEE AND SPEED</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
+                <input
+                  type="radio"
+                  name="deliveryFee"
+                  checked={form.deliveryFee === 3000}
+                  onChange={() => setForm({ ...form, deliveryFee: 3000 })}
+                />
+                <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>1 - 3 Days Nationwide Delivery ₦3000</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
+                <input
+                  type="radio"
+                  name="deliveryFee"
+                  checked={form.deliveryFee === 5000}
+                  onChange={() => setForm({ ...form, deliveryFee: 5000 })}
+                />
+                <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>24 Hours Nationwide Delivery ₦5000</span>
+              </label>
+            </div>
+            <p style={S.hint}>Sometimes we upgrade your delivery speed at no extra cost to you.</p>
+
+            {/* How did you hear */}
+            <label style={{ ...S.label, textAlign: 'center', fontSize: 20, letterSpacing: 0.5 }}>HOW DID YOU HEAR ABOUT US? <span style={S.req}>*</span></label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
+              {[
+                'Facebook Ads',
+                'Instagram Ads',
+                'TikTok Ads',
+                'WhatsApp',
+                'Google Search',
+                'A Friend / Referral',
+                'Your Hair Stylist',
+                'Repeat Customer',
+                'Other'
+              ].map(opt => (
+                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 28 }}>
+                  <input
+                    type="radio"
+                    name="heardAboutUs"
+                    checked={form.heardAboutUs === opt}
+                    onChange={() => setForm({ ...form, heardAboutUs: opt })}
+                  />
+                  <span
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: '#1a1a1a',
+                      lineHeight: 1.2,
+                      wordBreak: 'normal',
+                      overflowWrap: 'break-word',
+                      whiteSpace: opt === 'WhatsApp' ? 'nowrap' : 'normal'
+                    }}
+                  >
+                    {opt}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            {/* Preferred delivery date */}
+            <label style={S.label}>PREFERRED DELIVERY DATE <span style={S.req}>*</span></label>
+            <input
+              style={S.input}
+              type="date"
+              aria-label="Choose Delivery Date"
+              placeholder="Choose Delivery Date"
+              value={form.deliveryDate}
+              onClick={e => (e.currentTarget as HTMLInputElement).showPicker?.()}
+              onFocus={e => (e.currentTarget as HTMLInputElement).showPicker?.()}
+              onChange={e => setForm({ ...form, deliveryDate: e.target.value })}
+            />
+
+            {/* Preferred delivery time window */}
+            <label style={S.label}>PREFERRED DELIVERY TIME WINDOW <span style={S.req}>*</span></label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+              {[
+                'Morning (9am - 12pm)',
+                'Afternoon (12pm - 3pm)',
+                'Evening (3pm - 6pm)',
+                'Anytime on Preferred Day'
+              ].map(opt => (
+                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
+                  <input
+                    type="radio"
+                    name="deliveryTimeWindow"
+                    value={opt}
+                    checked={form.deliveryTimeWindow === opt}
+                    onChange={e => setForm({ ...form, deliveryTimeWindow: e.target.value })}
+                  />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
+                </label>
+              ))}
+            </div>
+            <p style={S.hint}>We will do our absolute best to deliver at your preferred time. If there's any delay or change, our customer service / dispatch rider will call you ahead so you're fully carried along.</p>
+
+            {/* Payment method */}
+            <label style={S.label}>PAYMENT METHOD</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+              {['Pay on Delivery', 'Pay Before Delivery'].map(opt => (
+                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={opt}
+                    checked={form.paymentMethod === opt}
+                    onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
+                  />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* Comment */}
+            <label style={S.label}>COMMENT OR MESSAGE</label>
+            <textarea
+              style={{ ...S.input, minHeight: 100, resize: 'vertical' as const }}
+              placeholder="Comment or message (optional)"
+              aria-label="Comment or message"
+              value={form.comment}
+              onChange={e => setForm({ ...form, comment: e.target.value })}
+            />
+
+            {/* Before you submit */}
+            <label style={S.label}>BEFORE YOU SUBMIT <span style={S.req}>*</span></label>
+            <div style={{ marginTop: 10 }}>
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#333' }}>
+                <input
+                  type="checkbox"
+                  checked={form.agreeToTerms}
+                  onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
+                  style={{ cursor: 'pointer', marginTop: 2 }}
+                />
+                <span>I understand this is a Pay-on-Delivery order and I will be available to receive my package.</span>
+              </label>
+            </div>
 
             {/* Summary */}
             <div style={S.sum}>
-              <b style={{ display: 'block', marginBottom: 12 }}>Order Summary</b>
+              <div style={{ fontSize: 14, fontWeight: 900, letterSpacing: 0.6, textAlign: 'center', marginBottom: 10, color: '#1a1a1a' }}>📋 ORDER SUMMARY</div>
               {(() => {
                 const p = packages.find(x => x.id === form.pkg);
-                return p ? (
+                if (!p) return null;
+
+                const deliveryFee = Number(form.deliveryFee || 0);
+                const total = p.price + deliveryFee;
+                const deliveryLabel = deliveryFee === 5000 ? 'Delivery (24 Hours)' : 'Delivery (1-3 Days)';
+                const items = PACKAGE_CONTENTS[p.name] || [];
+                const hasName = Boolean(form.name && form.name.trim());
+                const hasAddress = Boolean(form.address && form.address.trim());
+                const hasState = Boolean(form.state && form.state.trim());
+                const hasLga = Boolean(form.lga && form.lga.trim());
+                const locationLine = hasLga && hasState ? `${form.lga}, ${form.state}` : (hasState ? form.state : (hasLga ? form.lga : ''));
+
+                return (
                   <>
-                    <div style={S.sr}><span>{p.name}</span><span>₦{p.price.toLocaleString()}</span></div>
-                    <div style={S.sr}><span>Delivery</span><span style={{ color: '#36CA37' }}>FREE</span></div>
-                    <div style={S.tot}><span>Total</span><span>₦{p.price.toLocaleString()}</span></div>
+                    <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.08)', border: '1px solid #EDEDED' }}>
+                      {hasName && (
+                        <div style={{ fontSize: 18, fontWeight: 900, color: '#111', lineHeight: 1.2 }}>{form.name}</div>
+                      )}
+                      {locationLine && (
+                        <div style={{ marginTop: hasName ? 6 : 0, fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>📍 {locationLine}</div>
+                      )}
+                      {hasAddress && (
+                        <div style={{ marginTop: 6, fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>🏠 {form.address}</div>
+                      )}
+
+                      {(hasName || locationLine || hasAddress) && (
+                        <div style={{ height: 1, background: '#EFEFEF', margin: '12px 0' }} />
+                      )}
+
+                      <div style={S.sr}><span style={{ fontWeight: 900, color: '#1a1a1a' }}>{p.name}</span><span style={{ fontWeight: 900 }}>₦{p.price.toLocaleString()}</span></div>
+
+                      <div style={{ marginTop: 10, fontSize: 13, fontWeight: 900, color: '#1a1a1a' }}>📦 You will receive:</div>
+                      <div style={{ marginTop: 6, display: 'grid', gap: 4, paddingLeft: 8 }}>
+                        {items.map(line => (
+                          <div key={line} style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>• {line}</div>
+                        ))}
+                      </div>
+
+                      <div style={{ height: 1, background: '#EFEFEF', margin: '12px 0' }} />
+
+                      <div style={S.sr}><span>🚚 {deliveryLabel}</span><span>₦{deliveryFee.toLocaleString()}</span></div>
+
+                      <div style={{ height: 1, background: '#EFEFEF', margin: '12px 0' }} />
+
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <span style={{ fontSize: 13, fontWeight: 900, letterSpacing: 0.5, color: '#1a1a1a' }}>TOTAL</span>
+                        <span style={{ fontSize: 18, fontWeight: 900, color: '#36CA37' }}>₦{total.toLocaleString()}</span>
+                      </div>
+                    </div>
                   </>
-                ) : null;
+                );
               })()}
             </div>
 
@@ -326,14 +728,25 @@ export default function OrderFormEmbed() {
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
                 disabled={submitting}
                 onClick={() => {
-                  if (!form.state || !form.lga || !form.address) {
-                    alert('Please fill all required fields');
+                  const phoneDigits = form.phone.replace(/\D/g, '');
+                  const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0') && !phoneError;
+                  const emailOk = !!form.email.trim();
+                  const addressOk = !!form.address.trim();
+                  const stateOk = !!form.state;
+                  const heardOk = !!form.heardAboutUs;
+                  const dateOk = !!form.deliveryDate;
+                  const timeOk = !!form.deliveryTimeWindow;
+                  const termsOk = !!form.agreeToTerms;
+
+                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !heardOk || !dateOk || !timeOk || !termsOk) {
+                    alert('Please fill all required fields and agree to terms');
                     return;
                   }
+
                   submit();
                 }}
               >
-                {submitting ? 'PROCESSING...' : 'COMPLETE ORDER'}
+                {submitting ? 'PROCESSING...' : '→ SUBMIT'}
               </button>
             </div>
           </>

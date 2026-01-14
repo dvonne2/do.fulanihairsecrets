@@ -11,11 +11,7 @@ import { OptimizedImage } from '@/components/OptimizedImage';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import OrderForm from '../OrderFormEmbed';
 
-interface TopStoryBannerProps {
-  // No props needed
-}
-
-export const TopStoryBanner: React.FC<TopStoryBannerProps> = () => {
+export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
 
   return (
@@ -49,7 +45,6 @@ export const TopStoryBanner: React.FC<TopStoryBannerProps> = () => {
               alt="Fulani Hair Gro system packshot"
               className="w-full h-auto"
               loading="eager"
-              fetchPriority="high"
               decoding="sync"
               width={1200}
               height={1219}

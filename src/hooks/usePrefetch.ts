@@ -17,8 +17,10 @@ export function usePrefetch(importer: Importer): Handlers {
 
     try {
       void importer();
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error('Module prefetch failed:', {
+        error: error instanceof Error ? error.message : error
+      });
     }
   }, [importer]);
 

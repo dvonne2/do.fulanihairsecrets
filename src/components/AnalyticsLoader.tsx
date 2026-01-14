@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 declare global {
   interface Window {
-    dataLayer?: any[];
+    dataLayer?: Array<Record<string, unknown>>;
   }
 }
 
@@ -28,9 +28,7 @@ export function AnalyticsLoader({ delayMs = 3000 }: Props) {
   const lastTrackedPathRef = useRef<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const gtmId =
-    ((import.meta as any).env?.VITE_GTM_ID as string | undefined) ||
-    'GTM-P7F7447';
+  const gtmId = import.meta.env.VITE_GTM_ID || 'GTM-P7F7447';
 
   const load = () => {
     if (hasLoadedRef.current) return;
@@ -48,7 +46,11 @@ export function AnalyticsLoader({ delayMs = 3000 }: Props) {
       window.dataLayer.push({ event: 'page_view', page_path: initialPath });
       lastTrackedPathRef.current = initialPath;
       setIsLoaded(true);
-    } catch {
+    } catch (error) {
+      console.error('GTM initialization failed:', {
+        gtmId,
+        error: error instanceof Error ? error.message : error
+      });
       setIsLoaded(true);
     }
   };

@@ -210,21 +210,29 @@ const Index = () => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    type WindowWithTracking = Window & {
+      dataLayer?: Array<Record<string, unknown>> & {
+        push?: (event: Record<string, unknown>) => number;
+      };
+      fbq?: (...args: unknown[]) => unknown;
+    };
+
     const isDebug = window.location.search.includes('meta_debug=1');
 
     const fireFormStart = () => {
       try {
         if (window.sessionStorage.getItem('formStartFired') === '1') return;
         window.sessionStorage.setItem('formStartFired', '1');
-      } catch {
-        // sessionStorage may be unavailable; fail quietly but still try to fire events
+      } catch (error) {
+        console.error('sessionStorage unavailable (private browsing mode?):', {
+          error: error instanceof Error ? error.message : error
+        });
       }
 
-      (window as any).dataLayer?.push?.({ event: 'FormStart' });
-      (window as any).fbq?.('trackCustom', 'FormStart');
+      (window as WindowWithTracking).dataLayer?.push?.({ event: 'FormStart' });
+      (window as WindowWithTracking).fbq?.('trackCustom', 'FormStart');
 
       if (isDebug) {
-        // eslint-disable-next-line no-console
         console.log('FormStart fired');
       }
     };

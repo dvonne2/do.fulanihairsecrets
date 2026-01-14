@@ -18,10 +18,19 @@ const ThankYou = () => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
       const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('orderId');
+      if (orderId && orderId.trim().length > 0) {
+        return orderId;
+      }
       const entryId = params.get('entry_id');
       if (entryId && entryId.trim().length > 0) {
         return entryId;
       }
+      // Log when entry_id is missing for debugging
+      console.error('Order ID (entry_id) missing from URL:', {
+        url: window.location.href,
+        searchParams: window.location.search
+      });
     }
     // Fallback when no entry_id is available
     return 'UNKNOWN';
@@ -76,15 +85,23 @@ const ThankYou = () => {
       if (window.top !== window.self) {
         window.top.location.href = window.location.href;
       }
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error('Iframe breakout failed (cross-origin restriction):', {
+        currentUrl: window.location.href,
+        error: error instanceof Error ? error.message : error
+      });
     }
   }, []);
 
   // Force GTM + Pixel pageview on SPA navigation to /thank-you
   useEffect(() => {
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).dataLayer.push({
+    type WindowWithDataLayer = Window & {
+      dataLayer?: Array<Record<string, unknown>>;
+    };
+
+    const w = window as WindowWithDataLayer;
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({
       event: 'virtualPageview',
       page: '/thank-you',
     });

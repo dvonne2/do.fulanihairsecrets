@@ -52,7 +52,7 @@ Now, every bundle I make honors her words."`;
     }, 25);
 
     return () => clearInterval(timer);
-  }, [isVisible]);
+  }, [isVisible, fullQuote]);
 
   return (
     <section 
@@ -92,7 +92,7 @@ Now, every bundle I make honors her words."`;
             </div>
 
             {/* Memorial section */}
-            <div className={`mt-12 pt-8 border-t border-gold/20 text-center transition-all duration-1000 delay-\[8000ms\] ${typedText.length >= fullQuote.length ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`mt-12 pt-8 border-t border-gold/20 text-center transition-all duration-1000 delay-[8000ms] ${typedText.length >= fullQuote.length ? 'opacity-100' : 'opacity-0'}`}>
               <p className="font-serif text-muted-foreground text-base md:text-lg mb-2">In loving memory of</p>
               <p className="font-cinzel text-gold text-xl md:text-2xl mb-1">
                 Hajia Aissata Cissé 👑❤️
