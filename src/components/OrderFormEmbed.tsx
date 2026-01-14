@@ -523,11 +523,11 @@ function OrderFormEmbed() {
                 }
                 setStep(2);
                 
-                // Scroll to top of form when moving to Step 2
+                // Scroll to step indicator when moving to Step 2
                 setTimeout(() => {
-                  const formBox = document.querySelector('[style*="border: 2px solid #DAA520"]');
-                  if (formBox) {
-                    formBox.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('div[style*="textAlign: center"]');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start'
                     });
@@ -796,11 +796,11 @@ function OrderFormEmbed() {
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
               <button style={S.back} onClick={() => {
                 setStep(1);
-                // Scroll to top of form when going back to Step 1
+                // Scroll to step indicator when going back to Step 1
                 setTimeout(() => {
-                  const formBox = document.querySelector('[style*="border: 2px solid #DAA520"]');
-                  if (formBox) {
-                    formBox.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('div[style*="textAlign: center"]');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start'
                     });
