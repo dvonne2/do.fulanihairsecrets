@@ -594,7 +594,7 @@ function OrderFormEmbed() {
             <p style={S.hint}>Sometimes we upgrade your delivery speed at no extra cost to you.</p>
 
             {/* How did you hear */}
-            <label style={{ ...S.label, textAlign: 'center', fontSize: 20, letterSpacing: 0.5 }}>HOW DID YOU HEAR ABOUT US? <span style={S.req}>*</span></label>
+            <label style={{ ...S.label, textAlign: 'center' }}>HOW DID YOU HEAR ABOUT US? <span style={S.req}>*</span></label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
               {[
                 'Facebook Ads',
@@ -616,8 +616,8 @@ function OrderFormEmbed() {
                   />
                   <span
                     style={{
-                      fontSize: 18,
-                      fontWeight: 800,
+                      fontSize: 14,
+                      fontWeight: 600,
                       color: '#1a1a1a',
                       lineHeight: 1.2,
                       wordBreak: 'normal',
