@@ -30,7 +30,16 @@ export const TopStoryBanner = () => {
         </div>
 
         <p className="mt-6 jandes-quote text-lg md:text-xl text-black max-w-3xl mx-auto leading-relaxed">
-          Cheaper Than A Hair Transplant In Turkey
+          Fulani Hair Gro is a 400-Year Fulani Secret That Targets The ROOT CAUSE
+        </p>
+        <p className="mt-4 jandes-quote text-base md:text-lg text-black max-w-3xl mx-auto leading-relaxed">
+          Most hair products treat SURFACE (hair strand).
+        </p>
+        <p className="mt-4 jandes-quote text-base md:text-lg text-black max-w-3xl mx-auto leading-relaxed">
+          Fulani Hair Gro targets DHT at FOLLICLE - the actual hormone that shrinks and kills your hair follicles, causing thinning edges.
+        </p>
+        <p className="mt-4 jandes-quote text-base md:text-lg text-black max-w-3xl mx-auto leading-relaxed">
+          When DHT is blocked and follicles are nourished, DORMANT follicles WAKE UP and start growing again.
         </p>
 
         <div className="mt-6">
