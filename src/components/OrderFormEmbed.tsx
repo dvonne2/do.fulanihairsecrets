@@ -407,7 +407,7 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
-        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px'}}>
+        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '18px', color: '#000'}}>
           Step {step} of 2
         </div>
         <div style={{
