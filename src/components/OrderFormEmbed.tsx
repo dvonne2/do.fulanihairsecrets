@@ -407,7 +407,7 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
-        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '20px', color: '#000', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
+        <div id="step-indicator" style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '20px', color: '#000', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
           Step {step} of 2
         </div>
         <div style={{
@@ -525,7 +525,7 @@ function OrderFormEmbed() {
                 
                 // Scroll to step indicator when moving to Step 2
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('.step-indicator-text');
+                  const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
@@ -798,7 +798,7 @@ function OrderFormEmbed() {
                 setStep(1);
                 // Scroll to step indicator when going back to Step 1
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('.step-indicator-text');
+                  const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
