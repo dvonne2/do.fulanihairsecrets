@@ -26,9 +26,9 @@ export const TopStoryBanner = () => {
         </p>
         <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
           <h1 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
-            FULANI HAIR GRO,
+            FULANI HAIR GRO —
             <br />
-            THE SHARP! SHARP! HERBAL HAIR EDGES RESTORATION SYSTEM
+            Trusted by Women Who Regrew Their Edges
           </h1>
         </div>
 
