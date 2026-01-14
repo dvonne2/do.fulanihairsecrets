@@ -1,13 +1,12 @@
 import React from 'react';
-import fulaniBenefitsImage from '../../assets/products/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
-import fulaniTestimonialImage from '../../assets/products/Gemini_Generated_Image_fd8rz1fd8rz1fd8r.webp';
-import fulaniDaysImage from '../../assets/products/Gemini_Generated_Image_1knotm1knotm1kno.png';
-import fulaniExpertImage from '../../assets/products/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
-import hajiaMaryamTestimonial from '@/assets/testimonials/Hajia Maryam Testimonial.webp';
-import hajiaMaryam2 from '@/assets/testimonials/Hajia-Maryam-2.webp';
-import mamaTitiTestimonial1 from '@/assets/testimonials/Mama Titi Testimonial1.webp';
-import mamaTiti2 from '@/assets/testimonials/Mama Titi 2.webp';
-import { OptimizedImage } from '@/components/OptimizedImage';
+import fulaniBenefitsImage from '/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
+import fulaniTestimonialImage from '/Gemini_Generated_Image_fd8rz1fd8rz1fd8r.webp';
+import fulaniDaysImage from '/gemini-1knotm.png';
+import fulaniExpertImage from '/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
+import hajiaMaryamTestimonial from '/Hajia Maryam Testimonial.webp';
+import hajiaMaryam2 from '/Hajia-Maryam-2.webp';
+import mamaTitiTestimonial1 from '/Mama Titi Testimonial1.webp';
+import mamaTiti2 from '/Mama Titi 2.webp';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import OrderForm from '../OrderFormEmbed';
 
@@ -210,12 +209,13 @@ export const TopStoryBanner = () => {
         </div>
 
         <div className="mt-6">
-          <OptimizedImage
+          <img
             src={fulaniBenefitsImage}
             alt="Fulani Hair Gro benefits and growth potential"
             className="w-full h-auto"
             width={2048}
             height={2048}
+            loading="lazy"
           />
         </div>
 
@@ -239,9 +239,9 @@ export const TopStoryBanner = () => {
           </div>
         </section>
 
-        <div className="mt-6">
-          <OptimizedImage
-            src={fulaniDaysImage}
+        <div className="mt-6 bg-gray-200 flex items-center justify-center w-full h-auto">
+          <img
+            src="/gemini-1knotm.png"
             alt="Fulani Hair Gro results from day one to day ten"
             className="w-full h-auto"
             width={2048}
@@ -281,12 +281,13 @@ export const TopStoryBanner = () => {
         </section>
 
         <div className="mt-10">
-          <OptimizedImage
+          <img
             src={fulaniExpertImage}
             alt="Fulani Hair Gro specialist holding the product system"
             className="w-full h-auto"
             width={2048}
             height={2048}
+            loading="lazy"
           />
         </div>
 
