@@ -524,7 +524,7 @@ function OrderFormEmbed() {
                 setStep(2);
                 
                 // Force scroll to step indicator when moving to Step 2
-                setTimeout(() => {
+                requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
@@ -532,7 +532,7 @@ function OrderFormEmbed() {
                       block: 'start'
                     });
                   }
-                }, 30); // Reduced from 50ms to 30ms for faster response on mobile data
+                }); // Removed setTimeout for instant response
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -797,7 +797,7 @@ function OrderFormEmbed() {
               <button style={S.back} onClick={() => {
                 setStep(1);
                 // Force scroll to step indicator when going back to Step 1
-                setTimeout(() => {
+                requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
@@ -805,7 +805,7 @@ function OrderFormEmbed() {
                       block: 'start'
                     });
                   }
-                }, 30); // Reduced from 50ms to 30ms for faster response on mobile data
+                }); // Removed setTimeout for instant response
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
