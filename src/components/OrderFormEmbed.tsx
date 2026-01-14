@@ -529,7 +529,7 @@ function OrderFormEmbed() {
                   if (formBox) {
                     formBox.scrollIntoView({ 
                       behavior: 'smooth', 
-                      block: 'center' 
+                      block: 'start'
                     });
                   }
                 }, 100);
@@ -802,7 +802,7 @@ function OrderFormEmbed() {
                   if (formBox) {
                     formBox.scrollIntoView({ 
                       behavior: 'smooth', 
-                      block: 'center' 
+                      block: 'start'
                     });
                   }
                 }, 100);
