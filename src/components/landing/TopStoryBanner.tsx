@@ -28,7 +28,7 @@ export const TopStoryBanner = () => {
           <h1 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
             FULANI HAIR GRO,
             <br />
-            SHARP! SHARP! HERBAL HAIR EDGES RESTORATION SYSTEM
+            THE SHARP! SHARP! HERBAL HAIR EDGES RESTORATION SYSTEM
           </h1>
         </div>
 
