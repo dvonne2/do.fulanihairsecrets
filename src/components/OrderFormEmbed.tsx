@@ -1,4 +1,4 @@
-import { useState, useEffect, CSSProperties } from 'react';
+import { useState, useEffect, useCallback, useMemo, CSSProperties, memo } from 'react';
 
 const FULANI_API_URL = 'https://script.google.com/macros/s/AKfycbx1dHWosMwJcMNNWQfNEyLZNMI3bbBW9wtFD58l_eP8Uo7A5p755RVBJsCIwAm2syEB/exec';
 const FULANI_SECRET = 'fhg_orders_2024_secret';
@@ -38,6 +38,23 @@ const submitToFulani = async (formData) => {
     console.error('Fulani API error:', error);
     return { success: false, error };
   }
+};
+
+// Debounce hook for performance optimization
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
 };
 
 const packageMapping: Record<string, string> = {
@@ -125,17 +142,17 @@ const S: { [key: string]: CSSProperties } = {
   sucIcon: { width: 60, height: 60, background: '#36CA37', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, color: '#fff', margin: '0 auto 20px' },
 };
 
-export default function OrderFormEmbed() {
+function OrderFormEmbed() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ 
     name: '', 
     phone: '', 
     pkg: '', 
-    email: '',
+    email: '', 
     whatsapp: '',
-    state: '',
-    lga: '',
-    address: '',
+    state: '', 
+    lga: '', 
+    address: '', 
     landmark: '',
     deliveryFee: 3000 as 3000 | 5000,
     heardAboutUs: '',
@@ -149,6 +166,46 @@ export default function OrderFormEmbed() {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+
+  // Debounce phone input to reduce unnecessary re-renders and API calls
+  const debouncedPhone = useDebounce(form.phone, 300);
+
+  // Memoize phone validation function
+  const validatePhone = useCallback((phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    
+    if (digits.length === 0) return '';  // No error, empty field
+    if (digits.length < 11) return `Enter ${11 - digits.length} more digits`;
+    if (digits.length > 11) return 'Phone number cannot exceed 11 digits';
+    if (!digits.startsWith('0')) return 'Must start with 0';
+    
+    const validPrefixes = ['070', '071', '080', '081', '090', '091'];
+    if (!validPrefixes.includes(digits.substring(0, 3))) {
+      return 'Invalid phone prefix';
+    }
+    
+    return '';  // Valid - NO error message
+  }, []);
+
+  // Memoize selected package calculation
+  const selectedPackage = useMemo(() => {
+    return packages.find(p => p.id === form.pkg) || null;
+  }, [form.pkg]);
+
+  // Memoize delivery fee calculation
+  const deliveryFee = useMemo(() => {
+    return form.state === 'Lagos' ? 3000 : 5000;
+  }, [form.state]);
+
+  // Memoize total calculation
+  const total = useMemo(() => {
+    return (selectedPackage?.price || 0) + deliveryFee;
+  }, [selectedPackage, deliveryFee]);
+
+  // Memoize location string
+  const location = useMemo(() => {
+    return form.state && form.lga ? `${form.lga}, ${form.state}` : form.state || '';
+  }, [form.state, form.lga]);
 
   // Partial entry function
   const savePartialEntry = async (formData) => {
@@ -204,40 +261,25 @@ export default function OrderFormEmbed() {
     }
   };
 
-  // Handle phone input - save partial when 11 digits
-  const handlePhoneChange = async (e) => {
+  // Handle phone input - optimized with debounced validation
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const digits = value.replace(/\D/g, '');
+    setForm(prev => ({ ...prev, phone: value }));
+  }, []);
 
-    // Validate phone according to the new requirements
-    const validatePhone = (phone) => {
-      const digits = phone.replace(/\D/g, '');
-      
-      if (digits.length === 0) return '';  // No error, empty field
-      if (digits.length < 11) return `Enter ${11 - digits.length} more digits`;
-      if (digits.length > 11) return 'Phone number cannot exceed 11 digits';
-      if (!digits.startsWith('0')) return 'Must start with 0';
-      
-      const validPrefixes = ['070', '071', '080', '081', '090', '091'];
-      if (!validPrefixes.includes(digits.substring(0, 3))) {
-        return 'Invalid phone prefix';
-      }
-      
-      return '';  // ✅ Valid - NO error message
-    };
-
-    const nextPhoneError = validatePhone(value);
+  // Effect to handle debounced phone validation and partial save
+  useEffect(() => {
+    const digits = debouncedPhone.replace(/\D/g, '');
+    const nextPhoneError = validatePhone(debouncedPhone);
     setPhoneError(nextPhoneError);
 
-    console.log('Phone input changed:', {
-      raw: value,
+    console.log('Debounced phone validation:', {
+      phone: debouncedPhone,
       digits,
       digitsLength: digits.length,
       sent,
       hasName: Boolean(form.name)
     });
-    
-    setForm(prev => ({ ...prev, phone: value }));
     
     // Save partial when phone is valid (exactly 11 digits) AND not already saved
     if (digits.length === 11 && !sent && !nextPhoneError) {
@@ -250,31 +292,35 @@ export default function OrderFormEmbed() {
         setForm(prev => ({ ...prev, orderId }));
       }
 
-      const result = await savePartialEntry({
-        orderId,
-        phone: digits,
-        name: form.name,
-        email: form.email || '',
-        state: '',
-        lga: '',
-        address: '',
-        landmark: '',
-        packageSelected: form.pkg ? (packageMapping[form.pkg] || form.pkg) : ''
-      });
-      
-      if (result.success) {
-        // Ensure we keep the same orderId from partial through completion.
-        if (!form.orderId) {
-          setForm(prev => ({ ...prev, orderId: result.orderId }));
+      const savePartial = async () => {
+        const result = await savePartialEntry({
+          orderId,
+          phone: digits,
+          name: form.name,
+          email: form.email || '',
+          state: '',
+          lga: '',
+          address: '',
+          landmark: '',
+          packageSelected: form.pkg ? (packageMapping[form.pkg] || form.pkg) : ''
+        });
+        
+        if (result.success) {
+          // Ensure we keep the same orderId from partial through completion.
+          if (!form.orderId) {
+            setForm(prev => ({ ...prev, orderId: result.orderId }));
+          }
+        } else {
+          // Allow retry if the request truly failed.
+          setSent(false);
         }
-      } else {
-        // Allow retry if the request truly failed.
-        setSent(false);
-      }
+      };
+
+      savePartial();
     } else if (digits.length === 11) {
       console.log('11 digits reached but partial save NOT triggered due to conditions:', { sent, nextPhoneError });
     }
-  };
+  }, [debouncedPhone, validatePhone, sent, form.name, form.orderId, form.pkg]);
 
   // Generate Order ID on first name entry
   useEffect(() => {
@@ -755,3 +801,5 @@ export default function OrderFormEmbed() {
     </div>
   );
 }
+
+export default memo(OrderFormEmbed);
