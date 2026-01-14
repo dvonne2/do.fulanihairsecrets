@@ -407,8 +407,8 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* Progress */}
-        <div className="progress-bar">
-          <p style={S.step}>Step {step} of 2</p>
+        <div className="progress-bar" style={{ background: '#f0f0f0', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
+          <p style={{ ...S.step, fontSize: 16, fontWeight: 'bold', color: '#000', textAlign: 'center' }}>Step {step} of 2</p>
           <div style={S.bar}>
             <div style={{ ...S.fill, width: step === 1 ? '50%' : '100%' }} />
           </div>
