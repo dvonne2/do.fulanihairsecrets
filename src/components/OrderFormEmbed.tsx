@@ -407,11 +407,11 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* Progress */}
-        <div className="progress-bar" style={{ background: '#f0f0f0', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
-          <p style={{ ...S.step, fontSize: 16, fontWeight: 'bold', color: '#000', textAlign: 'center' }}>Step {step} of 2</p>
-          <div style={S.bar}>
-            <div style={{ ...S.fill, width: step === 1 ? '50%' : '100%' }} />
-          </div>
+        <div className="step-indicator" style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '10px' }}>
+          Step {step} of 2
+        </div>
+        <div className="progress-bar" style={{ width: '100%', height: '8px', backgroundColor: '#e0e0e0', borderRadius: '4px', marginBottom: '20px' }}>
+          <div className="progress-fill" style={{ height: '100%', backgroundColor: '#4CAF50', borderRadius: '4px', transition: 'width 0.3s ease', width: step === 1 ? '50%' : '100%' }} />
         </div>
 
         {step === 1 && (
