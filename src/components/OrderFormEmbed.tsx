@@ -523,14 +523,21 @@ function OrderFormEmbed() {
                 }
                 setStep(2);
                 
-                // Scroll to step indicator when moving to Step 2
+                // Force scroll to step indicator when moving to Step 2
                 setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
+                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start'
                     });
+                    // Force scroll to top as backup
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 50);
+                  } else {
+                    console.log('Step indicator not found');
                   }
                 }, 100);
               }}
@@ -796,14 +803,21 @@ function OrderFormEmbed() {
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
               <button style={S.back} onClick={() => {
                 setStep(1);
-                // Scroll to step indicator when going back to Step 1
+                // Force scroll to step indicator when going back to Step 1
                 setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
+                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start'
                     });
+                    // Force scroll to top as backup
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 50);
+                  } else {
+                    console.log('Step indicator not found');
                   }
                 }, 100);
               }}>← Back</button>
