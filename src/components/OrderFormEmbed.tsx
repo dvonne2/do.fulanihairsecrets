@@ -407,7 +407,7 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
-        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '18px', color: '#000'}}>
+        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '18px', color: '#000'}} className="step-indicator">
           Step {step} of 2
         </div>
         <div style={{
@@ -523,11 +523,11 @@ function OrderFormEmbed() {
                 }
                 setStep(2);
                 
-                // Scroll to progress bar when moving to Step 2
+                // Scroll to step indicator when moving to Step 2
                 setTimeout(() => {
-                  const progressBar = document.querySelector('.progress-bar');
-                  if (progressBar) {
-                    progressBar.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('.step-indicator');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
@@ -796,11 +796,11 @@ function OrderFormEmbed() {
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
               <button style={S.back} onClick={() => {
                 setStep(1);
-                // Scroll to progress bar when going back to Step 1
+                // Scroll to step indicator when going back to Step 1
                 setTimeout(() => {
-                  const progressBar = document.querySelector('.progress-bar');
-                  if (progressBar) {
-                    progressBar.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('.step-indicator');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
