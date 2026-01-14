@@ -525,9 +525,9 @@ function OrderFormEmbed() {
                 
                 // Scroll to progress bar when moving to Step 2
                 setTimeout(() => {
-                  const progressBar = document.querySelector('.progress-bar');
-                  if (progressBar) {
-                    progressBar.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('[style*="textAlign: center"]');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
@@ -798,9 +798,9 @@ function OrderFormEmbed() {
                 setStep(1);
                 // Scroll to progress bar when going back to Step 1
                 setTimeout(() => {
-                  const progressBar = document.querySelector('.progress-bar');
-                  if (progressBar) {
-                    progressBar.scrollIntoView({ 
+                  const stepIndicator = document.querySelector('[style*="textAlign: center"]');
+                  if (stepIndicator) {
+                    stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
