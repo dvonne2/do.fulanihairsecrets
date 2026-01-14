@@ -529,7 +529,7 @@ function OrderFormEmbed() {
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
-                      block: 'start' 
+                      block: 'center' 
                     });
                   }
                 }, 100);
@@ -802,7 +802,7 @@ function OrderFormEmbed() {
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
                       behavior: 'smooth', 
-                      block: 'start' 
+                      block: 'center' 
                     });
                   }
                 }, 100);
