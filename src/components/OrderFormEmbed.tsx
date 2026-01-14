@@ -508,6 +508,9 @@ function OrderFormEmbed() {
                   return;
                 }
                 setStep(2);
+                
+                // Scroll to top of form when moving to Step 2
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -769,7 +772,11 @@ function OrderFormEmbed() {
 
             {/* Buttons */}
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-              <button style={S.back} onClick={() => setStep(1)}>← Back</button>
+              <button style={S.back} onClick={() => {
+                setStep(1);
+                // Scroll to top of form when going back to Step 1
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
                 disabled={submitting}
