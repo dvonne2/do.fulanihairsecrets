@@ -21,7 +21,7 @@ export const TopStoryBanner = () => {
     >
       <div className="max-w-5xl mx-auto text-center">
         <p className="jandes-eyebrow text-black mb-6">
-          "Fulani Hair Gro grew my hair edges within but 14 days" Mrs Ololade, Ikoyi
+          "Within 14 days of using Fulani Hair Gro, I began noticing tiny stubs on my edges." — Mrs. Ololade, Ikoyi
         </p>
         <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
           <h1 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
