@@ -407,7 +407,7 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
-        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '18px', color: '#000'}} className="step-indicator">
+        <div style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px'}}>
           Step {step} of 2
         </div>
         <div style={{
@@ -416,7 +416,7 @@ function OrderFormEmbed() {
           backgroundColor: '#e0e0e0',
           borderRadius: '4px',
           marginBottom: '20px'
-        }} className="progress-bar">
+        }}>
           <div style={{
             width: step === 1 ? '50%' : '100%',
             height: '100%',
@@ -525,9 +525,9 @@ function OrderFormEmbed() {
                 
                 // Scroll to step indicator when moving to Step 2
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('.step-indicator');
-                  if (stepIndicator) {
-                    stepIndicator.scrollIntoView({ 
+                  const formBox = document.querySelector('[style*="border: 2px solid #DAA520"]');
+                  if (formBox) {
+                    formBox.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'center' 
                     });
@@ -798,9 +798,9 @@ function OrderFormEmbed() {
                 setStep(1);
                 // Scroll to step indicator when going back to Step 1
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('.step-indicator');
-                  if (stepIndicator) {
-                    stepIndicator.scrollIntoView({ 
+                  const formBox = document.querySelector('[style*="border: 2px solid #DAA520"]');
+                  if (formBox) {
+                    formBox.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'center' 
                     });
