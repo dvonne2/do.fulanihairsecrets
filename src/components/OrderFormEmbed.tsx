@@ -416,7 +416,7 @@ function OrderFormEmbed() {
           backgroundColor: '#e0e0e0',
           borderRadius: '4px',
           marginBottom: '20px'
-        }}>
+        }} className="progress-bar">
           <div style={{
             width: step === 1 ? '50%' : '100%',
             height: '100%',
@@ -525,9 +525,9 @@ function OrderFormEmbed() {
                 
                 // Scroll to progress bar when moving to Step 2
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('[style*="textAlign: center"]');
-                  if (stepIndicator) {
-                    stepIndicator.scrollIntoView({ 
+                  const progressBar = document.querySelector('.progress-bar');
+                  if (progressBar) {
+                    progressBar.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
@@ -798,9 +798,9 @@ function OrderFormEmbed() {
                 setStep(1);
                 // Scroll to progress bar when going back to Step 1
                 setTimeout(() => {
-                  const stepIndicator = document.querySelector('[style*="textAlign: center"]');
-                  if (stepIndicator) {
-                    stepIndicator.scrollIntoView({ 
+                  const progressBar = document.querySelector('.progress-bar');
+                  if (progressBar) {
+                    progressBar.scrollIntoView({ 
                       behavior: 'smooth', 
                       block: 'start' 
                     });
