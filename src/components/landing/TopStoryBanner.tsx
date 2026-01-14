@@ -1,7 +1,7 @@
 import React from 'react';
 import fulaniBenefitsImage from '../../assets/products/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
 import fulaniTestimonialImage from '../../assets/products/Gemini_Generated_Image_fd8rz1fd8rz1fd8r.webp';
-import fulaniDaysImage from '../../assets/products/Gemini_Generated_Image_1knotm1knotm1kno.webp';
+import fulaniDaysImage from '../../assets/products/Gemini_Generated_Image_1knotm1knotm1kno.png';
 import fulaniExpertImage from '../../assets/products/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
 import hajiaMaryamTestimonial from '@/assets/testimonials/Hajia Maryam Testimonial.webp';
 import hajiaMaryam2 from '@/assets/testimonials/Hajia-Maryam-2.webp';
