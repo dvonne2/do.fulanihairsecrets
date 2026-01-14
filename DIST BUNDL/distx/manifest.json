@@ -1,0 +1,57 @@
+{
+  "name": "Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO - Nigeria's #1 Hair Growth Solution",
+  "short_name": "Fulani Hair Gro",
+  "description": "Trusted by thousands of women who successfully regrew their hair edges with FULANI HAIR GRO. Nigeria's #1 rated hair growth system delivers real results. 400-year-old Fulani secret.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DAA520",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-NG",
+  "categories": ["health", "beauty", "shopping"],
+  "icons": [
+    {
+      "src": "/hero.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/hero-mobile.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Order Now",
+      "short_name": "Order",
+      "description": "Place your order for Fulani Hair Gro",
+      "url": "/#order",
+      "icons": [{ "src": "/hero.webp", "sizes": "96x96" }]
+    },
+    {
+      "name": "View Results",
+      "short_name": "Results",
+      "description": "See before and after results",
+      "url": "/#results",
+      "icons": [{ "src": "/hero.webp", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/hero.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/hero-mobile.webp",
+      "sizes": "750x1334",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    }
+  ]
+}

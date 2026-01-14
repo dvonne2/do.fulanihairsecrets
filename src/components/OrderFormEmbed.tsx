@@ -407,9 +407,11 @@ function OrderFormEmbed() {
     <div style={S.container}>
       <div style={S.box}>
         {/* Progress */}
-        <p style={S.step}>Step {step} of 2</p>
-        <div style={S.bar}>
-          <div style={{ ...S.fill, width: step === 1 ? '50%' : '100%' }} />
+        <div className="progress-bar">
+          <p style={S.step}>Step {step} of 2</p>
+          <div style={S.bar}>
+            <div style={{ ...S.fill, width: step === 1 ? '50%' : '100%' }} />
+          </div>
         </div>
 
         {step === 1 && (
@@ -509,9 +511,16 @@ function OrderFormEmbed() {
                 }
                 setStep(2);
                 
-                // Scroll to very top of page when moving to Step 2
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                document.documentElement.scrollTop = 0;
+                // Scroll to progress bar when moving to Step 2
+                setTimeout(() => {
+                  const progressBar = document.querySelector('.progress-bar');
+                  if (progressBar) {
+                    progressBar.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start' 
+                    });
+                  }
+                }, 100);
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -775,9 +784,16 @@ function OrderFormEmbed() {
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
               <button style={S.back} onClick={() => {
                 setStep(1);
-                // Scroll to very top of page when going back to Step 1
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                document.documentElement.scrollTop = 0;
+                // Scroll to progress bar when going back to Step 1
+                setTimeout(() => {
+                  const progressBar = document.querySelector('.progress-bar');
+                  if (progressBar) {
+                    progressBar.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start' 
+                    });
+                  }
+                }, 100);
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
