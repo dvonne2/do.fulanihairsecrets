@@ -1,5 +1,5 @@
 /* Fulani Hair Gro™ Design System - Nigerian Luxury Aesthetic */
-@import './fonts.generated.css';
+@import './fonts.core.css';
 
 @tailwind base;
 @tailwind components;
@@ -19,7 +19,7 @@
 
 .jandes-headline {
   font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .jandes-quote {
@@ -104,10 +104,11 @@
 /* Typography Classes */
 .font-cinzel {
   font-family: 'Cinzel', serif;
+  font-weight: 600;
 }
 
 .font-serif {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, serif;
 }
 
 .font-sans {
@@ -115,7 +116,7 @@
 }
 
 .font-dancing {
-  font-family: 'Dancing Script', cursive;
+  font-family: cursive;
 }
 
 /* Animations */
@@ -142,9 +143,10 @@
   animation-play-state: paused;
 }
 
+/* GPU-accelerated glow using pseudo-element + opacity */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px hsl(43 74% 49% / 0.6), 0 0 40px hsl(43 74% 49% / 0.4), 0 0 60px hsl(43 74% 49% / 0.2); }
-  50% { box-shadow: 0 0 40px hsl(43 74% 49% / 0.8), 0 0 80px hsl(43 74% 49% / 0.6), 0 0 120px hsl(43 74% 49% / 0.4); }
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
 }
 
 @keyframes float {
@@ -152,9 +154,10 @@
   50% { transform: translateY(-15px); }
 }
 
+/* GPU-accelerated pulse using transform + opacity */
 @keyframes pulse-red {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(0 84% 60% / 0.7); }
-  70% { box-shadow: 0 0 0 15px hsl(0 84% 60% / 0); }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
 }
 
 @keyframes slideIn {
@@ -189,7 +192,19 @@
 }
 
 .animate-glow {
+  position: relative;
+  will-change: transform, opacity;
+}
+.animate-glow::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: hsl(43 74% 49% / 0.4);
+  border-radius: inherit;
+  filter: blur(15px);
+  z-index: -1;
   animation: glow-pulse 2s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 .animate-float {
@@ -197,7 +212,18 @@
 }
 
 .animate-pulse-red {
+  position: relative;
+  will-change: transform;
+}
+.animate-pulse-red::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(0 84% 60% / 0.3);
+  border-radius: inherit;
   animation: pulse-red 2s infinite;
+  will-change: transform, opacity;
+  z-index: -1;
 }
 
 .animate-slideIn {
@@ -217,10 +243,10 @@
   background: linear-gradient(135deg, hsl(var(--gold-dark)) 0%, hsl(var(--gold)) 25%, hsl(var(--gold-bright)) 50%, hsl(var(--gold)) 75%, hsl(var(--gold-dark)) 100%);
 }
 
+/* Simplified gradient - no animation for performance */
 .gold-gradient-animated {
-  background: linear-gradient(90deg, hsl(var(--gold-dark)), hsl(var(--gold)), hsl(var(--gold-bright)), hsl(var(--gold-light)), hsl(var(--gold-bright)), hsl(var(--gold)), hsl(var(--gold-dark)));
-  background-size: 400% 100%;
-  animation: gradient-shift 4s ease infinite;
+  background: linear-gradient(90deg, hsl(var(--gold-dark)), hsl(var(--gold)), hsl(var(--gold-bright)), hsl(var(--gold)), hsl(var(--gold-dark)));
+  background-size: 100% 100%;
 }
 
 .royal-blue-gradient {
@@ -360,4 +386,32 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* GPU acceleration hints for animated elements */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  .animate-shimmer,
+  .animate-glow,
+  .animate-float,
+  .animate-pulse-red {
+    animation: none !important;
+  }
+  .animate-glow::before,
+  .animate-pulse-red::before {
+    animation: none !important;
+  }
 }

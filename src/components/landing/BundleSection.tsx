@@ -131,7 +131,7 @@ export const BundleSection = () => {
                   height={80}
                 />
               </div>
-              <h4 className="font-cinzel text-lg text-gold mb-2">{item.title}</h4>
+              <h3 className="font-cinzel text-lg text-gold mb-2">{item.title}</h3>
               <p className="font-sans text-sm text-muted-foreground">{item.desc}</p>
             </div>
           ))}
@@ -201,7 +201,7 @@ export const BundleSection = () => {
           <p className="font-sans text-xs text-muted-foreground mb-6">Includes: 3x Shampoo + 3x Conditioner + 3x Pomade + FREE Bonuses</p>
           
           <div className="flex items-center justify-center gap-4 mb-6">
-            <span className="text-muted-foreground line-through text-lg">₦214,500</span>
+            <span className="text-muted-foreground/80 line-through text-lg">₦214,500</span>
             <span className="font-cinzel text-4xl md:text-5xl text-gold animate-shimmer">₦66,750</span>
             <span className="px-3 py-1 bg-success/20 text-success text-sm font-bold rounded-full">SAVE ₦147,750</span>
           </div>

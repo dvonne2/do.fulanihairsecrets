@@ -12,6 +12,26 @@ dist
 dist-ssr
 *.local
 
+# Build artifacts and distributions
+DIST*/
+dist*/
+build/
+coverage/
+*.tgz
+*.tar.gz
+
+# Package manager lock files (keep package-lock.json, ignore others)
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +42,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test files
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# OS generated files
+Thumbs.db
+Desktop.ini

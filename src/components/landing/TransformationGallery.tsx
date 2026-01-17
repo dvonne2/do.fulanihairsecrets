@@ -79,6 +79,8 @@ export const TransformationGallery = () => {
                   src={item.image} 
                   alt={`${item.name} - ${item.highlight}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  decoding="async"
+                  loading="lazy"
                 />
                 
                 {/* Overlay gradient */}

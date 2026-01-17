@@ -77,6 +77,9 @@ export const ProductSystem = () => {
                 <img 
                   src={product.image} 
                   alt={product.name}
+                  width={336}
+                  height={336}
+                  loading="lazy"
                   className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105"
                   style={{ filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.4))' }}
                 />

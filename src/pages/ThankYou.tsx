@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Copy, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useMetaPixel } from '@/hooks/useMetaPixel';
 
 import result1 from '@/assets/results/result-1.webp';
 import result2 from '@/assets/results/result-2.webp';
@@ -14,6 +15,8 @@ import amina from '@/assets/testimonials/amina.webp';
 import blessing from '@/assets/testimonials/blessing.webp';
 
 const ThankYou = () => {
+  const { trackPurchase } = useMetaPixel();
+  const hasTrackedPurchase = useRef(false);
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -79,6 +82,55 @@ const ThankYou = () => {
     };
     setTimeout(animateSavings, 1000);
   }, []);
+
+  // Meta Pixel: Purchase on mount (with order data)
+  useEffect(() => {
+    if (hasTrackedPurchase.current) return;
+    if (!orderNumber || orderNumber === 'UNKNOWN') return;
+
+    type StoredOrder = {
+      orderId?: string;
+      fullName?: string;
+      phone?: string;
+      email?: string;
+      packageName?: string;
+      packageAmount?: number;
+      deliveryFee?: number;
+      totalAmount?: number;
+      state?: string;
+      lga?: string;
+      address?: string;
+    };
+
+    let stored: StoredOrder | null = null;
+    try {
+      const raw = window.sessionStorage.getItem('fhg_order_data');
+      if (raw) stored = JSON.parse(raw) as StoredOrder;
+    } catch {
+      stored = null;
+    }
+
+    const merged: StoredOrder = {
+      ...stored,
+      orderId: orderNumber,
+    };
+
+    trackPurchase({
+      orderId: merged.orderId,
+      fullName: merged.fullName,
+      email: merged.email,
+      phone: merged.phone,
+      packageName: merged.packageName,
+      packagePrice: merged.packageAmount,
+      deliveryFee: merged.deliveryFee,
+      totalAmount: merged.totalAmount,
+      state: merged.state,
+      lga: merged.lga,
+      address: merged.address,
+    });
+
+    hasTrackedPurchase.current = true;
+  }, [orderNumber, trackPurchase]);
 
   useEffect(() => {
     try {

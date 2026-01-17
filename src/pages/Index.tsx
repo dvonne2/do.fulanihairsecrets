@@ -1,20 +1,56 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { Navigation } from '@/components/landing/Navigation';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
+import type { ReactNode } from 'react';
+import { useAfterHeroLoad, useIdleLoad } from '@/hooks/useIdleLoad';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
+import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
-import { HairLossTypesGuide } from '@/components/landing/HairLossTypesGuide';
-import { MaiduguriSecret } from '@/components/landing/MaiduguriSecret';
-import { GrandmothersPermission } from '@/components/landing/GrandmothersPermission';
-import { LimitedStockWarning } from '@/components/landing/LimitedStockWarning';
-import { SocialProofStrip } from '@/components/landing/SocialProofStrip';
-import { TrustLogos } from '@/components/landing/TrustLogos';
-import { TransformationGallery } from '@/components/landing/TransformationGallery';
-import { BeforeAfterSection } from '@/components/landing/BeforeAfterSection';
-import { ProgressTimeline } from '@/components/landing/ProgressTimeline';
-import { ProblemAgitation } from '@/components/landing/ProblemAgitation';
-import { FounderStory } from '@/components/landing/FounderStory';
-import { IndustryTruth } from '@/components/landing/IndustryTruth';
-import { ProductSystem } from '@/components/landing/ProductSystem';
+import { StickyElements } from '@/components/landing/StickyElements';
+import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
+import { useMetaPixel } from '@/hooks/useMetaPixel';
+
+// Lazy load below-fold components
+const HairLossTypesGuide = lazy(() =>
+  import('@/components/landing/HairLossTypesGuide').then((m) => ({ default: m.HairLossTypesGuide }))
+);
+const MaiduguriSecret = lazy(() =>
+  import('@/components/landing/MaiduguriSecret').then((m) => ({ default: m.MaiduguriSecret }))
+);
+const GrandmothersPermission = lazy(() =>
+  import('@/components/landing/GrandmothersPermission').then((m) => ({ default: m.GrandmothersPermission }))
+);
+const LimitedStockWarning = lazy(() =>
+  import('@/components/landing/LimitedStockWarning').then((m) => ({ default: m.LimitedStockWarning }))
+);
+const SocialProofStrip = lazy(() =>
+  import('@/components/landing/SocialProofStrip').then((m) => ({ default: m.SocialProofStrip }))
+);
+const TrustLogos = lazy(() =>
+  import('@/components/landing/TrustLogos').then((m) => ({ default: m.TrustLogos }))
+);
+const TransformationGallery = lazy(() =>
+  import('@/components/landing/TransformationGallery').then((m) => ({ default: m.TransformationGallery }))
+);
+const BeforeAfterSection = lazy(() =>
+  import('@/components/landing/BeforeAfterSection').then((m) => ({ default: m.BeforeAfterSection }))
+);
+const ProgressTimeline = lazy(() =>
+  import('@/components/landing/ProgressTimeline').then((m) => ({ default: m.ProgressTimeline }))
+);
+const ProblemAgitation = lazy(() =>
+  import('@/components/landing/ProblemAgitation').then((m) => ({ default: m.ProblemAgitation }))
+);
+const FounderStory = lazy(() =>
+  import('@/components/landing/FounderStory').then((m) => ({ default: m.FounderStory }))
+);
+const IndustryTruth = lazy(() =>
+  import('@/components/landing/IndustryTruth').then((m) => ({ default: m.IndustryTruth }))
+);
+const ProductSystem = lazy(() =>
+  import('@/components/landing/ProductSystem').then((m) => ({ default: m.ProductSystem }))
+);
+const Footer = lazy(() =>
+  import('@/components/landing/Footer').then((m) => ({ default: m.Footer }))
+);
 
 const IngredientsSection = lazy(() =>
   import('@/components/landing/IngredientsSection').then((m) => ({ default: m.IngredientsSection }))
@@ -47,12 +83,51 @@ const Testimonials = lazy(() =>
   import('@/components/landing/Testimonials').then((m) => ({ default: m.Testimonials }))
 );
 const FAQ = lazy(() => import('@/components/landing/FAQ').then((m) => ({ default: m.FAQ })));
-import { Footer } from '@/components/landing/Footer';
-import { StickyElements } from '@/components/landing/StickyElements';
-import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
-import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import cashOnDeliveryImg from '@/assets/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
-import pointingGif from '@/assets/products/RtaIrAk.gif';
+
+type LazySectionProps = {
+  children: ReactNode;
+  minHeightClassName?: string;
+  rootMargin?: string;
+};
+
+const LazySection = ({
+  children,
+  minHeightClassName = 'min-h-[1px]',
+  rootMargin = '800px 0px'
+}: LazySectionProps) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) return;
+    const el = ref.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setIsVisible(true);
+        }
+      },
+      { root: null, rootMargin, threshold: 0.01 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isVisible, rootMargin]);
+
+  return (
+    <div ref={ref} className={minHeightClassName}>
+      {isVisible ? <Suspense fallback={null}>{children}</Suspense> : null}
+    </div>
+  );
+};
 
 const purchaseNotifications = [
   { name: "Hajia F.", location: "Banana Island", product: "6-Month Supply", time: "2 mins ago" },
@@ -85,6 +160,13 @@ const getCountdownToMidnight = () => {
 };
 
 const Index = () => {
+  // Idle load non-critical components to reduce TBT
+  const loadNonCritical = useIdleLoad(500); // Load after 500ms idle
+  const afterHero = useAfterHeroLoad();
+
+  const { trackPageView } = useMetaPixel();
+  const hasTrackedPageView = useRef(false);
+  
   // State management
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [stockCount, setStockCount] = useState(43);
@@ -100,6 +182,7 @@ const Index = () => {
 
   // Countdown Timer - always counts down to local midnight today
   useEffect(() => {
+    if (!afterHero) return;
     const timer = setInterval(() => {
       setCountdown(getCountdownToMidnight());
     }, 1000);
@@ -108,10 +191,18 @@ const Index = () => {
     setCountdown(getCountdownToMidnight());
 
     return () => clearInterval(timer);
-  }, []);
+  }, [afterHero]);
+
+  // Meta Pixel: PageView on mount
+  useEffect(() => {
+    if (hasTrackedPageView.current) return;
+    trackPageView();
+    hasTrackedPageView.current = true;
+  }, [trackPageView]);
 
   // Viewer count fluctuation (social proof)
   useEffect(() => {
+    if (!afterHero) return;
     const interval = setInterval(() => {
       setViewerCount(prev => {
         const change = Math.floor(Math.random() * 15) - 7; // -7 to +7
@@ -122,20 +213,22 @@ const Index = () => {
     }, 4000); // Update every 4 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [afterHero]);
 
   // Stock decreasing
   useEffect(() => {
+    if (!afterHero) return;
     const interval = setInterval(() => {
       if (Math.random() > 0.7) {
         setStockCount(prev => Math.max(7, prev - 1));
       }
     }, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [afterHero]);
 
   // Purchase notifications
   useEffect(() => {
+    if (!afterHero) return;
     const showNotification = () => {
       setCurrentNotif(prev => (prev + 1) % purchaseNotifications.length);
       setShowPurchaseNotif(true);
@@ -148,18 +241,20 @@ const Index = () => {
       clearInterval(interval);
       clearTimeout(firstTimeout);
     };
-  }, []);
+  }, [afterHero]);
 
   // Testimonial rotation
   useEffect(() => {
+    if (!afterHero) return;
     const interval = setInterval(() => {
       setActiveTestimonial(prev => (prev + 1) % 6);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [afterHero]);
 
   // Scroll progress + sticky bar
   useEffect(() => {
+    if (!afterHero) return;
     const handleScroll = () => {
       const scrolled = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -170,10 +265,11 @@ const Index = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [afterHero]);
 
   // Transactional popup gating (mobile-first): show only after 8s OR 50% scroll depth
   useEffect(() => {
+    if (!afterHero) return;
     if (hasShownTopIntent) return;
 
     const fireTopIntent = () => {
@@ -202,7 +298,7 @@ const Index = () => {
       window.clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasShownTopIntent]);
+  }, [afterHero, hasShownTopIntent]);
 
 
 
@@ -232,9 +328,7 @@ const Index = () => {
       (window as WindowWithTracking).dataLayer?.push?.({ event: 'FormStart' });
       (window as WindowWithTracking).fbq?.('trackCustom', 'FormStart');
 
-      if (isDebug) {
-        console.log('FormStart fired');
-      }
+      void isDebug;
     };
 
     const handleClick = (event: MouseEvent) => {
@@ -275,14 +369,16 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <StickyElements 
-        showStickyBar={showStickyBar}
-        viewerCount={viewerCount}
-        stockCount={stockCount}
-        showPurchaseNotif={showPurchaseNotif}
-        currentNotif={purchaseNotifications[currentNotif]}
-        scrollProgress={scrollProgress}
-      />
+      {afterHero && (
+        <StickyElements 
+          showStickyBar={showStickyBar}
+          viewerCount={viewerCount}
+          stockCount={stockCount}
+          showPurchaseNotif={showPurchaseNotif}
+          currentNotif={purchaseNotifications[currentNotif]}
+          scrollProgress={scrollProgress}
+        />
+      )}
       
       <UrgencyBanner countdown={countdown} />
       
@@ -292,21 +388,17 @@ const Index = () => {
         {/* DISQUALIFICATION WARNING - After the form */}
         <DisqualificationWarning stockCount={stockCount} />
 
-        {/* 7 HAIR LOSS TYPES GUIDE - Educational self-diagnosis */}
-        <HairLossTypesGuide />
-
-        {/* THE MAIDUGURI SECRET - Emotional heart */}
-        <MaiduguriSecret />
-        
-        {/* GRANDMOTHER'S PERMISSION */}
-        <GrandmothersPermission />
-        
-        {/* EXTREMELY LIMITED STOCK */}
-        <LimitedStockWarning stockCount={stockCount} />
-        
-        <SocialProofStrip />
-        <TrustLogos />
-        <TransformationGallery />
+        <LazySection minHeightClassName="min-h-[200px]">
+          <>
+            <HairLossTypesGuide />
+            <MaiduguriSecret />
+            <GrandmothersPermission />
+            <LimitedStockWarning stockCount={stockCount} />
+            <SocialProofStrip />
+            <TrustLogos />
+            <TransformationGallery />
+          </>
+        </LazySection>
 
         <section className="py-10 bg-background px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -325,13 +417,16 @@ const Index = () => {
           </div>
         </section>
 
-        <BeforeAfterSection />
-        <ProgressTimeline />
-        <ProblemAgitation />
-        <FounderStory />
-        <IndustryTruth />
-
-        <ProductSystem />
+        <LazySection minHeightClassName="min-h-[200px]">
+          <>
+            <BeforeAfterSection />
+            <ProgressTimeline />
+            <ProblemAgitation />
+            <FounderStory />
+            <IndustryTruth />
+            <ProductSystem />
+          </>
+        </LazySection>
 
         <section className="py-10 bg-background px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -350,24 +445,21 @@ const Index = () => {
           </div>
         </section>
 
-        <Suspense fallback={null}>
-          <IngredientsSection />
-          {/* PROTECTED RECIPE - After products/ingredients */}
-          <ProtectedRecipe />
-          {/* WHY WE RESTRICT SALES */}
-          <WhyWeRestrict />
-          <BundleSection />
-          {/* APPLICATION PROCESS */}
-          <ApplicationProcess stockCount={stockCount} />
-          {/* YOU'RE ONE OF THE LUCKY FEW - Before pricing */}
-          <LuckyFewSection stockCount={stockCount} />
-          {/* THE OFFER - Before pricing */}
-          <TheOffer stockCount={stockCount} />
-          <Testimonials
-            activeIndex={activeTestimonial}
-            onSetActive={setActiveTestimonial}
-          />
-        </Suspense>
+        <LazySection minHeightClassName="min-h-[200px]">
+          <>
+            <IngredientsSection />
+            <ProtectedRecipe />
+            <WhyWeRestrict />
+            <BundleSection />
+            <ApplicationProcess stockCount={stockCount} />
+            <LuckyFewSection stockCount={stockCount} />
+            <TheOffer stockCount={stockCount} />
+            <Testimonials
+              activeIndex={activeTestimonial}
+              onSetActive={setActiveTestimonial}
+            />
+          </>
+        </LazySection>
 
         {/* Decision point section - leads into pricing */}
         <section className="py-12 md:py-16 bg-background px-4">
@@ -465,7 +557,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Pricing and embedded order form - always visible */}
         <Suspense fallback={null}>
           <PricingSection 
             countdown={countdown}
@@ -492,9 +583,9 @@ const Index = () => {
           </div>
         </section>
 
-        <Suspense fallback={null}>
+        <LazySection minHeightClassName="min-h-[120px]">
           <Guarantee />
-        </Suspense>
+        </LazySection>
 
         <section className="py-10 bg-background px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -530,12 +621,18 @@ const Index = () => {
           </div>
         </section>
 
-        <Suspense fallback={null}>
-          <FAQ />
-        </Suspense>
+        {loadNonCritical && (
+          <Suspense fallback={null}>
+            <FAQ />
+          </Suspense>
+        )}
       </main>
       
-      <Footer />
+      {loadNonCritical && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
       
       <TopIntentPopup
         show={showTopIntent}

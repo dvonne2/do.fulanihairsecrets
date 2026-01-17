@@ -54,9 +54,9 @@ export const DisqualificationWarning = ({ stockCount }: DisqualificationWarningP
 
             {/* Symptoms grid */}
             <div className="mt-8 text-left">
-              <h4 className="font-cinzel text-lg md:text-xl text-gold text-center mb-4">
+              <h3 className="font-cinzel text-lg md:text-xl text-gold text-center mb-4">
                 Reverse It Quick... Here Are Some Symptoms You Might Experience!
-              </h4>
+              </h3>
               <div className="grid md:grid-cols-3 gap-4 text-lg md:text-xl text-foreground/90">
                 {[
                   'Excessive hair shedding',

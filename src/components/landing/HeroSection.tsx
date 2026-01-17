@@ -1,4 +1,10 @@
-import bundleImg from '@/assets/products/bundle-system.webp';
+import React, { useEffect, useMemo, useState } from 'react';
+
+const heroImageMobile = '/assets/hero-mobile.webp';
+const heroImage700 = '/assets/hero-fulani-700.webp';
+const heroImageLarge = '/assets/hero-fulani.webp';
+const heroVideoWebm = '/assets/hero-animated.webm';
+const heroVideoMp4 = '/assets/hero-animated.mp4';
 
 interface HeroSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
@@ -7,6 +13,67 @@ interface HeroSectionProps {
 }
 
 export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionProps) => {
+  const [canEnhance, setCanEnhance] = useState(false);
+
+  const shouldEnhanceWithVideo = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (prefersReducedMotion) return false;
+
+    const nav = window.navigator as Navigator & {
+      connection?: {
+        saveData?: boolean;
+        effectiveType?: string;
+        downlink?: number;
+      };
+    };
+
+    const connection = nav.connection;
+    if (!connection) return true;
+    if (connection.saveData) return false;
+
+    const effectiveType = connection.effectiveType;
+    if (effectiveType && ['slow-2g', '2g', '3g'].includes(effectiveType)) return false;
+
+    const downlink = connection.downlink;
+    if (typeof downlink === 'number' && downlink < 1.5) return false;
+
+    return true;
+  }, []);
+
+  useEffect(() => {
+    if (!shouldEnhanceWithVideo) return;
+
+    let didSet = false;
+    const enable = () => {
+      if (didSet) return;
+      didSet = true;
+      setCanEnhance(true);
+      cleanup();
+    };
+
+    const onFirstInteraction = () => enable();
+
+    const opts: AddEventListenerOptions = { passive: true };
+    window.addEventListener('scroll', onFirstInteraction, opts);
+    window.addEventListener('click', onFirstInteraction, opts);
+    window.addEventListener('touchstart', onFirstInteraction, opts);
+    window.addEventListener('keydown', onFirstInteraction);
+
+    const idleId = window.setTimeout(enable, 3500);
+
+    const cleanup = () => {
+      window.clearTimeout(idleId);
+      window.removeEventListener('scroll', onFirstInteraction);
+      window.removeEventListener('click', onFirstInteraction);
+      window.removeEventListener('touchstart', onFirstInteraction);
+      window.removeEventListener('keydown', onFirstInteraction);
+    };
+
+    return cleanup;
+  }, [shouldEnhanceWithVideo]);
+
   return (
     <section className="pt-32 md:pt-44 pb-16 md:pb-32 relative overflow-hidden royal-blue-gradient">
       <div className="absolute inset-0 arabian-pattern"></div>
@@ -22,7 +89,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             </p>
             
             {/* Main Headline */}
-            <h1 className="font-cinzel text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="font-cinzel text-3xl md:text-5xl lg:text-6xl font-semibold mb-6 leading-tight">
               <span className="text-foreground">STOP HAIR LOSS IN</span>
               <br />
               <span className="animate-shimmer">7 DAYS OR LESS</span>
@@ -30,7 +97,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             
             {/* Flash Sale Banner */}
             <div className="p-4 md:p-6 rounded-2xl bg-destructive/20 border-2 border-gold mb-6">
-              <p className="font-cinzel text-lg md:text-xl text-foreground mb-3">
+              <p className="font-cinzel text-lg md:text-xl text-foreground mb-3 font-semibold">
                 🔥 FLASH SALE: 69% OFF + ₦70,000 FREE Gifts
               </p>
               <div className="flex justify-center lg:justify-start gap-2">
@@ -41,7 +108,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                 ].map((item, i) => (
                   <div key={i} className="flex flex-col items-center">
                     <div className="w-14 md:w-16 h-14 md:h-16 bg-background rounded-lg flex items-center justify-center">
-                      <span className="font-cinzel text-2xl md:text-3xl text-gold font-bold">
+                      <span className="font-cinzel text-2xl md:text-3xl text-gold font-semibold">
                         {String(item.value).padStart(2, '0')}
                       </span>
                     </div>
@@ -71,7 +138,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
               </p>
               <div className="flex items-center justify-center lg:justify-start gap-3">
                 <span className="font-sans text-xl text-muted-foreground line-through">₦71,500</span>
-                <span className="font-cinzel text-3xl md:text-4xl text-gold font-bold">₦32,750</span>
+                <span className="font-cinzel text-3xl md:text-4xl text-gold font-semibold">₦32,750</span>
                 <span className="px-2 py-1 bg-destructive text-foreground text-sm font-bold rounded">-54%</span>
               </div>
             </div>
@@ -79,15 +146,15 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             {/* Stats Row */}
             <div className="grid grid-cols-3 gap-3 mb-6">
               <div className="p-3 md:p-4 rounded-xl bg-background/20 border border-gold/30 text-center">
-                <p className="font-cinzel text-xl md:text-2xl text-gold font-bold">100,000+</p>
+                <p className="font-cinzel text-xl md:text-2xl text-gold font-semibold">100,000+</p>
                 <p className="font-sans text-xs md:text-sm text-muted-foreground">Orders Delivered</p>
               </div>
               <div className="p-3 md:p-4 rounded-xl bg-background/20 border border-gold/30 text-center">
-                <p className="font-cinzel text-xl md:text-2xl text-gold font-bold">4.9★</p>
+                <p className="font-cinzel text-xl md:text-2xl text-gold font-semibold">4.9★</p>
                 <p className="font-sans text-xs md:text-sm text-muted-foreground">5,247 Reviews</p>
               </div>
               <div className="p-3 md:p-4 rounded-xl bg-background/20 border border-gold/30 text-center">
-                <p className="font-cinzel text-xl md:text-2xl text-success font-bold animate-pulse">127</p>
+                <p className="font-cinzel text-xl md:text-2xl text-success font-semibold animate-pulse">127</p>
                 <p className="font-sans text-xs md:text-sm text-muted-foreground">Orders Today</p>
               </div>
             </div>
@@ -111,12 +178,37 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             {/* Mobile product image (shown early) */}
             <div className="block lg:hidden max-w-xs mx-auto">
               <div className="rounded-3xl mega-glow pomade-glow p-5 bg-background/10">
-                <img
-                  src={bundleImg}
-                  alt="Fulani Hair Gro Complete 3-Step System"
-                  className="w-full h-auto object-contain"
-                  style={{ filter: 'drop-shadow(0 20px 35px rgba(0,0,0,0.5))' }}
-                />
+                <div className="relative w-full aspect-square">
+                  {!canEnhance && (
+                    <img
+                      src={heroImageMobile}
+                      srcSet={`${heroImageMobile} 400w, ${heroImage700} 700w, ${heroImageLarge} 1200w`}
+                      sizes="(max-width: 1023px) 300px, 400px"
+                      alt="Fulani Hair Gro Complete 3-Step System"
+                      className="absolute inset-0 w-full h-full object-contain"
+                      width={300}
+                      height={300}
+                      loading="eager"
+                      decoding="async"
+                      {...({ fetchpriority: 'high' } as any)}
+                    />
+                  )}
+
+                  {canEnhance && (
+                    <video
+                      className="absolute inset-0 w-full h-full object-contain"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      poster={heroImage700}
+                    >
+                      <source src={heroVideoWebm} type="video/webm" />
+                      <source src={heroVideoMp4} type="video/mp4" />
+                    </video>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -126,12 +218,37 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             <div className="relative">
               {/* Product Image */}
               <div className="w-full aspect-square rounded-3xl flex items-center justify-center mega-glow pomade-glow p-8">
-                <img 
-                  src={bundleImg}
-                  alt="Fulani Hair Gro Complete 3-Step System"
-                  className="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105"
-                  style={{ filter: 'drop-shadow(0 30px 50px rgba(0,0,0,0.5))' }}
-                />
+                <div className="relative w-full h-full">
+                  {!canEnhance && (
+                    <img
+                      src={heroImageLarge}
+                      srcSet={`${heroImageMobile} 400w, ${heroImage700} 700w, ${heroImageLarge} 1200w`}
+                      sizes="(min-width: 1024px) 400px, 300px"
+                      alt="Fulani Hair Gro Complete 3-Step System"
+                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 hover:scale-105"
+                      width={400}
+                      height={400}
+                      loading="eager"
+                      decoding="async"
+                      {...({ fetchpriority: 'high' } as any)}
+                    />
+                  )}
+
+                  {canEnhance && (
+                    <video
+                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 hover:scale-105"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      poster={heroImageLarge}
+                    >
+                      <source src={heroVideoWebm} type="video/webm" />
+                      <source src={heroVideoMp4} type="video/mp4" />
+                    </video>
+                  )}
+                </div>
               </div>
               
               {/* Stock Badge */}
@@ -142,7 +259,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
               {/* As Seen On Badge */}
               <div className="absolute -bottom-4 -left-4 px-6 py-3 rounded-xl gold-gradient text-background shadow-lg mega-glow">
                 <p className="font-sans text-xs uppercase tracking-wider font-bold">As Seen On</p>
-                <p className="font-cinzel text-base font-bold">Bella Naija • Guardian</p>
+                <p className="font-cinzel text-base font-semibold">Bella Naija • Guardian</p>
               </div>
             </div>
           </div>

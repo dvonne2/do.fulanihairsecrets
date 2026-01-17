@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, CSSProperties, memo } from 'react';
+import { useMetaPixel } from '@/hooks/useMetaPixel';
+import { SESSION_KEYS, getPackagePrice } from '@/utils/pixelUtils';
 
 const FULANI_API_URL = 'https://script.google.com/macros/s/AKfycbx1dHWosMwJcMNNWQfNEyLZNMI3bbBW9wtFD58l_eP8Uo7A5p755RVBJsCIwAm2syEB/exec';
 const FULANI_SECRET = 'fhg_orders_2024_secret';
@@ -111,7 +113,7 @@ const S: { [key: string]: CSSProperties } = {
   bar: { height: 8, background: '#E0E0E0', borderRadius: 4, overflow: 'hidden', marginBottom: 20 },
   fill: { height: '100%', background: 'linear-gradient(90deg, #36CA37, #2eb82e)', transition: 'width 0.3s' },
   label: { display: 'block', fontSize: 13, fontWeight: 800, color: '#1a1a1a', textTransform: 'uppercase' as const, margin: '16px 0 8px' },
-  req: { color: '#FF0000' },
+  req: { color: '#D30000' },
   input: { width: '100%', padding: '14px 16px', background: '#F9F9F9', border: '2px solid #E0E0E0', borderRadius: 10, fontSize: 16, fontWeight: 600, color: '#1a1a1a', outline: 'none', boxSizing: 'border-box' as const, fontFamily: 'inherit' },
   hint: { fontSize: 12, color: '#666', margin: '6px 0 0' },
   pkgs: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
@@ -120,15 +122,15 @@ const S: { [key: string]: CSSProperties } = {
   radio: { position: 'absolute' as const, left: 14, top: 16, width: 22, height: 22, border: '3px solid #CCC', borderRadius: '50%', background: '#fff', boxSizing: 'border-box' as const, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   radioSel: { borderColor: '#DAA520', background: '#DAA520' },
   check: { color: '#fff', fontSize: 12, fontWeight: 'bold' as const },
-  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#FF0000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const, boxShadow: '0 2px 8px rgba(255,0,0,0.3)' },
+  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#D30000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const, boxShadow: '0 2px 8px rgba(211,0,0,0.3)' },
   r1: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
   name: { fontSize: 14, fontWeight: 800, color: '#1a1a1a' },
   pr: { textAlign: 'right' as const },
-  old: { fontSize: 11, color: '#999', textDecoration: 'line-through', marginRight: 4 },
-  newP: { fontSize: 18, fontWeight: 900, color: '#FF0000' },
+  old: { fontSize: 11, color: '#666', textDecoration: 'line-through', marginRight: 4 },
+  newP: { fontSize: 18, fontWeight: 900, color: '#D30000' },
   r2: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   items: { fontSize: 12, fontWeight: 600, color: '#555' },
-  disc: { background: '#FF0000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '3px 6px', borderRadius: 4 },
+  disc: { fontSize: 12, fontWeight: 800, color: '#D30000' },
   free: { background: 'linear-gradient(135deg, #2E8B2E, #3CB371)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 6, textAlign: 'center' as const, margin: '6px 0' },
   dur: { fontSize: 10, fontWeight: 600, color: '#888', textAlign: 'center' as const, marginTop: 4 },
   pay: { fontSize: 14, color: '#666', textAlign: 'center' as const, margin: '16px 0' },
@@ -143,6 +145,7 @@ const S: { [key: string]: CSSProperties } = {
 };
 
 function OrderFormEmbed() {
+  const { trackAddToCart, trackInitiateCheckout, isEventFired } = useMetaPixel();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ 
     name: '', 
@@ -170,6 +173,46 @@ function OrderFormEmbed() {
   // Debounce phone input to reduce unnecessary re-renders and API calls
   const debouncedPhone = useDebounce(form.phone, 300);
 
+  // Memoize selected package calculation
+  const selectedPackage = useMemo(() => {
+    return packages.find(p => p.id === form.pkg) || null;
+  }, [form.pkg]);
+
+  const handlePhoneBlurForMeta = useCallback(() => {
+    if (step !== 1) return;
+
+    const phoneValue = form.phone;
+    void phoneValue;
+    let pvFired: string | null = null;
+    let atcFired: string | null = null;
+    try {
+      pvFired = sessionStorage.getItem('fhg_pv_fired');
+      atcFired = sessionStorage.getItem('fhg_atc_fired');
+    } catch (error) {
+      void error;
+    }
+    void pvFired;
+    void atcFired;
+
+    const phoneDigits = form.phone.replace(/\D/g, '');
+    const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0');
+    if (!phoneOk) return;
+
+    if (isEventFired(SESSION_KEYS.ADD_TO_CART)) return;
+
+    const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+    const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
+
+    trackAddToCart({
+      fullName: form.name,
+      phone: phoneDigits,
+      email: form.email,
+      packageName,
+      packagePrice,
+      state: form.state
+    });
+  }, [form.phone, form.pkg, form.name, form.email, form.state, isEventFired, selectedPackage?.price, step, trackAddToCart]);
+
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {
     const digits = phone.replace(/\D/g, '');
@@ -186,11 +229,6 @@ function OrderFormEmbed() {
     
     return '';  // Valid - NO error message
   }, []);
-
-  // Memoize selected package calculation
-  const selectedPackage = useMemo(() => {
-    return packages.find(p => p.id === form.pkg) || null;
-  }, [form.pkg]);
 
   // Memoize delivery fee calculation
   const deliveryFee = useMemo(() => {
@@ -229,10 +267,6 @@ function OrderFormEmbed() {
       Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
     );
 
-    console.log('Sending partial entry:', payload);
-    console.log('Partial entry POST URL:', FULANI_API_URL);
-    console.log('Partial entry body:', body.toString());
-
     try {
       let response: Response | undefined;
       try {
@@ -241,7 +275,6 @@ function OrderFormEmbed() {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
           body: body.toString()
         });
-        console.log('Partial entry response:', response);
       } catch (corsError) {
         console.error('Partial entry fetch error (likely CORS). Retrying with no-cors:', corsError);
         await fetch(FULANI_API_URL, {
@@ -250,10 +283,9 @@ function OrderFormEmbed() {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
           body: body.toString()
         });
-        console.log('Partial entry sent with no-cors fallback (no response available).');
       }
 
-      console.log('Partial entry saved:', orderId);
+      void response;
       return { success: true, orderId };
     } catch (error) {
       console.error('Partial entry error:', error);
@@ -272,18 +304,9 @@ function OrderFormEmbed() {
     const digits = debouncedPhone.replace(/\D/g, '');
     const nextPhoneError = validatePhone(debouncedPhone);
     setPhoneError(nextPhoneError);
-
-    console.log('Debounced phone validation:', {
-      phone: debouncedPhone,
-      digits,
-      digitsLength: digits.length,
-      sent,
-      hasName: Boolean(form.name)
-    });
     
     // Save partial when phone is valid (exactly 11 digits) AND not already saved
     if (digits.length === 11 && !sent && !nextPhoneError) {
-      console.log('Triggering partial save (11 digits).');
       // Prevent duplicate sends (fast typing / paste) before awaiting network.
       setSent(true);
 
@@ -318,7 +341,7 @@ function OrderFormEmbed() {
 
       savePartial();
     } else if (digits.length === 11) {
-      console.log('11 digits reached but partial save NOT triggered due to conditions:', { sent, nextPhoneError });
+      void nextPhoneError;
     }
   }, [debouncedPhone, validatePhone, sent, form.name, form.orderId, form.pkg]);
 
@@ -341,10 +364,36 @@ function OrderFormEmbed() {
     
     try {
       const orderId = form.orderId || generateOrderId();
+      const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+      const packageAmount = selectedPackage?.price ?? getPackagePrice(packageName);
+      const deliveryFee = Number(form.deliveryFee || 0);
+      const totalAmount = packageAmount + deliveryFee;
+
+      try {
+        window.sessionStorage.setItem(
+          'fhg_order_data',
+          JSON.stringify({
+            orderId,
+            fullName: form.name,
+            phone: form.phone,
+            email: form.email,
+            packageName,
+            packageAmount,
+            deliveryFee,
+            totalAmount,
+            state: form.state,
+            lga: form.lga,
+            address: form.address
+          })
+        );
+      } catch {
+        // ignore
+      }
+
       const formData = {
         name: form.name,
         phone: form.phone,
-        package: packageMapping[form.pkg] || form.pkg,
+        package: packageName,
         email: form.email,
         whatsapp: form.whatsapp,
         state: form.state,
@@ -446,6 +495,7 @@ function OrderFormEmbed() {
               placeholder="08012345678"
               value={form.phone}
               onChange={handlePhoneChange}
+              onBlur={handlePhoneBlurForMeta}
             />
             {phoneError && (
               <p style={{ margin: '6px 0 0', color: '#ff3b30', fontSize: 12, fontWeight: 800 }}>
@@ -509,6 +559,20 @@ function OrderFormEmbed() {
               }}
               disabled={Boolean(phoneError) || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.pkg}
               onClick={() => {
+                let pvFired: string | null = null;
+                let atcFired: string | null = null;
+                let icFired: string | null = null;
+                try {
+                  pvFired = sessionStorage.getItem('fhg_pv_fired');
+                  atcFired = sessionStorage.getItem('fhg_atc_fired');
+                  icFired = sessionStorage.getItem('fhg_ic_fired');
+                } catch (error) {
+                  void error;
+                }
+                void pvFired;
+                void atcFired;
+                void icFired;
+
                 const phoneDigits = form.phone.replace(/\D/g, '');
                 const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0') && !phoneError;
 
@@ -521,27 +585,42 @@ function OrderFormEmbed() {
                   alert('Please enter a valid 11-digit phone number');
                   return;
                 }
+
+                const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+                const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
+
+                if (!isEventFired(SESSION_KEYS.ADD_TO_CART)) {
+                  trackAddToCart({
+                    fullName: form.name,
+                    phone: phoneDigits,
+                    email: form.email,
+                    packageName,
+                    packagePrice,
+                    state: form.state
+                  });
+                }
+
+                trackInitiateCheckout({
+                  fullName: form.name,
+                  phone: phoneDigits,
+                  email: form.email,
+                  packageName,
+                  packagePrice,
+                  state: form.state
+                });
+
                 setStep(2);
                 
                 // Force scroll to step indicator when moving to Step 2
                 requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
-                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
-                    // Force scroll to top as backup
-                    requestAnimationFrame(() => {
-                      window.scrollTo({ top: 0, behavior: 'auto' });
-                    });
-                  } else {
-                    console.log('Step indicator not found');
-                    // Backup: scroll to top anyway
-                    window.scrollTo({ top: 0, behavior: 'auto' });
                   }
-                }); // Using requestAnimationFrame for instant response
+                }); // Removed setTimeout for instant response
               }}
             >
               CONTINUE (PAY ON DELIVERY)
@@ -738,7 +817,7 @@ function OrderFormEmbed() {
                   onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
                   style={{ cursor: 'pointer', marginTop: 2 }}
                 />
-                <span>I understand this is a Pay-on-Delivery order and I will be available to receive my package.</span>
+                <span>I understand that this is a Pay-on-Delivery order and I will be available to receive my package.</span>
               </label>
             </div>
 
@@ -809,21 +888,12 @@ function OrderFormEmbed() {
                 requestAnimationFrame(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
-                    console.log('Found step indicator, scrolling to it');
                     stepIndicator.scrollIntoView({ 
                       behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
                       block: 'start'
                     });
-                    // Force scroll to top as backup
-                    requestAnimationFrame(() => {
-                      window.scrollTo({ top: 0, behavior: 'auto' });
-                    });
-                  } else {
-                    console.log('Step indicator not found');
-                    // Backup: scroll to top anyway
-                    window.scrollTo({ top: 0, behavior: 'auto' });
                   }
-                }); // Using requestAnimationFrame for instant response
+                }); // Removed setTimeout for instant response
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}

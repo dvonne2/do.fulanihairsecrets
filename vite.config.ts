@@ -1,66 +1,84 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
+import fs from 'fs';
+import { partytownVite } from '@builder.io/partytown/utils';
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-  ].filter(Boolean),
-  build: {
-    // Enable better chunking and optimization
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return;
+// Custom plugin to copy critical files to dist root
+const copyCriticalFiles = () => ({
+  name: 'copy-critical-files',
+  writeBundle() {
+    const criticalFiles = [
+      'index.html',
+      'manifest.json',
+      'sw.js',
+      '.htaccess',
+      'favicon.ico',
+      'robots.txt'
+    ];
+    
+    criticalFiles.forEach(file => {
+      const src = path.resolve(__dirname, 'public', file);
+      const dest = path.resolve(__dirname, 'dist', file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      }
+    });
+  }
+});
 
-          // Split vendor chunks for better caching
-          if (id.includes("react") || id.includes("react-dom")) {
-            return "react-vendor";
-          }
-          if (id.includes("radix-ui")) {
-            return "ui-vendor";
-          }
-          if (id.includes("lucide")) {
-            return "icons-vendor";
-          }
-          if (id.includes("date-fns") || id.includes("recharts")) {
-            return "utils-vendor";
-          }
-          
-          return "vendor";
-        },
-        // Optimize chunk sizes
-      },
-    },
-    // Enable better compression
-    target: "esnext",
-    minify: "esbuild",
-    sourcemap: false,
-    // Optimize assets
-    assetsInlineLimit: 4096,
-    chunkSizeWarningLimit: 1000,
-  },
+export default defineConfig({
+  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Optimize dependencies
-  optimizeDeps: {
-    include: [
-      "react",
-      "react-dom",
-      "react-router-dom",
-      "@radix-ui/react-dialog",
-      "@radix-ui/react-select",
-      "lucide-react",
-    ],
+  build: {
+    outDir: "dist",
+    target: 'es2020',
+    minify: 'esbuild',
+    cssMinify: true,
+    reportCompressedSize: true,
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Core React - must load first
+          'react-vendor': ['react', 'react-dom'],
+          // Router - loads after React
+          'router': ['react-router-dom'],
+          // React Query - can load in parallel
+          'query': ['@tanstack/react-query'],
+          // Icons - lazy load
+          'icons': ['lucide-react'],
+          // Radix UI components - lazy load
+          'radix': [
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-label',
+            '@radix-ui/react-select',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-toast',
+          ],
+        },
+        // Put ALL assets in /assets/ folder
+        assetFileNames: (assetInfo) => {
+          let extType = assetInfo.name?.split('.').pop() || '';
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(extType)) {
+            return `assets/[name]-[hash][extname]`;
+          }
+          if (/woff2?|eot|ttf|otf/i.test(extType)) {
+            return `assets/fonts/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      },
+    },
+    // Copy publicDir for static assets (fonts, hero images)
+    copyPublicDir: true,
   },
-}));
+  publicDir: 'public',
+});

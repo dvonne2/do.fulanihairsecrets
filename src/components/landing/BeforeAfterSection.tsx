@@ -151,6 +151,7 @@ export const BeforeAfterSection = () => {
               src={fourteenDayCollage}
               alt="Dramatic 14-day before and after hair growth transformation collage"
               className="w-full h-full object-cover"
+              decoding="async"
               loading="lazy"
               width={1200}
               height={600}
@@ -185,6 +186,7 @@ export const BeforeAfterSection = () => {
                       src={item.after} 
                       alt={`${item.name} after transformation`}
                       className="w-full h-full object-cover"
+                      decoding="async"
                       loading="lazy"
                       width={600}
                       height={600}

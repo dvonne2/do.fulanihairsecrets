@@ -41,7 +41,7 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
 
             {/* Text */}
             <div className="text-left">
-              <div className="font-sans text-lg md:text-xl font-extrabold tracking-[0.25em] uppercase text-red-600 mb-1">
+              <div className="font-sans text-lg md:text-xl font-extrabold tracking-[0.25em] uppercase text-[#D30000] mb-1">
                 Caution
               </div>
               <div className="font-sans text-lg md:text-xl text-black">

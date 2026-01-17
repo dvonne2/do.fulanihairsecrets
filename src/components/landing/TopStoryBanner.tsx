@@ -1,17 +1,57 @@
-import React from 'react';
-import fulaniBenefitsImage from '/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
-import fulaniTestimonialImage from '/Gemini_Generated_Image_fd8rz1fd8rz1fd8r.webp';
-import fulaniDaysImage from '/gemini-1knotm.png';
-import fulaniExpertImage from '/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
-import hajiaMaryamTestimonial from '/Hajia Maryam Testimonial.webp';
-import hajiaMaryam2 from '/Hajia-Maryam-2.webp';
-import mamaTitiTestimonial1 from '/Mama Titi Testimonial1.webp';
-import mamaTiti2 from '/Mama Titi 2.webp';
+import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
-import OrderForm from '../OrderFormEmbed';
+import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
+
+// Lazy load heavy images - they're below the fold
+const fulaniBenefitsImage = '/assets/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
+const fulaniDaysImage = '/assets/Gemini_Generated_Image_1knotm1knotm1kno.webp';
+const fulaniExpertImage = '/assets/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
+const hajiaMaryamTestimonial = '/assets/Hajia Maryam Testimonial.webp';
+const hajiaMaryam2 = '/assets/Hajia-Maryam-2.webp';
+const mamaTitiTestimonial1 = '/assets/Mama Titi Testimonial1.webp';
+const mamaTiti2 = '/assets/Mama Titi 2.webp';
+
+// Lazy load OrderForm - 38KB component, preload after hero renders
+const OrderForm = lazy(() => import('../OrderFormEmbed'));
 
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
+  const [loadVideo, setLoadVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const afterHero = useAfterHeroLoad();
+
+  // Lazy load video after 3 seconds or on any user interaction
+  useEffect(() => {
+    if (!afterHero) return;
+    const timer = setTimeout(() => setLoadVideo(true), 3000);
+    const handleInteraction = () => setLoadVideo(true);
+    
+    window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
+    window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
+    };
+  }, [afterHero]);
+
+  useEffect(() => {
+    if (!afterHero) return;
+    try {
+      void import('../OrderFormEmbed');
+    } catch (error) {
+      console.error('Order form prefetch failed:', error);
+    }
+  }, [afterHero]);
+
+  // Play video once sources are loaded
+  useEffect(() => {
+    if (loadVideo && videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {});
+    }
+  }, [loadVideo]);
 
   return (
     <section
@@ -24,9 +64,9 @@ export const TopStoryBanner = () => {
           "Within 14 days of using Fulani Hair Gro, I began noticing tiny stubs on my edges." — Mrs. Ololade, Ikoyi
         </p>
         <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
-          <h1 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
+          <h2 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
             Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
-          </h1>
+          </h2>
         </div>
 
         <p className="mt-6 jandes-quote text-lg md:text-xl text-black max-w-3xl mx-auto leading-relaxed">
@@ -35,21 +75,44 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6">
           <picture>
-            {/* Mobile: Use static image for faster loading */}
-            <source media="(max-width: 768px)" srcSet="/hero-fulani.png" />
-            {/* Desktop: Use animated GIF */}
-            <source media="(min-width: 769px)" srcSet="/hero-animated.gif" />
-            {/* Fallback to animated GIF */}
+            <source
+              media="(max-width: 767px)"
+              srcSet="/assets/hero-fulani-700.webp"
+              type="image/webp"
+            />
+            <source
+              srcSet="/assets/hero-fulani.webp"
+              type="image/webp"
+            />
             <img
-              src="/hero-animated.gif"
-              alt="Fulani Hair Gro system packshot"
-              className="w-full h-auto"
-              loading="eager"
-              decoding="async"
-              width={1200}
-              height={1219}
+              src="/assets/hero-fulani.webp"
+              alt="Fulani Hair Gro hero"
+              width={864}
+              height={864}
+              className="w-full h-auto hidden"
+              {...({ fetchpriority: 'high' } as any)}
             />
           </picture>
+          <video
+            ref={videoRef}
+            autoPlay={loadVideo}
+            loop
+            muted
+            playsInline
+            preload="none"
+            className="w-full h-auto"
+            width={864}
+            height={864}
+            poster="/assets/hero-fulani-700.webp"
+            style={{ backgroundImage: 'url(/assets/hero-fulani-700.webp)', backgroundSize: 'cover' }}
+          >
+            {loadVideo && (
+              <>
+                <source src="/assets/hero-animated.webm" type="video/webm" />
+                <source src="/assets/hero-animated.mp4" type="video/mp4" />
+              </>
+            )}
+          </video>
         </div>
 
         <div className="mt-8 text-left">
@@ -76,55 +139,23 @@ export const TopStoryBanner = () => {
           >
             <style>
               {`
-                .scroll-stopper::before {
-                  content: '';
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  right: 0;
-                  bottom: 0;
-                  background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.1), transparent);
-                  animation: sweep 2s linear infinite;
-                  pointer-events: none;
-                }
-                @keyframes sweep {
-                  0% { transform: translateX(-100%); }
-                  100% { transform: translateX(100%); }
-                }
+                /* GPU-accelerated animations only */
                 @keyframes mega-pulse {
-                  0%, 100% {
-                    transform: scale(1);
-                    box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 8px #FF0000, 0 10px 40px rgba(255, 0, 0, 0.5);
-                  }
-                  50% {
-                    transform: scale(1.03);
-                    box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 8px #DAA520, 0 15px 50px rgba(255, 0, 0, 0.6);
-                  }
-                }
-                @keyframes gold-flash {
-                  0%, 100% { opacity: 1; }
-                  50% { opacity: 0.7; }
+                  0%, 100% { transform: scale(1); opacity: 1; }
+                  50% { transform: scale(1.02); opacity: 0.95; }
                 }
                 @keyframes point-bounce {
                   0%, 100% { transform: translateY(0); }
-                  50% { transform: translateY(10px); }
-                }
-                @keyframes shake-subtle {
-                  0%, 100% { transform: translateX(0); }
-                  25% { transform: translateX(-2px); }
-                  75% { transform: translateX(2px); }
-                }
-                @keyframes spin-icon {
-                  0%, 100% { transform: rotate(-10deg); }
-                  50% { transform: rotate(10deg); }
+                  50% { transform: translateY(8px); }
                 }
                 .mega-flash {
-                  background: #FF0000;
+                  background: #D30000;
                   padding: 28px;
                   border-radius: 16px;
                   margin-bottom: 18px;
-                  animation: mega-pulse 0.6s ease-in-out infinite;
-                  box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 8px #FF0000, 0 10px 40px rgba(255, 0, 0, 0.5);
+                  border: 4px solid #FFFFFF;
+                  outline: 4px solid #D30000;
+                  will-change: transform;
                 }
                 .mega-text {
                   color: #FFFFFF;
@@ -134,13 +165,11 @@ export const TopStoryBanner = () => {
                   letter-spacing: 2px;
                   margin: 0;
                   line-height: 1.2;
-                  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
                 }
                 .mega-text .gold {
                   color: #DAA520;
                   display: block;
                   font-size: 40px;
-                  animation: gold-flash 0.5s ease-in-out infinite;
                 }
                 .hands-row {
                   display: flex;
@@ -150,12 +179,8 @@ export const TopStoryBanner = () => {
                 }
                 .point-hand {
                   font-size: 44px;
-                  animation: point-bounce 0.4s ease-in-out infinite;
+                  will-change: transform;
                 }
-                .point-hand:nth-child(2) { animation-delay: 0.1s; }
-                .point-hand:nth-child(3) { animation-delay: 0.2s; }
-                .point-hand:nth-child(4) { animation-delay: 0.3s; }
-                .point-hand:nth-child(5) { animation-delay: 0.4s; }
                 .urgency-strip {
                   display: flex;
                   align-items: center;
@@ -165,12 +190,8 @@ export const TopStoryBanner = () => {
                   padding: 14px 24px;
                   border-radius: 8px;
                   margin-bottom: 16px;
-                  animation: shake-subtle 0.3s ease-in-out infinite;
                 }
-                .urgency-icon {
-                  font-size: 26px;
-                  animation: spin-icon 1s ease-in-out infinite;
-                }
+                .urgency-icon { font-size: 26px; }
                 .urgency-text {
                   color: #FFFFFF;
                   font-size: 15px;
@@ -179,6 +200,16 @@ export const TopStoryBanner = () => {
                   letter-spacing: 1px;
                 }
                 .urgency-text .red { color: #FF2A2A; }
+
+                /* Only animate on desktop for performance */
+                @media (min-width: 769px) {
+                  .mega-flash { animation: mega-pulse 0.8s ease-in-out infinite; }
+                  .point-hand { animation: point-bounce 0.5s ease-in-out infinite; }
+                  .point-hand:nth-child(2) { animation-delay: 0.1s; }
+                  .point-hand:nth-child(3) { animation-delay: 0.2s; }
+                  .point-hand:nth-child(4) { animation-delay: 0.3s; }
+                  .point-hand:nth-child(5) { animation-delay: 0.4s; }
+                }
 
                 @media (max-width: 480px) {
                   .mega-text { font-size: 26px; }
@@ -213,7 +244,13 @@ export const TopStoryBanner = () => {
             </div>
 
             <div id="order-form">
-              <OrderForm />
+              {afterHero ? (
+                <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
+                  <OrderForm />
+                </Suspense>
+              ) : (
+                <div className="min-h-[400px]" />
+              )}
             </div>
           </section>
         </div>
@@ -251,7 +288,7 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6 bg-gray-200 flex items-center justify-center w-full h-auto">
           <img
-            src="/gemini-1knotm.png"
+            src={fulaniDaysImage}
             alt="Fulani Hair Gro results from day one to day ten"
             className="w-full h-auto"
             width={2048}

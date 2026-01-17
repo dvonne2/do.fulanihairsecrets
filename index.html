@@ -24,35 +24,191 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/hero.webp" />
     <meta name="theme-color" content="#DAA520" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Fulani Hair Gro" />
     
-    <!-- Preload critical resources -->
-    <link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />
-    <link rel="preload" as="font" type="font/woff2" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" crossorigin />
+    <!-- ============================================== -->
+    <!-- FACEBOOK PIXEL - MUST BE BEFORE OTHER SCRIPTS -->
+    <!-- ============================================== -->
+    <script>
+      // Lightweight fbq stub on main thread so React can call fbq immediately.
+      // Actual Pixel script is loaded in a Web Worker via Partytown below.
+      (function(f){
+        if (f.fbq) return;
+        var n = function(){
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        n.queue = [];
+        n.version = '2.0';
+        n.loaded = true;
+        f.fbq = n;
+        if (!f._fbq) f._fbq = n;
+      })(window);
+
+      // Ensure dataLayer exists on main thread; calls are forwarded to Partytown.
+      window.dataLayer = window.dataLayer || [];
+
+      // Store fbp and fbc for CAPI matching
+      window.getFbp = function() {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.indexOf('_fbp=') === 0) {
+            return cookie.substring(5);
+          }
+        }
+        return null;
+      };
+
+      window.getFbc = function() {
+        // First check URL for fbclid
+        var urlParams = new URLSearchParams(window.location.search);
+        var fbclid = urlParams.get('fbclid');
+        if (fbclid) {
+          return 'fb.1.' + Date.now() + '.' + fbclid;
+        }
+        // Then check cookie
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.indexOf('_fbc=') === 0) {
+            return cookie.substring(5);
+          }
+        }
+        return null;
+      };
+    </script>
+    <!-- END FACEBOOK PIXEL -->
+
+    <script>
+      // Partytown config: forward tracking calls from main thread to the worker.
+      // This keeps Meta Pixel + GTM off the main thread, reducing TBT.
+      partytown = {
+        forward: ['fbq', 'dataLayer.push']
+      };
+    </script>
+    <!-- @vite-ignore -->
+    <script src="/~partytown/partytown.js" defer></script>
+
+    <script type="text/partytown">
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+
+      // Initialize Pixel - NO automatic PageView (we control this in React)
+      fbq('init', '220381209723501');
+    </script>
+
+    <script type="text/partytown">
+      // Load GTM in the Partytown worker after a delay (keeps main thread free).
+      setTimeout(function() {
+        var gtmId = 'GTM-P7F7447';
+        (function(w,d,s,l,i){
+          w[l]=w[l]||[];
+          w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+          var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+          j.async=true;
+          j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+          f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',gtmId);
+      }, 6000);
+    </script>
+    
+    <!-- Preload critical hero poster image - smaller version for faster LCP -->
+    <link rel="preload" as="image" href="/assets/hero-mobile.webp" fetchpriority="high" type="image/webp" />
+    
+    <!-- Preload critical fonts to reduce CLS -->
+    <link rel="preload" href="/fonts/montserrat-600-normal.woff2" as="font" type="font/woff2" crossorigin />
     
     <!-- DNS prefetch and preconnect for performance -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="dns-prefetch" href="https://connect.facebook.net" />
     <link rel="preconnect" href="https://fulanihairsecrets.com" crossorigin />
     <link rel="dns-prefetch" href="https://fulanihairsecrets.com" />
     <link rel="preconnect" href="https://script.google.com" crossorigin />
     <link rel="dns-prefetch" href="https://script.google.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     
-    <!-- Critical CSS inline -->
+    <!-- Critical CSS inline - Hero section styles for instant LCP -->
     <style>
-      /* Critical above-the-fold styles */
-      body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;line-height:1.6}
-      .loading{display:flex;align-items:center;justify-content:center;height:100vh}
+      /* Reset & base */
+      *,*::before,*::after{box-sizing:border-box}
+      body{margin:0;font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
       #root{min-height:100vh}
-      img{max-width:100%;height:auto}
+      img,video{max-width:100%;height:auto;display:block}
+      /* Font display */
+      @font-face{font-family:'Montserrat';font-display:swap;src:local('Montserrat')}
+      @font-face{font-family:'Cinzel';font-display:swap;src:local('Cinzel')}
+      /* Loading screen */
+      .loading{display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;animation:hideLoading 2s forwards}
+      @keyframes hideLoading{to{opacity:0;visibility:hidden;pointer-events:none}}
+      /* Hero section - critical path */
+      .bg-white{background:#fff}
+      .text-center{text-align:center}
+      .text-left{text-align:left}
+      .mx-auto{margin-left:auto;margin-right:auto}
+      .px-4{padding-left:1rem;padding-right:1rem}
+      .px-6{padding-left:1.5rem;padding-right:1.5rem}
+      .py-8{padding-top:2rem;padding-bottom:2rem}
+      .pt-10{padding-top:2.5rem}
+      .pb-6{padding-bottom:1.5rem}
+      .mt-3{margin-top:.75rem}
+      .mt-6{margin-top:1.5rem}
+      .mt-8{margin-top:2rem}
+      .mt-10{margin-top:2.5rem}
+      .mb-6{margin-bottom:1.5rem}
+      .max-w-3xl{max-width:48rem}
+      .max-w-4xl{max-width:56rem}
+      .max-w-5xl{max-width:64rem}
+      .w-full{width:100%}
+      .h-auto{height:auto}
+      .uppercase{text-transform:uppercase}
+      .leading-snug{line-height:1.375}
+      .leading-relaxed{line-height:1.625}
+      .font-semibold{font-weight:600}
+      .text-base{font-size:1rem}
+      .text-lg{font-size:1.125rem}
+      .text-xl{font-size:1.25rem}
+      .text-3xl{font-size:1.875rem}
+      .text-black{color:#000}
+      .border{border-width:1px;border-style:solid}
+      .border-y-6{border-top-width:6px;border-bottom-width:6px}
+      .border-yellow-600{border-color:#ca8a04}
+      .relative{position:relative}
+      .overflow-hidden{overflow:hidden}
+      /* Jandes typography */
+      .jandes-eyebrow{font-family:'Montserrat',sans-serif;font-size:.875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+      .jandes-headline{font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.02em}
+      .jandes-quote{font-family:'Montserrat',sans-serif;font-style:italic;font-weight:400}
+      /* Video poster visible immediately */
+      video{background-size:cover;background-position:center}
+      /* Responsive */
+      @media(min-width:768px){.md\:pt-12{padding-top:3rem}.md\:pb-8{padding-bottom:2rem}.md\:mt-12{margin-top:3rem}.md\:px-14{padding-left:3.5rem;padding-right:3.5rem}.md\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.md\:text-5xl{font-size:3rem}.md\:text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\:px-9{padding-left:2.25rem;padding-right:2.25rem}}
+      @media(min-width:1024px){.lg\:text-6xl{font-size:3.75rem}}
     </style>
+    <script>
+      // Emergency fallback: remove loading screen after 2 seconds
+      setTimeout(function(){
+        var loading = document.querySelector('.loading');
+        if(loading) loading.remove();
+      }, 2000);
+    </script>
   </head>
 
   <body>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=220381209723501&ev=PageView&noscript=1"
+      />
+    </noscript>
     <div id="root">
       <!-- Loading placeholder -->
       <div class="loading">

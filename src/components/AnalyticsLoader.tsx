@@ -11,24 +11,15 @@ type Props = {
   delayMs?: number;
 };
 
-const GTM_SCRIPT_ID = 'gtm-script';
+// Longer delay on mobile for faster initial paint
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const defaultDelay = isMobile ? 6000 : 3000;
 
-function injectScriptOnce({ id, src }: { id: string; src: string }) {
-  if (document.getElementById(id)) return;
-  const script = document.createElement('script');
-  script.id = id;
-  script.async = true;
-  script.src = src;
-  document.head.appendChild(script);
-}
-
-export function AnalyticsLoader({ delayMs = 3000 }: Props) {
+export function AnalyticsLoader({ delayMs = defaultDelay }: Props) {
   const location = useLocation();
   const hasLoadedRef = useRef(false);
   const lastTrackedPathRef = useRef<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  const gtmId = import.meta.env.VITE_GTM_ID || 'GTM-P7F7447';
 
   const load = () => {
     if (hasLoadedRef.current) return;
@@ -37,18 +28,12 @@ export function AnalyticsLoader({ delayMs = 3000 }: Props) {
     try {
       window.dataLayer = window.dataLayer || [];
 
-      injectScriptOnce({
-        id: GTM_SCRIPT_ID,
-        src: `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`,
-      });
-
       const initialPath = window.location.pathname + window.location.search;
       window.dataLayer.push({ event: 'page_view', page_path: initialPath });
       lastTrackedPathRef.current = initialPath;
       setIsLoaded(true);
     } catch (error) {
       console.error('GTM initialization failed:', {
-        gtmId,
         error: error instanceof Error ? error.message : error
       });
       setIsLoaded(true);

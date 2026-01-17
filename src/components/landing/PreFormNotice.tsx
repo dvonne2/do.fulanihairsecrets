@@ -7,7 +7,7 @@ export const PreFormNotice: React.FC = () => {
         <p className="font-serif text-base md:text-lg text-gold mb-2">
           Accelerate your hair growth. Get Fulani Hair Gro Today.
         </p>
-        <p className="font-sans text-2xl md:text-3xl font-extrabold tracking-widest uppercase text-red-600 mb-3">
+        <p className="font-sans text-2xl md:text-3xl font-extrabold tracking-widest uppercase text-[#D30000] mb-3">
           PLEASE NOTE!!!
         </p>
         <p className="font-sans text-sm md:text-base text-foreground mb-1">

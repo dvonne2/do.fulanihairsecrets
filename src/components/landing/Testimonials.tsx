@@ -66,9 +66,15 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
             {testimonials.map((_, i) => (
               <button 
                 key={i} 
+                type="button"
                 onClick={() => onSetActive(i)} 
-                className={`w-3 h-3 rounded-full transition-all ${activeIndex === i ? 'bg-gold scale-150' : 'bg-gold/30'}`} 
-              />
+                aria-label={`View testimonial ${i + 1}`}
+                className="w-11 h-11 flex items-center justify-center"
+              >
+                <span
+                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === i ? 'bg-gold scale-150' : 'bg-gold/30'}`}
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -96,6 +102,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
             src={fulaniGreenTestimonials}
             alt="Real testimonials for Fulani Hair Gro"
             className="w-full h-auto"
+            decoding="async"
             loading="lazy"
           />
         </div>
