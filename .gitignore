@@ -56,3 +56,12 @@ temp/
 # OS generated files
 Thumbs.db
 Desktop.ini
+
+# Root-level duplicate static files (Vite serves the versions in /public)
+/.htaccess
+/sw.js
+/robots.txt
+/manifest.json
+/favicon.ico
+/placeholder.svg
+/test-loading.html

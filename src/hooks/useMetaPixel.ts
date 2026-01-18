@@ -145,7 +145,9 @@ export function useMetaPixel(): UseMetaPixelReturn {
 
     if (!canFireEvent(SESSION_KEYS.PURCHASE)) return;
 
-    const eventId = generateEventId('pur');
+    const stableOrderId = (formData.orderId || '').trim();
+    const safeOrderId = stableOrderId.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64);
+    const eventId = safeOrderId ? `pur_${safeOrderId}` : generateEventId('pur');
 
     const packageName = formData.packageName || 'Fulani Hair Gro';
     const packageAmount = formData.packagePrice ?? getPackagePrice(packageName);

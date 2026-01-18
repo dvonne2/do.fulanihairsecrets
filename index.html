@@ -85,7 +85,14 @@
       // Partytown config: forward tracking calls from main thread to the worker.
       // This keeps Meta Pixel + GTM off the main thread, reducing TBT.
       partytown = {
-        forward: ['fbq', 'dataLayer.push']
+        forward: ['fbq', 'dataLayer.push'],
+        resolveUrl: function(url) {
+          // Meta Pixel script is blocked by Worker CORS. Proxy it through same-origin.
+          if (url && url.hostname === 'connect.facebook.net' && url.pathname === '/en_US/fbevents.js') {
+            return new URL('/proxy/facebook.php', window.location.origin);
+          }
+          return url;
+        }
       };
     </script>
     <!-- @vite-ignore -->

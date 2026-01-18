@@ -178,10 +178,10 @@ function OrderFormEmbed() {
     return packages.find(p => p.id === form.pkg) || null;
   }, [form.pkg]);
 
-  const handlePhoneBlurForMeta = useCallback(() => {
+  const handlePhoneBlurForMeta = useCallback((e?: React.FocusEvent<HTMLInputElement>) => {
     if (step !== 1) return;
 
-    const phoneValue = form.phone;
+    const phoneValue = e?.currentTarget?.value ?? form.phone;
     void phoneValue;
     let pvFired: string | null = null;
     let atcFired: string | null = null;
@@ -194,7 +194,7 @@ function OrderFormEmbed() {
     void pvFired;
     void atcFired;
 
-    const phoneDigits = form.phone.replace(/\D/g, '');
+    const phoneDigits = phoneValue.replace(/\D/g, '');
     const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0');
     if (!phoneOk) return;
 

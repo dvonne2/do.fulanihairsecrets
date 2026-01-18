@@ -14,12 +14,17 @@ const copyCriticalFiles = () => ({
       'sw.js',
       '.htaccess',
       'favicon.ico',
-      'robots.txt'
+      'robots.txt',
+      'proxy/facebook.php'
     ];
     
     criticalFiles.forEach(file => {
       const src = path.resolve(__dirname, 'public', file);
       const dest = path.resolve(__dirname, 'dist', file);
+      const destDir = path.dirname(dest);
+      if (!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
+      }
       if (fs.existsSync(src)) {
         fs.copyFileSync(src, dest);
       }
