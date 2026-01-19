@@ -144,6 +144,26 @@ const S: { [key: string]: CSSProperties } = {
   sucIcon: { width: 60, height: 60, background: '#36CA37', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, color: '#fff', margin: '0 auto 20px' },
 };
 
+const postOrderToFulani = (bodyString: string) => {
+  try {
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      const blob = new Blob([bodyString], { type: 'application/x-www-form-urlencoded;charset=UTF-8' });
+      const ok = navigator.sendBeacon(FULANI_API_URL, blob);
+      if (ok) return;
+    }
+  } catch {
+    // ignore
+  }
+
+  fetch(FULANI_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    keepalive: true,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: bodyString
+  }).catch(() => void 0);
+};
+
 function OrderFormEmbed() {
   const { trackAddToCart, trackInitiateCheckout, isEventFired } = useMetaPixel();
   const [step, setStep] = useState(1);
@@ -433,12 +453,7 @@ function OrderFormEmbed() {
         Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
       );
 
-      fetch(FULANI_API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-        body
-      }).catch(e => console.error('Order submission request failed (fire-and-forget):', e));
+      postOrderToFulani(body.toString());
 
       setTimeout(() => {
         window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
