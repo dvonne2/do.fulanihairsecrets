@@ -86,10 +86,11 @@
       // This keeps Meta Pixel + GTM off the main thread, reducing TBT.
       partytown = {
         forward: ['fbq', 'dataLayer.push'],
-        resolveUrl: function(url) {
+        resolveUrl: function(url, location) {
           // Meta Pixel script is blocked by Worker CORS. Proxy it through same-origin.
           if (url && url.hostname === 'connect.facebook.net' && url.pathname === '/en_US/fbevents.js') {
-            return new URL('/proxy/facebook.php', window.location.origin);
+            var origin = (location && location.origin) || (typeof globalThis !== 'undefined' && globalThis.location && globalThis.location.origin);
+            return origin ? new URL('/proxy/facebook.php', origin) : url;
           }
           return url;
         }
