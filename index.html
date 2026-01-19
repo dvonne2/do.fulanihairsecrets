@@ -90,9 +90,12 @@
         forward: ['fbq', 'dataLayer.push'],
         resolveUrl: function(url, location) {
           // Meta Pixel script is blocked by Worker CORS. Proxy it through same-origin.
-          if (url && url.hostname === 'connect.facebook.net' && url.pathname === '/en_US/fbevents.js') {
+          if (url && url.hostname === 'connect.facebook.net') {
             var origin = (location && location.origin) || (typeof globalThis !== 'undefined' && globalThis.location && globalThis.location.origin);
-            return origin ? new URL('/proxy/facebook.php', origin) : url;
+            if (!origin) return url;
+            var proxyUrl = new URL('/proxy/facebook.php', origin);
+            proxyUrl.searchParams.set('url', url.href);
+            return proxyUrl;
           }
           return url;
         }
