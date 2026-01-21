@@ -121,10 +121,11 @@ export function getFbc(): string | null {
   return null;
 }
 
-export function generateEventId(prefix: string): string {
+export function generateEventId(prefix?: string): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).slice(2, 11);
-  return `${prefix}_${timestamp}_${random}`;
+  void prefix;
+  return `${timestamp}_${random}`;
 }
 
 export function hasEventFired(key: string): boolean {

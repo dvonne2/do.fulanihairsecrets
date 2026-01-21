@@ -42,7 +42,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     if (hasEventFired(SESSION_KEYS.ADD_TO_CART)) return;
     if (!canFireEvent(SESSION_KEYS.ADD_TO_CART)) return;
 
-    const eventId = generateEventId('atc');
+    const eventId = generateEventId();
 
     const packageName = formData.packageName || 'Fulani Hair Gro';
     const packagePrice = formData.packagePrice ?? getPackagePrice(packageName);
@@ -93,7 +93,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     if (hasEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) return;
     if (!canFireEvent(SESSION_KEYS.INITIATE_CHECKOUT)) return;
 
-    const eventId = generateEventId('ic');
+    const eventId = generateEventId();
 
     const packageName = formData.packageName || 'Fulani Hair Gro';
     const value = formData.packagePrice ?? getPackagePrice(packageName);
@@ -147,7 +147,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
 
     const stableOrderId = (formData.orderId || '').trim();
     const safeOrderId = stableOrderId.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64);
-    const eventId = safeOrderId ? `pur_${safeOrderId}` : generateEventId('pur');
+    const eventId = safeOrderId || generateEventId();
 
     const packageName = formData.packageName || 'Fulani Hair Gro';
     const packageAmount = formData.packagePrice ?? getPackagePrice(packageName);
