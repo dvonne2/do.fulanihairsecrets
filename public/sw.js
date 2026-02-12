@@ -6,18 +6,32 @@ const DYNAMIC_CACHE = 'dynamic-v1';
 // Assets to cache on install
 const STATIC_ASSETS = [
   '/',
-  '/hero.webp',
-  '/hero-mobile.webp',
+  '/assets/hero.webp',
+  '/assets/hero-mobile.webp',
   '/manifest.json',
   // Add other critical assets
 ];
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
+  // Skip waiting to activate immediately
+  self.skipWaiting();
+  
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
-        return cache.addAll(STATIC_ASSETS);
+        // Cache assets individually to prevent one failure from breaking all
+        return Promise.allSettled(
+          STATIC_ASSETS.map(url => 
+            cache.add(url).catch(err => {
+              console.warn('[SW] Failed to cache:', url, err);
+              return null; // Continue despite individual failures
+            })
+          )
+        );
+      })
+      .catch(err => {
+        console.warn('[SW] Cache open failed:', err);
       })
   );
 });

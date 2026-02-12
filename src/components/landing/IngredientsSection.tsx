@@ -107,7 +107,7 @@ export const IngredientsSection: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-10 md:mb-14">
           <p className="font-cinzel text-sm md:text-base tracking-[0.4em] uppercase mb-3">
-            <span className="inline-block bg-[#DAA520] text-black px-4 md:px-6 py-1">
+            <span className="inline-block bg-[#B80F66] text-white px-4 md:px-6 py-1">
               INGREDIENTS
             </span>
           </p>

@@ -53,7 +53,7 @@ export const Footer = () => {
           </div>
         </div>
         
-        <p className="font-sans text-xs text-gold/60 tracking-widest mb-4">Est. 1625 · Maiduguri, Nigeria</p>
+        <p className="font-sans text-xs text-gold tracking-widest mb-4">Est. 1625 · Maiduguri, Nigeria</p>
         <p className="font-serif text-foreground/60 italic mb-4">400 years of African beauty wisdom.</p>
         <p className="font-serif text-gold italic mb-6">In honour of Hajia Aissata Cissé 👑❤️</p>
         

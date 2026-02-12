@@ -2,6 +2,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
+// Import COD purchase confirmation utility
+import "./utils/confirmPurchase";
+
 // Remove loading placeholder immediately and multiple times
 const removeLoadingScreen = () => {
   const loadingElement = document.querySelector('.loading');

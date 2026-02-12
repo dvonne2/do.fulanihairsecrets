@@ -15,8 +15,7 @@ import amina from '@/assets/testimonials/amina.webp';
 import blessing from '@/assets/testimonials/blessing.webp';
 
 const ThankYou = () => {
-  const { trackPurchase } = useMetaPixel();
-  const hasTrackedPurchase = useRef(false);
+  const { trackPurchase, trackHighValuePurchase, trackFormStart, trackInitiateCheckout, trackCompleteRegistration, isEventFired } = useMetaPixel();
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -43,20 +42,25 @@ const ThankYou = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // Confetti explosion on load
-    const duration = 3000;
-    const end = Date.now() + duration;
+    // Meta Browser Optimization: Reduce confetti for slower devices
+    const isMetaBrowser = /FB_IAB|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+    const particleCount = isMetaBrowser ? 1 : 3;
+    
+    // Confetti explosion on load - delayed for Meta browser
+    const startDelay = isMetaBrowser ? 1000 : 0;
+    const duration = isMetaBrowser ? 1500 : 3000;
+    const end = Date.now() + startDelay + duration;
 
     const frame = () => {
       confetti({
-        particleCount: 3,
+        particleCount,
         angle: 60,
         spread: 55,
         origin: { x: 0 },
         colors: ['#DAA520', '#FFD700', '#ffffff']
       });
       confetti({
-        particleCount: 3,
+        particleCount,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
@@ -67,7 +71,12 @@ const ThankYou = () => {
         requestAnimationFrame(frame);
       }
     };
-    frame();
+    
+    if (startDelay > 0) {
+      setTimeout(frame, startDelay);
+    } else {
+      frame();
+    }
 
     // Animate savings counter
     const targetSavings = 15493250;
@@ -83,9 +92,77 @@ const ThankYou = () => {
     setTimeout(animateSavings, 1000);
   }, []);
 
-  // Meta Pixel: Purchase on mount (with order data)
+  // 🔒 BULLETPROOF Purchase tracking on mount with order data
   useEffect(() => {
-    if (hasTrackedPurchase.current) return;
+    // 🧪 TEST MODE: Fire events for debugging even without order data
+    const isTestMode = window.location.search.includes('test=1') || !orderNumber || orderNumber === 'UNKNOWN';
+    
+    if (isTestMode) {
+      console.log('[ThankYou] 🧪 TEST MODE: Firing events for debugging');
+      
+      // Test data with elite Nigerian area
+      const testData = {
+        orderId: 'TEST_ORDER_123',
+        fullName: 'Test Customer',
+        email: 'test@example.com',
+        phone: '08012345678',
+        state: 'Lagos',
+        lga: 'Eti-Osa',
+        address: 'Banana Island, Lagos', // 🏝️ Ultra-premium area
+        packageName: 'SELF LOVE PLUS',
+        packagePrice: 66750,
+        deliveryFee: 5000,
+        totalAmount: 71750,
+        paymentMethod: 'Pay Before Delivery',
+        heardAboutUs: 'Facebook',
+        deliveryDate: new Date().toISOString().split('T')[0],
+        deliveryTimeWindow: 'Morning'
+      };
+      
+      console.log('[ThankYou] 🧪 TEST DATA:', testData);
+      
+      // 🧪 Fire test FormStart event (customer starts filling form)
+      trackFormStart({
+        fullName: testData.fullName,
+        email: testData.email,
+        phone: testData.phone,
+        state: testData.state,
+        lga: testData.lga,
+        address: testData.address,
+        zipCode: '',
+      });
+      
+      // 🧪 Fire test InitiateCheckout event (customer proceeds to payment)
+      trackInitiateCheckout({
+        fullName: testData.fullName,
+        email: testData.email,
+        phone: testData.phone,
+        state: testData.state,
+        lga: testData.lga,
+        address: testData.address,
+        packageName: testData.packageName,
+        packagePrice: testData.packagePrice,
+        deliveryFee: testData.deliveryFee,
+        totalAmount: testData.totalAmount,
+        zipCode: '',
+      });
+      
+      // Fire test Purchase event
+      trackPurchase({
+        ...testData,
+        zipCode: '',
+      });
+      
+      // Fire test High Value Purchase event
+      trackHighValuePurchase({
+        ...testData,
+        zipCode: '',
+      });
+      
+      return; // Exit test mode
+    }
+    
+    // Normal mode: Only proceed if we have a real order number
     if (!orderNumber || orderNumber === 'UNKNOWN') return;
 
     type StoredOrder = {
@@ -100,6 +177,10 @@ const ThankYou = () => {
       state?: string;
       lga?: string;
       address?: string;
+      paymentMethod?: string;
+      heardAboutUs?: string;
+      deliveryDate?: string;
+      deliveryTimeWindow?: string;
     };
 
     let stored: StoredOrder | null = null;
@@ -115,22 +196,74 @@ const ThankYou = () => {
       orderId: orderNumber,
     };
 
+    console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
+    
+    // Fire bulletproof Purchase event with order data
     trackPurchase({
-      orderId: merged.orderId,
-      fullName: merged.fullName,
-      email: merged.email,
-      phone: merged.phone,
-      packageName: merged.packageName,
-      packagePrice: merged.packageAmount,
-      deliveryFee: merged.deliveryFee,
-      totalAmount: merged.totalAmount,
-      state: merged.state,
-      lga: merged.lga,
-      address: merged.address,
+      orderId: merged.orderId || 'UNKNOWN',
+      fullName: merged.fullName || '',
+      email: merged.email || '',
+      phone: merged.phone || '',
+      state: merged.state || '',
+      lga: merged.lga || '',
+      address: merged.address || '', // 🏝️ Area detection: "Lake Ewe", "Banana Island", "Yanokwaja"
+      packageName: merged.packageName || '',
+      packagePrice: merged.packageAmount || 0,
+      deliveryFee: merged.deliveryFee || 0,
+      totalAmount: merged.totalAmount || 0,
+      paymentMethod: merged.paymentMethod,
+      heardAboutUs: merged.heardAboutUs,
+      deliveryDate: merged.deliveryDate,
+      deliveryTimeWindow: merged.deliveryTimeWindow
     });
-
-    hasTrackedPurchase.current = true;
-  }, [orderNumber, trackPurchase]);
+    
+    // 🏆 Fire High Value Purchase event for ultra-premium targeting
+    trackHighValuePurchase({
+      orderId: merged.orderId || 'UNKNOWN',
+      fullName: merged.fullName || '',
+      email: merged.email || '',
+      phone: merged.phone || '',
+      packageName: merged.packageName || 'Fulani Hair Gro',
+      totalAmount: merged.totalAmount || 0,
+      state: merged.state || '',
+      lga: merged.lga || '',
+      address: merged.address || '',
+      landmark: merged.landmark || '',
+      deliveryFee: merged.deliveryFee || 0,
+      deliveryDate: merged.deliveryDate || '',
+      deliveryTimeWindow: merged.deliveryTimeWindow
+    });
+    
+    // 🎯 Fire CompleteRegistration event alongside Purchase
+    trackCompleteRegistration({
+      orderId: merged.orderId || 'UNKNOWN',
+      fullName: merged.fullName || '',
+      email: merged.email || '',
+      phone: merged.phone || '',
+      packageName: merged.packageName || 'Fulani Hair Gro',
+      totalAmount: merged.totalAmount || 0,
+      state: merged.state || '',
+      lga: merged.lga || '',
+      address: merged.address || '',
+      landmark: merged.landmark || '',
+      deliveryFee: merged.deliveryFee || 0,
+      deliveryDate: merged.deliveryDate || '',
+      deliveryTimeWindow: merged.deliveryTimeWindow
+    });
+    
+    // 🎯 Value-based custom events are now fired automatically within trackPurchase
+    // Events like pbd215000, pbd66750, pod32750, etc. are generated dynamically
+    
+    // 🔧 PRODUCTION HARDENING: Clear sessionStorage after successful firing
+    // Prevents edge case where second order in same tab accidentally reads old data
+    try {
+      window.sessionStorage.removeItem('fhg_order_data');
+      console.log('[ThankYou] 🧹 sessionStorage cleared after successful event firing');
+    } catch (error) {
+      console.error('[ThankYou] Failed to clear sessionStorage:', error);
+      // Non-critical error, continue normally
+    }
+  }, [orderNumber, trackPurchase, trackHighValuePurchase]);
 
   useEffect(() => {
     try {
@@ -177,8 +310,25 @@ const ThankYou = () => {
     { q: "When will I see results?", a: "Most women notice reduced shedding Week 1, baby hairs Week 3, visible transformation Month 2-3. Check the timeline above!" }
   ];
 
+  const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+      {/* Test Mode Banner */}
+      {isTestMode && (
+        <div className="bg-yellow-500 text-black p-6 text-center">
+          <h2 className="text-2xl font-bold mb-2">CAPI TEST MODE ACTIVE</h2>
+          <p className="text-sm mb-3">Events are being sent to Meta. Check your browser console (F12) for details.</p>
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">FormStart</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">AddToCart</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">InitiateCheckout</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">Purchase</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">HighValuePurchase</span>
+          </div>
+          <p className="text-xs mt-3 opacity-75">Go to Meta Events Manager → Test Events tab to verify server events</p>
+        </div>
+      )}
       {/* Floating gold particles background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {[...Array(20)].map((_, i) => (
@@ -265,19 +415,19 @@ const ThankYou = () => {
           <div className="space-y-4 mb-8">
             <div className="flex justify-between items-center">
               <span className="text-gray-400 line-through">6 months of salon treatments</span>
-              <span className="text-gray-500 line-through">₦360,000</span>
+              <span className="text-gray-700 line-through">₦360,000</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400 line-through">Products that don't work</span>
-              <span className="text-gray-500 line-through">₦200,000</span>
+              <span className="text-gray-700 line-through">₦200,000</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400 line-through">Hair transplant (Turkey)</span>
-              <span className="text-gray-500 line-through">₦15,000,000</span>
+              <span className="text-gray-700 line-through">₦15,000,000</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400 line-through">Emotional stress</span>
-              <span className="text-gray-500 line-through">PRICELESS</span>
+              <span className="text-gray-700 line-through">PRICELESS</span>
             </div>
           </div>
 
@@ -377,7 +527,7 @@ const ThankYou = () => {
                 <div key={i} className="flex items-center gap-4">
                   <span className="text-2xl">{bonus.icon}</span>
                   <span className="flex-1 text-gray-300">{bonus.name}</span>
-                  <span className="text-gray-500">{bonus.value}</span>
+                  <span className="text-gray-700">{bonus.value}</span>
                   <Check className="w-5 h-5 text-green-500" />
                 </div>
               ))}

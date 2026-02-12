@@ -84,7 +84,7 @@ if (is_string($contentType) && $contentType !== '') {
 
 header('Content-Type: ' . $finalType);
 header('Access-Control-Allow-Origin: *');
-header('Cache-Control: public, max-age=600, stale-while-revalidate=604800');
+header('Cache-Control: public, max-age=7200, stale-while-revalidate=604800');
 header('X-Content-Type-Options: nosniff');
 
 echo $body;

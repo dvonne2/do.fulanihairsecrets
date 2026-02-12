@@ -117,6 +117,9 @@ export default {
         float: "float 4s ease-in-out infinite",
         "pulse-red": "pulse-red 2s infinite",
       },
+      transitionDelay: {
+        '8000': '8000ms',
+      },
     },
   },
   plugins: [tailwindcssAnimate],

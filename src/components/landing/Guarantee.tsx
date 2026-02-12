@@ -28,8 +28,8 @@ export const Guarantee = () => {
               { icon: "✓", title: "No Questions Asked", desc: "Just send us a message" },
               { icon: "✓", title: "Get 2X Refund", desc: "We pay for your disappointment" },
             ].map((item, i) => (
-              <div key={i} className="p-4 rounded-xl bg-success/20 border border-success/50">
-                <span className="text-2xl text-success mb-2 block">{item.icon}</span>
+              <div key={i} className="p-4 rounded-xl bg-[#FF1493]/20 border border-[#FF1493]/50">
+                <span className="text-2xl text-[#FF1493] mb-2 block">{item.icon}</span>
                 <p className="font-cinzel text-base text-foreground mb-1">{item.title}</p>
                 <p className="font-sans text-xs text-muted-foreground">{item.desc}</p>
               </div>
@@ -39,7 +39,7 @@ export const Guarantee = () => {
           <div className="flex justify-center gap-8 mb-6">
             <div className="text-center">
               <p className="font-sans text-xs text-muted-foreground mb-1">Your risk:</p>
-              <p className="font-cinzel text-2xl text-success">₦0</p>
+              <p className="font-cinzel text-2xl text-[#FF1493]">₦0</p>
             </div>
             <div className="text-center">
               <p className="font-sans text-xs text-muted-foreground mb-1">Our risk:</p>

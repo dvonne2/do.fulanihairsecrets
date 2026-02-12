@@ -2,14 +2,20 @@ import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
 
+const BASE_PATH = import.meta.env.BASE_URL || '/';
+
 // Lazy load heavy images - they're below the fold
-const fulaniBenefitsImage = '/assets/Gemini_Generated_Image_gj65n6gj65n6gj65.webp';
-const fulaniDaysImage = '/assets/Gemini_Generated_Image_1knotm1knotm1kno.webp';
-const fulaniExpertImage = '/assets/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp';
-const hajiaMaryamTestimonial = '/assets/Hajia Maryam Testimonial.webp';
-const hajiaMaryam2 = '/assets/Hajia-Maryam-2.webp';
-const mamaTitiTestimonial1 = '/assets/Mama Titi Testimonial1.webp';
-const mamaTiti2 = '/assets/Mama Titi 2.webp';
+const fulaniBenefitsImage = `${BASE_PATH}assets/Gemini_Generated_Image_gj65n6gj65n6gj65-700.webp`;
+const fulaniDaysImage = `${BASE_PATH}assets/Gemini_Generated_Image_1knotm1knotm1kno-700.webp`;
+const fulaniExpertImage = `${BASE_PATH}assets/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp`;
+const hajiaMaryamTestimonial = `${BASE_PATH}assets/Hajia Maryam Testimonial.webp`;
+const hajiaMaryam2 = `${BASE_PATH}assets/Hajia-Maryam-2.webp`;
+const mamaTitiTestimonial1 = `${BASE_PATH}assets/Mama Titi Testimonial1.webp`;
+const mamaTiti2 = `${BASE_PATH}assets/Mama Titi 2.webp`;
+const heroFulani700 = `${BASE_PATH}assets/hero-fulani-700.webp`;
+const heroFulani = `${BASE_PATH}assets/hero-fulani.webp`;
+const heroAnimatedWebm = `${BASE_PATH}assets/hero-animated.webm`;
+const heroAnimatedMp4 = `${BASE_PATH}assets/hero-animated.mp4`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
@@ -64,7 +70,7 @@ export const TopStoryBanner = () => {
           "Within 14 days of using Fulani Hair Gro, I began noticing tiny stubs on my edges." — Mrs. Ololade, Ikoyi
         </p>
         <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
-          <h2 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#000000] uppercase">
+          <h2 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#B80F66] uppercase">
             Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
           </h2>
         </div>
@@ -77,15 +83,15 @@ export const TopStoryBanner = () => {
           <picture>
             <source
               media="(max-width: 767px)"
-              srcSet="/assets/hero-fulani-700.webp"
+              srcSet={heroFulani700}
               type="image/webp"
             />
             <source
-              srcSet="/assets/hero-fulani.webp"
+              srcSet={heroFulani}
               type="image/webp"
             />
             <img
-              src="/assets/hero-fulani.webp"
+              src={heroFulani}
               alt="Fulani Hair Gro hero"
               width={864}
               height={864}
@@ -103,13 +109,13 @@ export const TopStoryBanner = () => {
             className="w-full h-auto"
             width={864}
             height={864}
-            poster="/assets/hero-fulani-700.webp"
-            style={{ backgroundImage: 'url(/assets/hero-fulani-700.webp)', backgroundSize: 'cover' }}
+            poster={heroFulani700}
+            style={{ backgroundImage: `url(${heroFulani700})`, backgroundSize: 'cover' }}
           >
             {loadVideo && (
               <>
-                <source src="/assets/hero-animated.webm" type="video/webm" />
-                <source src="/assets/hero-animated.mp4" type="video/mp4" />
+                <source src={heroAnimatedWebm} type="video/webm" />
+                <source src={heroAnimatedMp4} type="video/mp4" />
               </>
             )}
           </video>
@@ -186,20 +192,38 @@ export const TopStoryBanner = () => {
                   align-items: center;
                   justify-content: center;
                   gap: 10px;
-                  background: #1a1a1a;
+                  background: #B80F66;
                   padding: 14px 24px;
                   border-radius: 8px;
                   margin-bottom: 16px;
                 }
-                .urgency-icon { font-size: 26px; }
+                .urgency-strip-3 {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr 1fr;
+                  gap: 8px;
+                  margin-bottom: 16px;
+                }
+                .urgency-section {
+                  background: #B80F66;
+                  padding: 12px 8px;
+                  border-radius: 8px;
+                  text-align: center;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 80px;
+                }
+                .urgency-icon { font-size: 20px; margin-bottom: 4px; }
                 .urgency-text {
                   color: #FFFFFF;
-                  font-size: 15px;
+                  font-size: 12px;
                   font-weight: 900;
                   text-transform: uppercase;
-                  letter-spacing: 1px;
+                  letter-spacing: 0.5px;
+                  line-height: 1.2;
                 }
-                .urgency-text .red { color: #FF2A2A; }
+                .urgency-text .red { color: #E6E6FA; }
 
                 /* Only animate on desktop for performance */
                 @media (min-width: 769px) {
@@ -235,11 +259,28 @@ export const TopStoryBanner = () => {
                 <span className="point-hand">👇</span>
               </div>
 
-              <div className="urgency-strip">
-                <span className="urgency-icon">⚠️</span>
-                <span className="urgency-text">
-                  <span className="red">Limited Stock</span> — Order Before Sold Out
-                </span>
+              <div className="urgency-strip-3">
+                <div className="urgency-section">
+                  <span className="urgency-icon">🚚</span>
+                  <span className="urgency-text">
+                    <span className="red font-bold">FREE SHIPPING</span><br/>
+                    PRE-PAY ONLY
+                  </span>
+                </div>
+                <div className="urgency-section">
+                  <span className="urgency-icon">🌙</span>
+                  <span className="urgency-text">
+                    <span className="red font-bold">FREE BONNET</span><br/>
+                    PRE-PAY ONLY
+                  </span>
+                </div>
+                <div className="urgency-section">
+                  <span className="urgency-icon">🎁</span>
+                  <span className="urgency-text">
+                    <span className="red font-bold">FREE BRUSH</span><br/>
+                    PREMIUM PACKAGES
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -260,13 +301,14 @@ export const TopStoryBanner = () => {
             src={fulaniBenefitsImage}
             alt="Fulani Hair Gro benefits and growth potential"
             className="w-full h-auto"
-            width={2048}
-            height={2048}
+            width={700}
+            height={700}
             loading="lazy"
+            decoding="async"
           />
         </div>
 
-        <section className="mt-10 bg-[#DAA520] text-center text-white px-4 py-10 fhg-helvetica">
+        <section className="mt-10 bg-[#B80F66] text-center text-white px-4 py-10 fhg-helvetica">
           <div className="max-w-4xl mx-auto space-y-6">
             <p className="font-semibold text-3xl md:text-4xl leading-snug">
               No more scarves, wigs, or mascara just to hide your hairline
@@ -291,8 +333,10 @@ export const TopStoryBanner = () => {
             src={fulaniDaysImage}
             alt="Fulani Hair Gro results from day one to day ten"
             className="w-full h-auto"
-            width={2048}
-            height={2048}
+            width={700}
+            height={700}
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
@@ -399,7 +443,10 @@ export const TopStoryBanner = () => {
                   src={hajiaMaryam2}
                   alt="Second WhatsApp testimonial from Hajia Maryam showing product and regrowth update"
                   className="w-full h-auto object-contain"
+                  width={391}
+                  height={710}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
@@ -407,7 +454,10 @@ export const TopStoryBanner = () => {
                   src={mamaTitiTestimonial1}
                   alt="WhatsApp testimonial from Mama Titi about her hair transformation"
                   className="w-full h-auto object-contain"
+                  width={391}
+                  height={709}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="luxury-card rounded-xl overflow-hidden p-3 bg-background/80 border border-gold/30">
@@ -415,7 +465,10 @@ export const TopStoryBanner = () => {
                   src={mamaTiti2}
                   alt="Second WhatsApp testimonial from Mama Titi showing continued results"
                   className="w-full h-auto object-contain"
+                  width={391}
+                  height={709}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

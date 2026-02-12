@@ -90,7 +90,7 @@ export const LimitedStockWarning = ({ stockCount }: LimitedStockWarningProps) =>
 
         {/* Exclusive offer banner */}
         <div className="max-w-3xl mx-auto mb-10">
-          <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-gold/70 border border-gold/60 rounded-2xl p-5 md:p-6 text-center shadow-[0_18px_40px_rgba(0,0,0,0.6)]">
+          <div className="bg-gradient-to-r from-[#FF1493] via-[#FF69B4] to-gold/70 border border-gold/60 rounded-2xl p-5 md:p-6 text-center shadow-[0_18px_40px_rgba(0,0,0,0.6)]">
             <p className="font-sans text-lg md:text-xl tracking-[0.3em] uppercase text-gold mb-3">
               Exclusive Offer
             </p>

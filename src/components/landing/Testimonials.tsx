@@ -60,7 +60,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           </p>
           <p className="font-cinzel text-lg text-gold">{testimonials[activeIndex].name}</p>
           <p className="font-sans text-xs text-white">{testimonials[activeIndex].location}</p>
-          <p className="font-sans text-xs text-success mt-2">✓ Verified Purchase</p>
+          <p className="font-sans text-xs text-[#FF1493] mt-2">✓ Verified Purchase</p>
           
           <div className="flex justify-center gap-3 mt-6">
             {testimonials.map((_, i) => (
@@ -92,7 +92,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
               <div className="flex gap-1 mb-3">{Array(5).fill(0).map((_, j) => <span key={j} className="text-gold">★</span>)}</div>
               <p className="font-sans text-sm text-white mb-4">"{review.text}"</p>
               <div className="ornate-divider mb-3"></div>
-              <span className="text-xs text-success">✓ Verified Purchase</span>
+              <span className="text-xs text-[#FF1493]">✓ Verified Purchase</span>
             </div>
           ))}
         </div>

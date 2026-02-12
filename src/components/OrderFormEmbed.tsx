@@ -1,13 +1,32 @@
-import { useState, useEffect, useCallback, useMemo, CSSProperties, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import { useMetaPixel } from '@/hooks/useMetaPixel';
-import { SESSION_KEYS, getPackagePrice } from '@/utils/pixelUtils';
+import { SESSION_KEYS, getPackagePrice, getFbp, getFbc } from '@/utils/pixelUtils';
+import { getStoredFBC } from '@/utils/oneDayAttribution';
 
-const FULANI_API_URL = 'https://script.google.com/macros/s/AKfycbx1dHWosMwJcMNNWQfNEyLZNMI3bbBW9wtFD58l_eP8Uo7A5p755RVBJsCIwAm2syEB/exec';
-const FULANI_SECRET = 'fhg_orders_2024_secret';
+// New webhook URL from user requirements
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec";
+const WEBHOOK_SECRET = "fhg_orders_2024_secret";
+
+// Send webhook with no-cors for Google Apps Script compatibility
+async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
+  try {
+    // CRITICAL: no-cors is mandatory for Google Apps Script
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      mode: "no-cors" 
+    });
+    return true;
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return false;
+  }
+}
 
 const submitToFulani = async (formData) => {
   const payload = {
-    secret: FULANI_SECRET,
+    secret: WEBHOOK_SECRET,
     customerFullName: formData.name || formData.customerName || formData.fullName,
     phoneNumber: formData.phone || formData.phoneNumber || formData.tel,
     alternativePhone: formData.whatsapp || formData.altPhone || formData.phone,
@@ -29,7 +48,7 @@ const submitToFulani = async (formData) => {
   );
 
   try {
-    await fetch(FULANI_API_URL, {
+    await fetch(WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
@@ -87,11 +106,11 @@ const lgasByState: { [key: string]: string[] } = {
 };
 
 const packages = [
-  { id: 'PKG-001', name: 'SELF LOVE PLUS', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: '1 Month Supply', freeItems: '', isPopular: false },
-  { id: 'PKG-002', name: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade', supply: '3 Month Supply', freeItems: '', isPopular: false },
-  { id: 'PKG-003', name: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '3 Month Supply', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade', isPopular: false },
-  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '3 Month Supply', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade + 1 Conditioner', isPopular: true },
-  { id: 'PKG-005', name: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ 🎁 FREE: 4 Shampoos + 4 Pomades + 4 Conditioners', isPopular: false },
+  { id: 'PKG-001', name: 'THE TRIAL KIT (Self Love Plus)', webhookName: 'SELF LOVE PLUS', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
+  { id: 'PKG-002', name: 'SELF LOVE RETURN', webhookName: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade 🧴', supply: '3-Month Maintenance: Best for returning fans to keep growth consistent. Not for first-timers—you need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
+  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade + 🎁 FREE: 1 Shampoo + 1 Pomade', supply: '🧴 3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '', isPopular: false },
+  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner + 🎁 FREE: 1 Shampoo + 1 Pomade + 1 Conditioner', supply: '🧴 3-Month Recovery System: The complete professional routine. Essential for first-timers to purify, nourish, and seal for a full biological growth cycle.', freeItems: '', isPopular: true },
+  { id: 'PKG-005', name: 'FAMILY SAVES', webhookName: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ 🎁 FREE: 4 Shampoos + 4 Pomades + 4 Conditioners', isPopular: false },
 ];
 
 // Generate unique Order ID - YYMMDDHHmm format
@@ -99,16 +118,32 @@ const generateOrderId = (): string => {
   const now = new Date();
   const yy = String(now.getFullYear()).slice(-2);  // 26
   const mm = String(now.getMonth() + 1).padStart(2, '0');  // 01
-  const dd = String(now.getDate()).padStart(2, '0');  // 13
-  const hh = String(now.getHours()).padStart(2, '0');  // 05
-  const min = String(now.getMinutes()).padStart(2, '0');  // 56
-  return yy + mm + dd + hh + min;  // 2601130556
+  const dd = String(now.getDate()).padStart(2, '0');     // 09
+  const hh = String(now.getHours()).padStart(2, '0');    // 19
+  const min = String(now.getMinutes()).padStart(2, '0'); // 36
+  return `${yy}${mm}${dd}${hh}${min}`; // 2602091936
+};
+
+// Get orderId from URL or generate new one
+const getOrderIdFromURL = (): string => {
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const existingOrderId = urlParams.get('orderId');
+    if (existingOrderId && existingOrderId.trim().length > 0) {
+      console.log('🔄 Recovery link detected - using existing orderId:', existingOrderId);
+      return existingOrderId.trim();
+    }
+  }
+  return generateOrderId();
 };
 
 // All styles as objects
 const S: { [key: string]: CSSProperties } = {
   container: { maxWidth: 500, margin: '0 auto', padding: '0 16px', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif' },
   box: { background: '#fff', border: '2px solid #DAA520', borderRadius: 16, padding: '24px 20px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)' },
+  // Mobile-specific container styles
+  containerMobile: { padding: '0 12px' },
+  boxMobile: { padding: '16px 12px', borderRadius: 12 },
   step: { fontSize: 14, fontWeight: 600, color: '#666', margin: '0 0 8px' },
   bar: { height: 8, background: '#E0E0E0', borderRadius: 4, overflow: 'hidden', marginBottom: 20 },
   fill: { height: '100%', background: 'linear-gradient(90deg, #36CA37, #2eb82e)', transition: 'width 0.3s' },
@@ -119,21 +154,34 @@ const S: { [key: string]: CSSProperties } = {
   pkgs: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
   card: { display: 'block', position: 'relative' as const, padding: '14px 14px 14px 48px', background: '#fff', border: '2px solid #E0E0E0', borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s' },
   cardSel: { borderColor: '#DAA520', background: '#FFFBF0', boxShadow: '0 4px 12px rgba(218,165,32,0.2)' },
+  // Mobile-specific styles
+  cardMobile: { padding: '10px 10px 10px 36px' },
+  cardSelMobile: { padding: '10px 10px 10px 36px' },
   radio: { position: 'absolute' as const, left: 14, top: 16, width: 22, height: 22, border: '3px solid #CCC', borderRadius: '50%', background: '#fff', boxSizing: 'border-box' as const, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   radioSel: { borderColor: '#DAA520', background: '#DAA520' },
   check: { color: '#fff', fontSize: 12, fontWeight: 'bold' as const },
   pop: { position: 'absolute' as const, top: -10, right: 10, background: '#D30000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const, boxShadow: '0 2px 8px rgba(211,0,0,0.3)' },
   r1: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
   name: { fontSize: 14, fontWeight: 800, color: '#1a1a1a' },
+  nameMobile: { fontSize: 13 },
   pr: { textAlign: 'right' as const },
-  old: { fontSize: 11, color: '#666', textDecoration: 'line-through', marginRight: 4 },
+  old: { fontSize: 11, color: '#4b5563', textDecoration: 'line-through', marginRight: 4 },
   newP: { fontSize: 18, fontWeight: 900, color: '#D30000' },
+  newPMobile: { fontSize: 16 },
   r2: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   items: { fontSize: 12, fontWeight: 600, color: '#555' },
+  itemsMobile: { fontSize: 11 },
   disc: { fontSize: 12, fontWeight: 800, color: '#D30000' },
+  discMobile: { fontSize: 11 },
   free: { background: 'linear-gradient(135deg, #2E8B2E, #3CB371)', color: '#fff', fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 6, textAlign: 'center' as const, margin: '6px 0' },
+  freeMobile: { fontSize: 10, padding: '4px 8px', margin: '4px 0' },
   dur: { fontSize: 10, fontWeight: 600, color: '#888', textAlign: 'center' as const, marginTop: 4 },
+  durMobile: { fontSize: 9, marginTop: 2 },
   pay: { fontSize: 14, color: '#666', textAlign: 'center' as const, margin: '16px 0' },
+  // Mobile styles for "How did you hear about us"
+  hearAboutUsGridMobile: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
+  hearAboutUsOptionMobile: { display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 44, padding: '12px', background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 8, fontSize: 14, fontWeight: 600, transition: 'all 0.2s' },
+  hearAboutUsOptionHoverMobile: { background: '#F0F0F0', borderColor: '#DAA520' },
   btn: { width: '100%', background: '#36CA37', color: '#fff', border: 'none', borderRadius: 10, padding: 18, fontSize: 16, fontWeight: 'bold' as const, textTransform: 'uppercase' as const, cursor: 'pointer', boxShadow: '0 6px 20px rgba(54,202,55,0.4)', fontFamily: 'inherit' },
   btnDis: { background: '#ccc', cursor: 'not-allowed', boxShadow: 'none' },
   back: { background: '#F0F0F0', color: '#666', border: 'none', borderRadius: 10, padding: '18px 24px', fontSize: 14, fontWeight: 'bold' as const, cursor: 'pointer', fontFamily: 'inherit' },
@@ -148,14 +196,14 @@ const postOrderToFulani = (bodyString: string) => {
   try {
     if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
       const blob = new Blob([bodyString], { type: 'application/x-www-form-urlencoded;charset=UTF-8' });
-      const ok = navigator.sendBeacon(FULANI_API_URL, blob);
+      const ok = navigator.sendBeacon(WEBHOOK_URL, blob);
       if (ok) return;
     }
   } catch {
     // ignore
   }
 
-  fetch(FULANI_API_URL, {
+  fetch(WEBHOOK_URL, {
     method: 'POST',
     mode: 'no-cors',
     keepalive: true,
@@ -165,12 +213,24 @@ const postOrderToFulani = (bodyString: string) => {
 };
 
 function OrderFormEmbed() {
-  const { trackAddToCart, trackInitiateCheckout, isEventFired } = useMetaPixel();
+  const { trackFormStart, trackAddToCart, trackInitiateCheckout, isEventFired, captureIdentity, getCapturedIdentity, setupIdentityListeners } = useMetaPixel();
   const [step, setStep] = useState(1);
+  
+  // Generate orderId on component mount (or get from URL)
+  const [orderId] = useState(() => getOrderIdFromURL());
+  const [isRecoveryLink, setIsRecoveryLink] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('orderId')?.trim().length > 0;
+    }
+    return false;
+  });
+  const [lastFiredPhone, setLastFiredPhone] = useState("");
+  
   const [form, setForm] = useState({ 
     name: '', 
     phone: '', 
-    pkg: '', 
+    pkg: '', // No pre-selection
     email: '', 
     whatsapp: '',
     state: '', 
@@ -184,54 +244,308 @@ function OrderFormEmbed() {
     paymentMethod: 'Pay on Delivery',
     comment: '',
     agreeToTerms: false,
-    orderId: '' // Unique Order ID
+    orderId: orderId // Set generated orderId
   });
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+  const [deliveryDateError, setDeliveryDateError] = useState('');
+  
+  // Auto-advance ref to prevent multiple auto-advances
+  const hasAutoAdvanced = useRef(false);
+  
+    
+  // Ref to track InitiateCheckout trigger (Step 2 advancement)
+  const hasTriggeredInitiateCheckout = useRef(false);
+  
+  // Ref to track FormStart trigger (first keystroke in any field)
+  const hasTriggeredFormStart = useRef(false);
+  
+  // Ref to track AddToCart trigger (email + phone valid on Step 1)
+  const hasTriggeredAddToCart = useRef(false);
+  
+  // Input refs for keyboard scroll handling
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
+  // Handle input focus to scroll into view on mobile
+  const handleInputFocus = (ref: React.RefObject<HTMLInputElement>) => {
+    if (window.innerWidth < 768 && ref.current) {
+      setTimeout(() => {
+        ref.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 300);
+    }
+  };
+  
+  // 20-minute countdown timer state
+  const [timeLeft, setTimeLeft] = useState({
+    minutes: 20,
+    seconds: 0
+  });
+  const [timerActive, setTimerActive] = useState(true);
+
+  // Dynamic pricing based on timer
+  const [currentPackages, setCurrentPackages] = useState(packages);
+
+  // Update prices when timer expires
+  useEffect(() => {
+    if (!timerActive) {
+      // Set prices to full original price when timer expires
+      const updatedPackages = packages.map(p => ({
+        ...p,
+        price: p.originalPrice, // Set to full original price
+        discount: 0 // No discount when timer expires
+      }));
+      setCurrentPackages(updatedPackages);
+    }
+  }, [timerActive]);
+
+  // 4-Point Validation System with Progress Bar
+  useEffect(() => {
+    if (step !== 1) return;
+
+    // Update progress bar and checkmarks
+    const updateProgress = () => {
+      const nameValid = form.name.trim().length >= 2;
+      const phoneValid = form.phone.replace(/\D/g, '').length >= 10;
+      const emailValid = form.email.includes('@') && form.email.includes('.') && form.email.length >= 5;
+      const packageValid = !!form.pkg;
+
+      let completed = 0;
+      if (nameValid) completed++;
+      if (phoneValid) completed++;
+      if (emailValid) completed++;
+      if (packageValid) completed++;
+
+      const percent = (completed / 4) * 100;
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      
+      if (progressFill) {
+        progressFill.style.width = percent + '%';
+      }
+
+      // Update field checkmarks
+      const nameWrapper = document.getElementById('nameFieldWrapper');
+      const phoneWrapper = document.getElementById('phoneFieldWrapper');
+      const emailWrapper = document.getElementById('emailFieldWrapper');
+      
+      if (nameWrapper) {
+        const checkmark = nameWrapper.querySelector('.field-check') as HTMLElement;
+        if (checkmark) {
+          checkmark.style.opacity = nameValid ? '1' : '0';
+        }
+      }
+      if (phoneWrapper) {
+        const checkmark = phoneWrapper.querySelector('.field-check') as HTMLElement;
+        if (checkmark) {
+          checkmark.style.opacity = phoneValid ? '1' : '0';
+        }
+      }
+      if (emailWrapper) {
+        const checkmark = emailWrapper.querySelector('.field-check') as HTMLElement;
+        if (checkmark) {
+          checkmark.style.opacity = emailValid ? '1' : '0';
+        }
+      }
+
+      // Update progress text
+      if (progressText) {
+        if (completed === 0) {
+          progressText.textContent = 'Step 1 of 2 — Complete your details';
+        } else if (completed < 4) {
+          progressText.textContent = `Step 1 of 2 — ${completed} of 4 complete`;
+        } else {
+          progressText.textContent = 'Step 1 of 2 — All set! Moving to delivery...';
+        }
+      }
+
+      // Auto-advance when all 4 are valid
+      if (completed === 4 && !hasAutoAdvanced.current) {
+        setTimeout(() => {
+          if (!hasAutoAdvanced.current && step === 1) {
+            hasAutoAdvanced.current = true;
+            // Event Sync: Explicitly call trackInitiateCheckout before advancing
+            trackInitiateCheckout();
+            setStep(2);
+          }
+        }, 600);
+      }
+    };
+
+    updateProgress();
+  }, [form.name, form.phone, form.email, form.pkg, step, trackInitiateCheckout]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (!timerActive) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        const { minutes, seconds } = prev;
+        
+        if (minutes === 0 && seconds === 0) {
+          setTimerActive(false);
+          return { minutes: 0, seconds: 0 };
+        }
+        
+        if (seconds === 0) {
+          return { minutes: minutes - 1, seconds: 59 };
+        }
+        
+        return { minutes, seconds: seconds - 1 };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timerActive]);
 
   // Debounce phone input to reduce unnecessary re-renders and API calls
   const debouncedPhone = useDebounce(form.phone, 300);
 
   // Memoize selected package calculation
   const selectedPackage = useMemo(() => {
-    return packages.find(p => p.id === form.pkg) || null;
-  }, [form.pkg]);
+    return currentPackages.find(p => p.id === form.pkg) || null;
+  }, [form.pkg, currentPackages]);
 
-  const handlePhoneBlurForMeta = useCallback((e?: React.FocusEvent<HTMLInputElement>) => {
+  // STRICT AddToCart trigger - fire ONLY on Step 1 when email + phone are valid
+  useEffect(() => {
+    // STRICT: Only fire on Step 1
     if (step !== 1) return;
-
-    const phoneValue = e?.currentTarget?.value ?? form.phone;
-    void phoneValue;
-    let pvFired: string | null = null;
-    let atcFired: string | null = null;
-    try {
-      pvFired = sessionStorage.getItem('fhg_pv_fired');
-      atcFired = sessionStorage.getItem('fhg_atc_fired');
-    } catch (error) {
-      void error;
-    }
-    void pvFired;
-    void atcFired;
-
-    const phoneDigits = phoneValue.replace(/\D/g, '');
-    const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0');
-    if (!phoneOk) return;
-
+    
+    // STRICT: Only fire once
+    if (hasTriggeredAddToCart.current) return;
     if (isEventFired(SESSION_KEYS.ADD_TO_CART)) return;
 
-    const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-    const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
+    // Validate email + phone
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
+    const isPhoneValid = (form.phone?.replace(/\D/g, '') || '').length >= 7;
 
-    trackAddToCart({
-      fullName: form.name,
-      phone: phoneDigits,
-      email: form.email,
-      packageName,
-      packagePrice,
-      state: form.state
-    });
-  }, [form.phone, form.pkg, form.name, form.email, form.state, isEventFired, selectedPackage?.price, step, trackAddToCart]);
+    // STRICT: Both must be valid
+    if (!isEmailValid || !isPhoneValid) return;
+
+    // Fire AddToCart
+    hasTriggeredAddToCart.current = true;
+    
+    console.log('[AddToCart] Firing on Step 1 — email + phone valid');
+
+    // Build payload with available data
+    const payload: any = {
+      fullName: form.name || '',
+      email: form.email?.trim().toLowerCase() || '',
+      phone: form.phone?.replace(/\D/g, '') || '',
+      state: form.state || '',
+      lga: form.lga || '',
+      address: form.address || '',
+      
+      // Include package data if selected (optional)
+      ...(form.pkg && selectedPackage && {
+        packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
+        packagePrice: selectedPackage.price,
+      })
+    };
+
+    trackAddToCart(payload);
+  }, [step, form.email, form.phone, isEventFired, trackAddToCart]); // Note: step is in dependencies to enforce Rule 1
+
+  // FormStart trigger - fire on first keystroke in any Step 1 field
+  useEffect(() => {
+    // Prevent multiple fires
+    if (hasTriggeredFormStart.current) return;
+    if (isEventFired(SESSION_KEYS.FORM_START)) return;
+
+    // Check if any field has at least 1 character
+    const hasStartedTyping = 
+      (form.name && form.name.length > 0) || 
+      (form.phone && form.phone.length > 0) || 
+      (form.email && form.email.length > 0);
+
+    if (hasStartedTyping) {
+      hasTriggeredFormStart.current = true;
+      
+      console.log('[FormStart] User began typing - firing FormStart event');
+      
+      // Fire FormStart event
+      trackFormStart();
+    }
+  }, [form.name, form.phone, form.email, isEventFired, trackFormStart]);
+
+  // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
+  useEffect(() => {
+    // Generate external ID from timestamp and form data
+    const generateExternalId = () => {
+      const timestamp = Date.now().toString();
+      const nameHash = form.name ? form.name.substring(0, 3).toLowerCase() : 'xxx';
+      return `${timestamp}_${nameHash}`;
+    };
+
+    // Capture identity when user types valid email or phone
+    const externalId = generateExternalId();
+    
+    // Only capture if we have valid-looking data
+    if (form.email && form.email.length > 3) {
+      captureIdentity(form.email, form.phone, externalId);
+    } else if (form.phone && form.phone.length >= 10) {
+      captureIdentity(form.email, form.phone, externalId);
+    }
+  }, [form.email, form.phone, form.name, captureIdentity]);
+
+  // 🎯 Setup identity listeners on component mount
+  useEffect(() => {
+    // Delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      setupIdentityListeners();
+      console.log('[OrderForm] 🎯 Aggressive identity capturing activated');
+    }, 2000);
+    
+    return () => clearTimeout(timer);
+  }, [setupIdentityListeners]);
+
+  // InitiateCheckout trigger - fire when user advances to Step 2
+  useEffect(() => {
+    // Prevent multiple fires
+    if (hasTriggeredInitiateCheckout.current) return;
+    if (isEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) return;
+    if (step !== 2) return; // Only fire on Step 2
+
+    hasTriggeredInitiateCheckout.current = true;
+    
+    console.log('[InitiateCheckout] User advanced to Step 2 - firing InitiateCheckout event');
+    
+    // Build payload with all available data from Step 1
+    const payload: any = {
+      fullName: form.name || '',
+      email: form.email ? form.email.trim().toLowerCase() : '',
+      phone: form.phone ? form.phone.replace(/\D/g, '') : '',
+      state: form.state || '',
+      lga: form.lga || '',
+      address: form.address || '',
+      
+      // NEW: Enhanced tracking data
+      paymentMethod: form.paymentMethod || 'Pay on Delivery',
+      heardAboutUs: form.heardAboutUs || '',
+      deliveryDate: form.deliveryDate || '',
+      deliveryTimeWindow: form.deliveryTimeWindow || '',
+      deliveryFee: form.deliveryFee || 0
+    };
+
+    // Add package info if selected
+    if (form.pkg && selectedPackage) {
+      const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+      payload.packageName = packageName;
+      payload.packagePrice = selectedPackage.price;
+      console.log('[InitiateCheckout] Package selected:', packageName);
+    } else {
+      console.log('[InitiateCheckout] No package selected - firing with contact info only');
+    }
+
+    // Fire InitiateCheckout event
+    trackInitiateCheckout(payload);
+  }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage, isEventFired, trackInitiateCheckout]);
 
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {
@@ -252,8 +566,13 @@ function OrderFormEmbed() {
 
   // Memoize delivery fee calculation
   const deliveryFee = useMemo(() => {
-    return form.state === 'Lagos' ? 3000 : 5000;
-  }, [form.state]);
+    // Free shipping for Pay Before Delivery
+    if (form.paymentMethod === 'Pay Before Delivery') {
+      return 0;
+    }
+    // Use user's selected delivery fee for Pay on Delivery
+    return form.deliveryFee || (form.state === 'Lagos' ? 3000 : 5000);
+  }, [form.state, form.paymentMethod, form.deliveryFee]);
 
   // Memoize total calculation
   const total = useMemo(() => {
@@ -273,14 +592,7 @@ function OrderFormEmbed() {
       secret: FULANI_SECRET,
       type: 'partial',
       orderId: orderId,
-      phoneNumber: formData.phone || formData.phoneNumber,
-      customerFullName: formData.name || formData.customerFullName || '',
-      email: formData.email || '',
-      state: formData.state || '',
-      lga: formData.lga || '',
-      fullAddress: formData.address || formData.fullAddress || '',
-      landmark: formData.landmark || '',
-      packageSelected: formData.package || formData.packageSelected || ''
+      phone: formData.phone || formData.phoneNumber
     };
 
     const body = new URLSearchParams(
@@ -313,11 +625,37 @@ function OrderFormEmbed() {
     }
   };
 
-  // Handle phone input - optimized with debounced validation
+  // Handle phone input - optimized with debounced validation and partial webhook
   const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.replace(/\D/g, ''); // Numeric only
     setForm(prev => ({ ...prev, phone: value }));
-  }, []);
+
+    // Trigger CALL 1: Partial Order on 11 digits
+    if (value.length === 11 && value !== lastFiredPhone) {
+      // Skip partial webhook for recovery links (order already exists)
+      if (!isRecoveryLink) {
+        const partialPayload = {
+          secret: WEBHOOK_SECRET,
+          type: "partial",
+          orderId: orderId,
+          phone: value,
+          name: form.name,
+          email: form.email,
+          // Meta tracking identifiers for offline conversion matching
+          fbp: getFbp() || '',
+          fbc: getFbc() || '',
+          fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
+        };
+        
+        sendToWebhook(partialPayload);
+        setLastFiredPhone(value); // Prevent re-firing for same number
+        console.log("🎯 Partial Lead Captured:", value, "Order ID:", orderId);
+      } else {
+        console.log("🔄 Recovery link detected - skipping partial webhook for existing order:", orderId);
+        setLastFiredPhone(value); // Still set to prevent re-firing
+      }
+    }
+  }, [lastFiredPhone, orderId, form.name, form.email, isRecoveryLink]);
 
   // Effect to handle debounced phone validation and partial save
   useEffect(() => {
@@ -325,8 +663,11 @@ function OrderFormEmbed() {
     const nextPhoneError = validatePhone(debouncedPhone);
     setPhoneError(nextPhoneError);
     
-    // Save partial when phone is valid (exactly 11 digits) AND not already saved
-    if (digits.length === 11 && !sent && !nextPhoneError) {
+    // Save partial when phone is valid (exactly 11 digits), email is valid, AND not already saved
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const validEmail = form.email && emailRegex.test(form.email);
+    
+    if (digits.length === 11 && validEmail && !sent && !nextPhoneError) {
       // Prevent duplicate sends (fast typing / paste) before awaiting network.
       setSent(true);
 
@@ -372,6 +713,28 @@ function OrderFormEmbed() {
     }
   }, [form.name, form.orderId]);
 
+  // Auto-scroll to form and handle recovery link
+  useEffect(() => {
+    if (isRecoveryLink && typeof window !== 'undefined') {
+      console.log('🔄 Recovery link detected - auto-scrolling to form');
+      
+      // Auto-scroll to order form after a short delay
+      const timer = setTimeout(() => {
+        const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
+        if (formElement) {
+          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          console.log('📍 Scrolled to order form');
+        } else {
+          // Fallback: scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          console.log('📍 Scrolled to top (form not found)');
+        }
+      }, 1000); // Wait 1 second for page to load
+
+      return () => clearTimeout(timer);
+    }
+  }, [isRecoveryLink]);
+
   useEffect(() => {
     if (step === 2 && !form.state) {
       setForm(prev => ({ ...prev, state: 'Abia' }));
@@ -386,29 +749,8 @@ function OrderFormEmbed() {
       const orderId = form.orderId || generateOrderId();
       const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
       const packageAmount = selectedPackage?.price ?? getPackagePrice(packageName);
-      const deliveryFee = Number(form.deliveryFee || 0);
-      const totalAmount = packageAmount + deliveryFee;
-
-      try {
-        window.sessionStorage.setItem(
-          'fhg_order_data',
-          JSON.stringify({
-            orderId,
-            fullName: form.name,
-            phone: form.phone,
-            email: form.email,
-            packageName,
-            packageAmount,
-            deliveryFee,
-            totalAmount,
-            state: form.state,
-            lga: form.lga,
-            address: form.address
-          })
-        );
-      } catch {
-        // ignore
-      }
+      const calculatedDeliveryFee = deliveryFee; // Use memoized calculated value
+      const totalAmount = packageAmount + calculatedDeliveryFee;
 
       const formData = {
         name: form.name,
@@ -420,7 +762,7 @@ function OrderFormEmbed() {
         lga: form.lga,
         address: form.address,
         landmark: form.landmark,
-        deliveryFee: form.deliveryFee,
+        deliveryFee: calculatedDeliveryFee,
         heardAboutUs: form.heardAboutUs,
         deliveryDate: form.deliveryDate,
         deliveryTimeWindow: form.deliveryTimeWindow,
@@ -428,32 +770,78 @@ function OrderFormEmbed() {
         comment: form.comment,
       };
 
-      const payload = {
-        secret: FULANI_SECRET,
-        type: 'complete',
+      // Debug: Log the name value to investigate timing issues
+      console.log('[DEBUG] Submitting form with name:', formData.name);
+      console.log('[DEBUG] Form state name:', form.name);
+      console.log('[DEBUG] formData object:', formData);
+
+      // Store order data in sessionStorage for ThankYou page
+      try {
+        window.sessionStorage.setItem(
+          'fhg_order_data',
+          JSON.stringify({
+            orderId,
+            phone: form.phone,
+            email: form.email,
+            packageName,
+            packageAmount,
+            deliveryFee: calculatedDeliveryFee,
+            totalAmount: packageAmount + calculatedDeliveryFee, // Combined total for display
+            state: form.state,
+            lga: form.lga,
+            address: form.address,
+            landmark: form.landmark,
+            deliveryDate: form.deliveryDate,
+            deliveryTimeWindow: form.deliveryTimeWindow,
+            paymentMethod: form.paymentMethod,
+            heardAboutUs: form.heardAboutUs
+          })
+        );
+      } catch (error) {
+        console.error('Failed to save order data to sessionStorage:', error);
+      }
+
+      const completePayload = {
+        secret: WEBHOOK_SECRET,
+        type: "complete",
         orderId: orderId,
-        customerFullName: formData.name,
-        phoneNumber: formData.phone,
-        alternativePhone: formData.whatsapp || formData.phone,
+        name: formData.name || 'Customer Name Not Provided',
+        phone: formData.phone,
         email: formData.email || '',
-        packageSelected: formData.package,
+        packageName: selectedPackage?.webhookName || formData.package, // Use webhookName for backend compatibility
+        totalAmount: packageAmount, // Product price ONLY (no delivery fee)
+        deliveryType: calculatedDeliveryFee === 5000 ? "SAME_DAY" : "STANDARD",
         state: formData.state,
         lga: formData.lga,
-        fullAddress: formData.address,
+        address: formData.address,
         landmark: formData.landmark || '',
-        deliveryFee: formData.deliveryFee,
-        preferredDeliveryDate: formData.deliveryDate || '',
-        preferredDeliveryTime: formData.deliveryTimeWindow || '',
+        // NEW: Add missing fields for Google Sheets columns P-S
+        deliveryDate: formData.deliveryDate || '',
+        deliveryTimeWindow: formData.deliveryTimeWindow || '',
         paymentMethod: formData.paymentMethod || 'Pay on Delivery',
-        comment: formData.comment || '',
-        heardAboutUs: formData.heardAboutUs || ''
+        heardAboutUs: formData.heardAboutUs || '',
+        
+        // Meta tracking identifiers for offline conversion matching
+        fbp: getFbp() || '',
+        fbc: getFbc() || '',
+        fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
+        eventId: orderId,
+        userAgent: navigator.userAgent,
       };
 
-      const body = new URLSearchParams(
-        Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
-      );
-
-      postOrderToFulani(body.toString());
+      console.log("🚀 Sending Complete Order:", completePayload);
+      console.log("📊 Missing Fields Debug:", {
+        deliveryDate: formData.deliveryDate,
+        deliveryTimeWindow: formData.deliveryTimeWindow, 
+        paymentMethod: formData.paymentMethod,
+        heardAboutUs: formData.heardAboutUs
+      });
+      
+      const success = await sendToWebhook(completePayload);
+      
+      if (!success) {
+        throw new Error('Failed to send order to webhook');
+      }
 
       setTimeout(() => {
         window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
@@ -468,8 +856,8 @@ function OrderFormEmbed() {
   };
 
   return (
-    <div style={S.container}>
-      <div style={S.box}>
+    <div style={{ ...S.container, ...(window.innerWidth < 768 ? S.containerMobile : {}) }}>
+      <div style={{ ...S.box, ...(window.innerWidth < 768 ? S.boxMobile : {}) }}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
         <div id="step-indicator" style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '20px', color: '#000', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
           Step {step} of 2
@@ -492,26 +880,108 @@ function OrderFormEmbed() {
 
         {step === 1 && (
           <>
+            {/* Progress Bar */}
+            <div style={{
+              marginBottom: '20px',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                width: '100%',
+                height: '6px',
+                background: '#E5E7EB',
+                borderRadius: '100px',
+                overflow: 'hidden',
+                marginBottom: '8px'
+              }}>
+                <div id="progressFill" style={{
+                  height: '100%',
+                  width: '0%',
+                  background: 'linear-gradient(90deg, #14532d, #16a34a)',
+                  borderRadius: '100px',
+                  transition: 'width 0.4s ease'
+                }} />
+              </div>
+              <p id="progressText" style={{
+                fontSize: '12px',
+                fontWeight: '600',
+                color: '#6B7280',
+                margin: '0'
+              }}>Step 1 of 2 — Complete your details</p>
+            </div>
+
+            {/* 20-Minute Countdown Timer */}
+            <div style={{
+              background: timerActive ? 'linear-gradient(135deg, #CC0000, #FF0000)' : 'linear-gradient(135deg, #666, #999)',
+              color: '#fff',
+              padding: '12px',
+              borderRadius: '8px',
+              textAlign: 'center',
+              marginBottom: '16px',
+              fontSize: '14px',
+              fontWeight: '600',
+              boxShadow: timerActive ? '0 4px 12px rgba(204,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.2)',
+              border: timerActive ? '2px solid #CC0000' : '2px solid #666'
+            }}>
+              <div style={{ fontSize: '12px', marginBottom: '4px', textTransform: 'uppercase' }}>
+                {timerActive ? '⏰ Hurry! Price goes back to full price in:' : '⏰ Prices Increased!'}
+              </div>
+              <div style={{ fontSize: '18px', fontWeight: '800', fontFamily: 'monospace' }}>
+                {String(timeLeft.minutes).padStart(2, '0')}min:{String(timeLeft.seconds).padStart(2, '0')}sec
+              </div>
+              <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.9 }}>
+                {timerActive ? 'Order now to lock in your discount!' : 'Now at full price - no discount'}
+              </div>
+            </div>
+
             {/* Name */}
             <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
-            <input
-              style={S.input}
-              placeholder="Enter your full name"
-              value={form.name}
-              onChange={e => setForm({ ...form, name: e.target.value })}
-            />
+            <div style={{ position: 'relative' }} id="nameFieldWrapper">
+              <input
+                style={S.input}
+                placeholder="Enter your full name"
+                value={form.name}
+                onChange={e => setForm({ ...form, name: e.target.value })}
+                ref={nameInputRef}
+                onFocus={() => handleInputFocus(nameInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
 
             {/* Phone */}
             <label style={S.label}>PHONE NUMBER <span style={S.req}>*</span></label>
-            <input
-              style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
-              type="tel"
-              inputMode="numeric"
-              placeholder="08012345678"
-              value={form.phone}
-              onChange={handlePhoneChange}
-              onBlur={handlePhoneBlurForMeta}
-            />
+            <div style={{ position: 'relative' }} id="phoneFieldWrapper">
+              <input
+                style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
+                type="tel"
+                inputMode="numeric"
+                placeholder="08012345678"
+                value={form.phone}
+                onChange={handlePhoneChange}
+                ref={phoneInputRef}
+                onFocus={() => handleInputFocus(phoneInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
             {phoneError && (
               <p style={{ margin: '6px 0 0', color: '#ff3b30', fontSize: 12, fontWeight: 800 }}>
                 ⚠️ {phoneError}
@@ -519,60 +989,501 @@ function OrderFormEmbed() {
             )}
             <p style={S.hint}>We call you before delivery"</p>
 
+            {/* Email */}
+            <label style={S.label}>EMAIL ADDRESS <span style={S.req}>*</span></label>
+            <div style={{ position: 'relative' }} id="emailFieldWrapper">
+              <input
+                style={S.input}
+                type="email"
+                placeholder="your@email.com"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                ref={emailInputRef}
+                onFocus={() => handleInputFocus(emailInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
+            <p style={S.hint}>For order confirmation and updates</p>
+
             {/* Packages */}
-            <label style={S.label}>BUY MORE, SAVE MORE <span style={S.req}>*</span></label>
-            <div style={S.pkgs}>
-              {packages.map(p => {
+            <label style={S.label}>CHOOSE YOUR RECOVERY SYSTEM <span style={S.req}>*</span></label>
+            <div style={{
+              fontFamily: 'DM Sans, sans-serif',
+              background: '#F3F0EC',
+              padding: '16px 12px 40px',
+              borderRadius: '12px',
+              border: '1.5px solid #E5E7EB'
+            }}>
+              {currentPackages.map(p => {
                 const selected = form.pkg === p.id;
+                const isFeatured = p.id === 'PKG-004'; // Self Love Plus B2GOF
+                const isBestValue = p.id === 'PKG-005'; // Family Saves
+                
                 return (
                   <div
                     key={p.id}
-                    onClick={() => setForm({ ...form, pkg: p.id })}
-                    style={{ ...S.card, ...(selected ? S.cardSel : {}) }}
+                    onClick={() => {
+                      // 1. Visual feedback - select this card
+                      setForm({ ...form, pkg: p.id });
+                      
+                      // 2. Error nudge if fields missing
+                      const nameValid = form.name.trim().length >= 2;
+                      const phoneValid = form.phone.replace(/\D/g, '').length >= 10;
+                      const emailValid = form.email.includes('@') && form.email.includes('.') && form.email.length >= 5;
+                      
+                      if (!nameValid || !phoneValid || !emailValid) {
+                        const nameInput = document.getElementById('nameFieldWrapper')?.querySelector('input');
+                        const phoneInput = document.getElementById('phoneFieldWrapper')?.querySelector('input');
+                        const emailInput = document.getElementById('emailFieldWrapper')?.querySelector('input');
+                        
+                        const firstEmpty = (!nameValid && nameInput) ? nameInput
+                          : (!phoneValid && phoneInput) ? phoneInput
+                          : emailInput;
+
+                        if (firstEmpty) {
+                          firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          firstEmpty.style.outline = '2px solid #1a7a4a';
+                          firstEmpty.style.outlineOffset = '2px';
+                          firstEmpty.focus();
+                          setTimeout(() => {
+                            firstEmpty.style.outline = '';
+                            firstEmpty.style.outlineOffset = '';
+                          }, 2000);
+                        }
+                      }
+                    }}
+                    style={{
+                      border: isFeatured ? '3px solid #14532d' : isBestValue ? '2px solid #D4AF37' : '1.5px solid #E5E7EB',
+                      borderRadius: '12px',
+                      padding: isFeatured ? '18px' : '14px',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      marginBottom: '10px',
+                      opacity: isFeatured ? 1 : (selected ? 1 : 0.7),
+                      boxShadow: isFeatured 
+                        ? '0 0 0 4px rgba(20,83,45,0.1), 0 4px 20px rgba(20,83,45,0.18), 0 8px 40px rgba(20,83,45,0.08)'
+                        : isBestValue 
+                        ? '0 2px 14px rgba(212,175,55,0.15)'
+                        : 'none',
+                      background: isFeatured ? 'linear-gradient(180deg, #f8fefb 0%, #ffffff 100%)' : '#fff',
+                      transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+                      WebkitFontSmoothing: 'antialiased',
+                      MozOsxFontSmoothing: 'grayscale'
+                    }}
+                    onMouseEnter={(e) => {
+                      const card = e.currentTarget;
+                      if (isFeatured) {
+                        card.style.boxShadow = '0 0 0 5px rgba(26,122,74,0.12), 0 6px 24px rgba(26,122,74,0.22)';
+                      } else if (isBestValue) {
+                        card.style.boxShadow = '0 6px 20px rgba(212,175,55,0.25)';
+                        card.style.borderColor = '#D4AF37';
+                      } else {
+                        card.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)';
+                        card.style.borderColor = '#aaa';
+                      }
+                      card.style.opacity = '1';
+                    }}
+                    onMouseLeave={(e) => {
+                      const card = e.currentTarget;
+                      if (isFeatured) {
+                        card.style.boxShadow = '0 0 0 4px rgba(20,83,45,0.1), 0 4px 20px rgba(20,83,45,0.18), 0 8px 40px rgba(20,83,45,0.08)';
+                        card.style.borderColor = '3px solid #14532d';
+                      } else if (isBestValue) {
+                        card.style.boxShadow = '0 2px 14px rgba(212,175,55,0.15)';
+                        card.style.borderColor = '2px solid #D4AF37';
+                      } else {
+                        card.style.boxShadow = 'none';
+                        card.style.borderColor = '1.5px solid #E5E7EB';
+                      }
+                      card.style.opacity = selected || isFeatured ? '1' : '0.7';
+                    }}
                   >
                     {/* Radio circle */}
-                    <div style={{ ...S.radio, ...(selected ? S.radioSel : {}) }}>
-                      {selected && <span style={S.check}>✓</span>}
-                    </div>
+                    <div style={{
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '50%',
+                      border: selected ? '2px solid #14532d' : '2px solid #D1D5DB',
+                      position: 'absolute',
+                      top: isFeatured ? '18px' : '14px',
+                      left: '14px',
+                      background: selected ? 'radial-gradient(circle, #14532d 38%, transparent 39%)' : 'transparent'
+                    }} />
 
-                    {/* Popular tag */}
-                    {p.isPopular && <span style={S.pop}>🔥 MOST POPULAR</span>}
+                    {/* Tags */}
+                    {p.isPopular && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '-10px',
+                        right: '14px',
+                        fontSize: '9.5px',
+                        fontWeight: '700',
+                        letterSpacing: '0.7px',
+                        textTransform: 'uppercase',
+                        padding: '3px 9px',
+                        borderRadius: '5px',
+                        color: '#fff',
+                        background: '#DC2626',
+                        zIndex: 10
+                      }}>
+                        🔥 Most Popular
+                      </span>
+                    )}
+                    {isBestValue && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '-10px',
+                        right: '14px',
+                        fontSize: '9.5px',
+                        fontWeight: '700',
+                        letterSpacing: '0.7px',
+                        textTransform: 'uppercase',
+                        padding: '3px 9px',
+                        borderRadius: '5px',
+                        color: '#fff',
+                        background: 'linear-gradient(135deg, #B8860B, #D4AF37)',
+                        zIndex: 10
+                      }}>
+                        🏆 Best Value
+                      </span>
+                    )}
 
-                    {/* Row 1 */}
-                    <div style={S.r1}>
-                      <span style={S.name}>{p.name}</span>
-                      <div style={S.pr}>
-                        <span style={S.old}>₦{p.originalPrice.toLocaleString()}</span>
-                        <span style={S.newP}>₦{p.price.toLocaleString()}</span>
+                    {/* Ribbon for featured */}
+                    {isFeatured && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '0',
+                        left: '0',
+                        right: '0',
+                        height: '4px',
+                        background: 'linear-gradient(90deg, #14532d, #16a34a, #22c55e, #16a34a, #14532d)',
+                        borderRadius: '12px 12px 0 0',
+                        zIndex: 0
+                      }} />
+                    )}
+
+                    {/* Top row */}
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      gap: '8px',
+                      marginBottom: '8px',
+                      paddingLeft: '26px'
+                    }}>
+                      <div>
+                        <div style={{
+                          fontSize: isFeatured ? '16px' : '13.5px',
+                          fontWeight: '800',
+                          color: '#111111',
+                          lineHeight: '1.2',
+                          letterSpacing: '-0.2px'
+                        }}>
+                          {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'The Trial Kit')
+                           .replace('SELF LOVE PLUS B2GOF', 'Self Love Plus B2GOF')
+                           .replace('SELF LOVE B2GOF', 'Self Love B2GOF')
+                           .replace('SELF LOVE RETURN', 'Self Love Return')
+                           .replace('FAMILY SAVES', 'Family Saves')}
+                          {p.id === 'PKG-001' && (
+                            <span style={{
+                              fontWeight: '500',
+                              color: '#6B7280',
+                              fontSize: '11px'
+                            }}> (Self Love Plus)</span>
+                          )}
+                        </div>
+                        <div style={{
+                          fontSize: '10px',
+                          fontWeight: '600',
+                          color: '#6B7280',
+                          marginTop: '1px',
+                          letterSpacing: '0.1px'
+                        }}>
+                          {p.supply.split(':')[0]}
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{
+                          fontSize: '10.5px',
+                          color: '#6B7280',
+                          textDecoration: 'line-through'
+                        }}>
+                          ₦{p.originalPrice.toLocaleString()}
+                        </div>
+                        <div style={{
+                          fontSize: isFeatured ? '26px' : '20px',
+                          fontWeight: '800',
+                          color: isBestValue ? '#946B00' : '#0F6B3A',
+                          lineHeight: '1.1',
+                          letterSpacing: '-0.3px'
+                        }}>
+                          ₦{p.price.toLocaleString()}
+                        </div>
+                        <span style={{
+                          display: 'inline-block',
+                          background: '#FEE2E2',
+                          color: '#DC2626',
+                          fontSize: '9.5px',
+                          fontWeight: '700',
+                          padding: '1.5px 5px',
+                          borderRadius: '3px',
+                          marginTop: '1px'
+                        }}>
+                          {p.discount}% OFF
+                        </span>
                       </div>
                     </div>
 
-                    {/* Row 2 */}
-                    <div style={S.r2}>
-                      <span style={S.items}>{p.items}</span>
-                      <span style={S.disc}>{p.discount}% OFF</span>
+                    {/* Items */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '5px',
+                      flexWrap: 'wrap',
+                      marginBottom: '6px',
+                      paddingLeft: '26px'
+                    }}>
+                      {p.items.split(' | ').map((item, idx) => {
+                        const [quantity, product] = item.split('× ');
+                        return (
+                          <span key={idx} style={{
+                            background: '#F3F4F6',
+                            borderRadius: '5px',
+                            padding: isFeatured ? '5px 9px' : '3.5px 7px',
+                            fontSize: isFeatured ? '12.5px' : '11px',
+                            fontWeight: '600',
+                            color: '#1F2937',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '3px'
+                          }}>
+                            <span style={{
+                              background: '#14532d',
+                              color: '#fff',
+                              fontSize: isFeatured ? '10px' : '8.5px',
+                              fontWeight: '700',
+                              padding: isFeatured ? '2px 5px' : '1px 4px',
+                              borderRadius: '3px'
+                            }}>
+                              {quantity}×
+                            </span>
+                            {product}
+                          </span>
+                        );
+                      })}
                     </div>
 
-                    {/* Free items */}
-                    {p.freeItems && <div style={S.free}>{p.freeItems}</div>}
+                    {/* Bonus items */}
+                    {p.freeItems && p.freeItems.includes('FREE:') && (
+                      <div style={{
+                        background: '#FFFBEB',
+                        border: '1px dashed #D97706',
+                        borderRadius: '7px',
+                        padding: '6px 9px',
+                        fontSize: isFeatured ? '12px' : '10.5px',
+                        fontWeight: '600',
+                        color: '#92400E',
+                        margin: '6px 0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px'
+                      }}>
+                        <span style={{ fontSize: '13px', flexShrink: 0 }}>🎁</span>
+                        {p.freeItems.replace('+ ', '')}
+                      </div>
+                    )}
 
-                    {/* Duration */}
-                    <div style={S.dur}>🧴 {p.supply}</div>
+                    {/* Callout for trial kit */}
+                    {p.id === 'PKG-001' && (
+                      <div style={{
+                        background: 'linear-gradient(135deg, #14532d, #16a34a)',
+                        borderRadius: '8px',
+                        padding: '10px 12px',
+                        margin: '8px 0 6px',
+                        color: '#fff',
+                        fontSize: '11px',
+                        fontWeight: '600',
+                        lineHeight: '1.45'
+                      }}>
+                        <strong>Important:</strong> Hair recovery is a biological cycle. The Trial Kit resets your scalp but permanent edge restoration & follicle wake-up typically require 60–90 days of consistent 3-step use.
+                      </div>
+                    )}
+
+                    {/* Description */}
+                    <p style={{
+                      fontSize: isFeatured ? '12.5px' : '11px',
+                      color: '#4B5563',
+                      lineHeight: '1.4',
+                      paddingLeft: '26px',
+                      margin: p.id === 'PKG-001' ? '0' : '6px 0',
+                      fontWeight: p.id === 'PKG-002' ? '400' : '400'
+                    }}>
+                      {p.id === 'PKG-001' && 'Experience immediate scalp relief and test the formula before committing to a full 3 month hair recovery.'}
+                      {p.id === 'PKG-002' && (
+                        <>
+                          Keep growth consistent. <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.
+                        </>
+                      )}
+                      {p.id === 'PKG-003' && 'Purify the scalp & clear dandruff so the Pomade can trigger real growth.'}
+                      {p.id === 'PKG-004' && (
+                        <>
+                          🧴 3-Month Recovery System: The complete professional routine. <strong>Essential for first-timers</strong> to purify, nourish, and seal for a full biological hair growth cycle.
+                        </>
+                      )}
+                      {p.id === 'PKG-005' && (
+                        <>
+                          🧴 12-Month Institutional Pack: The Gold Standard for total restoration. Ideal for high-level consistency or shared "Group Buying" with friends to secure the 61% discount. <strong>Includes ₦20,500 in VIP Gifts.</strong>
+                        </>
+                      )}
+                    </p>
+
+                    {/* For who tag */}
+                    <span style={{
+                      display: 'inline-block',
+                      background: p.id === 'PKG-001' ? '#EEF2FF' 
+                               : p.id === 'PKG-002' ? '#FFF7ED'
+                               : p.id === 'PKG-003' ? '#F0FDF4'
+                               : p.id === 'PKG-004' ? '#ECFDF5'
+                               : '#FDF8E8',
+                      color: p.id === 'PKG-001' ? '#4338CA'
+                           : p.id === 'PKG-002' ? '#C2410C'
+                           : p.id === 'PKG-003' ? '#15803D'
+                           : p.id === 'PKG-004' ? '#059669'
+                           : '#8B6914',
+                      fontSize: '9.5px',
+                      fontWeight: '700',
+                      padding: '2px 7px',
+                      borderRadius: '4px',
+                      marginTop: '6px',
+                      marginLeft: '26px'
+                    }}>
+                      Best for: {p.id === 'PKG-001' ? 'Testing the system'
+                               : p.id === 'PKG-002' ? 'Returning customers'
+                               : p.id === 'PKG-003' ? 'Scalp Reset & Dandruff Clearing'
+                               : p.id === 'PKG-004' ? 'First-timers (recommended)'
+                               : 'Families & group buying'}
+                    </span>
+
+                    {/* Social proof for featured */}
+                    {isFeatured && (
+                      <div style={{
+                        background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
+                        borderRadius: '7px',
+                        padding: '8px 12px',
+                        margin: '8px 0 4px',
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#15803D',
+                        textAlign: 'center',
+                        letterSpacing: '0.2px'
+                      }}>
+                        👥 Chosen by 8 out of 10 customers
+                      </div>
+                    )}
+
+                    {/* CTA Button */}
+                    <button
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: isFeatured ? '15px' : '12px',
+                        border: 'none',
+                        borderRadius: '9px',
+                        fontFamily: 'DM Sans, sans-serif',
+                        fontSize: isFeatured ? '15px' : '12.5px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        marginTop: '10px',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        background: selected 
+                          ? (isBestValue 
+                            ? 'linear-gradient(135deg, #D4AF37 0%, #F5D76E 50%, #D4AF37 100%)'
+                            : 'linear-gradient(135deg, #14532d, #16a34a)')
+                          : '#F9FAFB',
+                        color: selected 
+                          ? (isBestValue ? '#1a2744' : '#fff')
+                          : '#6B7280',
+                        border: selected ? 'none' : '1.5px solid #D1D5DB',
+                        boxShadow: selected 
+                          ? (isBestValue 
+                            ? '0 4px 14px rgba(212,175,55,0.35), inset 0 1px 0 rgba(255,255,255,0.3)'
+                            : '0 4px 16px rgba(20,83,45,0.4)')
+                          : 'none',
+                        letterSpacing: selected ? '0.3px' : '0',
+                        textShadow: selected ? '0 1px 0 rgba(255,255,255,0.2)' : 'none'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setForm({ ...form, pkg: p.id });
+                        
+                        // Auto-advance to Step 2 after brief confirmation delay
+                        setTimeout(() => {
+                          // Trigger continue button click to advance to Step 2
+                          const continueBtn = document.querySelector('button');
+                          if (continueBtn && continueBtn.textContent?.includes('CONTINUE')) {
+                            continueBtn.click();
+                          }
+                        }, 600);
+                      }}
+                    >
+                      {p.id === 'PKG-001' && 'Select Trial Kit →'}
+                      {p.id === 'PKG-002' && 'Select This Plan →'}
+                      {p.id === 'PKG-003' && 'Select This Plan →'}
+                      {p.id === 'PKG-004' && 'Start My Hair Recovery →'}
+                      {p.id === 'PKG-005' && 'Secure the Gold Standard Pack →'}
+                    </button>
                   </div>
                 );
               })}
+              
+              {/* Trust indicators */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
+                marginTop: '14px',
+                flexWrap: 'wrap'
+              }}>
+                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+                  Pay on Delivery
+                </span>
+                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+                  Nationwide Shipping
+                </span>
+                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+                  Support Active
+                </span>
+              </div>
             </div>
 
             {/* Pay text */}
-            <p style={S.pay}>Pay only when it arrives"</p>
+            <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery"</p>
 
             {/* Continue button */}
             <button
               style={{
                 ...S.btn,
-                ...((phoneError || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.pkg) ? S.btnDis : {})
+                ...(form.pkg ? {
+                  background: 'linear-gradient(135deg, #1a7a4a, #16a34a)',
+                  boxShadow: '0 4px 16px rgba(20,83,45,0.4)',
+                  cursor: 'pointer'
+                } : S.btnDis)
               }}
-              disabled={Boolean(phoneError) || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.pkg}
+              disabled={Boolean(phoneError) || form.phone.replace(/\D/g, '').length !== 11 || !form.name || !form.email || !form.pkg}
               onClick={() => {
                 let pvFired: string | null = null;
                 let atcFired: string | null = null;
@@ -591,8 +1502,22 @@ function OrderFormEmbed() {
                 const phoneDigits = form.phone.replace(/\D/g, '');
                 const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0') && !phoneError;
 
-                if (!form.name || !form.phone || !form.pkg) {
-                  alert('Please fill all required fields');
+                if (!form.name || !form.email || !form.phone || !form.pkg) {
+                  alert('Please fill all required fields (Name, Email, Phone, and Package)');
+                  return;
+                }
+
+                // Timer expired warning (but allow order at full price)
+                if (!timerActive) {
+                  if (!confirm('The special offer has expired and prices are now at full price. Do you want to continue at the full price?')) {
+                    return;
+                  }
+                }
+
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(form.email)) {
+                  alert('Please enter a valid email address');
                   return;
                 }
 
@@ -604,25 +1529,24 @@ function OrderFormEmbed() {
                 const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
                 const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
 
-                if (!isEventFired(SESSION_KEYS.ADD_TO_CART)) {
-                  trackAddToCart({
+                
+                if (!isEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) {
+                  trackInitiateCheckout({
                     fullName: form.name,
                     phone: phoneDigits,
                     email: form.email,
                     packageName,
                     packagePrice,
-                    state: form.state
+                    state: form.state,
+                    lga: form.lga,
+                    address: form.address,
+                    paymentMethod: form.paymentMethod,
+                    heardAboutUs: form.heardAboutUs,
+                    deliveryDate: form.deliveryDate,
+                    deliveryTimeWindow: form.deliveryTimeWindow,
+                    deliveryFee: form.deliveryFee
                   });
                 }
-
-                trackInitiateCheckout({
-                  fullName: form.name,
-                  phone: phoneDigits,
-                  email: form.email,
-                  packageName,
-                  packagePrice,
-                  state: form.state
-                });
 
                 setStep(2);
                 
@@ -638,23 +1562,13 @@ function OrderFormEmbed() {
                 }); // Removed setTimeout for instant response
               }}
             >
-              CONTINUE (PAY ON DELIVERY)
+              CONTINUE
             </button>
           </>
         )}
 
         {step === 2 && (
           <>
-            {/* Email */}
-            <label style={S.label}>EMAIL <span style={S.req}>*</span></label>
-            <input
-              style={S.input}
-              placeholder="Enter your email"
-              aria-label="Email"
-              value={form.email}
-              onChange={e => setForm({ ...form, email: e.target.value })}
-            />
-
             {/* Alternative phone */}
             <label style={S.label}>ALTERNATIVE PHONE NUMBER (WHATSAPP)</label>
             <input
@@ -697,33 +1611,125 @@ function OrderFormEmbed() {
               {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'FCT Abuja' : s}</option>)}
             </select>
 
-            {/* Delivery fee & speed */}
-            <label style={S.label}>DELIVERY FEE AND SPEED</label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
-                <input
-                  type="radio"
-                  name="deliveryFee"
-                  checked={form.deliveryFee === 3000}
-                  onChange={() => setForm({ ...form, deliveryFee: 3000 })}
-                />
-                <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>1 - 3 Days Nationwide Delivery ₦3000</span>
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
-                <input
-                  type="radio"
-                  name="deliveryFee"
-                  checked={form.deliveryFee === 5000}
-                  onChange={() => setForm({ ...form, deliveryFee: 5000 })}
-                />
-                <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>24 Hours Nationwide Delivery ₦5000</span>
-              </label>
+            {/* Payment method */}
+            <label style={S.label}>PAYMENT METHOD</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+              {['Pay on Delivery', 'Pay Before Delivery'].map(opt => (
+                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={opt}
+                    checked={form.paymentMethod === opt}
+                    onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
+                  />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
+                </label>
+              ))}
             </div>
-            <p style={S.hint}>Sometimes we upgrade your delivery speed at no extra cost to you.</p>
+
+            {/* Bank details for Pay Before Delivery */}
+            {form.paymentMethod === 'Pay Before Delivery' && (
+              <div style={{
+                background: '#f8f9fa',
+                border: '2px solid #0047AB',
+                borderRadius: '12px',
+                padding: '20px',
+                marginTop: '16px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '16px',
+                lineHeight: '1.6',
+                color: '#0047AB',
+                fontWeight: '600'
+              }}>
+                <div style={{ marginBottom: '12px', fontSize: '18px', fontWeight: '700' }}>
+                  🏦 Bank: Moniepoint
+                </div>
+                <div style={{ marginBottom: '12px', fontSize: '16px' }}>
+                  📛 Account Name: <span style={{ fontWeight: '700' }}>Fulani Hair Gro</span>
+                </div>
+                <div style={{ fontSize: '16px' }}>
+                  🔢 Account Number: <span style={{ fontWeight: '700', fontSize: '18px' }}>5633783114</span>
+                </div>
+              </div>
+            )}
+
+            {/* Payment notice for Pay on Delivery */}
+            {form.paymentMethod === 'Pay on Delivery' && (
+              <div style={{
+                background: '#fff3cd',
+                border: '2px solid #ffc107',
+                borderRadius: '12px',
+                padding: '20px',
+                marginTop: '16px',
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '15px',
+                lineHeight: '1.6',
+                color: '#856404',
+                fontWeight: '600'
+              }}>
+                <div style={{ marginBottom: '12px', fontSize: '17px', fontWeight: '700', color: '#856404' }}>
+                  🚨 Important Payment Notice
+                </div>
+                <div style={{ marginBottom: '8px', fontSize: '15px' }}>
+                  When the rider arrives, please pay ONLY into our company account:
+                </div>
+                <div style={{ marginBottom: '10px', fontSize: '16px', fontWeight: '700' }}>
+                  🏦 Bank: Moniepoint
+                </div>
+                <div style={{ marginBottom: '10px', fontSize: '16px', fontWeight: '700' }}>
+                  📛 Account Name: Fulani Hair Gro
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: '700' }}>
+                  🔢 Account Number: 5633783114
+                </div>
+                <div style={{ 
+                  marginTop: '12px', 
+                  fontSize: '16px', 
+                  fontWeight: '800', 
+                  color: '#dc3545',
+                  backgroundColor: '#f8d7da',
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  textAlign: 'center',
+                  border: '2px solid #dc3545'
+                }}>
+                  ⚠️ DO NOT PAY TO THE RIDER
+                </div>
+              </div>
+            )}
+
+            {/* Delivery fee & speed - only show for Pay on Delivery */}
+            {form.paymentMethod === 'Pay on Delivery' && (
+              <>
+                <label style={S.label}>DELIVERY FEE AND SPEED</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 8 }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
+                    <input
+                      type="radio"
+                      name="deliveryFee"
+                      checked={form.deliveryFee === 3000}
+                      onChange={() => setForm({ ...form, deliveryFee: 3000 })}
+                    />
+                    <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>1 - 3 Days Nationwide Delivery ₦3000</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', color: '#1a1a1a' }}>
+                    <input
+                      type="radio"
+                      name="deliveryFee"
+                      checked={form.deliveryFee === 5000}
+                      onChange={() => setForm({ ...form, deliveryFee: 5000 })}
+                    />
+                    <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>24 Hours Nationwide Delivery ₦5000</span>
+                  </label>
+                </div>
+                <p style={S.hint}>Sometimes we upgrade your delivery speed at no extra cost to you.</p>
+              </>
+            )}
 
             {/* How did you hear */}
             <label style={{ ...S.label, textAlign: 'center' }}>HOW DID YOU HEAR ABOUT US? <span style={S.req}>*</span></label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
+            <div style={window.innerWidth < 768 ? S.hearAboutUsGridMobile : { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
               {[
                 'Facebook Ads',
                 'Instagram Ads',
@@ -735,7 +1741,13 @@ function OrderFormEmbed() {
                 'Repeat Customer',
                 'Other'
               ].map(opt => (
-                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 28 }}>
+                <label 
+                  key={opt} 
+                  style={window.innerWidth < 768 ? 
+                    { ...S.hearAboutUsOptionMobile, ...(form.heardAboutUs === opt ? S.hearAboutUsOptionHoverMobile : {}) } :
+                    { display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 28 }
+                  }
+                >
                   <input
                     type="radio"
                     name="heardAboutUs"
@@ -744,13 +1756,13 @@ function OrderFormEmbed() {
                   />
                   <span
                     style={{
-                      fontSize: 14,
+                      fontSize: window.innerWidth < 768 ? 14 : 14,
                       fontWeight: 600,
                       color: '#1a1a1a',
                       lineHeight: 1.2,
-                      wordBreak: 'normal',
+                      wordBreak: window.innerWidth < 768 ? 'normal' : 'normal',
                       overflowWrap: 'break-word',
-                      whiteSpace: opt === 'WhatsApp' ? 'nowrap' : 'normal'
+                      whiteSpace: window.innerWidth < 768 ? 'normal' : (opt === 'WhatsApp' ? 'nowrap' : 'normal')
                     }}
                   >
                     {opt}
@@ -765,12 +1777,47 @@ function OrderFormEmbed() {
               style={S.input}
               type="date"
               aria-label="Choose Delivery Date"
-              placeholder="Choose Delivery Date"
+              placeholder="Select delivery date"
               value={form.deliveryDate}
-              onClick={e => (e.currentTarget as HTMLInputElement).showPicker?.()}
-              onFocus={e => (e.currentTarget as HTMLInputElement).showPicker?.()}
-              onChange={e => setForm({ ...form, deliveryDate: e.target.value })}
+              onChange={e => {
+                const selectedDate = new Date(e.target.value);
+                const now = new Date();
+                const minDate = new Date(now.getTime()); // Today onwards
+                const maxDate = new Date(now.getTime() + 48 * 60 * 60 * 1000); // 48 hours from now
+                
+                // Clear previous error
+                setDeliveryDateError('');
+                
+                // Validate date is within 48 hours (including today)
+                if (selectedDate < minDate) {
+                  setDeliveryDateError('Delivery date cannot be in the past.');
+                  setForm({ ...form, deliveryDate: '' });
+                  return;
+                }
+                
+                if (selectedDate > maxDate) {
+                  setDeliveryDateError('Delivery dates must be within 48 hours. Please select today, tomorrow, or the next day.');
+                  setForm({ ...form, deliveryDate: '' });
+                  return;
+                }
+                
+                // Valid date, update form
+                setForm({ ...form, deliveryDate: e.target.value });
+              }}
+              onClick={(e) => e.target.showPicker()}
+              onFocus={(e) => e.target.showPicker()}
+              min={new Date().toISOString().split('T')[0]} // Today onwards
+              max={new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString().split('T')[0]} // 48 hours from now
+              required
             />
+            {deliveryDateError && (
+              <p style={{...S.hint, fontSize: '13px', color: '#dc3545', marginTop: '4px', fontWeight: 'bold'}}>
+                ⚠️ {deliveryDateError}
+              </p>
+            )}
+            <p style={{...S.hint, fontSize: '13px', color: '#666', marginTop: '4px'}}>
+              📅 Select your preferred delivery date (today, tomorrow, or the next day only)
+            </p>
 
             {/* Preferred delivery time window */}
             <label style={S.label}>PREFERRED DELIVERY TIME WINDOW <span style={S.req}>*</span></label>
@@ -795,23 +1842,6 @@ function OrderFormEmbed() {
             </div>
             <p style={S.hint}>We will do our absolute best to deliver at your preferred time. If there's any delay or change, our customer service / dispatch rider will call you ahead so you're fully carried along.</p>
 
-            {/* Payment method */}
-            <label style={S.label}>PAYMENT METHOD</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
-              {['Pay on Delivery', 'Pay Before Delivery'].map(opt => (
-                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={opt}
-                    checked={form.paymentMethod === opt}
-                    onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
-                  />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
-                </label>
-              ))}
-            </div>
-
             {/* Comment */}
             <label style={S.label}>COMMENT OR MESSAGE</label>
             <textarea
@@ -822,30 +1852,35 @@ function OrderFormEmbed() {
               onChange={e => setForm({ ...form, comment: e.target.value })}
             />
 
-            {/* Before you submit */}
-            <label style={S.label}>BEFORE YOU SUBMIT <span style={S.req}>*</span></label>
-            <div style={{ marginTop: 10 }}>
-              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#333' }}>
-                <input
-                  type="checkbox"
-                  checked={form.agreeToTerms}
-                  onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
-                  style={{ cursor: 'pointer', marginTop: 2 }}
-                />
-                <span>I understand that this is a Pay-on-Delivery order and I will be available to receive my package.</span>
-              </label>
-            </div>
+            {/* Before you submit - only show for Pay on Delivery */}
+            {form.paymentMethod === 'Pay on Delivery' && (
+              <>
+                <label style={S.label}>BEFORE YOU SUBMIT <span style={S.req}>*</span></label>
+                <div style={{ marginTop: 10 }}>
+                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#333' }}>
+                    <input
+                      type="checkbox"
+                      checked={form.agreeToTerms}
+                      onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
+                      style={{ cursor: 'pointer', marginTop: 2 }}
+                    />
+                    <span>I understand that this is a Pay-on-Delivery order and I will be available to receive my package.</span>
+                  </label>
+                </div>
+              </>
+            )}
 
             {/* Summary */}
             <div style={S.sum}>
               <div style={{ fontSize: 14, fontWeight: 900, letterSpacing: 0.6, textAlign: 'center', marginBottom: 10, color: '#1a1a1a' }}>📋 ORDER SUMMARY</div>
               {(() => {
-                const p = packages.find(x => x.id === form.pkg);
+                const p = currentPackages.find(x => x.id === form.pkg);
                 if (!p) return null;
 
-                const deliveryFee = Number(form.deliveryFee || 0);
-                const total = p.price + deliveryFee;
-                const deliveryLabel = deliveryFee === 5000 ? 'Delivery (24 Hours)' : 'Delivery (1-3 Days)';
+                const currentDeliveryFee = deliveryFee; // Use memoized value
+                const total = p.price + currentDeliveryFee;
+                const deliveryLabel = currentDeliveryFee === 0 ? 'Delivery (FREE - Pay Before Delivery)' : 
+                                     currentDeliveryFee === 5000 ? 'Delivery (24 Hours)' : 'Delivery (1-3 Days)';
                 const items = PACKAGE_CONTENTS[p.name] || [];
                 const hasName = Boolean(form.name && form.name.trim());
                 const hasAddress = Boolean(form.address && form.address.trim());
@@ -881,7 +1916,7 @@ function OrderFormEmbed() {
 
                       <div style={{ height: 1, background: '#EFEFEF', margin: '12px 0' }} />
 
-                      <div style={S.sr}><span>🚚 {deliveryLabel}</span><span>₦{deliveryFee.toLocaleString()}</span></div>
+                      <div style={S.sr}><span style={{ fontWeight: 900 }}>🚚 {deliveryLabel}</span><span style={{ fontWeight: 900, fontSize: 15 }}>{currentDeliveryFee === 0 ? 'FREE' : `₦${currentDeliveryFee.toLocaleString()}`}</span></div>
 
                       <div style={{ height: 1, background: '#EFEFEF', margin: '12px 0' }} />
 
@@ -920,9 +1955,9 @@ function OrderFormEmbed() {
                   const addressOk = !!form.address.trim();
                   const stateOk = !!form.state;
                   const heardOk = !!form.heardAboutUs;
-                  const dateOk = !!form.deliveryDate;
+                  const dateOk = !!form.deliveryDate && !deliveryDateError;
                   const timeOk = !!form.deliveryTimeWindow;
-                  const termsOk = !!form.agreeToTerms;
+                  const termsOk = form.paymentMethod === 'Pay on Delivery' ? !!form.agreeToTerms : true;
 
                   if (!phoneOk || !emailOk || !addressOk || !stateOk || !heardOk || !dateOk || !timeOk || !termsOk) {
                     alert('Please fill all required fields and agree to terms');

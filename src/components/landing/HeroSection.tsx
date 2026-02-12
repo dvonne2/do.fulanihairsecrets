@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-const heroImageMobile = '/assets/hero-mobile.webp';
-const heroImage700 = '/assets/hero-fulani-700.webp';
-const heroImageLarge = '/assets/hero-fulani.webp';
-const heroVideoWebm = '/assets/hero-animated.webm';
-const heroVideoMp4 = '/assets/hero-animated.mp4';
+const BASE_PATH = import.meta.env.BASE_URL || '/';
+const heroImageMobile = `${BASE_PATH}assets/hero-mobile.webp`;
+const heroImage700 = `${BASE_PATH}assets/hero-fulani-700.webp`;
+const heroImageLarge = `${BASE_PATH}assets/hero-fulani.webp`;
+// Videos disabled for performance - LPV optimization
+const heroVideoWebm = null;
+const heroVideoMp4 = null;
 
 interface HeroSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };
@@ -16,30 +18,8 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
   const [canEnhance, setCanEnhance] = useState(false);
 
   const shouldEnhanceWithVideo = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-
-    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-    if (prefersReducedMotion) return false;
-
-    const nav = window.navigator as Navigator & {
-      connection?: {
-        saveData?: boolean;
-        effectiveType?: string;
-        downlink?: number;
-      };
-    };
-
-    const connection = nav.connection;
-    if (!connection) return true;
-    if (connection.saveData) return false;
-
-    const effectiveType = connection.effectiveType;
-    if (effectiveType && ['slow-2g', '2g', '3g'].includes(effectiveType)) return false;
-
-    const downlink = connection.downlink;
-    if (typeof downlink === 'number' && downlink < 1.5) return false;
-
-    return true;
+    // Videos disabled for LPV optimization
+    return false;
   }, []);
 
   useEffect(() => {
@@ -75,7 +55,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
   }, [shouldEnhanceWithVideo]);
 
   return (
-    <section className="pt-32 md:pt-44 pb-16 md:pb-32 relative overflow-hidden royal-blue-gradient">
+    <section className="pt-32 md:pt-44 pb-16 md:pb-32 relative overflow-hidden royal-blue-gradient valentine-pattern">
       <div className="absolute inset-0 arabian-pattern"></div>
       <div className="absolute inset-0 moroccan-tile opacity-30"></div>
       
@@ -84,10 +64,11 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
           {/* Left Column - Content */}
           <div className="text-center lg:text-left">
             {/* Pre-headline */}
-            <p className="inline-block font-sans text-base md:text-lg mb-4 bg-[#DAA520] text-black px-3 py-1.5 rounded">
+            <p className="inline-block font-sans text-base md:text-lg mb-4 bg-[#B80F66] text-white px-3 py-1.5 rounded">
               Tired of watching your edges disappear? 😔
             </p>
             
+                        
             {/* Main Headline */}
             <h1 className="font-cinzel text-3xl md:text-5xl lg:text-6xl font-semibold mb-6 leading-tight">
               <span className="text-foreground">STOP HAIR LOSS IN</span>
@@ -154,14 +135,14 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                 <p className="font-sans text-xs md:text-sm text-muted-foreground">5,247 Reviews</p>
               </div>
               <div className="p-3 md:p-4 rounded-xl bg-background/20 border border-gold/30 text-center">
-                <p className="font-cinzel text-xl md:text-2xl text-success font-semibold animate-pulse">127</p>
+                <p className="font-cinzel text-xl md:text-2xl text-[#B80F66] font-semibold animate-pulse">127</p>
                 <p className="font-sans text-xs md:text-sm text-muted-foreground">Orders Today</p>
               </div>
             </div>
             
             {/* Live Activity */}
-            <div className="p-3 rounded-xl bg-success/20 border border-success/50 mb-6">
-              <p className="font-sans text-sm md:text-base text-success">
+            <div className="p-3 rounded-xl bg-[#B80F66]/20 border border-[#B80F66]/50 mb-6">
+              <p className="font-sans text-sm md:text-base text-[#B80F66]">
                 {viewerCount} people viewing · 23 orders in last hour · Only {stockCount} left!
               </p>
             </div>
@@ -170,9 +151,9 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
             <a
               href="#order-form"
               data-form-cta="true"
-              className="block w-full gold-gradient text-background font-sans text-base md:text-lg tracking-widest uppercase py-4 md:py-5 rounded-xl font-bold btn-luxury text-center mb-6"
+              className="block w-full bg-gradient-to-r from-[#B80F66] via-[#FF69B4] to-[#B80F66] text-white font-sans text-base md:text-lg tracking-widest uppercase py-4 md:py-5 rounded-xl font-bold text-center mb-6 hover:transform hover:-translate-y-2 hover:shadow-lg transition-all duration-300"
             >
-              Order Now
+              Claim My Special Offer
             </a>
 
             {/* Mobile product image (shown early) */}
@@ -206,6 +187,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                     >
                       <source src={heroVideoWebm} type="video/webm" />
                       <source src={heroVideoMp4} type="video/mp4" />
+                      <track kind="captions" src="/assets/hero-captions.vtt" srcLang="en" label="English" default />
                     </video>
                   )}
                 </div>
@@ -246,6 +228,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                     >
                       <source src={heroVideoWebm} type="video/webm" />
                       <source src={heroVideoMp4} type="video/mp4" />
+                      <track kind="captions" src="/assets/hero-captions.vtt" srcLang="en" label="English" default />
                     </video>
                   )}
                 </div>

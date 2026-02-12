@@ -5,6 +5,7 @@ const faqs = [
   { q: "Why does this work better than the luxury products I buy abroad?", a: "Our formula is a 400-year-old Fulani family heirloom that predates modern haircare. Combined with trichological science, it delivers results that luxury brands simply cannot match. Many of our clients have shelves full of expensive Dubai and UK products — this is the one that finally filled in their edges." },
   { q: "How soon will I notice my edges filling in?", a: "Most women notice early changes in clear stages: in the first 2–3 weeks shedding reduces and the scalp feels calmer; by weeks 4–6 tiny baby hairs start appearing along the hairline and thinning spots; by 90 days you can see fuller density and stronger strands if you stay consistent. Full, dramatic transformations continue over 6–12 months." },
   { q: "Is it suitable for hair under hijab?", a: "Absolutely. In fact, it's perfect for covered hair. The formula nourishes deeply without heavy residue." },
+  { q: "Can it be used on relaxed hair?", a: "Yes, it can be used on all hair types including relaxed hair. Our gentle yet effective formula works with any hair texture or treatment, helping to nourish follicles and support healthy growth regardless of whether your hair is natural, relaxed, colored, or chemically treated." },
   { q: "What if it doesn't work for me?", a: "We offer a 12-month guarantee. If you don't see results, we refund in full — DOUBLE. No questions asked. We are that confident." },
   { 
     q: "What happens when I stop using Fulani Hair Gro?", 

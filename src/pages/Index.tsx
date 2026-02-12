@@ -6,7 +6,10 @@ import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
+// Valentine promo ended
+// import { ValentineCountdown } from '@/components/ValentineCountdown';
 import { useMetaPixel } from '@/hooks/useMetaPixel';
+import hajiaMaryamTestimonial from '@/assets/Hajia Maryam Testimonial.webp';
 
 // Lazy load below-fold components
 const HairLossTypesGuide = lazy(() =>
@@ -20,9 +23,6 @@ const GrandmothersPermission = lazy(() =>
 );
 const LimitedStockWarning = lazy(() =>
   import('@/components/landing/LimitedStockWarning').then((m) => ({ default: m.LimitedStockWarning }))
-);
-const SocialProofStrip = lazy(() =>
-  import('@/components/landing/SocialProofStrip').then((m) => ({ default: m.SocialProofStrip }))
 );
 const TrustLogos = lazy(() =>
   import('@/components/landing/TrustLogos').then((m) => ({ default: m.TrustLogos }))
@@ -78,9 +78,6 @@ const PricingSection = lazy(() =>
 );
 const Guarantee = lazy(() =>
   import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
-);
-const Testimonials = lazy(() =>
-  import('@/components/landing/Testimonials').then((m) => ({ default: m.Testimonials }))
 );
 const FAQ = lazy(() => import('@/components/landing/FAQ').then((m) => ({ default: m.FAQ })));
 import cashOnDeliveryImg from '@/assets/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
@@ -138,6 +135,10 @@ const purchaseNotifications = [
   { name: "Chief Mrs. N.", location: "Ikoyi", product: "6-Month Supply", time: "18 mins ago" },
   { name: "Hajia B.", location: "Asokoro", product: "Complete Set", time: "23 mins ago" },
   { name: "Mrs. K.", location: "Ikeja GRA", product: "Growth Pomade", time: "27 mins ago" },
+  { name: "Obinna", location: "Ikeja", product: "B2GOF Bundle for his wife!", time: "3 mins ago" },
+  { name: "Chukwuemeka", location: "Lekki", product: "Premium Bundle for wife", time: "6 mins ago" },
+  { name: "Ahmed", location: "Abuja", product: "Complete Set", time: "9 mins ago" },
+  { name: "Tunde", location: "Victoria Island", product: "6-Month Supply (gift)", time: "11 mins ago" },
 ];
 
 const getCountdownToMidnight = () => {
@@ -164,11 +165,10 @@ const Index = () => {
   const loadNonCritical = useIdleLoad(500); // Load after 500ms idle
   const afterHero = useAfterHeroLoad();
 
-  const { trackPageView } = useMetaPixel();
+  const { trackPageView, trackViewContent, trackFormStart } = useMetaPixel();
   const hasTrackedPageView = useRef(false);
   
   // State management
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [stockCount, setStockCount] = useState(43);
   const [viewerCount, setViewerCount] = useState(427);
   const [showPurchaseNotif, setShowPurchaseNotif] = useState(false);
@@ -193,12 +193,19 @@ const Index = () => {
     return () => clearInterval(timer);
   }, [afterHero]);
 
-  // Meta Pixel: PageView on mount
+  // Meta Pixel: PageView and ViewContent on mount
   useEffect(() => {
     if (hasTrackedPageView.current) return;
     trackPageView();
+    // CRITICAL FIX: Dynamic ViewContent for whale hunting - capture high-value packages
+    setTimeout(() => {
+      // Check URL for package selection, default to baseline
+      const urlParams = new URLSearchParams(window.location.search);
+      const pkg = urlParams.get('pkg') || 'Fulani Hair Gro';
+      trackViewContent(pkg); // Dynamic pricing for whale hunting
+    }, 1000); // Fire after 1 second
     hasTrackedPageView.current = true;
-  }, [trackPageView]);
+  }, [trackPageView, trackViewContent]);
 
   // Viewer count fluctuation (social proof)
   useEffect(() => {
@@ -235,21 +242,12 @@ const Index = () => {
       setTimeout(() => setShowPurchaseNotif(false), 4000);
     };
     
-    const interval = setInterval(showNotification, 15000);
-    const firstTimeout = setTimeout(showNotification, 5000);
+    const interval = setInterval(showNotification, 8000);
+    const firstTimeout = setTimeout(showNotification, 3000);
     return () => {
       clearInterval(interval);
       clearTimeout(firstTimeout);
     };
-  }, [afterHero]);
-
-  // Testimonial rotation
-  useEffect(() => {
-    if (!afterHero) return;
-    const interval = setInterval(() => {
-      setActiveTestimonial(prev => (prev + 1) % 6);
-    }, 5000);
-    return () => clearInterval(interval);
   }, [afterHero]);
 
   // Scroll progress + sticky bar
@@ -302,7 +300,8 @@ const Index = () => {
 
 
 
-  // FormStart tracking - fires once per session on first CTA or form interaction
+  // FormStart tracking - fires once per session on first CTA click ONLY (not on form interactions)
+  // This prevents FormStart from firing on Step 2
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -313,8 +312,6 @@ const Index = () => {
       fbq?: (...args: unknown[]) => unknown;
     };
 
-    const isDebug = window.location.search.includes('meta_debug=1');
-
     const fireFormStart = () => {
       try {
         if (window.sessionStorage.getItem('formStartFired') === '1') return;
@@ -323,41 +320,28 @@ const Index = () => {
         console.error('sessionStorage unavailable (private browsing mode?):', {
           error: error instanceof Error ? error.message : error
         });
+        return; // Don't fire if sessionStorage is unavailable
       }
 
       (window as WindowWithTracking).dataLayer?.push?.({ event: 'FormStart' });
-      (window as WindowWithTracking).fbq?.('trackCustom', 'FormStart');
-
-      void isDebug;
+      trackFormStart();
     };
 
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target) return;
 
+      // Only fire FormStart on CTA buttons, NOT on form container clicks
       const cta = target.closest('[data-form-cta="true"]');
-      const formContainer = target.closest('#order-form-container');
 
-      if (cta || formContainer) {
-        fireFormStart();
-      }
-    };
-
-    const handleFocus = (event: FocusEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (!target) return;
-
-      const input = target.closest('[data-form-input="true"]');
-      if (input) {
+      if (cta) {
         fireFormStart();
       }
     };
 
     document.addEventListener('click', handleClick);
-    document.addEventListener('focusin', handleFocus);
     return () => {
       document.removeEventListener('click', handleClick);
-      document.removeEventListener('focusin', handleFocus);
     };
   }, []);
 
@@ -380,10 +364,40 @@ const Index = () => {
         />
       )}
       
+      {/* Valentine promo ended - countdown removed */}
       <UrgencyBanner countdown={countdown} />
       
       <main>
         <TopStoryBanner />
+
+        {/* Testimonial Image Stack before form */}
+        <section className="py-8 px-4 bg-background">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-6">
+              <p className="font-cinzel text-sm tracking-[0.4em] uppercase text-gold mb-4">✦ Real Customer Results ✦</p>
+              <h2 className="font-cinzel text-2xl md:text-3xl text-foreground mb-2">See What Our Customers Say</h2>
+            </div>
+            <div className="luxury-card rounded-3xl p-6 md:p-8 mega-glow">
+              <img
+                src={hajiaMaryamTestimonial}
+                alt="Hajia Maryam Testimonial - Real customer results with Fulani Hair Gro"
+                className="w-full h-auto rounded-2xl shadow-2xl"
+                width={391}
+                height={891}
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="mt-6">
+                <div className="flex justify-center gap-1 mb-4">
+                  {Array(5).fill(0).map((_, j) => <span key={j} className="text-gold text-2xl">★</span>)}
+                </div>
+                <p className="font-cinzel text-lg text-gold mb-2">Hajia Maryam</p>
+                <p className="font-sans text-sm text-white mb-4">Verified Customer • Nigeria</p>
+                <p className="font-sans text-xs text-[#B80F66]">✓ Real Results • Real Customer</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* DISQUALIFICATION WARNING - After the form */}
         <DisqualificationWarning stockCount={stockCount} />
@@ -394,7 +408,6 @@ const Index = () => {
             <MaiduguriSecret />
             <GrandmothersPermission />
             <LimitedStockWarning stockCount={stockCount} />
-            <SocialProofStrip />
             <TrustLogos />
             <TransformationGallery />
           </>
@@ -450,14 +463,9 @@ const Index = () => {
             <IngredientsSection />
             <ProtectedRecipe />
             <WhyWeRestrict />
-            <BundleSection />
             <ApplicationProcess stockCount={stockCount} />
             <LuckyFewSection stockCount={stockCount} />
             <TheOffer stockCount={stockCount} />
-            <Testimonials
-              activeIndex={activeTestimonial}
-              onSetActive={setActiveTestimonial}
-            />
           </>
         </LazySection>
 
@@ -496,8 +504,8 @@ const Index = () => {
               </div>
 
               {/* Option 3 */}
-              <div className="bg-emerald-900/20 border border-emerald-500 rounded-2xl p-5 md:p-6 shadow-[0_0_30px_rgba(16,185,129,0.35)]">
-                <h3 className="font-cinzel text-lg md:text-xl text-emerald-400 mb-3">Option 3</h3>
+              <div className="bg-[#B80F66]/20 border border-[#B80F66] rounded-2xl p-5 md:p-6 shadow-[0_0_30px_rgba(184,15,102,0.35)]">
+                <h3 className="font-cinzel text-lg md:text-xl text-[#B80F66] mb-3">Option 3</h3>
                 <ul className="font-serif text-sm md:text-base text-foreground/90 space-y-1.5">
                   <li>• Use Fulani Hair Gro™ — a natural 3-step herbal system rooted in a 400-year-old Fulani tradition</li>
                   <li>• Formulated to calm the scalp, reduce excessive shedding, and restore healthy growth at the edges and crown</li>
@@ -557,7 +565,7 @@ const Index = () => {
           </div>
         </section>
 
-        <Suspense fallback={null}>
+        <Suspense fallback={<div className="py-16 text-center">Loading pricing...</div>}>
           <PricingSection 
             countdown={countdown}
             stockCount={stockCount}
@@ -579,6 +587,8 @@ const Index = () => {
               src={cashOnDeliveryImg}
               alt="Cash on Delivery available"
               className="w-full max-w-md object-contain"
+              width="1024"
+              height="345"
             />
           </div>
         </section>

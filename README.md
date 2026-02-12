@@ -1,22 +1,20 @@
-# Welcome to your Lovable project
+# Fulani Hair Gro - Premium Hair Growth Solution
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://fulanihairgro.com
+
+## About This Project
+
+Fulani Hair Gro is Nigeria's #1 rated hair growth system, trusted by thousands of women who successfully regrew their hair edges. Our 400-year-old Fulani secret delivers real results with 100,000+ satisfied customers.
 
 ## How can I edit this code?
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+There are several ways of editing this application.
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +60,15 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+This project can be deployed to any hosting platform that supports static sites (Vercel, Netlify, AWS S3, etc.). Simply build the project and deploy the dist folder.
 
-## Can I connect a custom domain to my Lovable project?
+```sh
+# Build the project
+npm run build
 
-Yes, you can!
+# Deploy the dist folder to your preferred hosting platform
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Can I connect a custom domain?
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Yes, you can connect a custom domain through your hosting provider's domain settings.

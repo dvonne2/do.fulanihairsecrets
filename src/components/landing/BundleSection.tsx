@@ -203,7 +203,7 @@ export const BundleSection = () => {
           <div className="flex items-center justify-center gap-4 mb-6">
             <span className="text-muted-foreground/80 line-through text-lg">₦214,500</span>
             <span className="font-cinzel text-4xl md:text-5xl text-gold animate-shimmer">₦66,750</span>
-            <span className="px-3 py-1 bg-success/20 text-success text-sm font-bold rounded-full">SAVE ₦147,750</span>
+            <span className="px-3 py-1 bg-[#B80F66]/20 text-[#B80F66] text-sm font-bold rounded-full">SAVE ₦147,750</span>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
@@ -221,13 +221,13 @@ export const BundleSection = () => {
           
           <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
-              <span className="text-success">✓</span> Pay on Delivery
+              <span className="text-[#B80F66]">✓</span> Pay on Delivery
             </span>
             <span className="flex items-center gap-2">
-              <span className="text-success">✓</span> 365-Day Guarantee
+              <span className="text-[#B80F66]">✓</span> 365-Day Guarantee
             </span>
             <span className="flex items-center gap-2">
-              <span className="text-success">✓</span> Free Shipping on ₦66,750 &amp; ₦215,000 bundles
+              <span className="text-[#B80F66]">✓</span> Free Shipping on ₦66,750 &amp; ₦215,000 bundles
             </span>
           </div>
         </div>

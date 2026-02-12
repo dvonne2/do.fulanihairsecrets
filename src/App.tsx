@@ -4,6 +4,9 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { AnalyticsLoader } from "@/components/AnalyticsLoader";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
+// Valentine promo ended - components hidden
+// import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
+// import { FloatingHearts } from "@/components/FloatingHearts";
 import Index from "./pages/Index";
 
 const ThankYou = React.lazy(() => import("./pages/ThankYou"));
@@ -50,7 +53,8 @@ const App = () => {
         <Providers>
           {ToasterComp ? <ToasterComp /> : null}
           {SonnerComp ? <SonnerComp /> : null}
-          <BrowserRouter>
+          <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            {/* Valentine promo ended - components removed */}
             <AnalyticsLoader />
             <Routes>
               <Route path="/" element={<Index />} />

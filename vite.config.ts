@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import fs from 'fs';
-import { partytownVite } from '@builder.io/partytown/utils';
+import { partytownVite } from '@qwik.dev/partytown/utils';
 
 // Custom plugin to copy critical files to dist root
 const copyCriticalFiles = () => ({
@@ -15,12 +15,22 @@ const copyCriticalFiles = () => ({
       '.htaccess',
       'favicon.ico',
       'robots.txt',
-      'proxy/facebook.php'
+      'proxy/facebook.php',
+      'proxy/gtag.php',
+      'meta-capi.php'
     ];
     
     criticalFiles.forEach(file => {
-      const src = path.resolve(__dirname, 'public', file);
-      const dest = path.resolve(__dirname, 'dist', file);
+      let src, dest;
+      if (file.startsWith('proxy/')) {
+        // Proxy files are in root directory
+        src = path.resolve(__dirname, file);
+        dest = path.resolve(__dirname, 'dist', file);
+      } else {
+        // Other files are in public directory
+        src = path.resolve(__dirname, 'public', file);
+        dest = path.resolve(__dirname, 'dist', file);
+      }
       const destDir = path.dirname(dest);
       if (!fs.existsSync(destDir)) {
         fs.mkdirSync(destDir, { recursive: true });
@@ -32,8 +42,33 @@ const copyCriticalFiles = () => ({
   }
 });
 
+// Custom plugin to make CSS loading non-blocking
+const optimizeCssLoading = () => ({
+  name: 'optimize-css-loading',
+  generateBundle(options, bundle) {
+    // Find the HTML file
+    const htmlFile = Object.keys(bundle).find(key => key.endsWith('.html'));
+    if (htmlFile && bundle[htmlFile].type === 'asset') {
+      let htmlSource = bundle[htmlFile].source.toString();
+      
+      // Replace blocking stylesheet with preload + async load
+      htmlSource = htmlSource.replace(
+        /<link rel="stylesheet" crossorigin href="([^"]+)">/,
+        (match, cssPath) => {
+          return `
+    <link rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
+        }
+      );
+      
+      bundle[htmlFile].source = htmlSource;
+    }
+  }
+});
+
 export default defineConfig({
-  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles()],
+  base: '/',
+  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles(), optimizeCssLoading()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -42,30 +77,35 @@ export default defineConfig({
   build: {
     outDir: "dist",
     target: 'es2020',
-    minify: 'esbuild',
+    minify: 'terser', // Better compression than esbuild
     cssMinify: true,
     reportCompressedSize: true,
-    chunkSizeWarningLimit: 500,
+    chunkSizeWarningLimit: 300,
+    sourcemap: false, // Disable sourcemaps for production
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console logs for production
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug']
+      }
+    },
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core React - must load first
+          // Core React - critical, loads first
           'react-vendor': ['react', 'react-dom'],
-          // Router - loads after React
+          // Router - critical for navigation
           'router': ['react-router-dom'],
           // React Query - can load in parallel
           'query': ['@tanstack/react-query'],
-          // Icons - lazy load
+          // Icons - lazy load (non-critical)
           'icons': ['lucide-react'],
-          // Radix UI components - lazy load
-          'radix': [
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-label',
-            '@radix-ui/react-select',
-            '@radix-ui/react-slot',
-            '@radix-ui/react-toast',
-          ],
+          // Radix UI - split into smaller chunks (avoid circular deps)
+          'radix-dialog': ['@radix-ui/react-dialog'],
+          'radix-forms': ['@radix-ui/react-label', '@radix-ui/react-select'],
+          'radix-ui': ['@radix-ui/react-accordion', '@radix-ui/react-toast', '@radix-ui/react-slot'],
+          // Utils - lazy load
+          'utils': ['date-fns', 'clsx', 'tailwind-merge'],
         },
         // Put ALL assets in /assets/ folder
         assetFileNames: (assetInfo) => {

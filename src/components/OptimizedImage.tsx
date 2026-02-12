@@ -104,7 +104,7 @@ export function OptimizedImage({
            width={width}
            height={height}
            className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-           loading={loading}
+           loading={loading || 'lazy'}
            decoding={decoding}
            {...(fetchPriority ? ({ fetchpriority: fetchPriority } as any) : {})}
          />
@@ -118,7 +118,7 @@ export function OptimizedImage({
              width={width}
              height={height}
              className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-             loading={loading}
+             loading={loading || 'lazy'}
              decoding={decoding}
              {...(fetchPriority ? ({ fetchpriority: fetchPriority } as any) : {})}
            />

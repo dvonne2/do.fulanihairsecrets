@@ -86,7 +86,7 @@ export const HairLossTypesGuide = () => {
               <div className="w-full md:w-3/5 space-y-4">
                 <div>
                   <h3 className="font-cinzel text-2xl md:text-3xl">
-                    <span className="inline-block bg-[#DAA520] text-white px-3 md:px-4 py-1">
+                    <span className="inline-block bg-[#FF1493] text-white px-3 md:px-4 py-1">
                       {type.name}
                     </span>
                   </h3>
@@ -145,7 +145,7 @@ export const HairLossTypesGuide = () => {
         {/* Why Choose Fulani Hair Gro */}
         <div className="bg-white border border-gold/20 rounded-2xl p-6 md:p-10 mb-12">
           <h3 className="font-cinzel font-extrabold text-xl md:text-2xl text-center mb-8">
-            <span className="inline-block bg-[#DAA520] text-black px-4 md:px-6 py-1">
+            <span className="inline-block bg-[#FF1493] text-black px-4 md:px-6 py-1">
               Why Choose Fulani Hair Gro?
             </span>
           </h3>

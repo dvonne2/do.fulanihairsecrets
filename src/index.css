@@ -5,6 +5,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Valentine's Day Theme Variables */
+:root {
+  --valentine-red: #B80F66;
+  --valentine-rose: #FF69B4;
+  --valentine-gradient: linear-gradient(135deg, #B80F66 0%, #FF69B4 100%);
+}
+
 .jandes-eyebrow {
   font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 600;
@@ -32,20 +39,167 @@
   font-family: 'Helvetica', Arial, sans-serif;
 }
 
-/* Fulani gold heading/body sizes for "This works for" section */
+/* Fulani gold heading/body sizes for "This works for" section - Valentine's Theme */
 .fhg-gold-heading {
   font-size: 35px;
-  color: #DAA520;
+  color: #FF1493;
 }
 
 .fhg-gold-body {
   font-size: 30px;
-  color: #333333;
+  color: #FF1493;
 }
 
 /* Soften all "black" text site-wide to #333333 while keeping Tailwind API */
 .text-black {
   color: #333333 !important;
+}
+
+/* Valentine's Day Theme Styles */
+.valentine-accent {
+  background: var(--valentine-gradient);
+  color: white;
+}
+
+.valentine-text {
+  color: var(--valentine-red);
+}
+
+.valentine-rose-text {
+  color: var(--valentine-rose);
+}
+
+.valentine-border {
+  border-color: var(--valentine-red);
+}
+
+.valentine-rose-border {
+  border-color: var(--valentine-rose);
+}
+
+/* Override all gold colors with Valentine's pink - DARKER for better contrast */
+.text-gold {
+  color: #B80F66 !important; /* Darker pink for better contrast */
+}
+
+.border-gold {
+  border-color: #B80F66 !important;
+}
+
+.bg-gold {
+  background-color: #B80F66 !important;
+}
+
+.from-gold {
+  --tw-gradient-from: #B80F66 !important;
+}
+
+.to-gold {
+  --tw-gradient-to: #B80F66 !important;
+}
+
+/* Valentine's Button Styles */
+.btn-valentine {
+  background: var(--valentine-gradient);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-valentine:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
+}
+
+/* Floating Hearts Animation */
+@keyframes floatHeart {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.floating-heart {
+  position: fixed;
+  color: var(--valentine-rose);
+  font-size: 20px;
+  animation: floatHeart 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+.floating-heart:nth-child(2) { left: 20%; animation-delay: 2s; }
+.floating-heart:nth-child(3) { left: 30%; animation-delay: 4s; }
+.floating-heart:nth-child(4) { left: 40%; animation-delay: 1s; }
+.floating-heart:nth-child(5) { left: 50%; animation-delay: 3s; }
+.floating-heart:nth-child(6) { left: 60%; animation-delay: 5s; }
+.floating-heart:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+.floating-heart:nth-child(8) { left: 80%; animation-delay: 4.5s; }
+.floating-heart:nth-child(9) { left: 90%; animation-delay: 1.5s; }
+
+/* Valentine's Background Pattern */
+.valentine-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(241, 158, 210, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(169, 29, 58, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(241, 158, 210, 0.03) 0%, transparent 50%);
+}
+
+/* Valentine's Badge */
+.valentine-badge {
+  background: var(--valentine-red);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+/* Countdown Timer Styles */
+.valentine-countdown {
+  background: var(--valentine-gradient);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.countdown-item {
+  text-align: center;
+}
+
+.countdown-number {
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+}
+
+.countdown-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.8;
 }
 
 @layer base {
@@ -54,11 +208,11 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    /* Gold Palette - MAXIMUM BRIGHTNESS */
-    --gold: 45 100% 55%;
-    --gold-bright: 50 100% 60%;
-    --gold-dark: 42 100% 45%;
-    --gold-light: 48 100% 95%;
+    /* Gold Palette - MAXIMUM BRIGHTNESS - DARKER for accessibility */
+    --gold: 45 100% 35%; /* Much darker for better contrast on light backgrounds */
+    --gold-bright: 50 100% 50%;
+    --gold-dark: 42 100% 25%;
+    --gold-light: 48 100% 75%;
     
     /* Royal Blue Palette - VIVID */
     --royal-blue: 230 100% 25%;
