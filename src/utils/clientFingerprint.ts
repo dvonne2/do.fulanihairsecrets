@@ -5,66 +5,12 @@
 
 // 🌐 Get Client IP Address (Server-side proxy needed for accuracy)
 export async function getClientIPAddress(): Promise<string | null> {
-  try {
-    // Prioritize reliable IP services to avoid rate limiting
-    const ipServices = [
-      { url: 'https://ipinfo.io/json', timeout: 5000 },  // Most reliable
-      { url: 'https://api.ipify.org?format=json', timeout: 3000 },  // Backup
-      { url: 'https://httpbin.org/ip', timeout: 3000 }  // Simple fallback
-    ];
-    
-    // Try each service until one succeeds
-    for (const service of ipServices) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), service.timeout);
-        
-        const response = await fetch(service.url, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Cache-Control': 'no-cache',
-            'User-Agent': 'Mozilla/5.0 (compatible; FHG-Tracker/1.0)'
-          },
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (response.ok) {
-          const data = await response.json();
-          const ip = data.ip || data.query || data.ip_address || data.origin?.replace('/ip', '');
-          
-          if (ip && isValidIP(ip)) {
-            console.log('[EMQ 10/10] 🌐 Client IP detected:', {
-              ip,
-              service: service.url.split('/')[2],
-              timestamp: new Date().toISOString()
-            });
-            return ip;
-          }
-        }
-      } catch (error) {
-        console.log(`[EMQ 10/10] ⚠️ IP service ${service.url} failed:`, error instanceof Error ? error.name : error);
-        continue;
-      }
-    }
-    
-    // Fallback: Try to get IP from browser's WebRTC (less reliable but better than nothing)
-    const webrtcIP = await getWebRTCIP();
-    if (webrtcIP) {
-      console.log('[EMQ 10/10] 🌐 WebRTC IP fallback:', webrtcIP);
-      return webrtcIP;
-    }
-    
-    // Final fallback: Use a placeholder to prevent empty headers
-    console.log('[EMQ 10/10] ⚠️ Could not detect client IP address, using fallback');
-    return '0.0.0.0'; // Placeholder that Meta will ignore but won't cause 400 errors
-    
-  } catch (error) {
-    console.error('[EMQ 10/10] ❌ IP detection failed:', error);
-    return null;
-  }
+  // Browser-side IP detection has been disabled.
+  // The server-side meta-capi.php endpoint already reads the client IP
+  // from incoming request headers, so we no longer call any external
+  // IP services from the browser.
+  console.log('[EMQ 10/10] 🌐 Skipping client IP detection in browser; using server-side IP instead');
+  return null;
 }
 
 // 🔍 Validate IP address format
@@ -179,25 +125,21 @@ export async function getEnhancedClientFingerprint(): Promise<{
   ip_source?: string;
   timestamp?: string;
 }> {
-  const [clientIP, userAgent] = await Promise.all([
-    getCachedClientIP(),
-    Promise.resolve(getClientUserAgent())
-  ]);
-  
+  // Only capture User Agent from the browser; rely on server for IP.
+  const userAgent = getClientUserAgent();
   const fingerprint = {
-    client_ip_address: clientIP || undefined,
+    client_ip_address: undefined,
     client_user_agent: userAgent || undefined,
-    ip_source: clientIP ? 'detected' : 'unavailable',
+    ip_source: 'server_headers',
     timestamp: new Date().toISOString()
   };
-  
-  console.log('[EMQ 10/10] 🎯 Enhanced client fingerprint:', {
-    hasIP: !!clientIP,
+
+  console.log('[EMQ 10/10] 🎯 Enhanced client fingerprint (UA only, no IP lookup):', {
     hasUserAgent: !!userAgent,
     ipSource: fingerprint.ip_source,
     timestamp: fingerprint.timestamp
   });
-  
+
   return fingerprint;
 }
 
@@ -207,44 +149,9 @@ export async function getLocationFromIP(ip: string): Promise<{
   region?: string;
   city?: string;
 }> {
-  try {
-    // Try multiple location services to avoid 429/CORS errors
-    const locationServices = [
-      { url: `https://ipapi.co/${ip}/json/`, parser: (data: any) => ({ country: data.country_code || data.country, region: data.region || data.region_name, city: data.city }) },
-      { url: `https://ip-api.com/json/${ip}`, parser: (data: any) => ({ country: data.countryCode, region: data.regionName, city: data.city }) },
-      { url: `https://geo.ipify.org/api/v1?apiKey=at_your_key&ipAddress=${ip}`, parser: (data: any) => ({ country: data.location?.country, region: data.location?.region, city: data.location?.city }) }
-    ];
-
-    for (const service of locationServices) {
-      try {
-        const response = await fetch(service.url, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          const location = service.parser(data);
-          
-          console.log('[EMQ 10/10] 🌍 IP location detected:', {
-            ip,
-            location,
-            service: service.url,
-            timestamp: new Date().toISOString()
-          });
-          
-          return location;
-        }
-      } catch (serviceError) {
-        console.warn(`[Client Fingerprint] Location service ${service.url} failed:`, serviceError);
-        continue;
-      }
-    }
-  } catch (error) {
-    console.log('[EMQ 10/10] ⚠️ IP location detection failed:', error);
-  }
-  
+  // Browser-side IP geolocation has been disabled to avoid external calls
+  // like ipapi.co, ip-api.com, geo.ipify.org, etc. Any IP-based
+  // enrichment should be performed server-side using request headers.
+  console.log('[Client Fingerprint] 🌍 Skipping IP location lookup in browser for IP:', ip);
   return {};
 }

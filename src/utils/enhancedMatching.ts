@@ -46,43 +46,15 @@ export async function hashString(input: string): Promise<string> {
 }
 
 /**
- * Get client IP address (with fallbacks)
+ * Get client IP address
+ *
+ * NOTE: Browser-side IP detection has been disabled. The server-side
+ * meta-capi.php endpoint already reads the client IP from request
+ * headers, so we avoid making any external IP lookup requests here.
  */
 export async function getClientIPAddress(): Promise<string> {
-  try {
-    // Try multiple IP detection services in order of preference
-    const ipServices = [
-      'https://api.ipify.org?format=json',
-      'https://ipapi.co/ip/',
-      'https://api.ip.sb/ip',
-      'https://icanhazip.com'
-    ];
-
-    for (const service of ipServices) {
-      try {
-        const response = await fetch(service);
-        if (response.ok) {
-          const data = await response.text();
-          const ip = data.trim();
-          
-          // Validate IP format (basic IPv4/IPv6 validation)
-          if (/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^[0-9a-fA-F:]+$/.test(ip)) {
-            console.log('[Enhanced Matching] Client IP detected:', ip);
-            return ip;
-          }
-        }
-      } catch (serviceError) {
-        console.warn(`[Enhanced Matching] IP service ${service} failed:`, serviceError);
-        continue;
-      }
-    }
-
-    console.warn('[Enhanced Matching] All IP services failed, using fallback');
-    return '';
-  } catch (error) {
-    console.error('[Enhanced Matching] Failed to get client IP:', error);
-    return '';
-  }
+  console.log('[Enhanced Matching] Skipping client IP fetch in browser; using server-side IP instead');
+  return '';
 }
 
 /**
