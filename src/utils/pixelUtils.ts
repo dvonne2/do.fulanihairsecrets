@@ -9,6 +9,9 @@ declare global {
 
 import { getExternalId, generateRefCode, saveExternalId } from './externalIdMirroring';
 
+// 🛡️ GLOBAL DEDUPLICATION GUARD: Prevents ANY pixel event from firing more than once
+const firedEvents = new Set<string>();
+
 export const PIXEL_ID = '220381209723501';
 
 // CAPI Server-Side Proxy (WordPress PHP)
@@ -284,6 +287,14 @@ export function firePixelEvent(
   params: Record<string, unknown> = {},
   eventId?: string
 ): boolean {
+  // 🛡️ GLOBAL DEDUP: Block duplicate events at the source
+  const eventKey = `track_${eventName}_${eventId || JSON.stringify(params)}`;
+  if (firedEvents.has(eventKey)) {
+    console.warn(`[Pixel] 🛡️ Blocked duplicate track: ${eventName}`, { eventKey });
+    return false;
+  }
+  firedEvents.add(eventKey);
+
   if (!isPixelReady()) {
     console.warn('[Pixel] fbq not ready (track skipped):', eventName);
     return false;
@@ -325,6 +336,14 @@ export function fireCustomPixelEvent(
   params: Record<string, unknown> = {},
   eventId?: string
 ): boolean {
+  // 🛡️ GLOBAL DEDUP: Block duplicate custom events at the source
+  const eventKey = `trackCustom_${eventName}_${eventId || JSON.stringify(params)}`;
+  if (firedEvents.has(eventKey)) {
+    console.warn(`[Pixel] 🛡️ Blocked duplicate trackCustom: ${eventName}`, { eventKey });
+    return false;
+  }
+  firedEvents.add(eventKey);
+
   if (!isPixelReady()) {
     console.warn('[Pixel] fbq not ready (trackCustom skipped):', eventName);
     return false;

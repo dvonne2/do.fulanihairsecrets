@@ -645,51 +645,49 @@ export function useMetaPixel(): UseMetaPixelReturn {
     const contentName = getProductContentName(packageName);
     const numItems = getProductNumItems(packageName);
     
-    // 🏆 Send High Value Purchase custom event
-    if (window.fbq) {
-      window.fbq('trackCustom', 'HighValuePurchase', {
-        value: totalAmount,
-        currency: 'NGN',
-        content_ids: contentIds,
-        content_name: contentName,
-        content_type: 'product',
-        num_items: numItems,
-        event_id: eventId,
-        
-        // 🏆 Ultra-premium indicators for Facebook AI
-        area_tier: wealthInfo.areaTier,
-        is_wealthy_area: wealthInfo.isWealthyArea,
-        is_lagos_island: wealthInfo.isLagosIsland,
-        is_abuja: wealthInfo.isAbuja,
-        payment_method: formData.paymentMethod,
-        is_prepaid_customer: isPrepaidCustomer,
-        acquisition_channel: formData.heardAboutUs,
-        
-        // 🏆 Predictive LTV indicators
-        predicted_ltv: 'high', // Tell Facebook this is high LTV
-        customer_segment: 'ultra_premium',
-        delivery_speed_preference: formData.deliveryFee || 0,
-        price_sensitivity: 'premium',
-        
-        // 🏆 TRUST SCORE: Elite customer trust signal
-        trust_score: trustScore, // 100 = Ultra-premium + Prepaid (maximum trust)
-        is_elite_customer: trustScore === 100, // Boolean for Facebook AI
-        trust_indicators: {
-          area_wealth: isUltraPremium,
-          prepaid_trust: isPrepaidCustomer,
-          high_value_intent: isHighValuePackage
-        },
-        
-        // 🏆 CONVENIENCE PREFERENCE: Time-saving behavior
-        user_preference: userPreference, // 'convenience' = pays for speed
-        is_convenience_seeker: userPreference === 'convenience',
-        convenience_indicators: {
-          paid_express_delivery: (formData.deliveryFee || 0) > 3000,
-          urgent_delivery_requested: formData.deliveryDate && calculateDeliveryUrgency(formData.deliveryDate) === 'immediate'
-        }
-      });
-      console.log('[HighValuePurchase] 🏆 Ultra-premium event sent to Facebook:', eventId);
-    }
+    // 🏆 Send High Value Purchase custom event via fireCustomPixelEvent (global dedup guard)
+    fireCustomPixelEvent('HighValuePurchase', {
+      value: totalAmount,
+      currency: 'NGN',
+      content_ids: contentIds,
+      content_name: contentName,
+      content_type: 'product',
+      num_items: numItems,
+      event_id: eventId,
+      
+      // 🏆 Ultra-premium indicators for Facebook AI
+      area_tier: wealthInfo.areaTier,
+      is_wealthy_area: wealthInfo.isWealthyArea,
+      is_lagos_island: wealthInfo.isLagosIsland,
+      is_abuja: wealthInfo.isAbuja,
+      payment_method: formData.paymentMethod,
+      is_prepaid_customer: isPrepaidCustomer,
+      acquisition_channel: formData.heardAboutUs,
+      
+      // 🏆 Predictive LTV indicators
+      predicted_ltv: 'high',
+      customer_segment: 'ultra_premium',
+      delivery_speed_preference: formData.deliveryFee || 0,
+      price_sensitivity: 'premium',
+      
+      // 🏆 TRUST SCORE: Elite customer trust signal
+      trust_score: trustScore,
+      is_elite_customer: trustScore === 100,
+      trust_indicators: {
+        area_wealth: isUltraPremium,
+        prepaid_trust: isPrepaidCustomer,
+        high_value_intent: isHighValuePackage
+      },
+      
+      // 🏆 CONVENIENCE PREFERENCE: Time-saving behavior
+      user_preference: userPreference,
+      is_convenience_seeker: userPreference === 'convenience',
+      convenience_indicators: {
+        paid_express_delivery: (formData.deliveryFee || 0) > 3000,
+        urgent_delivery_requested: formData.deliveryDate && calculateDeliveryUrgency(formData.deliveryDate) === 'immediate'
+      }
+    }, eventId);
+    console.log('[HighValuePurchase] 🏆 Ultra-premium event sent to Facebook:', eventId);
     
     // 🏆 Send to CAPI with enhanced high-value data
     void sendToCAPI(
