@@ -230,11 +230,7 @@ const ThankYou = () => {
           zipCode: '',
         });
         
-        // Fire test High Value Purchase event
-        await trackHighValuePurchase({
-          ...testData,
-          zipCode: '',
-        });
+        // HighValuePurchase test mode removed to prevent duplicate firing
       })();
       
       return; // Exit test mode

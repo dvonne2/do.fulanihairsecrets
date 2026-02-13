@@ -208,29 +208,39 @@ export async function getLocationFromIP(ip: string): Promise<{
   city?: string;
 }> {
   try {
-    const response = await fetch(`https://ipapi.co/${ip}/json/`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
+    // Try multiple location services to avoid 429/CORS errors
+    const locationServices = [
+      { url: `https://ipapi.co/${ip}/json/`, parser: (data: any) => ({ country: data.country_code || data.country, region: data.region || data.region_name, city: data.city }) },
+      { url: `https://ip-api.com/json/${ip}`, parser: (data: any) => ({ country: data.countryCode, region: data.regionName, city: data.city }) },
+      { url: `https://geo.ipify.org/api/v1?apiKey=at_your_key&ipAddress=${ip}`, parser: (data: any) => ({ country: data.location?.country, region: data.location?.region, city: data.location?.city }) }
+    ];
+
+    for (const service of locationServices) {
+      try {
+        const response = await fetch(service.url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const location = service.parser(data);
+          
+          console.log('[EMQ 10/10] 🌍 IP location detected:', {
+            ip,
+            location,
+            service: service.url,
+            timestamp: new Date().toISOString()
+          });
+          
+          return location;
+        }
+      } catch (serviceError) {
+        console.warn(`[Client Fingerprint] Location service ${service.url} failed:`, serviceError);
+        continue;
       }
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      
-      const location = {
-        country: data.country_code || data.country,
-        region: data.region || data.region_name,
-        city: data.city
-      };
-      
-      console.log('[EMQ 10/10] 🌍 IP location detected:', {
-        ip,
-        location,
-        timestamp: new Date().toISOString()
-      });
-      
-      return location;
     }
   } catch (error) {
     console.log('[EMQ 10/10] ⚠️ IP location detection failed:', error);
