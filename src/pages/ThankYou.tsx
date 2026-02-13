@@ -40,6 +40,7 @@ const ThankYou = () => {
   });
   const [savingsAnimated, setSavingsAnimated] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [deliveryEstimate, setDeliveryEstimate] = useState('');
 
   useEffect(() => {
     // Meta Browser Optimization: Reduce confetti for slower devices
@@ -120,6 +121,9 @@ const ThankYou = () => {
       };
       
       console.log('[ThankYou] 🧪 TEST DATA:', testData);
+      
+      // Calculate and set delivery estimate for test mode
+      setDeliveryEstimate(getDeliveryEstimate(testData.deliveryType));
       
       // Pre-mark prerequisite events so canFireEvent() passes for Purchase
       // On the ThankYou page we know the full funnel already completed
@@ -205,6 +209,9 @@ const ThankYou = () => {
       ...stored,
       orderId: orderNumber,
     };
+
+    // Calculate and set delivery estimate
+    setDeliveryEstimate(getDeliveryEstimate(merged.deliveryType));
 
     console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
     
@@ -314,6 +321,32 @@ const ThankYou = () => {
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(amount);
+  };
+
+  const getDeliveryEstimate = (deliveryType?: string) => {
+    const now = new Date();
+    const formatDate = (d: Date) =>
+      d.toLocaleDateString('en-NG', { month: 'long', day: 'numeric', year: 'numeric' });
+
+    if (deliveryType === 'SAME_DAY') {
+      return formatDate(now);
+    }
+
+    // Standard delivery: 3-5 business days
+    const addBusinessDays = (start: Date, days: number): Date => {
+      const result = new Date(start);
+      let added = 0;
+      while (added < days) {
+        result.setDate(result.getDate() + 1);
+        const day = result.getDay();
+        if (day !== 0 && day !== 6) added++; // skip weekends
+      }
+      return result;
+    };
+
+    const startDate = addBusinessDays(now, 3);
+    const endDate = addBusinessDays(now, 5);
+    return `${formatDate(startDate)} – ${formatDate(endDate)}`;
   };
 
 
@@ -495,7 +528,7 @@ const ThankYou = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <p className="text-green-400">📍 Delivering to: <span className="text-white">Lagos, Nigeria</span></p>
-                <p className="text-green-400">📅 Expected arrival: <span className="text-white">December 10-12, 2025</span></p>
+                <p className="text-green-400">📅 Expected arrival: <span className="text-white">{deliveryEstimate}</span></p>
                 <p className="text-green-400">📱 Tracking sent via WhatsApp</p>
               </div>
               <Button className="bg-green-500 hover:bg-green-600 text-white">
@@ -834,7 +867,7 @@ const ThankYou = () => {
       <div className="fixed bottom-0 left-0 right-0 bg-[#111] border-t border-gold/30 p-4 z-50">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-sm text-gray-400">
-            📦 Order ID: {orderNumber} • Est. Delivery: Dec 10-12
+            📦 Order ID: {orderNumber} • Est. Delivery: {deliveryEstimate}
           </div>
           <div className="flex gap-2">
             <Button size="sm" variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black text-xs">
