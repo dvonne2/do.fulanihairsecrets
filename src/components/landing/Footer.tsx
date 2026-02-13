@@ -21,7 +21,7 @@ export const Footer = () => {
       <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
         {/* Result Images Row */}
         <div className="mb-8">
-          <p className="font-serif text-lg text-gold/80 italic mb-4">Your transformation starts today</p>
+          <p className="font-serif text-lg text-gold italic mb-4">Your transformation starts today</p>
           <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
             {footerImages.map((img, i) => (
               <div 

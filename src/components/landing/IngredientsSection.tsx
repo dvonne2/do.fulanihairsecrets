@@ -139,7 +139,7 @@ export const IngredientsSection: React.FC = () => {
                   <li key={i}>• {benefit}</li>
                 ))}
               </ul>
-              <p className="text-gold/70 text-sm md:text-lg font-serif italic">
+              <p className="text-gold text-sm md:text-lg font-serif italic">
                 "{ingredient.tagline}"
               </p>
             </div>

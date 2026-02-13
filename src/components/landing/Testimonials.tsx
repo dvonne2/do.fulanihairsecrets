@@ -47,7 +47,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           <h2 className="font-cinzel text-2xl md:text-4xl">
             <span className="text-foreground">5,247 Five-Star Reviews</span>
           </h2>
-          <p className="font-sans text-gold/60 mt-2">Verified purchases only</p>
+          <p className="font-sans text-gold mt-2">Verified purchases only</p>
         </div>
 
         {/* Featured Review (no headshot image) */}

@@ -16,7 +16,7 @@ export const HairLossTypesGuide = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="font-sans font-extrabold text-xs tracking-[0.3em] uppercase text-gold/80 mb-3">
+          <p className="font-sans font-extrabold text-xs tracking-[0.3em] uppercase text-gold mb-3">
             Educational Guide
           </p>
           <h2 className="font-cinzel text-2xl md:text-4xl text-[#D30000] mb-4">

@@ -19,7 +19,7 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
                 <span className="text-foreground">FULANI</span>
                 <span className="animate-shimmer ml-1">HAIR GRO™</span>
               </div>
-              <p className="font-sans text-[10px] md:text-xs text-gold/60 tracking-widest hidden sm:block">Est. 1625 · Maiduguri, Nigeria</p>
+              <p className="font-sans text-[10px] md:text-xs text-gold tracking-widest hidden sm:block">Est. 1625 · Maiduguri, Nigeria</p>
             </div>
           </div>
           

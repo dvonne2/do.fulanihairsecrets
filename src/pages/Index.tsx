@@ -505,7 +505,7 @@ const Index = () => {
 
               {/* Option 3 */}
               <div className="bg-[#B80F66]/20 border border-[#B80F66] rounded-2xl p-5 md:p-6 shadow-[0_0_30px_rgba(184,15,102,0.35)]">
-                <h3 className="font-cinzel text-lg md:text-xl text-[#B80F66] mb-3">Option 3</h3>
+                <h3 className="font-cinzel text-lg md:text-xl text-[#8A0B50] mb-3">Option 3</h3>
                 <ul className="font-serif text-sm md:text-base text-foreground/90 space-y-1.5">
                   <li>• Use Fulani Hair Gro™ — a natural 3-step herbal system rooted in a 400-year-old Fulani tradition</li>
                   <li>• Formulated to calm the scalp, reduce excessive shedding, and restore healthy growth at the edges and crown</li>
