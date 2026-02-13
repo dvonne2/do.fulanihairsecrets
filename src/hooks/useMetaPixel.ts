@@ -6,6 +6,7 @@ import {
   canFireEvent,
   generateEventId,
   firePixelEvent,
+  fireCustomPixelEvent,
   sendToCAPI,
   updatePixelWithAdvancedMatching,
   getPackagePrice,
@@ -402,49 +403,48 @@ export function useMetaPixel(): UseMetaPixelReturn {
     });
 
     //  BULLETPROOF DEDUPLICATION LAYER 4: Facebook event_id for server-side deduplication
-    // Send browser-side Purchase event
-    if (window.fbq) {
-      // 🎯 PBD SIGNAL: Distinguish between Pay Before Delivery and Pay on Delivery
-      
-      window.fbq('track', 'Purchase', {
-        value: totalAmount, // Amount is already in Naira (discounted for PBD, full for POD)
-        currency: 'NGN',
-        content_ids: contentIds,
-        content_name: `${paymentType}_${contentName}`, // PBD_Package vs POD_Package
-        content_type: 'product',
-        num_items: numItems,
-        event_id: eventId, //  CRITICAL: Prevents duplicate processing on Facebook's side
-        payment_type: paymentType // 🎯 CRITICAL: PBD vs POD signal for optimization
-      });
-      console.log('[Purchase] 🎯 PBD SIGNAL - Browser Purchase event sent:', {
-        paymentType,
-        payment_method: paymentMethod,
-        totalAmount,
-        contentName: `${paymentType}_${contentName}`,
-        eventId
-      });
-      
-      // 🎯 VALUE-BASED CUSTOM EVENT: Clean, readable event name for Ads Manager
-      window.fbq('trackCustom', valueBasedEventName, {
-        value: packageAmount, // Package amount (without delivery)
-        currency: 'NGN',
-        content_name: `${packageName}_${paymentPrefix}`,
-        content_type: 'product',
-        payment_type: paymentType,
-        payment_method: paymentMethod,
-        package_amount: packageAmount,
-        delivery_fee: deliveryFee,
-        total_amount: totalAmount,
-        event_id: eventId
-      });
-      console.log('[Whale Hunting] 🚀 Value-based custom event sent:', {
-        eventName: valueBasedEventName,
-        packageAmount,
-        paymentType,
-        totalAmount,
-        eventId
-      });
-    }
+    // Send browser-side Purchase event via firePixelEvent (single source of truth)
+    const purchaseData = {
+      value: totalAmount, // Amount is already in Naira (discounted for PBD, full for POD)
+      currency: 'NGN',
+      content_ids: contentIds,
+      content_name: `${paymentType}_${contentName}`, // PBD_Package vs POD_Package
+      content_type: 'product',
+      num_items: numItems,
+      event_id: eventId, //  CRITICAL: Prevents duplicate processing on Facebook's side
+      payment_type: paymentType // 🎯 CRITICAL: PBD vs POD signal for optimization
+    };
+    
+    // Fire Purchase event (single fbq call)
+    firePixelEvent('Purchase', purchaseData, eventId);
+    console.log('[Purchase] 🎯 PBD SIGNAL - Browser Purchase event sent:', {
+      paymentType,
+      payment_method: paymentMethod,
+      totalAmount,
+      contentName: `${paymentType}_${contentName}`,
+      eventId
+    });
+    
+    // Fire value-based custom event (separate from Purchase)
+    fireCustomPixelEvent(valueBasedEventName, {
+      value: packageAmount, // Package amount (without delivery)
+      currency: 'NGN',
+      content_name: `${packageName}_${paymentPrefix}`,
+      content_type: 'product',
+      payment_type: paymentType,
+      payment_method: paymentMethod,
+      package_amount: packageAmount,
+      delivery_fee: deliveryFee,
+      total_amount: totalAmount,
+      event_id: eventId
+    });
+    console.log('[Whale Hunting] 🚀 Value-based custom event sent:', {
+      eventName: valueBasedEventName,
+      packageAmount,
+      paymentType,
+      totalAmount,
+      eventId
+    });
 
     //  BULLETPROOF DEDUPLICATION LAYER 5: CAPI with same event_id
     void sendToCAPI(

@@ -60,7 +60,7 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
 };
 
 const ThankYou = () => {
-  const { trackPurchase, trackHighValuePurchase, trackFormStart, trackInitiateCheckout, trackCompleteRegistration, isEventFired } = useMetaPixel();
+  const { trackPurchase, trackHighValuePurchase, trackFormStart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel();
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -236,7 +236,11 @@ const ThankYou = () => {
           zipCode: '',
         });
         
-        // HighValuePurchase test mode removed to prevent duplicate firing
+        // Fire test HighValuePurchase event
+        await trackHighValuePurchase({
+          ...testData,
+          zipCode: '',
+        });
       })();
       
       return; // Exit test mode
@@ -299,9 +303,11 @@ const ThankYou = () => {
 
     console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
     
+    // Fire PageView for thank-you page
+    trackPageView();
+    
     // Pre-mark prerequisite events so canFireEvent() passes for Purchase
     // On the ThankYou page the full funnel already completed before arriving here
-    markEventFired(SESSION_KEYS.PAGE_VIEW);
     markEventFired(SESSION_KEYS.FORM_START);
     markEventFired(SESSION_KEYS.ADD_TO_CART);
     markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
