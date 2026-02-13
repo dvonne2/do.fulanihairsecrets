@@ -368,7 +368,7 @@ const ThankYou = () => {
         // Non-critical error, continue normally
       }
     })();
-  }, [orderNumber, trackPurchase, trackHighValuePurchase]);
+  }, [orderNumber, trackPurchase]);
 
   useEffect(() => {
     try {
