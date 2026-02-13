@@ -12,7 +12,7 @@ import { getExternalId, generateRefCode, saveExternalId } from './externalIdMirr
 export const PIXEL_ID = '220381209723501';
 
 // CAPI Server-Side Proxy (WordPress PHP)
-export const CAPI_PROXY_URL = 'https://api.fulanihairsecrets.com/meta-capi.php';
+export const CAPI_PROXY_URL = 'https://apis.fulanihairsecrets.com/meta-capi.php';
 
 // Meta Access Token - NOW HANDLED SERVER-SIDE via PHP proxy
 // No client-side access to prevent token exposure
