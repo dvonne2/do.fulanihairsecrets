@@ -142,8 +142,8 @@ const ThankYou = () => {
 
   // 🔒 BULLETPROOF Purchase tracking on mount with order data
   useEffect(() => {
-    // 🧪 TEST MODE: Fire events for debugging even without order data
-    const isTestMode = window.location.search.includes('test=1') || !orderNumber || orderNumber === 'UNKNOWN';
+    // 🧪 TEST MODE: Fire events for debugging when test=1 is in URL
+    const isTestMode = window.location.search.includes('test=1');
     
     if (isTestMode) {
       console.log('[ThankYou] 🧪 TEST MODE: Firing events for debugging');
