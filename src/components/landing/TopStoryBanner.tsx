@@ -263,7 +263,7 @@ export const TopStoryBanner = () => {
                 <div className="urgency-section">
                   <span className="urgency-icon">🚚</span>
                   <span className="urgency-text">
-                    <span className="red font-bold">FREE SHIPPING</span><br/>
+                    <span className="red font-bold">FREE SHIPPING</span> (pay before delivery orders only)<br/>
                     PRE-PAY ONLY
                   </span>
                 </div>
