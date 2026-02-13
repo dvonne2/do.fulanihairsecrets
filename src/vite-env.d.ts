@@ -1,1 +1,1 @@
-VITE_API_URL=api.fulanihairsecrets.com
+VITE_API_URL=apis.fulanihairsecrets.com
