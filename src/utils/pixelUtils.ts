@@ -287,8 +287,8 @@ export function firePixelEvent(
   params: Record<string, unknown> = {},
   eventId?: string
 ): boolean {
-  // 🛡️ GLOBAL DEDUP: Block duplicate events at the source
-  const eventKey = `track_${eventName}_${eventId || JSON.stringify(params)}`;
+  // 🛡️ GLOBAL DEDUP: Block duplicate events at the source (keyed on event name only)
+  const eventKey = `track_${eventName}`;
   if (firedEvents.has(eventKey)) {
     console.warn(`[Pixel] 🛡️ Blocked duplicate track: ${eventName}`, { eventKey });
     return false;
@@ -336,8 +336,8 @@ export function fireCustomPixelEvent(
   params: Record<string, unknown> = {},
   eventId?: string
 ): boolean {
-  // 🛡️ GLOBAL DEDUP: Block duplicate custom events at the source
-  const eventKey = `trackCustom_${eventName}_${eventId || JSON.stringify(params)}`;
+  // 🛡️ GLOBAL DEDUP: Block duplicate custom events at the source (keyed on event name only)
+  const eventKey = `trackCustom_${eventName}`;
   if (firedEvents.has(eventKey)) {
     console.warn(`[Pixel] 🛡️ Blocked duplicate trackCustom: ${eventName}`, { eventKey });
     return false;
