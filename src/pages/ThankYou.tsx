@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Copy, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMetaPixel } from '@/hooks/useMetaPixel';
+import { markEventFired, SESSION_KEYS } from '@/utils/pixelUtils';
 
 import result1 from '@/assets/results/result-1.webp';
 import result2 from '@/assets/results/result-2.webp';
@@ -121,43 +122,53 @@ const ThankYou = () => {
       
       console.log('[ThankYou] 🧪 TEST DATA:', testData);
       
-      // 🧪 Fire test FormStart event (customer starts filling form)
-      trackFormStart({
-        fullName: testData.fullName,
-        email: testData.email,
-        phone: testData.phone,
-        state: testData.state,
-        lga: testData.lga,
-        address: testData.address,
-        zipCode: '',
-      });
+      // Pre-mark prerequisite events so canFireEvent() passes for Purchase
+      // On the ThankYou page we know the full funnel already completed
+      markEventFired(SESSION_KEYS.PAGE_VIEW);
+      markEventFired(SESSION_KEYS.FORM_START);
+      markEventFired(SESSION_KEYS.ADD_TO_CART);
+      markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
       
-      // 🧪 Fire test InitiateCheckout event (customer proceeds to payment)
-      trackInitiateCheckout({
-        fullName: testData.fullName,
-        email: testData.email,
-        phone: testData.phone,
-        state: testData.state,
-        lga: testData.lga,
-        address: testData.address,
-        packageName: testData.packageName,
-        packagePrice: testData.packagePrice,
-        deliveryFee: testData.deliveryFee,
-        totalAmount: testData.totalAmount,
-        zipCode: '',
-      });
-      
-      // Fire test Purchase event
-      trackPurchase({
-        ...testData,
-        zipCode: '',
-      });
-      
-      // Fire test High Value Purchase event
-      trackHighValuePurchase({
-        ...testData,
-        zipCode: '',
-      });
+      // Use async IIFE to await each tracking call in sequence
+      (async () => {
+        // 🧪 Fire test FormStart event (customer starts filling form)
+        trackFormStart({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          zipCode: '',
+        });
+        
+        // 🧪 Fire test InitiateCheckout event (customer proceeds to payment)
+        await trackInitiateCheckout({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          packageName: testData.packageName,
+          packagePrice: testData.packagePrice,
+          deliveryFee: testData.deliveryFee,
+          totalAmount: testData.totalAmount,
+          zipCode: '',
+        });
+        
+        // Fire test Purchase event
+        await trackPurchase({
+          ...testData,
+          zipCode: '',
+        });
+        
+        // Fire test High Value Purchase event
+        await trackHighValuePurchase({
+          ...testData,
+          zipCode: '',
+        });
+      })();
       
       return; // Exit test mode
     }
@@ -198,71 +209,81 @@ const ThankYou = () => {
 
     console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
     
-    // Fire bulletproof Purchase event with order data
-    trackPurchase({
-      orderId: merged.orderId || 'UNKNOWN',
-      fullName: merged.fullName || '',
-      email: merged.email || '',
-      phone: merged.phone || '',
-      state: merged.state || '',
-      lga: merged.lga || '',
-      address: merged.address || '', // 🏝️ Area detection: "Lake Ewe", "Banana Island", "Yanokwaja"
-      packageName: merged.packageName || '',
-      packagePrice: merged.packageAmount || 0,
-      deliveryFee: merged.deliveryFee || 0,
-      totalAmount: merged.totalAmount || 0,
-      paymentMethod: merged.paymentMethod,
-      heardAboutUs: merged.heardAboutUs,
-      deliveryDate: merged.deliveryDate,
-      deliveryTimeWindow: merged.deliveryTimeWindow
-    });
+    // Pre-mark prerequisite events so canFireEvent() passes for Purchase
+    // On the ThankYou page the full funnel already completed before arriving here
+    markEventFired(SESSION_KEYS.PAGE_VIEW);
+    markEventFired(SESSION_KEYS.FORM_START);
+    markEventFired(SESSION_KEYS.ADD_TO_CART);
+    markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
     
-    // 🏆 Fire High Value Purchase event for ultra-premium targeting
-    trackHighValuePurchase({
-      orderId: merged.orderId || 'UNKNOWN',
-      fullName: merged.fullName || '',
-      email: merged.email || '',
-      phone: merged.phone || '',
-      packageName: merged.packageName || 'Fulani Hair Gro',
-      totalAmount: merged.totalAmount || 0,
-      state: merged.state || '',
-      lga: merged.lga || '',
-      address: merged.address || '',
-      landmark: merged.landmark || '',
-      deliveryFee: merged.deliveryFee || 0,
-      deliveryDate: merged.deliveryDate || '',
-      deliveryTimeWindow: merged.deliveryTimeWindow
-    });
-    
-    // 🎯 Fire CompleteRegistration event alongside Purchase
-    trackCompleteRegistration({
-      orderId: merged.orderId || 'UNKNOWN',
-      fullName: merged.fullName || '',
-      email: merged.email || '',
-      phone: merged.phone || '',
-      packageName: merged.packageName || 'Fulani Hair Gro',
-      totalAmount: merged.totalAmount || 0,
-      state: merged.state || '',
-      lga: merged.lga || '',
-      address: merged.address || '',
-      landmark: merged.landmark || '',
-      deliveryFee: merged.deliveryFee || 0,
-      deliveryDate: merged.deliveryDate || '',
-      deliveryTimeWindow: merged.deliveryTimeWindow
-    });
-    
-    // 🎯 Value-based custom events are now fired automatically within trackPurchase
-    // Events like pbd215000, pbd66750, pod32750, etc. are generated dynamically
-    
-    // 🔧 PRODUCTION HARDENING: Clear sessionStorage after successful firing
-    // Prevents edge case where second order in same tab accidentally reads old data
-    try {
-      window.sessionStorage.removeItem('fhg_order_data');
-      console.log('[ThankYou] 🧹 sessionStorage cleared after successful event firing');
-    } catch (error) {
-      console.error('[ThankYou] Failed to clear sessionStorage:', error);
-      // Non-critical error, continue normally
-    }
+    // Use async IIFE to await each tracking call in sequence
+    (async () => {
+      // Fire bulletproof Purchase event with order data
+      await trackPurchase({
+        orderId: merged.orderId || 'UNKNOWN',
+        fullName: merged.fullName || '',
+        email: merged.email || '',
+        phone: merged.phone || '',
+        state: merged.state || '',
+        lga: merged.lga || '',
+        address: merged.address || '', // 🏝️ Area detection: "Lake Ewe", "Banana Island", "Yanokwaja"
+        packageName: merged.packageName || '',
+        packagePrice: merged.packageAmount || 0,
+        deliveryFee: merged.deliveryFee || 0,
+        totalAmount: merged.totalAmount || 0,
+        paymentMethod: merged.paymentMethod,
+        heardAboutUs: merged.heardAboutUs,
+        deliveryDate: merged.deliveryDate,
+        deliveryTimeWindow: merged.deliveryTimeWindow
+      });
+      
+      // 🏆 Fire High Value Purchase event for ultra-premium targeting
+      await trackHighValuePurchase({
+        orderId: merged.orderId || 'UNKNOWN',
+        fullName: merged.fullName || '',
+        email: merged.email || '',
+        phone: merged.phone || '',
+        packageName: merged.packageName || 'Fulani Hair Gro',
+        totalAmount: merged.totalAmount || 0,
+        state: merged.state || '',
+        lga: merged.lga || '',
+        address: merged.address || '',
+        landmark: merged.landmark || '',
+        deliveryFee: merged.deliveryFee || 0,
+        deliveryDate: merged.deliveryDate || '',
+        deliveryTimeWindow: merged.deliveryTimeWindow
+      });
+      
+      // 🎯 Fire CompleteRegistration event alongside Purchase
+      await trackCompleteRegistration({
+        orderId: merged.orderId || 'UNKNOWN',
+        fullName: merged.fullName || '',
+        email: merged.email || '',
+        phone: merged.phone || '',
+        packageName: merged.packageName || 'Fulani Hair Gro',
+        totalAmount: merged.totalAmount || 0,
+        state: merged.state || '',
+        lga: merged.lga || '',
+        address: merged.address || '',
+        landmark: merged.landmark || '',
+        deliveryFee: merged.deliveryFee || 0,
+        deliveryDate: merged.deliveryDate || '',
+        deliveryTimeWindow: merged.deliveryTimeWindow
+      });
+      
+      // 🎯 Value-based custom events are now fired automatically within trackPurchase
+      // Events like pbd215000, pbd66750, pod32750, etc. are generated dynamically
+      
+      // 🔧 PRODUCTION HARDENING: Clear sessionStorage after successful firing
+      // Prevents edge case where second order in same tab accidentally reads old data
+      try {
+        window.sessionStorage.removeItem('fhg_order_data');
+        console.log('[ThankYou] 🧹 sessionStorage cleared after successful event firing');
+      } catch (error) {
+        console.error('[ThankYou] Failed to clear sessionStorage:', error);
+        // Non-critical error, continue normally
+      }
+    })();
   }, [orderNumber, trackPurchase, trackHighValuePurchase]);
 
   useEffect(() => {
