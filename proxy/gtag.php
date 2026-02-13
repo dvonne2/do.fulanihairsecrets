@@ -13,6 +13,7 @@ if (strpos($origin, 'fulanihairsecrets.com') !== false) {
 
 // Handle browser pre-check (OPTIONS) - prevents CORS blocks
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
     exit;
 }
 // --- END OF SECURITY ADDITION ---

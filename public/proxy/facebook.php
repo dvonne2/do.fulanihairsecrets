@@ -2,6 +2,15 @@
 // Same-origin proxy for Meta Pixel script to bypass Web Worker CORS restrictions (Partytown).
 // Strictly proxies https://connect.facebook.net/en_US/fbevents.js
 
+header('Access-Control-Allow-Origin: https://fulanihairsecrets.com');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 $url = 'https://connect.facebook.net/en_US/fbevents.js';
 
 if (isset($_GET['url'])) {
@@ -83,7 +92,6 @@ if (is_string($contentType) && $contentType !== '') {
 }
 
 header('Content-Type: ' . $finalType);
-header('Access-Control-Allow-Origin: *');
 header('Cache-Control: public, max-age=7200, stale-while-revalidate=604800');
 header('X-Content-Type-Options: nosniff');
 
