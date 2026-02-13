@@ -79,19 +79,7 @@ const ThankYou = () => {
       frame();
     }
 
-    // Animate savings counter
-    const targetSavings = 15493250;
-    const duration2 = 2000;
-    const startTime = Date.now();
-    
-    const animateSavings = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration2, 1);
-      setSavingsAnimated(Math.floor(progress * targetSavings));
-      if (progress < 1) requestAnimationFrame(animateSavings);
-    };
-    setTimeout(animateSavings, 1000);
-  }, []);
+      }, []);
 
   // 🔒 BULLETPROOF Purchase tracking on mount with order data
   useEffect(() => {
@@ -124,6 +112,23 @@ const ThankYou = () => {
       
       // Calculate and set delivery estimate for test mode
       setDeliveryEstimate(getDeliveryEstimate(testData.deliveryType));
+      
+      // Calculate savings for test mode
+      const whatTheyWouldHaveSpent = 360000 + 200000 + 15000000; // Salon + failed products + transplant
+      const whatTheyPaid = testData.totalAmount || 0;
+      const targetSavings = Math.max(0, whatTheyWouldHaveSpent - whatTheyPaid);
+      
+      // Animate savings counter
+      const duration2 = 2000;
+      const startTime = Date.now();
+      
+      const animateSavings = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration2, 1);
+        setSavingsAnimated(Math.floor(progress * targetSavings));
+        if (progress < 1) requestAnimationFrame(animateSavings);
+      };
+      setTimeout(animateSavings, 1000);
       
       // Pre-mark prerequisite events so canFireEvent() passes for Purchase
       // On the ThankYou page we know the full funnel already completed
@@ -212,6 +217,24 @@ const ThankYou = () => {
 
     // Calculate and set delivery estimate
     setDeliveryEstimate(getDeliveryEstimate(merged.deliveryType));
+
+    // Calculate actual savings from order data
+    // Compare what they would have spent vs what they actually paid
+    const whatTheyWouldHaveSpent = 360000 + 200000 + 15000000; // Salon + failed products + transplant
+    const whatTheyPaid = merged.totalAmount || 0;
+    const targetSavings = Math.max(0, whatTheyWouldHaveSpent - whatTheyPaid);
+    
+    // Animate savings counter
+    const duration2 = 2000;
+    const startTime = Date.now();
+    
+    const animateSavings = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration2, 1);
+      setSavingsAnimated(Math.floor(progress * targetSavings));
+      if (progress < 1) requestAnimationFrame(animateSavings);
+    };
+    setTimeout(animateSavings, 1000);
 
     console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
     
@@ -439,7 +462,7 @@ const ThankYou = () => {
             <div className="bg-[#0a0a0a] border-2 border-green-500 rounded-2xl p-6 text-center">
               <div className="text-4xl mb-4">💰</div>
               <h3 className="text-xl font-bold text-green-400 mb-2">Smart Investment</h3>
-              <p className="text-gray-300">You just saved <span className="text-green-400 font-bold">₦179,250</span> compared to buying individually. That's a Chanel bag worth of savings! 👜</p>
+              <p className="text-gray-300">You just saved <span className="text-green-400 font-bold">{formatCurrency(savingsAnimated)}</span> compared to buying individually. That's a Chanel bag worth of savings! 👜</p>
             </div>
 
             <div className="bg-[#0a0a0a] border-2 border-gold rounded-2xl p-6 text-center">
@@ -482,7 +505,7 @@ const ThankYou = () => {
           <div className="border-t border-gray-700 pt-6 mb-6">
             <div className="flex justify-between items-center text-xl">
               <span className="text-white">Your investment today:</span>
-              <span className="text-green-400 font-bold">₦66,750</span>
+              <span className="text-green-400 font-bold">{formatCurrency(merged.totalAmount || 0)}</span>
             </div>
           </div>
 
@@ -589,11 +612,11 @@ const ThankYou = () => {
             </div>
             <div className="flex justify-between mb-4">
               <span className="text-white">You Paid:</span>
-              <span className="text-white">₦66,750</span>
+              <span className="text-white">{formatCurrency(merged.totalAmount || 0)}</span>
             </div>
             <div className="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span className="text-xl font-bold text-green-400">YOU SAVED:</span>
-              <span className="text-3xl font-bold text-green-400">₦179,250 💰</span>
+              <span className="text-3xl font-bold text-green-400">{formatCurrency(savingsAnimated)} 💰</span>
             </div>
           </div>
         </div>
