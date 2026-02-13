@@ -573,7 +573,7 @@ export async function sendToCAPI(
   const metaEventType = eventType === 'addtocart' ? 'AddToCart' :
                         eventType === 'initiatecheckout' ? 'InitiateCheckout' :
                         eventType === 'purchase' ? 'Purchase' :
-                        customData?.eventName || 'CustomEvent';
+                        customData?.custom_event_name || customData?.eventName || customData?.event_name || 'CustomEvent';
 
   // Build Meta CAPI payload in correct format
   const payload = {
