@@ -53,8 +53,25 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$error = curl_error($ch);
 curl_close($ch);
 
-http_response_code($httpCode === 200 ? 200 : 502);
-echo $response;
+// Log errors for debugging - always return 200 to browser
+if ($error) {
+    error_log("CAPI cURL Error: " . $error);
+}
+if ($httpCode !== 200) {
+    error_log("CAPI HTTP Error: " . $httpCode . " Response: " . $response);
+    // Always return 200 to browser to prevent 502 errors
+    http_response_code(200);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Facebook API error',
+        'facebook_http_code' => $httpCode,
+        'facebook_response' => json_decode($response) ?: $response
+    ]);
+} else {
+    http_response_code(200);
+    echo $response;
+}
 ?>

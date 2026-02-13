@@ -6,6 +6,7 @@
 import { getExternalId } from './externalIdMirroring';
 import { getCachedClientIP } from './clientFingerprint';
 import { CAPI_PROXY_URL } from './pixelUtils';
+import { hashString } from './enhancedMatching';
 
 // 🎯 PII-First Rule: Universal Phone/Email Bridge
 export function getStoredPIIForRehydration(): {
@@ -137,12 +138,17 @@ export async function rehydrateIdentityOnPageLoad(): Promise<{
     console.warn('[Invisible Bridge] ⚠️ Could not get client IP:', error);
   }
   
+  // Hash PII data before sending to CAPI
+  const hashedEmail = storedPII.email ? await hashString(storedPII.email) : undefined;
+  const hashedPhone = storedPII.phone ? await hashString(storedPII.phone) : undefined;
+  const hashedExternalId = storedPII.externalId ? await hashString(storedPII.externalId) : undefined;
+  
   // Combine all signals
   const rehydratedData = {
-    // PII-based signals (highest confidence)
-    ...(storedPII.email && { em: storedPII.email }),
-    ...(storedPII.phone && { ph: storedPII.phone }),
-    ...(storedPII.externalId && { external_id: storedPII.externalId }),
+    // PII-based signals (highest confidence) - HASHED for CAPI
+    ...(hashedEmail && { em: hashedEmail }),
+    ...(hashedPhone && { ph: hashedPhone }),
+    ...(hashedExternalId && { external_id: hashedExternalId }),
     
     // Fingerprint signals (medium confidence)
     ...fingerprint,

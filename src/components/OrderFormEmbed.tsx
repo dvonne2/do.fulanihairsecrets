@@ -1447,24 +1447,17 @@ function OrderFormEmbed() {
               })}
               
               {/* Trust indicators */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                marginTop: '14px',
-                flexWrap: 'wrap'
-              }}>
-                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+              <div className="trust-indicators">
+                <span className="trust-indicator">
+                  <span className="trust-indicator-check">✓</span>
                   Pay on Delivery
                 </span>
-                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+                <span className="trust-indicator">
+                  <span className="trust-indicator-check">✓</span>
                   Nationwide Shipping
                 </span>
-                <span style={{ fontSize: '10.5px', color: '#6B7280', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  <span style={{ color: '#14532d', fontWeight: '700', fontSize: '12px' }}>✓</span>
+                <span className="trust-indicator">
+                  <span className="trust-indicator-check">✓</span>
                   Support Active
                 </span>
               </div>
@@ -1651,6 +1644,9 @@ function OrderFormEmbed() {
                 <div style={{ fontSize: '16px' }}>
                   🔢 Account Number: <span style={{ fontWeight: '700', fontSize: '18px' }}>5633783114</span>
                 </div>
+                <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#fff3cd', border: '1px solid #ffeaa7', borderRadius: '8px', color: '#856404' }}>
+                  <strong>⚠️ Important:</strong> After payment, send your proof of payment to 08101594734
+                </div>
               </div>
             )}
 
@@ -1695,6 +1691,18 @@ function OrderFormEmbed() {
                   border: '2px solid #dc3545'
                 }}>
                   ⚠️ DO NOT PAY TO THE RIDER
+                </div>
+                <div style={{ 
+                  marginTop: '12px', 
+                  fontSize: '14px', 
+                  color: '#856404',
+                  backgroundColor: '#fff3cd',
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  textAlign: 'center',
+                  border: '1px solid #ffeaa7'
+                }}>
+                  <strong>After payment, send your proof of payment to 08101594734</strong>
                 </div>
               </div>
             )}

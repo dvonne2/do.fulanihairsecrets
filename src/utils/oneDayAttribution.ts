@@ -4,6 +4,7 @@
  */
 
 import { CAPI_PROXY_URL } from './pixelUtils';
+import { hashString } from './enhancedMatching';
 
 // 🚀 FBC Persistence - Store Click ID for 30 days
 export function captureAndStoreFBC(): string | null {
@@ -123,7 +124,7 @@ export function sendImmediateCAPI(
 }
 
 // 🎯 Early Identification - LeadSync with full identity
-export function triggerEarlyIdentification(
+export async function triggerEarlyIdentification(
   email: string,
   phone: string,
   externalId: string,
@@ -131,12 +132,17 @@ export function triggerEarlyIdentification(
 ): Promise<void> {
   const eventId = generateEventId('lead');
   
+  // Hash PII data before sending to CAPI
+  const hashedEmail = email ? await hashString(email) : undefined;
+  const hashedPhone = phone ? await hashString(phone) : undefined;
+  const hashedExternalId = externalId ? await hashString(externalId) : undefined;
+  
   // Full user_data for immediate identification
   const userData = {
-    // Hashed identity (will be hashed by caller)
-    em: email,
-    ph: phone,
-    external_id: externalId,
+    // Hashed identity for CAPI compliance
+    em: hashedEmail,
+    ph: hashedPhone,
+    external_id: hashedExternalId,
     
     // Critical for 1-day attribution
     fbp: getFacebookBrowserId(),

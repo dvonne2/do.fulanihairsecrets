@@ -15,6 +15,50 @@ import founderImg from '@/assets/products/hajara.webp';
 import amina from '@/assets/testimonials/amina.webp';
 import blessing from '@/assets/testimonials/blessing.webp';
 
+// Dynamic package mapping based on actual package names from OrderFormEmbed
+const packageProducts: Record<string, { title: string; items: { name: string; qty: number; image: string }[] }> = {
+  "SELF LOVE PLUS": {
+    title: "YOUR 1-MONTH TRIAL SUPPLY",
+    items: [
+      { name: "Heritage Shampoo (500ml)", qty: 1, image: shampoo },
+      { name: "Growth Pomade (150g)", qty: 1, image: pomade },
+      { name: "Voluminous Conditioner (500ml)", qty: 1, image: conditioner },
+    ]
+  },
+  "SELF LOVE RETURN": {
+    title: "YOUR 3-MONTH MAINTENANCE SUPPLY",
+    items: [
+      { name: "Growth Pomade (150g)", qty: 3, image: pomade },
+    ]
+  },
+  "SELF LOVE B2GOF": {
+    title: "YOUR 3-MONTH SCALP RESET SUPPLY",
+    items: [
+      { name: "Heritage Shampoo (500ml)", qty: 2, image: shampoo },
+      { name: "Growth Pomade (150g)", qty: 2, image: pomade },
+    ]
+  },
+  "SELF LOVE PLUS B2GOF": {
+    title: "YOUR 3-MONTH RECOVERY SYSTEM SUPPLY",
+    items: [
+      { name: "Heritage Shampoo (500ml)", qty: 2, image: shampoo },
+      { name: "Growth Pomade (150g)", qty: 2, image: pomade },
+      { name: "Voluminous Conditioner (500ml)", qty: 2, image: conditioner },
+    ]
+  },
+  "FAMILY SAVES": {
+    title: "YOUR 12-MONTH GOLD STANDARD SUPPLY",
+    items: [
+      { name: "Heritage Shampoo (500ml)", qty: 6, image: shampoo },
+      { name: "Voluminous Conditioner (500ml)", qty: 6, image: conditioner },
+      { name: "Growth Pomade (150g)", qty: 6, image: pomade },
+      { name: "🎁 FREE: Heritage Shampoo (500ml)", qty: 4, image: shampoo },
+      { name: "🎁 FREE: Voluminous Conditioner (500ml)", qty: 4, image: conditioner },
+      { name: "🎁 FREE: Growth Pomade (150g)", qty: 4, image: pomade },
+    ]
+  },
+};
+
 const ThankYou = () => {
   const { trackPurchase, trackHighValuePurchase, trackFormStart, trackInitiateCheckout, trackCompleteRegistration, isEventFired } = useMetaPixel();
   const [orderNumber] = useState(() => {
@@ -618,20 +662,24 @@ const ThankYou = () => {
           </p>
           
           <div className="bg-[#111] border border-gold/30 rounded-2xl p-6 mb-6">
-            <h3 className="text-lg font-bold text-gold mb-4">YOUR 6-MONTH TRANSFORMATION SUPPLY:</h3>
+            <h3 className="text-lg font-bold text-gold mb-4">
+              {(() => {
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['SELF LOVE PLUS'];
+                return currentPackage.title;
+              })()}:
+            </h3>
             <div className="space-y-4">
-              {[
-                { img: shampoo, name: 'Heritage Shampoo (500ml)', qty: 'x3' },
-                { img: conditioner, name: 'Voluminous Conditioner (500ml)', qty: 'x3' },
-                { img: pomade, name: 'Growth Pomade (150g)', qty: 'x3' }
-              ].map((product, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <img src={product.img} alt={product.name} className="w-16 h-16 object-cover rounded-lg" />
-                  <span className="flex-1 text-gray-300">{product.name}</span>
-                  <span className="text-gold">{product.qty}</span>
-                  <Check className="w-5 h-5 text-green-500" />
-                </div>
-              ))}
+              {(() => {
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['SELF LOVE PLUS'];
+                return currentPackage.items.map((item, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+                    <span className="flex-1 text-gray-300">{item.name}</span>
+                    <span className="text-gold">x{item.qty}</span>
+                    <Check className="w-5 h-5 text-green-500" />
+                  </div>
+                ));
+              })()}
             </div>
           </div>
 
