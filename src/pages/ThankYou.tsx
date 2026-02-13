@@ -148,6 +148,12 @@ const ThankYou = () => {
     if (isTestMode) {
       console.log('[ThankYou] 🧪 TEST MODE: Firing events for debugging');
       
+      // 🧪 Clear purchase localStorage in test mode to allow Purchase event
+      if (window.location.search.includes('test=1')) {
+        localStorage.removeItem('purchase_TEST_ORDER_123');
+        console.log('[Test Mode] Cleared purchase localStorage for testing');
+      }
+      
       // Test data with elite Nigerian area
       const testData = {
         orderId: 'TEST_ORDER_123',
