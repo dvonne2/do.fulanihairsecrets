@@ -92,7 +92,7 @@ if (is_string($contentType) && $contentType !== '') {
 }
 
 header('Content-Type: ' . $finalType);
-header('Cache-Control: public, max-age=7200, stale-while-revalidate=604800');
+header('Cache-Control: public, max-age=86400, stale-while-revalidate=604800');
 header('X-Content-Type-Options: nosniff');
 
 echo $body;

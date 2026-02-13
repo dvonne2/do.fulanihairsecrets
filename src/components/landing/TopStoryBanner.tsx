@@ -299,6 +299,8 @@ export const TopStoryBanner = () => {
         <div className="mt-6">
           <img
             src={fulaniBenefitsImage}
+            srcSet={`${fulaniBenefitsImage} 700w`}
+            sizes="(max-width: 768px) 100vw, 700px"
             alt="Fulani Hair Gro benefits and growth potential"
             className="w-full h-auto"
             width={700}
@@ -331,6 +333,8 @@ export const TopStoryBanner = () => {
         <div className="mt-6 bg-gray-200 flex items-center justify-center w-full h-auto">
           <img
             src={fulaniDaysImage}
+            srcSet={`${fulaniDaysImage} 700w`}
+            sizes="(max-width: 768px) 100vw, 700px"
             alt="Fulani Hair Gro results from day one to day ten"
             className="w-full h-auto"
             width={700}
