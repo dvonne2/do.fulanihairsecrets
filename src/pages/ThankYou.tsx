@@ -41,6 +41,8 @@ const ThankYou = () => {
   const [savingsAnimated, setSavingsAnimated] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [deliveryEstimate, setDeliveryEstimate] = useState('');
+  const [orderData, setOrderData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Meta Browser Optimization: Reduce confetti for slower devices
@@ -80,6 +82,19 @@ const ThankYou = () => {
     }
 
       }, []);
+
+  // Read order data from sessionStorage
+  useEffect(() => {
+    const stored = sessionStorage.getItem('fhg_order_data');
+    if (stored) {
+      try {
+        setOrderData(JSON.parse(stored));
+      } catch (e) {
+        console.error('Failed to parse order data:', e);
+      }
+    }
+    setLoading(false);
+  }, []);
 
   // 🔒 BULLETPROOF Purchase tracking on mount with order data
   useEffect(() => {
@@ -221,7 +236,7 @@ const ThankYou = () => {
     // Calculate actual savings from order data
     // Compare what they would have spent vs what they actually paid
     const whatTheyWouldHaveSpent = 360000 + 200000 + 15000000; // Salon + failed products + transplant
-    const whatTheyPaid = merged.totalAmount || 0;
+    const whatTheyPaid = orderData?.totalAmount || 0;
     const targetSavings = Math.max(0, whatTheyWouldHaveSpent - whatTheyPaid);
     
     // Animate savings counter
@@ -383,6 +398,36 @@ const ThankYou = () => {
 
   const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
 
+  // Loading state
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+      <p className="text-lg text-white">Loading your order details...</p>
+    </div>;
+  }
+
+  // No data fallback
+  if (!orderData && !window.location.search.includes('test=1')) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
+        <h1 className="text-2xl font-bold text-white mb-4">Order Details Not Found</h1>
+        <p className="text-gray-400 mb-6 max-w-md">
+          We couldn't find your order details. This can happen if you refreshed the page or visited this link directly.
+        </p>
+        <p className="text-gray-400 mb-8">
+          Need help? Contact us on WhatsApp and we'll look up your order.
+        </p>
+        <a
+          href="https://wa.me/2348101594734?text=Hi%2C%20I%20just%20placed%20an%20order%20and%20need%20help%20finding%20my%20details"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
+        >
+          Chat on WhatsApp
+        </a>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
       {/* Test Mode Banner */}
@@ -425,7 +470,9 @@ const ThankYou = () => {
           </div>
           
           <h1 className="text-2xl md:text-3xl font-bold text-green-500 mb-2">✓ ORDER CONFIRMED!</h1>
-          <p className="text-3xl md:text-4xl font-cinzel text-gold mb-2">Congratulations, Queen! 👑</p>
+          <p className="text-3xl md:text-4xl font-cinzel text-gold mb-2">
+            Congratulations, {orderData?.phone ? 'Queen' : 'Guest'}! 👑
+          </p>
           <p className="text-xl text-gray-300 mb-4">"You Just Made the Best Decision for Your Hair"</p>
           
           <div className="text-gray-400 mb-8">
@@ -505,7 +552,7 @@ const ThankYou = () => {
           <div className="border-t border-gray-700 pt-6 mb-6">
             <div className="flex justify-between items-center text-xl">
               <span className="text-white">Your investment today:</span>
-              <span className="text-green-400 font-bold">{formatCurrency(merged.totalAmount || 0)}</span>
+              <span className="text-green-400 font-bold">{formatCurrency(orderData?.totalAmount || 0)}</span>
             </div>
           </div>
 
@@ -565,7 +612,10 @@ const ThankYou = () => {
       {/* SECTION 5: ORDER SUMMARY */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-cinzel text-center text-gold mb-12">Here's Everything Coming Your Way:</h2>
+          <h2 className="text-2xl md:text-3xl font-cinzel text-center text-gold mb-4">Here's Everything Coming Your Way:</h2>
+          <p className="text-center text-xl text-gray-300 mb-8">
+            Package: <span className="text-gold font-bold">{orderData?.packageName || 'Fulani Hair Gro'}</span>
+          </p>
           
           <div className="bg-[#111] border border-gold/30 rounded-2xl p-6 mb-6">
             <h3 className="text-lg font-bold text-gold mb-4">YOUR 6-MONTH TRANSFORMATION SUPPLY:</h3>
@@ -612,7 +662,7 @@ const ThankYou = () => {
             </div>
             <div className="flex justify-between mb-4">
               <span className="text-white">You Paid:</span>
-              <span className="text-white">{formatCurrency(merged.totalAmount || 0)}</span>
+              <span className="text-white">{formatCurrency(orderData?.totalAmount || 0)}</span>
             </div>
             <div className="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span className="text-xl font-bold text-green-400">YOU SAVED:</span>
