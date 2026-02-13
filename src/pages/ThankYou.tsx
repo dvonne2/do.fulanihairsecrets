@@ -542,7 +542,7 @@ const ThankYou = () => {
               <h3 className="text-xl font-bold text-gold mb-2">Join The Winners</h3>
               <p className="text-gray-300 mb-4">92% of women who use the complete system see visible results within 8 weeks</p>
               <div className="w-full bg-gray-800 rounded-full h-3">
-                <div className="bg-gradient-to-r from-gold to-amber-500 h-3 rounded-full transition-all duration-1000" style={{ width: '92%' }} />
+                <div className="bg-gradient-to-r from-gold to-amber-500 h-3 rounded-full transition-all duration-1000 progress-bar-92" />
               </div>
             </div>
 

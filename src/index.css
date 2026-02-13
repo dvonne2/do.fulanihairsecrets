@@ -499,6 +499,10 @@
   font-size: 12px;
 }
 
+.progress-bar-92 {
+  width: 92%;
+}
+
 .ornate-divider {
   height: 2px;
   background: linear-gradient(90deg, transparent, hsl(var(--gold)), hsl(var(--gold-bright)), hsl(var(--gold)), transparent);
