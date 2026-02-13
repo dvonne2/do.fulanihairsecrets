@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Copy, Share2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMetaPixel } from '@/hooks/useMetaPixel';
 import { markEventFired, SESSION_KEYS } from '@/utils/pixelUtils';
@@ -40,7 +40,6 @@ const ThankYou = () => {
   });
   const [savingsAnimated, setSavingsAnimated] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     // Meta Browser Optimization: Reduce confetti for slower devices
@@ -317,11 +316,6 @@ const ThankYou = () => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(amount);
   };
 
-  const copyReferralLink = () => {
-    navigator.clipboard.writeText('fulaniharigro.com/ref/QUEEN2024');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const faqs = [
     { q: "What if my order doesn't arrive?", a: "Every order is tracked. You'll receive WhatsApp updates at every stage. If anything goes wrong, we reship immediately at our cost." },
@@ -774,45 +768,7 @@ const ThankYou = () => {
         </div>
       </section>
 
-      {/* SECTION 13: REFERRAL */}
-      <section className="py-16 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-cinzel text-center text-gold mb-8">💰 Share The Secret, Get Rewarded</h2>
-          
-          <div className="bg-[#111] border-2 border-gold rounded-3xl p-8">
-            <h3 className="text-xl font-bold text-center text-gold mb-6">EARN ₦5,000 FOR EVERY FRIEND WHO ORDERS</h3>
-            
-            <div className="bg-[#0a0a0a] rounded-xl p-4 flex items-center justify-between mb-6">
-              <span className="text-gray-300 text-sm md:text-base truncate">fulaniharigro.com/ref/QUEEN2024</span>
-              <Button onClick={copyReferralLink} variant="outline" size="sm" className="border-gold text-gold hover:bg-gold hover:text-black">
-                {copied ? 'Copied!' : <><Copy className="w-4 h-4 mr-1" /> Copy</>}
-              </Button>
-            </div>
-
-            <div className="space-y-2 mb-6 text-gray-300">
-              <p>1️⃣ Share your link with friends</p>
-              <p>2️⃣ They get ₦3,000 off their first order</p>
-              <p>3️⃣ You get ₦5,000 credited to your account</p>
-              <p>4️⃣ Use credits for your next order!</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 justify-center mb-6">
-              <Button className="bg-green-500 hover:bg-green-600 text-white">
-                <Share2 className="w-4 h-4 mr-2" /> Share on WhatsApp
-              </Button>
-              <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white">
-                Share on Instagram
-              </Button>
-              <Button variant="outline" className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white">
-                Share on Facebook
-              </Button>
-            </div>
-
-            <p className="text-center text-amber-400 text-sm">"23 queens earned over ₦50,000 last month just by sharing!"</p>
-          </div>
-        </div>
-      </section>
-
+      
       {/* SECTION 14: COMMITMENT */}
       <section className="py-16 px-4 bg-[#111]">
         <div className="max-w-3xl mx-auto">
