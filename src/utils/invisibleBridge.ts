@@ -5,6 +5,7 @@
 
 import { getExternalId } from './externalIdMirroring';
 import { getCachedClientIP } from './clientFingerprint';
+import { CAPI_PROXY_URL } from './pixelUtils';
 
 // 🎯 PII-First Rule: Universal Phone/Email Bridge
 export function getStoredPIIForRehydration(): {
@@ -197,7 +198,7 @@ export async function sendRehydratedIdentityToMeta(): Promise<void> {
     const eventId = `rehydrate_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Send to CAPI via PHP proxy (no batching)
-    const response = await fetch('https://fulanihairsecrets.com/meta-capi.php', {
+    const response = await fetch(CAPI_PROXY_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

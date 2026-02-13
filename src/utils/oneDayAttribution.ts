@@ -3,6 +3,8 @@
  * Optimized for maximum signal density and speed in Meta's 24-hour attribution window
  */
 
+import { CAPI_PROXY_URL } from './pixelUtils';
+
 // 🚀 FBC Persistence - Store Click ID for 30 days
 export function captureAndStoreFBC(): string | null {
   try {
@@ -80,7 +82,7 @@ export function sendImmediateCAPI(
     const startTime = performance.now();
     
     // Fire immediately - no setTimeout, no batching
-    fetch('https://fulanihairsecrets.com/meta-capi.php', {
+    fetch(CAPI_PROXY_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
