@@ -785,12 +785,14 @@ function OrderFormEmbed() {
           'fhg_order_data',
           JSON.stringify({
             orderId,
+            fullName: form.name,
             phone: form.phone,
             email: form.email,
             packageName,
             packageAmount,
             deliveryFee: calculatedDeliveryFee,
-            totalAmount: packageAmount + calculatedDeliveryFee, // Combined total for display
+            totalAmount: packageAmount + calculatedDeliveryFee,
+            paymentType: form.paymentMethod === 'Pay Before Delivery' ? 'PBD' : 'POD',
             state: form.state,
             lga: form.lga,
             address: form.address,
@@ -798,6 +800,7 @@ function OrderFormEmbed() {
             deliveryDate: form.deliveryDate,
             deliveryTimeWindow: form.deliveryTimeWindow,
             paymentMethod: form.paymentMethod,
+            numItems: selectedPackage?.items?.length || 1,
             heardAboutUs: form.heardAboutUs
           })
         );
