@@ -406,11 +406,11 @@ export function useMetaPixel(): UseMetaPixelReturn {
     // Send browser-side Purchase event via firePixelEvent (single source of truth)
     const purchaseData = {
       value: totalAmount, // Amount is already in Naira (discounted for PBD, full for POD)
-      currency: 'NGN',
       content_ids: contentIds,
       content_name: `${paymentType}_${contentName}`, // PBD_Package vs POD_Package
       content_type: 'product',
-      num_items: numItems
+      num_items: numItems,
+      currency: 'NGN'
     };
     
     // Fire Purchase event (single fbq call)
