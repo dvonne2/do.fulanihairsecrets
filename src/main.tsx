@@ -3,11 +3,15 @@ import App from "./App.tsx";
 import "./index.css";
 
 
-// Remove loading placeholder immediately and multiple times
+// Remove loading placeholder and SEO fallback immediately and multiple times
 const removeLoadingScreen = () => {
   const loadingElement = document.querySelector('.loading');
   if (loadingElement) {
     loadingElement.remove();
+  }
+  const seoFallback = document.getElementById('seo-fallback');
+  if (seoFallback) {
+    seoFallback.remove();
   }
 };
 

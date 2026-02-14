@@ -185,11 +185,11 @@
       .bg-\[#FF1493\]\/20{background-color:rgba(255,20,147,.2)}
       .border-\[#FF1493\]\/50{border-color:rgba(255,20,147,.5)}
       video{background-size:cover;background-position:center}
-      #root > div:first-child { padding: 20px; max-width: 800px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
-      #root > div:first-child h1 { color: #DAA520; font-size: 2.5em; margin-bottom: 20px; }
-      #root > div:first-child h2 { color: #333; font-size: 1.8em; margin: 30px 0 15px 0; }
-      #root > div:first-child p { margin-bottom: 15px; }
-      #root > div:first-child ul, #root > div:first-child ol { margin: 15px 0; padding-left: 30px; }
+      #seo-fallback { padding: 20px; max-width: 800px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+      #seo-fallback h1 { color: #DAA520; font-size: 2.5em; margin-bottom: 20px; }
+      #seo-fallback h2 { color: #333; font-size: 1.8em; margin: 30px 0 15px 0; }
+      #seo-fallback p { margin-bottom: 15px; }
+      #seo-fallback ul, #seo-fallback ol { margin: 15px 0; padding-left: 30px; }
       @media(min-width:768px){.md\:pt-12{padding-top:3rem}.md\:pb-8{padding-bottom:2rem}.md\:mt-12{margin-top:3rem}.md\:px-14{padding-left:3.5rem;padding-right:3.5rem}.md\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.md\:text-5xl{font-size:3rem}.md\:text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\:px-9{padding-left:2.25rem;padding-right:2.25rem}.md\:w-16{width:4rem}.md\:h-16{height:4rem}.md\:text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}.md\:text-3xl{font-size:1.875rem}.md\:text-4xl{font-size:2.25rem}.md\:justify-start{justify-content:flex-start}.md\:gap-2{gap:.5rem}}
       @media(min-width:1024px){.lg\:text-6xl{font-size:3.75rem}}
     </style>
@@ -200,7 +200,7 @@
       }, 2000);
       
       window.addEventListener('load', function() {
-        var seoContent = document.querySelector('#root > div:first-child');
+        var seoContent = document.getElementById('seo-fallback');
         var loadingDiv = document.querySelector('.loading');
         if(seoContent) seoContent.style.display = 'none';
         if(loadingDiv) loadingDiv.style.display = 'flex';
@@ -230,7 +230,7 @@
 
   <body>
         <div id="root">
-      <div>
+      <div id="seo-fallback">
         <h1>FULANI HAIR GRO™ - Nigeria's #1 Hair Growth Solution</h1>
         <div>
           <p>Trusted by thousands of women who successfully regrew their hair edges with FULANI HAIR GRO. 
