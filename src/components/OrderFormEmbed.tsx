@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
+import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 
 // New webhook URL from user requirements
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec";
@@ -1567,10 +1568,25 @@ function OrderFormEmbed() {
             <select
               style={S.input}
               value={form.state || 'Abia'}
-              onChange={e => setForm({ ...form, state: e.target.value })}
+              onChange={e => setForm({ ...form, state: e.target.value, lga: '' })}
               aria-label="Select state of residence"
             >
               {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'FCT Abuja' : s}</option>)}
+            </select>
+
+            {/* LGA */}
+            <label style={S.label}>LOCAL GOVERNMENT AREA (LGA) <span style={S.req}>*</span></label>
+            <select
+              style={S.input}
+              value={form.lga || ''}
+              onChange={e => setForm({ ...form, lga: e.target.value })}
+              aria-label="Select local government area"
+              disabled={!form.state}
+            >
+              <option value="">Select LGA...</option>
+              {form.state && nigeriaLGAs[form.state as keyof typeof nigeriaLGAs]?.map(lga => (
+                <option key={lga} value={lga}>{lga}</option>
+              ))}
             </select>
 
             {/* Payment method */}
