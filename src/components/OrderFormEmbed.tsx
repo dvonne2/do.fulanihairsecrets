@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
+import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout } from '@/utils/metaTracking';
 
 // New webhook URL from user requirements
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec";
@@ -444,7 +445,17 @@ function OrderFormEmbed() {
       })
     };
 
-    }, [step, form.email, form.phone]); // Note: step is in dependencies to enforce Rule 1
+    // Fire AddToCart event
+    if (form.pkg && selectedPackage) {
+      fireAddToCart({
+        packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
+        amount: selectedPackage.price,
+        email: form.email,
+        phone: form.phone,
+      });
+    }
+
+    }, [step, form.email, form.phone, form.pkg, selectedPackage]); // Note: step is in dependencies to enforce Rule 1
 
   // FormStart trigger - fire on first keystroke in any Step 1 field
   useEffect(() => {
@@ -461,8 +472,29 @@ function OrderFormEmbed() {
       hasTriggeredFormStart.current = true;
       
       console.log('[FormStart] User began typing');
+      fireFormStart();
     }
   }, [form.name, form.phone, form.email]);
+
+  // LeadSync trigger - fire on valid email or phone input
+  useEffect(() => {
+    // Check if email or phone has valid data
+    const hasValidEmail = form.email && form.email.includes('@') && form.email.length > 5;
+    const hasValidPhone = form.phone && form.phone.replace(/\D/g, '').length >= 10;
+    
+    if (hasValidEmail || hasValidPhone) {
+      const nameParts = form.name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      fireLeadSync({
+        email: hasValidEmail ? form.email : undefined,
+        phone: hasValidPhone ? form.phone : undefined,
+        firstName,
+        lastName,
+      });
+    }
+  }, [form.email, form.phone, form.name]);
 
   // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
   useEffect(() => {
@@ -528,6 +560,20 @@ function OrderFormEmbed() {
       payload.packageName = packageName;
       payload.packagePrice = selectedPackage.price;
       console.log('[InitiateCheckout] Package selected:', packageName);
+      
+      // Fire InitiateCheckout event
+      const nameParts = form.name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      fireInitiateCheckout({
+        packageName,
+        amount: selectedPackage.price,
+        email: form.email,
+        phone: form.phone,
+        firstName,
+        lastName,
+      });
     } else {
       console.log('[InitiateCheckout] No package selected - firing with contact info only');
     }

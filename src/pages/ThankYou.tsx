@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { fireThankYouEvents, resetTracking } from '@/utils/metaTracking';
 
 import result1 from '@/assets/results/result-1.webp';
 import result2 from '@/assets/results/result-2.webp';
@@ -413,6 +414,42 @@ const ThankYou = () => {
       }
     })();
   }, [orderNumber, trackPurchase]);
+
+  useEffect(() => {
+    const isTestMode = window.location.search.includes('test=1');
+    if (isTestMode) {
+      resetTracking();
+      fireThankYouEvents({
+        orderId: 'TEST_ORDER_123',
+        email: 'test@fulanihairsecrets.com',
+        phone: '08012345678',
+        fullName: 'Test User',
+        totalAmount: 71750,
+        packageAmount: 66750,
+        paymentType: 'PBD',
+        packageName: 'SELF LOVE PLUS',
+        state: 'Lagos',
+        lga: 'Eti-Osa',
+        numItems: 3,
+      });
+      return;
+    }
+    if (orderData) {
+      fireThankYouEvents({
+        orderId: orderData.orderId || orderNumber,
+        email: orderData.email,
+        phone: orderData.phone,
+        fullName: orderData.fullName,
+        totalAmount: orderData.totalAmount,
+        packageAmount: orderData.packageAmount || orderData.totalAmount,
+        paymentType: orderData.paymentType || 'PBD',
+        packageName: orderData.packageName || 'Fulani Hair Gro',
+        state: orderData.state,
+        lga: orderData.lga,
+        numItems: orderData.numItems || 1,
+      });
+    }
+  }, [orderData, orderNumber]);
 
   useEffect(() => {
     try {
