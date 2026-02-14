@@ -622,7 +622,7 @@ function OrderFormEmbed() {
     const orderId = formData.orderId || generateOrderId();
     
     const payload = {
-      secret: FULANI_SECRET,
+      secret: (import.meta as any).env?.VITE_FULANI_SECRET || 'fhg_orders_2024_secret',
       type: 'partial',
       orderId: orderId,
       phone: formData.phone || formData.phoneNumber
