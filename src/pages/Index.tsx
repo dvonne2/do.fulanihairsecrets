@@ -8,7 +8,6 @@ import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
 // Valentine promo ended
 // import { ValentineCountdown } from '@/components/ValentineCountdown';
-import { useMetaPixel } from '@/hooks/useMetaPixel';
 import hajiaMaryamTestimonial from '@/assets/Hajia Maryam Testimonial.webp';
 
 // Lazy load below-fold components
@@ -165,7 +164,7 @@ const Index = () => {
   const loadNonCritical = useIdleLoad(500); // Load after 500ms idle
   const afterHero = useAfterHeroLoad();
 
-  const { trackPageView, trackViewContent, trackFormStart } = useMetaPixel();
+  // const { trackPageView, trackViewContent, trackFormStart } = useMetaPixel(); // Tracking removed
   const hasTrackedPageView = useRef(false);
   
   // State management
@@ -196,16 +195,16 @@ const Index = () => {
   // Meta Pixel: PageView and ViewContent on mount
   useEffect(() => {
     if (hasTrackedPageView.current) return;
-    trackPageView();
+    // trackPageView(); // Tracking removed
     // CRITICAL FIX: Dynamic ViewContent for whale hunting - capture high-value packages
     setTimeout(() => {
       // Check URL for package selection, default to baseline
       const urlParams = new URLSearchParams(window.location.search);
       const pkg = urlParams.get('pkg') || 'Fulani Hair Gro';
-      trackViewContent(pkg); // Dynamic pricing for whale hunting
+      // trackViewContent(pkg); // Dynamic pricing for whale hunting - Tracking removed
     }, 1000); // Fire after 1 second
     hasTrackedPageView.current = true;
-  }, [trackPageView, trackViewContent]);
+  }, []);
 
   // Viewer count fluctuation (social proof)
   useEffect(() => {
@@ -324,7 +323,7 @@ const Index = () => {
       }
 
       (window as WindowWithTracking).dataLayer?.push?.({ event: 'FormStart' });
-      trackFormStart();
+      // trackFormStart(); // Tracking removed
     };
 
     const handleClick = (event: MouseEvent) => {

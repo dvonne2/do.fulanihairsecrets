@@ -58,6 +58,7 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
 };
 
 const ThankYou = () => {
+  // const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel(); // Tracking removed
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -137,6 +138,242 @@ const ThankYou = () => {
     setLoading(false);
   }, []);
 
+  // 🔒 BULLETPROOF Purchase tracking on mount with order data
+  useEffect(() => {
+    // 🧪 TEST MODE: Fire events for debugging when test=1 is in URL
+    const isTestMode = window.location.search.includes('test=1');
+    
+    if (isTestMode) {
+      console.log('[ThankYou] 🧪 TEST MODE: Firing events for debugging');
+      
+      try {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          Object.values(SESSION_KEYS).forEach((key) => {
+            window.sessionStorage.removeItem(key);
+          });
+          console.log('[Test Mode] Reset sessionStorage dedup keys for events');
+        }
+      } catch (error) {
+        console.warn('[Test Mode] Failed to reset sessionStorage keys for events', error);
+      }
+      
+      // 🧪 Clear purchase localStorage in test mode to allow Purchase event
+      if (window.location.search.includes('test=1')) {
+        localStorage.removeItem('purchase_TEST_ORDER_123');
+        console.log('[Test Mode] Cleared purchase localStorage for testing');
+      }
+      
+      // Test data with elite Nigerian area
+      const testData = {
+        orderId: 'TEST_ORDER_123',
+        fullName: 'Test Customer',
+        email: 'test@example.com',
+        phone: '08012345678',
+        state: 'Lagos',
+        lga: 'Eti-Osa',
+        address: 'Banana Island, Lagos', // 🏝️ Ultra-premium area
+        packageName: 'SELF LOVE PLUS',
+        packagePrice: 66750,
+        deliveryFee: 5000,
+        totalAmount: 71750,
+        paymentMethod: 'Pay Before Delivery',
+        heardAboutUs: 'Facebook',
+        deliveryDate: new Date().toISOString().split('T')[0],
+        deliveryTimeWindow: 'Morning'
+      };
+      
+      console.log('[ThankYou] 🧪 TEST DATA:', testData);
+      
+      // Calculate and set delivery estimate for test mode
+      setDeliveryEstimate(getDeliveryEstimate(testData.deliveryType));
+      
+      // Calculate savings for test mode
+      const whatTheyWouldHaveSpent = 360000 + 200000 + 15000000; // Salon + failed products + transplant
+      const whatTheyPaid = testData.totalAmount || 0;
+      const targetSavings = Math.max(0, whatTheyWouldHaveSpent - whatTheyPaid);
+      
+      // Animate savings counter
+      const duration2 = 2000;
+      const startTime = Date.now();
+      
+      const animateSavings = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration2, 1);
+        setSavingsAnimated(Math.floor(progress * targetSavings));
+        if (progress < 1) requestAnimationFrame(animateSavings);
+      };
+      setTimeout(animateSavings, 1000);
+      
+      // Pre-mark prerequisite events so canFireEvent() passes for Purchase
+      // On the ThankYou page we know the full funnel already completed
+      markEventFired(SESSION_KEYS.PAGE_VIEW);
+      markEventFired(SESSION_KEYS.FORM_START);
+      markEventFired(SESSION_KEYS.ADD_TO_CART);
+      markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
+      
+      // Use async IIFE to await each tracking call in sequence with delays
+      (async () => {
+        // 🧪 Fire test FormStart event (customer starts filling form)
+        await trackFormStart({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          zipCode: '',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // 🧪 Fire test AddToCart event (customer passes validation on Step 1)
+        await trackAddToCart({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          packageName: testData.packageName,
+          packagePrice: testData.packagePrice,
+          deliveryFee: testData.deliveryFee,
+          totalAmount: testData.totalAmount,
+          zipCode: '',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        
+        // 🧪 Fire test InitiateCheckout event (customer proceeds to payment)
+        await trackInitiateCheckout({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          packageName: testData.packageName,
+          packagePrice: testData.packagePrice,
+          deliveryFee: testData.deliveryFee,
+          totalAmount: testData.totalAmount,
+          zipCode: '',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        
+        // Fire test Purchase event
+        await trackPurchase({
+          ...testData,
+          zipCode: '',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // Fire test HighValuePurchase event
+        await trackHighValuePurchase({
+          ...testData,
+          zipCode: '',
+        });
+      })();
+      
+      return; // Exit test mode
+    }
+    
+    // Normal mode: Only proceed if we have a real order number
+    if (!orderNumber || orderNumber === 'UNKNOWN') return;
+
+    type StoredOrder = {
+      orderId?: string;
+      fullName?: string;
+      phone?: string;
+      email?: string;
+      packageName?: string;
+      packageAmount?: number;
+      deliveryFee?: number;
+      totalAmount?: number;
+      state?: string;
+      lga?: string;
+      address?: string;
+      paymentMethod?: string;
+      heardAboutUs?: string;
+      deliveryDate?: string;
+      deliveryTimeWindow?: string;
+    };
+
+    let stored: StoredOrder | null = null;
+    try {
+      const raw = window.sessionStorage.getItem('fhg_order_data');
+      if (raw) stored = JSON.parse(raw) as StoredOrder;
+    } catch {
+      stored = null;
+    }
+
+    const merged: StoredOrder = {
+      ...stored,
+      orderId: orderNumber,
+    };
+
+    // Calculate and set delivery estimate
+    setDeliveryEstimate(getDeliveryEstimate(merged.deliveryType));
+
+    // Calculate actual savings from order data
+    // Compare what they would have spent vs what they actually paid
+    const whatTheyWouldHaveSpent = 360000 + 200000 + 15000000; // Salon + failed products + transplant
+    const whatTheyPaid = orderData?.totalAmount || 0;
+    const targetSavings = Math.max(0, whatTheyWouldHaveSpent - whatTheyPaid);
+    
+    // Animate savings counter
+    const duration2 = 2000;
+    const startTime = Date.now();
+    
+    const animateSavings = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration2, 1);
+      setSavingsAnimated(Math.floor(progress * targetSavings));
+      if (progress < 1) requestAnimationFrame(animateSavings);
+    };
+    setTimeout(animateSavings, 1000);
+
+    console.log('[ThankYou] Firing bulletproof Purchase event with order data:', merged);
+    
+    // Fire PageView for thank-you page
+    trackPageView();
+    
+    // Pre-mark prerequisite events so canFireEvent() passes for Purchase
+    // On the ThankYou page the full funnel already completed before arriving here
+    markEventFired(SESSION_KEYS.FORM_START);
+    markEventFired(SESSION_KEYS.ADD_TO_CART);
+    markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
+    
+    // Use async IIFE to await each tracking call in sequence
+    (async () => {
+      // Fire bulletproof Purchase event with order data
+      await trackPurchase({
+        orderId: merged.orderId || 'UNKNOWN',
+        fullName: merged.fullName || '',
+        email: merged.email || '',
+        phone: merged.phone || '',
+        state: merged.state || '',
+        lga: merged.lga || '',
+        address: merged.address || '', // 🏝️ Area detection: "Lake Ewe", "Banana Island", "Yanokwaja"
+        packageName: merged.packageName || '',
+        packagePrice: merged.packageAmount || 0,
+        deliveryFee: merged.deliveryFee || 0,
+        totalAmount: merged.totalAmount || 0,
+        paymentMethod: merged.paymentMethod,
+        heardAboutUs: merged.heardAboutUs,
+        deliveryDate: merged.deliveryDate,
+        deliveryTimeWindow: merged.deliveryTimeWindow
+      });
+      
+      // 🏆 Fire High Value Purchase event for ultra-premium targeting
+      await trackHighValuePurchase({
+        orderId: merged.orderId || 'UNKNOWN',
+        fullName: merged.fullName || '',
+        email: merged.email || '',
+        phone: merged.phone || '',
+        packageName: merged.packageName || 'Fulani Hair Gro',
+        totalAmount: merged.totalAmount || 0,
+        state: merged.state || '',
         lga: merged.lga || '',
         address: merged.address || '',
         landmark: merged.landmark || '',

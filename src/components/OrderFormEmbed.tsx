@@ -210,6 +210,7 @@ const postOrderToFulani = (bodyString: string) => {
 };
 
 function OrderFormEmbed() {
+  // const { trackFormStart, trackAddToCart, trackInitiateCheckout, isEventFired, captureIdentity, getCapturedIdentity, setupIdentityListeners } = useMetaPixel(); // Tracking removed
   const [step, setStep] = useState(1);
   
   // Generate orderId on component mount (or get from URL)
@@ -365,16 +366,14 @@ function OrderFormEmbed() {
         setTimeout(() => {
           if (!hasAutoAdvanced.current && step === 1) {
             hasAutoAdvanced.current = true;
-            // Event Sync: Explicitly call trackInitiateCheckout before advancing
-            // trackInitiateCheckout(); // Tracking removed
-            setStep(2);
+                        setStep(2);
           }
         }, 600);
       }
     };
 
     updateProgress();
-  }, [form.name, form.phone, form.email, form.pkg, step, trackInitiateCheckout]);
+  }, [form.name, form.phone, form.email, form.pkg, step]);
 
   // Countdown timer effect
   useEffect(() => {
@@ -415,7 +414,6 @@ function OrderFormEmbed() {
     
     // STRICT: Only fire once
     if (hasTriggeredAddToCart.current) return;
-    if (isEventFired(SESSION_KEYS.ADD_TO_CART)) return;
 
     // Validate email + phone
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
@@ -444,7 +442,73 @@ function OrderFormEmbed() {
         packagePrice: selectedPackage.price,
       })
     };
-  }, [step, form.email, form.phone]);
+
+    }, [step, form.email, form.phone]); // Note: step is in dependencies to enforce Rule 1
+
+  // FormStart trigger - fire on first keystroke in any Step 1 field
+  useEffect(() => {
+    // Prevent multiple fires
+    if (hasTriggeredFormStart.current) return;
+
+    // Check if any field has at least 1 character
+    const hasStartedTyping = 
+      (form.name && form.name.length > 0) || 
+      (form.phone && form.phone.length > 0) || 
+      (form.email && form.email.length > 0);
+
+    if (hasStartedTyping) {
+      hasTriggeredFormStart.current = true;
+      
+      console.log('[FormStart] User began typing');
+    }
+  }, [form.name, form.phone, form.email]);
+
+  // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
+  useEffect(() => {
+    // Generate external ID from timestamp and form data
+    const generateExternalId = () => {
+      const timestamp = Date.now().toString();
+      const nameHash = form.name ? form.name.substring(0, 3).toLowerCase() : 'xxx';
+      return `${timestamp}_${nameHash}`;
+    };
+
+    // Capture identity when user types valid email or phone
+    const externalId = generateExternalId();
+    
+    // Only capture if we have valid-looking data
+    if (form.email && form.email.length > 3) {
+      captureIdentity(form.email, form.phone, externalId);
+    } else if (form.phone && form.phone.length >= 10) {
+      captureIdentity(form.email, form.phone, externalId);
+    }
+  }, [form.email, form.phone, form.name, captureIdentity]);
+
+  // 🎯 Setup identity listeners on component mount
+  useEffect(() => {
+    // Delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      setupIdentityListeners();
+      console.log('[OrderForm] 🎯 Aggressive identity capturing activated');
+    }, 2000);
+    
+    return () => clearTimeout(timer);
+  }, [setupIdentityListeners]);
+
+  // InitiateCheckout trigger - fire when user advances to Step 2
+  useEffect(() => {
+    // Prevent multiple fires
+    if (hasTriggeredInitiateCheckout.current) return;
+    if (step !== 2) return; // Only fire on Step 2
+
+    hasTriggeredInitiateCheckout.current = true;
+    
+    console.log('[InitiateCheckout] User advanced to Step 2 - firing InitiateCheckout event');
+    
+    // Build payload with all available data from Step 1
+    const payload: any = {
+      fullName: form.name || '',
+      email: form.email ? form.email.trim().toLowerCase() : '',
+      phone: form.phone ? form.phone.replace(/\D/g, '') : '',
       state: form.state || '',
       lga: form.lga || '',
       address: form.address || '',
@@ -467,9 +531,7 @@ function OrderFormEmbed() {
       console.log('[InitiateCheckout] No package selected - firing with contact info only');
     }
 
-    // Fire InitiateCheckout event
-    trackInitiateCheckout(payload);
-  }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage, isEventFired, trackInitiateCheckout]);
+    }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage]);
 
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {
@@ -566,8 +628,8 @@ function OrderFormEmbed() {
           name: form.name,
           email: form.email,
           // Meta tracking identifiers for offline conversion matching
-          fbp: getFbp() || '',
-          fbc: getFbc() || '',
+          fbp: '',
+          fbc: '',
           fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         };
         
@@ -672,7 +734,7 @@ function OrderFormEmbed() {
     try {
       const orderId = form.orderId || generateOrderId();
       const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-      const packageAmount = selectedPackage?.price ?? getPackagePrice(packageName);
+      const packageAmount = selectedPackage?.price ?? 75000; // Default fallback price
       const calculatedDeliveryFee = deliveryFee; // Use memoized calculated value
       const totalAmount = packageAmount + calculatedDeliveryFee;
 
@@ -746,8 +808,8 @@ function OrderFormEmbed() {
         heardAboutUs: formData.heardAboutUs || '',
         
         // Meta tracking identifiers for offline conversion matching
-        fbp: getFbp() || '',
-        fbc: getFbc() || '',
+        fbp: '',
+        fbc: '',
         fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         eventId: orderId,
         userAgent: navigator.userAgent,
@@ -1444,27 +1506,10 @@ function OrderFormEmbed() {
                 }
 
                 const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-                const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
+                const packagePrice = selectedPackage?.price ?? 75000; // Default fallback price
 
                 
-                if (!isEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) {
-                  trackInitiateCheckout({
-                    fullName: form.name,
-                    phone: phoneDigits,
-                    email: form.email,
-                    packageName,
-                    packagePrice,
-                    state: form.state,
-                    lga: form.lga,
-                    address: form.address,
-                    paymentMethod: form.paymentMethod,
-                    heardAboutUs: form.heardAboutUs,
-                    deliveryDate: form.deliveryDate,
-                    deliveryTimeWindow: form.deliveryTimeWindow,
-                    deliveryFee: form.deliveryFee
-                  });
-                }
-
+                
                 setStep(2);
                 
                 // Force scroll to step indicator when moving to Step 2
