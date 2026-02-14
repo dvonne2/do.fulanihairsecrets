@@ -1429,7 +1429,6 @@ function OrderFormEmbed() {
                         display: 'block',
                         width: '100%',
                         padding: isFeatured ? '15px' : '12px',
-                        border: 'none',
                         borderRadius: '9px',
                         fontFamily: 'DM Sans, sans-serif',
                         fontSize: isFeatured ? '15px' : '12.5px',
