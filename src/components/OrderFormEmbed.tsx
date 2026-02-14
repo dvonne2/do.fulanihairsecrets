@@ -366,7 +366,7 @@ function OrderFormEmbed() {
           if (!hasAutoAdvanced.current && step === 1) {
             hasAutoAdvanced.current = true;
             // Event Sync: Explicitly call trackInitiateCheckout before advancing
-            trackInitiateCheckout();
+            // trackInitiateCheckout(); // Tracking removed
             setStep(2);
           }
         }, 600);
