@@ -1,7 +1,4 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
-import { useMetaPixel } from '@/hooks/useMetaPixel';
-import { SESSION_KEYS, getPackagePrice, getFbp, getFbc } from '@/utils/pixelUtils';
-import { getStoredFBC } from '@/utils/oneDayAttribution';
 
 // New webhook URL from user requirements
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec";
@@ -213,7 +210,6 @@ const postOrderToFulani = (bodyString: string) => {
 };
 
 function OrderFormEmbed() {
-  const { trackFormStart, trackAddToCart, trackInitiateCheckout, isEventFired, captureIdentity, getCapturedIdentity, setupIdentityListeners } = useMetaPixel();
   const [step, setStep] = useState(1);
   
   // Generate orderId on component mount (or get from URL)
@@ -448,79 +444,7 @@ function OrderFormEmbed() {
         packagePrice: selectedPackage.price,
       })
     };
-
-    trackAddToCart(payload);
-  }, [step, form.email, form.phone, isEventFired, trackAddToCart]); // Note: step is in dependencies to enforce Rule 1
-
-  // FormStart trigger - fire on first keystroke in any Step 1 field
-  useEffect(() => {
-    // Prevent multiple fires
-    if (hasTriggeredFormStart.current) return;
-    if (isEventFired(SESSION_KEYS.FORM_START)) return;
-
-    // Check if any field has at least 1 character
-    const hasStartedTyping = 
-      (form.name && form.name.length > 0) || 
-      (form.phone && form.phone.length > 0) || 
-      (form.email && form.email.length > 0);
-
-    if (hasStartedTyping) {
-      hasTriggeredFormStart.current = true;
-      
-      console.log('[FormStart] User began typing - firing FormStart event');
-      
-      // Fire FormStart event
-      trackFormStart();
-    }
-  }, [form.name, form.phone, form.email, isEventFired, trackFormStart]);
-
-  // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
-  useEffect(() => {
-    // Generate external ID from timestamp and form data
-    const generateExternalId = () => {
-      const timestamp = Date.now().toString();
-      const nameHash = form.name ? form.name.substring(0, 3).toLowerCase() : 'xxx';
-      return `${timestamp}_${nameHash}`;
-    };
-
-    // Capture identity when user types valid email or phone
-    const externalId = generateExternalId();
-    
-    // Only capture if we have valid-looking data
-    if (form.email && form.email.length > 3) {
-      captureIdentity(form.email, form.phone, externalId);
-    } else if (form.phone && form.phone.length >= 10) {
-      captureIdentity(form.email, form.phone, externalId);
-    }
-  }, [form.email, form.phone, form.name, captureIdentity]);
-
-  // 🎯 Setup identity listeners on component mount
-  useEffect(() => {
-    // Delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      setupIdentityListeners();
-      console.log('[OrderForm] 🎯 Aggressive identity capturing activated');
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, [setupIdentityListeners]);
-
-  // InitiateCheckout trigger - fire when user advances to Step 2
-  useEffect(() => {
-    // Prevent multiple fires
-    if (hasTriggeredInitiateCheckout.current) return;
-    if (isEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) return;
-    if (step !== 2) return; // Only fire on Step 2
-
-    hasTriggeredInitiateCheckout.current = true;
-    
-    console.log('[InitiateCheckout] User advanced to Step 2 - firing InitiateCheckout event');
-    
-    // Build payload with all available data from Step 1
-    const payload: any = {
-      fullName: form.name || '',
-      email: form.email ? form.email.trim().toLowerCase() : '',
-      phone: form.phone ? form.phone.replace(/\D/g, '') : '',
+  }, [step, form.email, form.phone]);
       state: form.state || '',
       lga: form.lga || '',
       address: form.address || '',
