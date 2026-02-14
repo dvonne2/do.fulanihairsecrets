@@ -410,9 +410,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
       content_ids: contentIds,
       content_name: `${paymentType}_${contentName}`, // PBD_Package vs POD_Package
       content_type: 'product',
-      num_items: numItems,
-      event_id: eventId, //  CRITICAL: Prevents duplicate processing on Facebook's side
-      payment_type: paymentType // 🎯 CRITICAL: PBD vs POD signal for optimization
+      num_items: numItems
     };
     
     // Fire Purchase event (single fbq call)
