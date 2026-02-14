@@ -9,7 +9,6 @@ const copyCriticalFiles = () => ({
   name: 'copy-critical-files',
   writeBundle() {
     const criticalFiles = [
-      'index.html',
       'manifest.json',
       'sw.js',
       '.htaccess',
