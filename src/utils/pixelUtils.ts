@@ -312,15 +312,12 @@ export function firePixelEvent(
     console.warn('[Identity Mirroring] ⚠️ Could not get external ID for Pixel:', error);
   }
 
-  const eventParams = { 
-    ...params, 
-    ...(eventId && { eventID: eventId }),
-    // 🎯 Add external_id to Pixel for perfect parity with CAPI
-    ...(externalId && { external_id: externalId })
+  const eventParams: Record<string, unknown> = {
+    ...params,
+    ...(externalId && eventName !== 'Purchase' ? { external_id: externalId } : {})
   };
 
   try {
-    // Targeted debug for Purchase to inspect currency payload
     if (eventName === 'Purchase') {
       const debugParams: any = eventParams;
       console.log('[Pixel DEBUG] Purchase fbq payload:', {
@@ -328,11 +325,18 @@ export function firePixelEvent(
         eventId,
         currency: debugParams?.currency,
         currencyType: typeof debugParams?.currency,
+        value: debugParams?.value,
+        valueType: typeof debugParams?.value,
         eventParams: debugParams,
+        options: eventId ? { eventID: eventId } : undefined
       });
     }
 
-    window.fbq('track', eventName, eventParams, { eventID: eventId || undefined });
+    if (eventId) {
+      window.fbq('track', eventName, eventParams, { eventID: eventId });
+    } else {
+      window.fbq('track', eventName, eventParams);
+    }
     console.log('[Identity Mirroring] 🎯 Pixel event fired with external_id:', {
       eventName,
       eventId,

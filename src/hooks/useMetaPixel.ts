@@ -414,8 +414,6 @@ export function useMetaPixel(): UseMetaPixelReturn {
     };
     
     // Fire Purchase event (single fbq call)
-    console.log('[DEBUG] Purchase payload:', JSON.stringify(purchaseData));
-    console.log('[DEBUG] value type:', typeof totalAmount, 'value:', totalAmount);
     firePixelEvent('Purchase', purchaseData, eventId);
     console.log('[Purchase] 🎯 PBD SIGNAL - Browser Purchase event sent:', {
       paymentType,
