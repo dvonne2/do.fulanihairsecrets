@@ -30,9 +30,6 @@ class ErrorBoundary extends Component<Props, State> {
         <div style={{ padding: '20px', textAlign: 'center' }}>
           <h2>Something went wrong</h2>
           <p>Please refresh the page and try again.</p>
-          <pre style={{ textAlign: 'left', background: '#f5f5f5', padding: '12px', borderRadius: '8px', fontSize: '12px', overflow: 'auto', maxHeight: '300px', color: '#c00' }}>
-            {this.state.error?.message}{'\n'}{this.state.error?.stack}
-          </pre>
           <button onClick={() => window.location.reload()}>
             Refresh Page
           </button>
