@@ -1,7 +1,7 @@
 // Service Worker for caching static assets
-const CACHE_NAME = 'fulani-hair-gro-v1';
-const STATIC_CACHE = 'static-v1';
-const DYNAMIC_CACHE = 'dynamic-v1';
+const CACHE_NAME = 'fulani-hair-gro-v2';
+const STATIC_CACHE = 'static-v2';
+const DYNAMIC_CACHE = 'dynamic-v2';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -61,8 +61,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache images, fonts, and static assets
-  if (/\.(png|jpe?g|webp|svg|woff2?|css|js)$/i.test(url.pathname)) {
+  // Cache images, fonts, and CSS only - JS bundles use content hashes and should always be fetched fresh
+  if (/\.(png|jpe?g|webp|svg|woff2?|css)$/i.test(url.pathname)) {
     event.respondWith(
       caches.match(request)
         .then((response) => {
