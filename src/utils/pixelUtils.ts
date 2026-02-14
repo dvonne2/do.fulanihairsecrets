@@ -320,6 +320,18 @@ export function firePixelEvent(
   };
 
   try {
+    // Targeted debug for Purchase to inspect currency payload
+    if (eventName === 'Purchase') {
+      const debugParams: any = eventParams;
+      console.log('[Pixel DEBUG] Purchase fbq payload:', {
+        eventName,
+        eventId,
+        currency: debugParams?.currency,
+        currencyType: typeof debugParams?.currency,
+        eventParams: debugParams,
+      });
+    }
+
     window.fbq('track', eventName, eventParams, { eventID: eventId || undefined });
     console.log('[Identity Mirroring] 🎯 Pixel event fired with external_id:', {
       eventName,
