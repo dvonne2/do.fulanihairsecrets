@@ -1,15 +1,14 @@
 // Service Worker for caching static assets
-const CACHE_NAME = 'fulani-hair-gro-v2';
-const STATIC_CACHE = 'static-v2';
-const DYNAMIC_CACHE = 'dynamic-v2';
+const CACHE_NAME = 'fulani-hair-gro-v3';
+const STATIC_CACHE = 'static-v3';
+const DYNAMIC_CACHE = 'dynamic-v3';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  '/',
   '/assets/hero.webp',
   '/assets/hero-mobile.webp',
   '/manifest.json',
-  // Add other critical assets
+  // Never cache '/' — HTML changes with every deploy
 ];
 
 // Install event - cache static assets

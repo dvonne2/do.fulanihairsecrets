@@ -497,35 +497,6 @@ function OrderFormEmbed() {
   }, [form.email, form.phone, form.name]);
 
   // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
-  useEffect(() => {
-    // Generate external ID from timestamp and form data
-    const generateExternalId = () => {
-      const timestamp = Date.now().toString();
-      const nameHash = form.name ? form.name.substring(0, 3).toLowerCase() : 'xxx';
-      return `${timestamp}_${nameHash}`;
-    };
-
-    // Capture identity when user types valid email or phone
-    const externalId = generateExternalId();
-    
-    // Only capture if we have valid-looking data
-    if (form.email && form.email.length > 3) {
-      captureIdentity(form.email, form.phone, externalId);
-    } else if (form.phone && form.phone.length >= 10) {
-      captureIdentity(form.email, form.phone, externalId);
-    }
-  }, [form.email, form.phone, form.name, captureIdentity]);
-
-  // 🎯 Setup identity listeners on component mount
-  useEffect(() => {
-    // Delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      setupIdentityListeners();
-      console.log('[OrderForm] 🎯 Aggressive identity capturing activated');
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, [setupIdentityListeners]);
 
   // InitiateCheckout trigger - fire when user advances to Step 2
   useEffect(() => {
