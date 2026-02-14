@@ -148,6 +148,17 @@ const ThankYou = () => {
     if (isTestMode) {
       console.log('[ThankYou] 🧪 TEST MODE: Firing events for debugging');
       
+      try {
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          Object.values(SESSION_KEYS).forEach((key) => {
+            window.sessionStorage.removeItem(key);
+          });
+          console.log('[Test Mode] Reset sessionStorage dedup keys for events');
+        }
+      } catch (error) {
+        console.warn('[Test Mode] Failed to reset sessionStorage keys for events', error);
+      }
+      
       // 🧪 Clear purchase localStorage in test mode to allow Purchase event
       if (window.location.search.includes('test=1')) {
         localStorage.removeItem('purchase_TEST_ORDER_123');

@@ -12,6 +12,9 @@ import { getExternalId, generateRefCode, saveExternalId } from './externalIdMirr
 // 🛡️ GLOBAL DEDUPLICATION GUARD: Prevents ANY pixel event from firing more than once
 const firedEvents = new Set<string>();
 
+// 🛡️ GLOBAL CAPI DEDUPLICATION GUARD: Prevents ANY CAPI event from being sent more than once
+const sentCAPIEvents = new Set<string>();
+
 export const PIXEL_ID = '220381209723501';
 
 // CAPI Server-Side Proxy (WordPress PHP)
@@ -417,7 +420,20 @@ export async function sendToCAPI(
   customData: Record<string, any>
 ): Promise<void> {
   try {
-    console.log('[EMQ 10/10] 🎯 Starting enhanced CAPI send for:', eventType);
+    // 🛡️ GLOBAL CAPI DEDUP: Block duplicate server events per event name
+    const metaEventType = eventType === 'addtocart' ? 'AddToCart' :
+                          eventType === 'initiatecheckout' ? 'InitiateCheckout' :
+                          eventType === 'purchase' ? 'Purchase' :
+                          customData?.custom_event_name || customData?.eventName || customData?.event_name || 'CustomEvent';
+
+    const capiKey = `capi_${metaEventType}`;
+    if (sentCAPIEvents.has(capiKey)) {
+      console.warn('[CAPI] 🛡️ Blocked duplicate CAPI event:', metaEventType, { capiKey, eventType, eventId });
+      return;
+    }
+    sentCAPIEvents.add(capiKey);
+
+    console.log('[EMQ 10/10] 🎯 Starting enhanced CAPI send for:', eventType, 'as', metaEventType);
     
     // 🎯 1-Day Attribution: Get Facebook cookies with persistence
     const { getStoredFBC, captureAndStoreFBC, sendImmediateCAPI, isInOneDayWindow } = await import('./oneDayAttribution');
@@ -587,12 +603,6 @@ export async function sendToCAPI(
     hasFBC: !!fbc,
     hasExternalId: !!(enrichedUserData.orderId || storedIdentity?.external_id)
   });
-
-  // Map event types to Meta's standard event names
-  const metaEventType = eventType === 'addtocart' ? 'AddToCart' :
-                        eventType === 'initiatecheckout' ? 'InitiateCheckout' :
-                        eventType === 'purchase' ? 'Purchase' :
-                        customData?.custom_event_name || customData?.eventName || customData?.event_name || 'CustomEvent';
 
   // Build Meta CAPI payload in correct format
   const payload = {
