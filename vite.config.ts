@@ -26,6 +26,10 @@ const copyCriticalFiles = () => ({
         // Proxy files are in root directory
         src = path.resolve(__dirname, file);
         dest = path.resolve(__dirname, 'dist', file);
+      } else if (file === 'index.html') {
+        // index.html is in root directory
+        src = path.resolve(__dirname, file);
+        dest = path.resolve(__dirname, 'dist', file);
       } else {
         // Other files are in public directory
         src = path.resolve(__dirname, 'public', file);
