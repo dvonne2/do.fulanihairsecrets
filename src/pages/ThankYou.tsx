@@ -60,7 +60,7 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
 };
 
 const ThankYou = () => {
-  const { trackPurchase, trackHighValuePurchase, trackFormStart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel();
+  const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel();
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -213,10 +213,10 @@ const ThankYou = () => {
       markEventFired(SESSION_KEYS.ADD_TO_CART);
       markEventFired(SESSION_KEYS.INITIATE_CHECKOUT);
       
-      // Use async IIFE to await each tracking call in sequence
+      // Use async IIFE to await each tracking call in sequence with delays
       (async () => {
         // 🧪 Fire test FormStart event (customer starts filling form)
-        trackFormStart({
+        await trackFormStart({
           fullName: testData.fullName,
           email: testData.email,
           phone: testData.phone,
@@ -225,6 +225,25 @@ const ThankYou = () => {
           address: testData.address,
           zipCode: '',
         });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // 🧪 Fire test AddToCart event (customer passes validation on Step 1)
+        await trackAddToCart({
+          fullName: testData.fullName,
+          email: testData.email,
+          phone: testData.phone,
+          state: testData.state,
+          lga: testData.lga,
+          address: testData.address,
+          packageName: testData.packageName,
+          packagePrice: testData.packagePrice,
+          deliveryFee: testData.deliveryFee,
+          totalAmount: testData.totalAmount,
+          zipCode: '',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
         
         // 🧪 Fire test InitiateCheckout event (customer proceeds to payment)
         await trackInitiateCheckout({
@@ -240,13 +259,17 @@ const ThankYou = () => {
           totalAmount: testData.totalAmount,
           zipCode: '',
         });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
         
         // Fire test Purchase event
         await trackPurchase({
           ...testData,
           zipCode: '',
         });
-        
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         // Fire test HighValuePurchase event
         await trackHighValuePurchase({
           ...testData,

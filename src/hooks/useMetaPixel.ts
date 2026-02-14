@@ -70,8 +70,8 @@ interface CapturedIdentity {
 type UseMetaPixelReturn = {
   trackPageView: () => void;
   trackViewContent: (contentData?: any) => void;
-  trackFormStart: (formData?: MetaFormData) => void;
-  trackAddToCart: (formData: MetaFormData) => void;
+  trackFormStart: (formData?: MetaFormData) => Promise<void>;
+  trackAddToCart: (formData: MetaFormData) => Promise<void>;
   trackInitiateCheckout: (formData: MetaFormData) => Promise<void>;
   trackPurchase: (formData: MetaFormData) => Promise<void>;
   trackHighValuePurchase: (formData: MetaFormData) => Promise<void>;
@@ -165,7 +165,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     console.log('[FormStart] Pixel event fired:', true);
 
     console.log('[FormStart] Sending CAPI event...');
-    void sendToCAPI(
+    await sendToCAPI(
       'custom',
       eventId,
       formData || {}, // Use formData if provided
@@ -181,7 +181,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     console.log('[FormStart] Completed successfully');
   }, []);
 
-  const trackAddToCart = useCallback((formData: MetaFormData) => {
+  const trackAddToCart = useCallback(async (formData: MetaFormData) => {
     console.log('[AddToCart] Starting trackAddToCart...');
     
     // STRICT: Only fire once
@@ -222,7 +222,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     firePixelEvent('AddToCart', pixelData, eventId);
 
     // CAPI — send user data for matching (same eventId for deduplication)
-    void sendToCAPI(
+    await sendToCAPI(
       'addtocart',
       eventId,
       {
@@ -286,7 +286,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
       eventId
     );
 
-    void sendToCAPI(
+    await sendToCAPI(
       'initiatecheckout',
       eventId,
       {
@@ -447,7 +447,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     });
 
     //  BULLETPROOF DEDUPLICATION LAYER 5: CAPI with same event_id
-    void sendToCAPI(
+    await sendToCAPI(
       'purchase',
       eventId, // Same event_id for perfect deduplication
       {
@@ -504,9 +504,11 @@ export function useMetaPixel(): UseMetaPixelReturn {
         trust_score: paymentType === 'PBD' ? 'high_trust' : 'standard_trust'
       },
     );
-    
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     // 🎯 VALUE-BASED CUSTOM EVENT CAPI: Clean, readable event name for Ads Manager
-    void sendToCAPI(
+    await sendToCAPI(
       'custom',
       eventId, // Same event_id for perfect deduplication
       {
@@ -690,7 +692,7 @@ export function useMetaPixel(): UseMetaPixelReturn {
     console.log('[HighValuePurchase] 🏆 Ultra-premium event sent to Facebook:', eventId);
     
     // 🏆 Send to CAPI with enhanced high-value data
-    void sendToCAPI(
+    await sendToCAPI(
       'custom', // Custom event type
       eventId,
       {
