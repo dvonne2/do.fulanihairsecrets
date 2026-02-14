@@ -170,7 +170,7 @@
         } else { markBadge('badge-initiatecheckout', false); }
 
         // 4. Purchase
-        if (await sendEvent('Purchase', { value: 71750, content_name: 'SELF LOVE PLUS', num_items: 3, order_id: 'TEST_ORDER_123' })) {
+        if (await sendEvent('Purchase', { value: 71750, currency: 'NGN', content_name: 'SELF LOVE PLUS', num_items: 3, order_id: 'TEST_ORDER_123' })) {
           markBadge('badge-purchase', true); successCount++;
         } else { markBadge('badge-purchase', false); }
 
