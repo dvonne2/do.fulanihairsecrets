@@ -366,7 +366,7 @@ function OrderFormEmbed() {
           if (!hasAutoAdvanced.current && step === 1) {
             hasAutoAdvanced.current = true;
             // Event Sync: Explicitly call trackInitiateCheckout before advancing
-            // trackInitiateCheckout();
+            trackInitiateCheckout();
             setStep(2);
           }
         }, 600);
@@ -374,7 +374,7 @@ function OrderFormEmbed() {
     };
 
     updateProgress();
-  }, [form.name, form.phone, form.email, form.pkg, step]);
+  }, [form.name, form.phone, form.email, form.pkg, step, trackInitiateCheckout]);
 
   // Countdown timer effect
   useEffect(() => {
@@ -415,7 +415,7 @@ function OrderFormEmbed() {
     
     // STRICT: Only fire once
     if (hasTriggeredAddToCart.current) return;
-    if (false) return;
+    if (isEventFired(SESSION_KEYS.ADD_TO_CART)) return;
 
     // Validate email + phone
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
@@ -469,7 +469,7 @@ function OrderFormEmbed() {
 
     // Fire InitiateCheckout event
     trackInitiateCheckout(payload);
-  }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage, isEventFired]);
+  }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage, isEventFired, trackInitiateCheckout]);
 
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {
@@ -566,8 +566,8 @@ function OrderFormEmbed() {
           name: form.name,
           email: form.email,
           // Meta tracking identifiers for offline conversion matching
-          fbp: "" || '',
-          fbc: "" || '',
+          fbp: getFbp() || '',
+          fbc: getFbc() || '',
           fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         };
         
@@ -672,7 +672,7 @@ function OrderFormEmbed() {
     try {
       const orderId = form.orderId || generateOrderId();
       const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-      const packageAmount = selectedPackage?.price ?? 0;
+      const packageAmount = selectedPackage?.price ?? getPackagePrice(packageName);
       const calculatedDeliveryFee = deliveryFee; // Use memoized calculated value
       const totalAmount = packageAmount + calculatedDeliveryFee;
 
@@ -746,8 +746,8 @@ function OrderFormEmbed() {
         heardAboutUs: formData.heardAboutUs || '',
         
         // Meta tracking identifiers for offline conversion matching
-        fbp: "" || '',
-        fbc: "" || '',
+        fbp: getFbp() || '',
+        fbc: getFbc() || '',
         fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         eventId: orderId,
         userAgent: navigator.userAgent,
@@ -1444,10 +1444,10 @@ function OrderFormEmbed() {
                 }
 
                 const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-                const packagePrice = selectedPackage?.price ?? 0;
+                const packagePrice = selectedPackage?.price ?? getPackagePrice(packageName);
 
                 
-                if (!false) {
+                if (!isEventFired(SESSION_KEYS.INITIATE_CHECKOUT)) {
                   trackInitiateCheckout({
                     fullName: form.name,
                     phone: phoneDigits,
