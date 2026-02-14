@@ -33,8 +33,6 @@
       fbq('track', 'PageView');
     </script>
     
-    <link rel="preload" href="/~partytown/partytown.js" as="script" />
-    
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/hero.webp" />
     <meta name="theme-color" content="#DAA520" />
@@ -43,26 +41,8 @@
     <meta name="apple-mobile-web-app-title" content="Fulani Hair Gro" />
     
     
-    <script>
-      // Partytown config
-      partytown = {
-        forward: ['dataLayer.push', 'gtag'], 
-        resolveUrl: function(url, location) {
-          // Facebook Pixel is loaded on main thread - don't proxy
-          if (url && url.hostname === 'connect.facebook.net') {
-            return url; // Load directly, not through proxy
-          }
-          // Google Analytics Proxy through APIS subdomain
-          if (url && (url.hostname === 'www.googletagmanager.com' || url.hostname === 'www.google-analytics.com')) {
-            var proxyUrl = new URL('https://apis.fulanihairsecrets.com/proxy/gtag.php');
-            proxyUrl.searchParams.set('url', url.href);
-            return proxyUrl;
-          }
-          return url;
-        }
-      };
-    </script>
-    <script src="/~partytown/partytown.js" defer></script>
+    <!-- Partytown disabled due to Shared Storage API deprecation causing crashes -->
+    <!-- All scripts now load on main thread -->
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -239,8 +219,8 @@
       });
     </script>
 
-    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03"></script>
-    <script type="text/partytown">
+    <script src="https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03"></script>
+    <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
