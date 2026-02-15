@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout } from '@/utils/metaTracking';
-
-// New webhook URL from user requirements
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec";
-const WEBHOOK_SECRET = "fhg_orders_2024_secret";
+import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
+import { toast } from 'sonner';
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -208,7 +206,9 @@ const postOrderToFulani = (bodyString: string) => {
     keepalive: true,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
     body: bodyString
-  }).catch(() => void 0);
+  }).catch((error) => {
+    console.error('postOrderToFulani fallback fetch failed:', error);
+  });
 };
 
 function OrderFormEmbed() {
@@ -593,7 +593,7 @@ function OrderFormEmbed() {
     const orderId = formData.orderId || generateOrderId();
     
     const payload = {
-      secret: (import.meta as any).env?.VITE_FULANI_SECRET || 'fhg_orders_2024_secret',
+      secret: WEBHOOK_SECRET,
       type: 'partial',
       orderId: orderId,
       phone: formData.phone || formData.phoneNumber
@@ -856,7 +856,7 @@ function OrderFormEmbed() {
       
     } catch (e) {
       console.error('Order submission failed:', e);
-      alert('Error submitting order. Please try again.');
+      toast.error('Something went wrong submitting your order. Please try again.');
     }
     
     setSubmitting(false);
@@ -1649,7 +1649,7 @@ function OrderFormEmbed() {
                   🔢 Account Number: <span style={{ fontWeight: '700', fontSize: '18px' }}>5633783114</span>
                 </div>
                 <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#fff3cd', border: '1px solid #ffeaa7', borderRadius: '8px', color: '#856404' }}>
-                  <strong>⚠️ Important:</strong> After payment, send your proof of payment to 08101594734
+                  <strong>⚠️ Important:</strong> After payment, send your proof of payment to {PHONE_DISPLAY}
                 </div>
               </div>
             )}
@@ -1706,7 +1706,7 @@ function OrderFormEmbed() {
                   textAlign: 'center',
                   border: '1px solid #ffeaa7'
                 }}>
-                  <strong>After payment, send your proof of payment to 08101594734</strong>
+                  <strong>After payment, send your proof of payment to {PHONE_DISPLAY}</strong>
                 </div>
               </div>
             )}

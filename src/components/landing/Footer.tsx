@@ -1,17 +1,17 @@
-import result1 from '@/assets/results/result-1.webp';
-import result2 from '@/assets/results/result-2.webp';
-import result3 from '@/assets/results/result-3.webp';
-import result4 from '@/assets/results/result-4.webp';
-import result5 from '@/assets/results/result-5.webp';
-import result6 from '@/assets/results/result-6.webp';
-import result7 from '@/assets/results/result-7.webp';
-import result8 from '@/assets/results/result-8.webp';
-import result9 from '@/assets/results/result-9.webp';
-import result10 from '@/assets/results/result-10.webp';
-import result11 from '@/assets/results/result-11.webp';
-import result12 from '@/assets/results/result-12.webp';
-import result13 from '@/assets/results/result-13.webp';
-import result14 from '@/assets/results/result-14.webp';
+import result1 from '@/assets-optimized/results/result-1.webp';
+import result2 from '@/assets-optimized/results/result-2.webp';
+import result3 from '@/assets-optimized/results/result-3.webp';
+import result4 from '@/assets-optimized/results/result-4.webp';
+import result5 from '@/assets-optimized/results/result-5.webp';
+import result6 from '@/assets-optimized/results/result-6.webp';
+import result7 from '@/assets-optimized/results/result-7.webp';
+import result8 from '@/assets-optimized/results/result-8.webp';
+import result9 from '@/assets-optimized/results/result-9.webp';
+import result10 from '@/assets-optimized/results/result-10.webp';
+import result11 from '@/assets-optimized/results/result-11.webp';
+import result12 from '@/assets-optimized/results/result-12.webp';
+import result13 from '@/assets-optimized/results/result-13.webp';
+import result14 from '@/assets-optimized/results/result-14.webp';
 
 const footerImages = [result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13, result14];
 

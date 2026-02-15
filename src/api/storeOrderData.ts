@@ -1,6 +1,8 @@
 // Backend order data storage for CAPI Purchase events
 // Captures key form data at submission time for later confirmation
 
+import { FULANI_API_URL, WEBHOOK_SECRET } from '@/config/api';
+
 export interface StoredOrderData {
   orderId: string;
   timestamp: number;
@@ -171,10 +173,8 @@ function updateInLocalStorage(orderId: string, data: StoredOrderData): Promise<v
 // Google Sheets Storage Functions
 async function storeInGoogleSheets(data: StoredOrderData): Promise<void> {
   try {
-    const { FULANI_API_URL } = await import('../utils/pixelUtils');
-    
     const payload = {
-      secret: 'fhg_orders_2024_secret',
+      secret: WEBHOOK_SECRET,
       type: 'store_order_data',
       ...data
     };
@@ -183,23 +183,24 @@ async function storeInGoogleSheets(data: StoredOrderData): Promise<void> {
       Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
     );
 
-    await fetch(FULANI_API_URL, {
+    const response = await fetch(FULANI_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body
     });
+    if (!response.ok) {
+      throw new Error(`Store failed: HTTP ${response.status}`);
+    }
   } catch (error) {
-    console.warn('[Google Sheets Storage] Store failed:', error);
+    console.error('[Google Sheets Storage] Store failed:', error);
     throw error;
   }
 }
 
 async function getFromGoogleSheets(orderId: string): Promise<StoredOrderData | null> {
   try {
-    const { FULANI_API_URL } = await import('../utils/pixelUtils');
-    
     const payload = {
-      secret: 'fhg_orders_2024_secret',
+      secret: WEBHOOK_SECRET,
       type: 'retrieve_order_data',
       orderId
     };
@@ -221,17 +222,15 @@ async function getFromGoogleSheets(orderId: string): Promise<StoredOrderData | n
     const result = await response.json();
     return result.data || null;
   } catch (error) {
-    console.warn('[Google Sheets Storage] Retrieve failed:', error);
+    console.error('[Google Sheets Storage] Retrieve failed:', error);
     return null;
   }
 }
 
 async function updateInGoogleSheets(data: StoredOrderData): Promise<void> {
   try {
-    const { FULANI_API_URL } = await import('../utils/pixelUtils');
-    
     const payload = {
-      secret: 'fhg_orders_2024_secret',
+      secret: WEBHOOK_SECRET,
       type: 'update_order_status',
       ...data
     };
@@ -240,13 +239,16 @@ async function updateInGoogleSheets(data: StoredOrderData): Promise<void> {
       Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
     );
 
-    await fetch(FULANI_API_URL, {
+    const response = await fetch(FULANI_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body
     });
+    if (!response.ok) {
+      throw new Error(`Update failed: HTTP ${response.status}`);
+    }
   } catch (error) {
-    console.warn('[Google Sheets Storage] Update failed:', error);
+    console.error('[Google Sheets Storage] Update failed:', error);
     throw error;
   }
 }

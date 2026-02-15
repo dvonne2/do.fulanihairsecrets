@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/copy-htaccess-to-dist.mjs",
+    "build": "vite build && node scripts/copy-htaccess-to-dist.mjs && node scripts/ssg.mjs",
     "build:dev": "vite build --mode development",
     "images:webp": "node scripts/convert-images-to-webp.mjs",
     "fonts:download": "node scripts/download-google-fonts.mjs",

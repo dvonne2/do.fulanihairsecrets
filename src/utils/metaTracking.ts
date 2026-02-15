@@ -1,13 +1,13 @@
 // src/utils/metaTracking.ts
 // Complete Meta Pixel + CAPI tracking — single file, zero dependencies
 
+import { CAPI_ENDPOINT } from '@/config/api';
+
 declare global {
   interface Window {
     fbq: (...args: any[]) => void;
   }
 }
-
-const CAPI_ENDPOINT = 'https://apis.fulanihairsecrets.com/meta-capi.php';
 
 const browserFired = new Set<string>();
 const capiFired = new Set<string>();
@@ -128,6 +128,9 @@ async function fireCAPIEvent(
         },
       }),
     });
+    if (!res.ok) {
+      throw new Error(`CAPI request failed: HTTP ${res.status}`);
+    }
     const result = await res.json();
     console.log(`[Meta] CAPI sent: ${eventName}`, result);
   } catch (err) {

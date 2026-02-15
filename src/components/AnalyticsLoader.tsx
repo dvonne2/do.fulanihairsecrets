@@ -12,7 +12,7 @@ type Props = {
 };
 
 // Longer delay on mobile for faster initial paint
-const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 const defaultDelay = isMobile ? 6000 : 3000;
 
 export function AnalyticsLoader({ delayMs = defaultDelay }: Props) {

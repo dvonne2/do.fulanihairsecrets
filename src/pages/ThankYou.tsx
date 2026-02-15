@@ -3,16 +3,17 @@ import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { fireThankYouEvents, resetTracking } from '@/utils/metaTracking';
+import { WHATSAPP_ORDER_HELP_LINK, WHATSAPP_LINK, PHONE_DISPLAY, PHONE_TEL } from '@/config/api';
 
-import result1 from '@/assets/results/result-1.webp';
-import result2 from '@/assets/results/result-2.webp';
-import result3 from '@/assets/results/result-3.webp';
-import shampoo from '@/assets/products/shampoo.webp';
-import conditioner from '@/assets/products/conditioner.webp';
-import pomade from '@/assets/products/pomade.webp';
-import founderImg from '@/assets/products/hajara.webp';
-import amina from '@/assets/testimonials/amina.webp';
-import blessing from '@/assets/testimonials/blessing.webp';
+import result1 from '@/assets-optimized/results/result-1.webp';
+import result2 from '@/assets-optimized/results/result-2.webp';
+import result3 from '@/assets-optimized/results/result-3.webp';
+import shampoo from '@/assets-optimized/products/shampoo.webp';
+import conditioner from '@/assets-optimized/products/conditioner.webp';
+import pomade from '@/assets-optimized/products/pomade.webp';
+import founderImg from '@/assets-optimized/products/hajara.webp';
+import amina from '@/assets-optimized/testimonials/amina.webp';
+import blessing from '@/assets-optimized/testimonials/blessing.webp';
 
 // Dynamic package mapping based on actual package names from OrderFormEmbed
 const packageProducts: Record<string, { title: string; items: { name: string; qty: number; image: string }[] }> = {
@@ -262,7 +263,7 @@ const ThankYou = () => {
           Need help? Contact us on WhatsApp and we'll look up your order.
         </p>
         <a
-          href="https://wa.me/2348101594734?text=Hi%2C%20I%20just%20placed%20an%20order%20and%20need%20help%20finding%20my%20details"
+          href={WHATSAPP_ORDER_HELP_LINK}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
@@ -673,10 +674,10 @@ const ThankYou = () => {
           <h2 className="text-2xl md:text-3xl font-cinzel text-center text-gold mb-12">Questions? We're Here For You 24/7</h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <a href="https://wa.me/2348101594734" className="bg-[#111] border border-green-500/30 rounded-2xl p-6 text-center hover:border-green-500 transition-colors">
+            <a href={WHATSAPP_LINK} className="bg-[#111] border border-green-500/30 rounded-2xl p-6 text-center hover:border-green-500 transition-colors">
               <MessageCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">WHATSAPP</h3>
-              <p className="text-gray-400 mb-2">08101594734</p>
+              <p className="text-gray-400 mb-2">{PHONE_DISPLAY}</p>
               <p className="text-green-400 text-sm">Response: Under 2 hours</p>
             </a>
 
@@ -687,10 +688,10 @@ const ThankYou = () => {
               <p className="text-amber-400 text-sm">Response: Within 24hrs</p>
             </div>
 
-            <a href="tel:+2348101594734" className="bg-[#111] border border-gold/30 rounded-2xl p-6 text-center hover:border-gold transition-colors">
+            <a href={`tel:${PHONE_TEL}`} className="bg-[#111] border border-gold/30 rounded-2xl p-6 text-center hover:border-gold transition-colors">
               <PhoneCall className="w-12 h-12 text-gold mx-auto mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">CALL US</h3>
-              <p className="text-gray-400 mb-2">08101594734</p>
+              <p className="text-gray-400 mb-2">{PHONE_DISPLAY}</p>
               <p className="text-amber-400 text-sm">Hours: 9am-6pm Mon-Sat</p>
             </a>
           </div>

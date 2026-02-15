@@ -23,6 +23,35 @@
     <link rel="dns-prefetch" href="https://script.google.com" />
     <link rel="dns-prefetch" href="https://apis.fulanihairsecrets.com" />
     
+    <link rel="preload" as="image" href="/assets/hero-fulani-700.webp" type="image/webp" fetchpriority="high">
+
+    <!-- Critical above-the-fold CSS (urgency banner + hero) -->
+    <style>
+      @font-face{font-family:'Montserrat';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/montserrat-400-normal.woff2') format('woff2')}
+      @font-face{font-family:'Montserrat';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/montserrat-600-normal.woff2') format('woff2')}
+      @font-face{font-family:'Cinzel';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/cinzel-600-normal.woff2') format('woff2')}
+      :root{--valentine-red:#B80F66;--valentine-rose:#FF69B4;--background:0 0% 0%;--foreground:0 0% 100%;--gold:45 100% 35%;--gold-bright:50 100% 50%;--gold-dark:42 100% 25%;--gold-light:48 100% 75%;--royal-blue:230 100% 25%;--royal-blue-light:225 100% 50%;--destructive:0 100% 60%;--destructive-foreground:0 0% 100%;--card:0 0% 4%;--card-foreground:0 0% 100%;--primary:45 100% 55%;--primary-foreground:0 0% 0%;--muted:0 0% 15%;--muted-foreground:0 0% 70%;--accent:45 100% 55%;--accent-foreground:0 0% 0%;--border:45 100% 55%;--input:0 0% 15%;--ring:45 100% 55%;--radius:0.75rem}
+      body{margin:0;background:hsl(0 0% 0%);color:hsl(0 0% 100%)}
+      *,*::before,*::after{box-sizing:border-box}
+      .font-cinzel{font-family:'Cinzel',serif;font-weight:600}
+      .font-sans{font-family:'Montserrat',sans-serif}
+      .font-serif{font-family:Georgia,serif}
+      .text-gold{color:#B80F66!important}
+      .text-foreground{color:hsl(var(--foreground))}
+      .text-white{color:#fff}
+      .bg-background{background-color:hsl(var(--background))}
+      .royal-blue-gradient{background:linear-gradient(135deg,hsl(var(--royal-blue)) 0%,hsl(var(--royal-blue-light)) 50%,hsl(224 69% 40%) 100%)}
+      .valentine-pattern{background-image:radial-gradient(circle at 20% 50%,rgba(241,158,210,.03) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(169,29,58,.03) 0%,transparent 50%),radial-gradient(circle at 40% 20%,rgba(241,158,210,.03) 0%,transparent 50%)}
+      .arabian-pattern{background-image:linear-gradient(30deg,hsl(var(--gold)/.1) 12%,transparent 12.5%,transparent 87%,hsl(var(--gold)/.1) 87.5%),linear-gradient(150deg,hsl(var(--gold)/.1) 12%,transparent 12.5%,transparent 87%,hsl(var(--gold)/.1) 87.5%),linear-gradient(30deg,hsl(var(--gold)/.1) 12%,transparent 12.5%,transparent 87%,hsl(var(--gold)/.1) 87.5%),linear-gradient(150deg,hsl(var(--gold)/.1) 12%,transparent 12.5%,transparent 87%,hsl(var(--gold)/.1) 87.5%);background-size:80px 140px;background-position:0 0,0 0,40px 70px,40px 70px}
+      .moroccan-tile{background-color:hsl(var(--royal-blue));background-image:radial-gradient(circle at 0% 50%,transparent 9%,hsl(var(--gold)/.15) 10%,hsl(var(--gold)/.15) 15%,transparent 16%),radial-gradient(circle at 100% 50%,transparent 9%,hsl(var(--gold)/.15) 10%,hsl(var(--gold)/.15) 15%,transparent 16%),radial-gradient(circle at 50% 0%,transparent 9%,hsl(var(--gold)/.15) 10%,hsl(var(--gold)/.15) 15%,transparent 16%),radial-gradient(circle at 50% 100%,transparent 9%,hsl(var(--gold)/.15) 10%,hsl(var(--gold)/.15) 15%,transparent 16%);background-size:60px 60px}
+      .mega-glow{box-shadow:0 0 30px hsl(var(--gold)/.5),0 0 60px hsl(var(--gold)/.3),0 0 90px hsl(var(--gold)/.2)}
+      .gold-gradient{background:linear-gradient(135deg,hsl(var(--gold-dark)) 0%,hsl(var(--gold)) 25%,hsl(var(--gold-bright)) 50%,hsl(var(--gold)) 75%,hsl(var(--gold-dark)) 100%)}
+      @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+      .animate-shimmer{background:linear-gradient(90deg,hsl(var(--gold-dark)) 0%,hsl(var(--gold)) 20%,hsl(var(--gold-bright)) 40%,hsl(var(--gold-light)) 50%,hsl(var(--gold-bright)) 60%,hsl(var(--gold)) 80%,hsl(var(--gold-dark)) 100%);background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+      .animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+      @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    </style>
+    
     <script>
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -219,13 +248,6 @@
       });
     </script>
 
-    <script src="https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-KC7KTLQW03');
-    </script>
   </head>
 
   <body>

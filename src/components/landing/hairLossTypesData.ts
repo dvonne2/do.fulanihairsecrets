@@ -1,14 +1,14 @@
-import alopeciaAreata from '@/assets/hair-types/alopecia-areata.webp';
-import anagenEffluvium from '@/assets/hair-types/anagen-effluvium.webp';
-import androgenicAlopecia from '@/assets/hair-types/androgenic-alopecia.webp';
-import cicatricialAlopecia from '@/assets/hair-types/cicatricial-alopecia.webp';
-import tractionAlopecia from '@/assets/hair-types/traction-alopecia.webp';
-import nutritionalDeficiency from '@/assets/hair-types/nutritional-deficiency.webp';
-import telogenEffluvium from '@/assets/hair-types/telogen-effluvium.webp';
-import bundleImg from '@/assets/products/bundle-system.webp';
-import follicleBeforeAfter from '@/assets/products/jj-768x756-1.webp';
-import hairStrandRepair from '@/assets/products/jjj-768x735-1.webp';
-import denseScalp from '@/assets/products/jjjj-768x748-1.webp';
+import alopeciaAreata from '@/assets-optimized/hair-types/alopecia-areata.webp';
+import anagenEffluvium from '@/assets-optimized/hair-types/anagen-effluvium.webp';
+import androgenicAlopecia from '@/assets-optimized/hair-types/androgenic-alopecia.webp';
+import cicatricialAlopecia from '@/assets-optimized/hair-types/cicatricial-alopecia.webp';
+import tractionAlopecia from '@/assets-optimized/hair-types/traction-alopecia.webp';
+import nutritionalDeficiency from '@/assets-optimized/hair-types/nutritional-deficiency.webp';
+import telogenEffluvium from '@/assets-optimized/hair-types/telogen-effluvium.webp';
+import bundleImg from '@/assets-optimized/products/bundle-system.webp';
+import follicleBeforeAfter from '@/assets-optimized/products/jj-768x756-1.webp';
+import hairStrandRepair from '@/assets-optimized/products/jjj-768x735-1.webp';
+import denseScalp from '@/assets-optimized/products/jjjj-768x748-1.webp';
 
 export type HairLossType = {
   id: number;

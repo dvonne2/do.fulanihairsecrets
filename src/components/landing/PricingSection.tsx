@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import shampooImg from '@/assets/products/shampoo.webp';
-import conditionerImg from '@/assets/products/conditioner.webp';
-import pomadeImg from '@/assets/products/pomade.webp';
-import fullBundleImg from '@/assets/products/66750-bundle.webp';
+import shampooImg from '@/assets-optimized/products/shampoo.webp';
+import conditionerImg from '@/assets-optimized/products/conditioner.webp';
+import pomadeImg from '@/assets-optimized/products/pomade.webp';
+import fullBundleImg from '@/assets-optimized/products/66750-bundle.webp';
 
 interface PricingSectionProps {
   countdown: { hours: number; minutes: number; seconds: number };

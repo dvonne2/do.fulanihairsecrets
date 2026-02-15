@@ -1,9 +1,9 @@
-import result1 from '@/assets/results/result-1.webp';
-import result5 from '@/assets/results/result-5.webp';
-import result8 from '@/assets/results/result-8.webp';
-import result10 from '@/assets/results/result-10.webp';
-import result12 from '@/assets/results/result-12.webp';
-import result14 from '@/assets/results/result-14.webp';
+import result1 from '@/assets-optimized/results/result-1.webp';
+import result5 from '@/assets-optimized/results/result-5.webp';
+import result8 from '@/assets-optimized/results/result-8.webp';
+import result10 from '@/assets-optimized/results/result-10.webp';
+import result12 from '@/assets-optimized/results/result-12.webp';
+import result14 from '@/assets-optimized/results/result-14.webp';
 
 const stages = [
   { week: "Week 2", image: result1, title: "Shedding Stops", description: "Hair fall reduces by 70%. Scalp feels healthier." },

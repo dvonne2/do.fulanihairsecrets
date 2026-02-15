@@ -8,7 +8,7 @@ import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
 // Valentine promo ended
 // import { ValentineCountdown } from '@/components/ValentineCountdown';
-import hajiaMaryamTestimonial from '@/assets/Hajia Maryam Testimonial.webp';
+import hajiaMaryamTestimonial from '@/assets-optimized/Hajia Maryam Testimonial.webp';
 
 // Lazy load below-fold components
 const HairLossTypesGuide = lazy(() =>
@@ -79,7 +79,7 @@ const Guarantee = lazy(() =>
   import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
 );
 const FAQ = lazy(() => import('@/components/landing/FAQ').then((m) => ({ default: m.FAQ })));
-import cashOnDeliveryImg from '@/assets/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
+import cashOnDeliveryImg from '@/assets-optimized/products/cash-on-delivery-icon-1024x345-7sgjf338-2-1.webp';
 
 type LazySectionProps = {
   children: ReactNode;

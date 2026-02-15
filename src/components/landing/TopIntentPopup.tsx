@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
-import bundleSystemImg from '@/assets/products/bundle-system.webp';
-import ebookImg from '@/assets/products/Screenshot 2025-12-16 at 02.01.44.webp';
+import bundleSystemImg from '@/assets-optimized/products/bundle-system.webp';
+import ebookImg from '@/assets-optimized/products/Screenshot 2025-12-16 at 02.01.44.webp';
 
 interface TopIntentPopupProps {
   show: boolean;

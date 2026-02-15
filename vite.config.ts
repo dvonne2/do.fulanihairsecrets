@@ -15,7 +15,6 @@ const copyCriticalFiles = () => ({
       'favicon.ico',
       'robots.txt',
       'proxy/facebook.php',
-      'proxy/gtag.php',
       'meta-capi.php'
     ];
     
@@ -44,25 +43,21 @@ const copyCriticalFiles = () => ({
 // Custom plugin to make CSS loading non-blocking
 const optimizeCssLoading = () => ({
   name: 'optimize-css-loading',
-  generateBundle(options, bundle) {
-    // Find the HTML file
-    const htmlFile = Object.keys(bundle).find(key => key.endsWith('.html'));
-    if (htmlFile && bundle[htmlFile].type === 'asset') {
-      let htmlSource = bundle[htmlFile].source.toString();
-      
-      // Replace blocking stylesheet with preload + async load
-      htmlSource = htmlSource.replace(
-        /<link rel="stylesheet" crossorigin href="([^"]+)">/,
-        (match, cssPath) => {
-          return `
-    <link rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
-        }
-      );
-      
-      bundle[htmlFile].source = htmlSource;
-    }
-  }
+  transformIndexHtml: {
+    order: 'post' as const,
+    handler(html: string) {
+      const cssMatch = html.match(/<link\s+rel="stylesheet"\s+crossorigin\s+href="([^"]+)">/);
+      if (cssMatch) {
+        const cssPath = cssMatch[1];
+        html = html.replace(
+          cssMatch[0],
+          `<link rel="stylesheet" href="${cssPath}" media="print" onload="this.media='all'">\n    <noscript><link rel="stylesheet" href="${cssPath}"></noscript>`
+        );
+        console.log('[optimize-css] Made stylesheet non-render-blocking:', cssPath);
+      }
+      return html;
+    },
+  },
 });
 
 export default defineConfig({

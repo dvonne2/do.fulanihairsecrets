@@ -1,14 +1,14 @@
-import shampooImg from '@/assets/products/shampoo.webp';
-import conditionerImg from '@/assets/products/conditioner.webp';
-import pomadeImg from '@/assets/products/pomade.webp';
-import fullBundleImg from '@/assets/products/66750-bundle.webp';
-import result1 from '@/assets/results/result-1.webp';
-import result2 from '@/assets/results/result-2.webp';
-import result3 from '@/assets/results/result-3.webp';
-import result4 from '@/assets/results/result-4.webp';
-import result5 from '@/assets/results/result-5.webp';
-import result6 from '@/assets/results/result-6.webp';
-import result7 from '@/assets/results/result-7.webp';
+import shampooImg from '@/assets-optimized/products/shampoo.webp';
+import conditionerImg from '@/assets-optimized/products/conditioner.webp';
+import pomadeImg from '@/assets-optimized/products/pomade.webp';
+import fullBundleImg from '@/assets-optimized/products/66750-bundle.webp';
+import result1 from '@/assets-optimized/results/result-1.webp';
+import result2 from '@/assets-optimized/results/result-2.webp';
+import result3 from '@/assets-optimized/results/result-3.webp';
+import result4 from '@/assets-optimized/results/result-4.webp';
+import result5 from '@/assets-optimized/results/result-5.webp';
+import result6 from '@/assets-optimized/results/result-6.webp';
+import result7 from '@/assets-optimized/results/result-7.webp';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { usePrefetch } from '@/hooks/usePrefetch';
 

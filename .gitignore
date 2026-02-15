@@ -57,6 +57,9 @@ temp/
 Thumbs.db
 Desktop.ini
 
+# Image optimization backups
+assets-backup/
+
 # Root-level duplicate static files (Vite serves the versions in /public)
 /.htaccess
 /sw.js

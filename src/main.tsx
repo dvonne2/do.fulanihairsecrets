@@ -1,4 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -40,4 +40,17 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
   });
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootEl = document.getElementById("root")!;
+
+// Hydrate only on the index route where SSG pre-rendered content matches.
+// Other routes (e.g. /thank-you) use createRoot for normal SPA rendering.
+const isSSG = rootEl.children.length > 0
+  && !rootEl.querySelector('#seo-fallback')
+  && !rootEl.querySelector('.loading')
+  && window.location.pathname === '/';
+
+if (isSSG) {
+  hydrateRoot(rootEl, <App />);
+} else {
+  createRoot(rootEl).render(<App />);
+}

@@ -1,9 +1,9 @@
-import shampooImg from '@/assets/products/shampoo.webp';
-import conditionerImg from '@/assets/products/conditioner.webp';
-import pomadeImg from '@/assets/products/pomade.webp';
-import aminaImg from '@/assets/testimonials/amina.webp';
-import blessingImg from '@/assets/testimonials/blessing.webp';
-import founderImg from '@/assets/products/hajara.webp';
+import shampooImg from '@/assets-optimized/products/shampoo.webp';
+import conditionerImg from '@/assets-optimized/products/conditioner.webp';
+import pomadeImg from '@/assets-optimized/products/pomade.webp';
+import aminaImg from '@/assets-optimized/testimonials/amina.webp';
+import blessingImg from '@/assets-optimized/testimonials/blessing.webp';
+import founderImg from '@/assets-optimized/products/hajara.webp';
 
 export const ProductSystem = () => {
   const products = [

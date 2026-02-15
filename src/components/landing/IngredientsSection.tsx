@@ -1,5 +1,5 @@
 import React from 'react';
-import follicleHealing from '@/assets/products/1756204617-1720026155-giphy (1).webp';
+import follicleHealing from '@/assets-optimized/products/1756204617-1720026155-giphy (1).webp';
 
 const ingredients = [
   {
