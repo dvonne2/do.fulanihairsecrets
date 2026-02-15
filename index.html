@@ -53,13 +53,18 @@
     </style>
     
     <script>
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      // FB Pixel: queue commands immediately so fbq() calls work before script loads
+      !function(f,b,e,v,n){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-      (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window);
       fbq('init', '220381209723501');
       fbq('track', 'PageView');
+      // Defer fbevents.js load until after first paint
+      (function(){function load(){var t=document.createElement('script');t.async=!0;
+      t.src='https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(t)}
+      if('requestIdleCallback' in window){requestIdleCallback(load)}
+      else{setTimeout(load,2000)}})();
     </script>
     
     <link rel="manifest" href="/manifest.json" />
@@ -70,15 +75,6 @@
     <meta name="apple-mobile-web-app-title" content="Fulani Hair Gro" />
     
     
-    <!-- Partytown disabled due to Shared Storage API deprecation causing crashes -->
-    <!-- All scripts now load on main thread -->
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        console.log('[Performance] Partytown initialized');
-      });
-    </script>
-
     <link rel="preload" href="/fonts/cinzel-600-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/montserrat-600-normal.woff2" as="font" type="font/woff2" crossorigin />
@@ -87,19 +83,8 @@
     <link rel="dns-prefetch" href="https://apis.fulanihairsecrets.com" />
     
     <script>
-      if ('PerformanceObserver' in window) {
-        const observer = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            if (entry.entryType === 'largest-contentful-paint') {
-              console.log('[Performance] LCP:', entry.startTime);
-            }
-            if (entry.entryType === 'first-input') {
-              console.log('[Performance] FID:', entry.processingStart - entry.startTime);
-            }
-          }
-        });
-        observer.observe({entryTypes: ['largest-contentful-paint', 'first-input']});
-      }
+      // Defer perf observer — debug only, must not block render
+      setTimeout(function(){if('PerformanceObserver' in window){var o=new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(e.entryType==='largest-contentful-paint')console.log('[Performance] LCP:',e.startTime);if(e.entryType==='first-input')console.log('[Performance] FID:',e.processingStart-e.startTime)})});o.observe({entryTypes:['largest-contentful-paint','first-input']})}},0);
     </script>
     
     <style>
