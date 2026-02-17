@@ -33,7 +33,7 @@ export const StickyElements = ({
 
       {/* Purchase notification popup */}
       {showPurchaseNotif && currentNotif && (
-        <div className="fixed top-20 right-4 z-[9999] bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm animate-pulse md:top-20 md:right-4 top-4 right-2 md:max-w-sm max-w-[280px]">
+        <div className="fixed bottom-20 left-4 z-[50] bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm animate-pulse md:top-20 md:right-4 md:bottom-auto md:left-auto md:max-w-sm max-w-[280px]">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <div>

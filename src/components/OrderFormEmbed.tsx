@@ -1502,26 +1502,24 @@ function OrderFormEmbed() {
                 const phoneOk = phoneDigits.length === 11 && phoneDigits.startsWith('0') && !phoneError;
 
                 if (!form.name || !form.email || !form.phone || !form.pkg) {
-                  alert('Please fill all required fields (Name, Email, Phone, and Package)');
+                  const missing = [];
+                  if (!form.name) missing.push('Name');
+                  if (!form.phone) missing.push('Phone');
+                  if (!form.email) missing.push('Email');
+                  if (!form.pkg) missing.push('Package');
+                  toast.error(`Please fill: ${missing.join(', ')}`);
                   return;
-                }
-
-                // Timer expired warning (but allow order at full price)
-                if (!timerActive) {
-                  if (!confirm('The special offer has expired and prices are now at full price. Do you want to continue at the full price?')) {
-                    return;
-                  }
                 }
 
                 // Validate email format
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(form.email)) {
-                  alert('Please enter a valid email address');
+                  toast.error('Please enter a valid email address');
                   return;
                 }
 
                 if (!phoneOk) {
-                  alert('Please enter a valid 11-digit phone number');
+                  toast.error('Please enter a valid 11-digit phone number starting with 0');
                   return;
                 }
 
@@ -1972,7 +1970,36 @@ function OrderFormEmbed() {
                   const termsOk = form.paymentMethod === 'Pay on Delivery' ? !!form.agreeToTerms : true;
 
                   if (!phoneOk || !emailOk || !addressOk || !stateOk || !heardOk || !dateOk || !timeOk || !termsOk) {
-                    alert('Please fill all required fields and agree to terms');
+                    const missing = [];
+                    if (!addressOk) missing.push('Address');
+                    if (!stateOk) missing.push('State');
+                    if (!heardOk) missing.push('How you heard about us');
+                    if (!dateOk) missing.push('Delivery date');
+                    if (!timeOk) missing.push('Delivery time');
+                    if (!termsOk) missing.push('Terms agreement');
+                    if (!phoneOk) missing.push('Phone number');
+                    if (!emailOk) missing.push('Email');
+                    toast.error(`Please complete: ${missing.join(', ')}`);
+                    
+                    // Scroll to first missing field
+                    if (!addressOk) {
+                      const el = document.querySelector('textarea[placeholder="Full address"]') as HTMLElement;
+                      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      el?.focus();
+                    } else if (!heardOk) {
+                      const el = document.querySelector('[name="heardAboutUs"]') as HTMLElement;
+                      el?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else if (!dateOk) {
+                      const el = document.querySelector('input[type="date"]') as HTMLElement;
+                      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      el?.focus();
+                    } else if (!timeOk) {
+                      const el = document.querySelector('[name="deliveryTimeWindow"]') as HTMLElement;
+                      el?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else if (!termsOk) {
+                      const el = document.querySelector('input[type="checkbox"]') as HTMLElement;
+                      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                     return;
                   }
 
