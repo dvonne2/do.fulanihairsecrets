@@ -947,29 +947,32 @@ function OrderFormEmbed() {
       };
 
       console.log("🚀 Sending Complete Order:", completePayload);
-      console.log("📊 Missing Fields Debug:", {
-        deliveryDate: formData.deliveryDate,
-        deliveryTimeWindow: formData.deliveryTimeWindow, 
-        paymentMethod: formData.paymentMethod,
-        heardAboutUs: formData.heardAboutUs
-      });
+
+      // Fire-and-forget: send webhook via sendBeacon (survives page navigation)
+      // then redirect immediately — no waiting for response since no-cors can't read it anyway
+      const blob = new Blob([JSON.stringify(completePayload)], { type: 'application/json' });
+      const beaconSent = navigator.sendBeacon(WEBHOOK_URL, blob);
       
-      const success = await sendToWebhook(completePayload);
-      
-      if (!success) {
-        throw new Error('Failed to send order to webhook');
+      // Fallback: if sendBeacon fails, fire fetch without awaiting
+      if (!beaconSent) {
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(completePayload),
+          mode: 'no-cors',
+          keepalive: true
+        }).catch(err => console.error('Webhook fallback error:', err));
       }
 
-      setTimeout(() => {
-        window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
-      }, 500);
+      // Redirect instantly — order data already in sessionStorage
+      window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
+      return;
       
     } catch (e) {
       console.error('Order submission failed:', e);
       toast.error('Something went wrong submitting your order. Please try again.');
+      setSubmitting(false);
     }
-    
-    setSubmitting(false);
   };
 
   return (
