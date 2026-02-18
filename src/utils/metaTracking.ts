@@ -374,6 +374,56 @@ export async function fireInitiateCheckout(data: {
   });
 }
 
+export async function fireCartRecovery(data: {
+  orderId: string;
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  packageName?: string;
+  amount?: number;
+}): Promise<void> {
+  const eventId = `recovery_${data.orderId}_${Date.now()}`;
+  fireBrowserEvent('trackCustom', 'CartRecovery', {
+    value: Number(data.amount) || 0,
+    currency: 'NGN',
+    content_category: 'abandoned_cart',
+    content_name: data.packageName || 'Fulani Hair Gro',
+    order_id: data.orderId,
+  }, eventId);
+  const userData = await buildUserData({
+    email: data.email,
+    phone: data.phone,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    externalId: data.orderId,
+  });
+  await fireCAPIEvent('CartRecovery', eventId, userData, {
+    value: Number(data.amount) || 0,
+    content_category: 'abandoned_cart',
+    content_name: data.packageName || 'Fulani Hair Gro',
+    order_id: data.orderId,
+  });
+  console.log('[Meta] CartRecovery fired for order:', data.orderId);
+}
+
+/**
+ * Pre-mark events as already fired so recovery sessions don't duplicate them.
+ * Call this when restoring a recovery link to prevent FormStart/LeadSync/AddToCart
+ * from re-firing with the pre-filled data.
+ */
+export function markEventsAsFired(events: string[]): void {
+  for (const event of events) {
+    browserFired.add(`trackCustom_${event}`);
+    browserFired.add(`track_${event}`);
+    capiFired.add(`capi_${event}`);
+  }
+  if (events.includes('LeadSync')) {
+    leadSyncFired = true;
+  }
+  console.log('[Meta] Pre-marked events as fired:', events);
+}
+
 export function resetTracking(): void {
   browserFired.clear();
   capiFired.clear();

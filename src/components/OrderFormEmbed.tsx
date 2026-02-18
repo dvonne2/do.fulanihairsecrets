@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
-import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout } from '@/utils/metaTracking';
+import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
 
@@ -594,12 +594,19 @@ function OrderFormEmbed() {
     
     // Save to localStorage for abandoned cart recovery
     try {
+      let fbclid = '';
+      try {
+        const fbcData = localStorage.getItem('meta_fbc_data');
+        if (fbcData) fbclid = JSON.parse(fbcData).fbclid || '';
+      } catch {}
+
       const recoveryData = {
         orderId,
         name: formData.name || '',
         phone: formData.phone || formData.phoneNumber || '',
         email: formData.email || '',
         pkg: form.pkg || '',
+        fbclid,
         timestamp: Date.now()
       };
       localStorage.setItem(`fhg_partial_${orderId}`, JSON.stringify(recoveryData));
@@ -741,6 +748,11 @@ function OrderFormEmbed() {
     if (isRecoveryLink && typeof window !== 'undefined') {
       console.log('🔄 Recovery link detected - restoring partial data for orderId:', orderId);
       
+      // Pre-mark Meta events as fired to prevent duplicates from pre-filled data
+      markEventsAsFired(['FormStart', 'LeadSync', 'AddToCart']);
+      hasTriggeredFormStart.current = true;
+      hasTriggeredAddToCart.current = true;
+
       // Try to restore partial form data from localStorage
       let restored = false;
       try {
@@ -758,6 +770,16 @@ function OrderFormEmbed() {
           restored = true;
           console.log('✅ Restored partial data from localStorage:', data);
           toast.success('Welcome back! We restored your details.');
+          if (data.fbclid) {
+            try {
+              localStorage.setItem('meta_fbc_data', JSON.stringify({
+                fbc: `fb.1.${Date.now()}.${data.fbclid}`, fbclid: data.fbclid,
+                timestamp: Date.now(), expiresAt: Date.now() + 30*24*60*60*1000,
+              }));
+            } catch {}
+          }
+          const np = (data.name || '').trim().split(' ');
+          fireCartRecovery({ orderId, email: data.email, phone: data.phone, firstName: np[0] || '', lastName: np.slice(1).join(' ') || '' });
         }
       } catch (e) {
         console.warn('localStorage restore failed:', e);
@@ -793,10 +815,17 @@ function OrderFormEmbed() {
                 }));
                 console.log('✅ Restored partial data from backend:', result.data);
                 toast.success('Welcome back! We restored your details.');
+                const np = (result.data.name || '').trim().split(' ');
+                fireCartRecovery({ orderId, email: result.data.email, phone: result.data.phone, firstName: np[0] || '', lastName: np.slice(1).join(' ') || '' });
+              } else {
+                fireCartRecovery({ orderId });
               }
+            } else {
+              fireCartRecovery({ orderId });
             }
           } catch (e) {
             console.warn('Backend partial restore failed:', e);
+            fireCartRecovery({ orderId });
           }
         })();
       }
