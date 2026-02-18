@@ -1921,34 +1921,32 @@ function OrderFormEmbed() {
               placeholder="Select delivery date"
               value={form.deliveryDate}
               onChange={e => {
-                const selectedDate = new Date(e.target.value);
+                const selectedDate = new Date(e.target.value + 'T00:00:00');
                 const now = new Date();
-                const minDate = new Date(now.getTime()); // Today onwards
-                const maxDate = new Date(now.getTime() + 48 * 60 * 60 * 1000); // 48 hours from now
+                // Compare dates at midnight (strip time) so "today" is always valid
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const maxDate = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days from today
                 
-                // Clear previous error
                 setDeliveryDateError('');
                 
-                // Validate date is within 48 hours (including today)
-                if (selectedDate < minDate) {
+                if (selectedDate < today) {
                   setDeliveryDateError('Delivery date cannot be in the past.');
                   setForm({ ...form, deliveryDate: '' });
                   return;
                 }
                 
                 if (selectedDate > maxDate) {
-                  setDeliveryDateError('Delivery dates must be within 48 hours. Please select today, tomorrow, or the next day.');
+                  setDeliveryDateError('Please select today, tomorrow, or the next day.');
                   setForm({ ...form, deliveryDate: '' });
                   return;
                 }
                 
-                // Valid date, update form
                 setForm({ ...form, deliveryDate: e.target.value });
               }}
               onClick={(e) => e.target.showPicker()}
               onFocus={(e) => e.target.showPicker()}
-              min={new Date().toISOString().split('T')[0]} // Today onwards
-              max={new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString().split('T')[0]} // 48 hours from now
+              min={new Date().toISOString().split('T')[0]}
+              max={(() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.toISOString().split('T')[0]; })()}
               required
             />
             {deliveryDateError && (
