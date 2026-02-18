@@ -593,13 +593,14 @@ html {
   }
 }
 
-/* Step 2 fade-slide-in transition */
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* Step 2 slide-in transition — element is always visible by default */
 .step2-enter {
-  animation: fadeSlideIn 0.4s ease both;
+  opacity: 1;
+  transform: translateY(0);
+  animation: stepSlideIn 0.35s ease;
+}
+@keyframes stepSlideIn {
+  from { opacity: 0.3; transform: translateY(8px); }
 }
 
 /* Mobile performance optimizations */
