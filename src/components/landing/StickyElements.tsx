@@ -31,18 +31,6 @@ export const StickyElements = ({
         style={{ width: `${scrollProgress}%` }}
       />
 
-      {/* Purchase notification popup */}
-      {showPurchaseNotif && currentNotif && (
-        <div className="fixed bottom-20 left-4 z-[50] bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm animate-pulse md:top-20 md:right-4 md:bottom-auto md:left-auto md:max-w-sm max-w-[280px]">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <div>
-              <div className="font-semibold text-sm">{currentNotif.name || 'A Customer'}</div>
-              <div className="text-xs text-gray-600">{currentNotif.name} from {currentNotif.location} just ordered {currentNotif.product} • {currentNotif.time}</div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
