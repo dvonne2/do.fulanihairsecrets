@@ -40,29 +40,9 @@ const copyCriticalFiles = () => ({
   }
 });
 
-// Custom plugin to make CSS loading non-blocking
-const optimizeCssLoading = () => ({
-  name: 'optimize-css-loading',
-  transformIndexHtml: {
-    order: 'post' as const,
-    handler(html: string) {
-      const cssMatch = html.match(/<link\s+rel="stylesheet"\s+crossorigin\s+href="([^"]+)">/);
-      if (cssMatch) {
-        const cssPath = cssMatch[1];
-        html = html.replace(
-          cssMatch[0],
-          `<link rel="stylesheet" href="${cssPath}" media="print" onload="this.media='all'">\n    <noscript><link rel="stylesheet" href="${cssPath}"></noscript>`
-        );
-        console.log('[optimize-css] Made stylesheet non-render-blocking:', cssPath);
-      }
-      return html;
-    },
-  },
-});
-
 export default defineConfig({
   base: '/',
-  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles(), optimizeCssLoading()],
+  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
