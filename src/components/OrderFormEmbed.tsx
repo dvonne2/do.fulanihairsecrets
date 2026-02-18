@@ -592,11 +592,30 @@ function OrderFormEmbed() {
   const savePartialEntry = async (formData) => {
     const orderId = formData.orderId || generateOrderId();
     
+    // Save to localStorage for abandoned cart recovery
+    try {
+      const recoveryData = {
+        orderId,
+        name: formData.name || '',
+        phone: formData.phone || formData.phoneNumber || '',
+        email: formData.email || '',
+        pkg: form.pkg || '',
+        timestamp: Date.now()
+      };
+      localStorage.setItem(`fhg_partial_${orderId}`, JSON.stringify(recoveryData));
+      console.log('💾 Saved partial data to localStorage for recovery:', orderId);
+    } catch (e) {
+      console.warn('localStorage save failed:', e);
+    }
+
     const payload = {
       secret: WEBHOOK_SECRET,
       type: 'partial',
       orderId: orderId,
-      phone: formData.phone || formData.phoneNumber
+      phone: formData.phone || formData.phoneNumber,
+      name: formData.name || '',
+      email: formData.email || '',
+      packageSelected: formData.packageSelected || ''
     };
 
     const body = new URLSearchParams(
@@ -717,11 +736,74 @@ function OrderFormEmbed() {
     }
   }, [form.name, form.orderId]);
 
-  // Auto-scroll to form and handle recovery link
+  // Auto-scroll to form and handle recovery link — restore saved partial data
   useEffect(() => {
     if (isRecoveryLink && typeof window !== 'undefined') {
-      console.log('🔄 Recovery link detected - auto-scrolling to form');
+      console.log('🔄 Recovery link detected - restoring partial data for orderId:', orderId);
       
+      // Try to restore partial form data from localStorage
+      let restored = false;
+      try {
+        const saved = localStorage.getItem(`fhg_partial_${orderId}`);
+        if (saved) {
+          const data = JSON.parse(saved);
+          setForm(prev => ({
+            ...prev,
+            name: data.name || prev.name,
+            phone: data.phone || prev.phone,
+            email: data.email || prev.email,
+            pkg: data.pkg || prev.pkg,
+            orderId: orderId
+          }));
+          restored = true;
+          console.log('✅ Restored partial data from localStorage:', data);
+          toast.success('Welcome back! We restored your details.');
+        }
+      } catch (e) {
+        console.warn('localStorage restore failed:', e);
+      }
+
+      // If localStorage didn't have data, try the backend API
+      if (!restored) {
+        (async () => {
+          try {
+            const payload = {
+              secret: WEBHOOK_SECRET,
+              type: 'retrieve_partial',
+              orderId: orderId
+            };
+            const body = new URLSearchParams(
+              Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
+            );
+            const response = await fetch(FULANI_API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+              body: body.toString()
+            });
+            if (response.ok) {
+              const result = await response.json();
+              if (result.data) {
+                setForm(prev => ({
+                  ...prev,
+                  name: result.data.name || prev.name,
+                  phone: result.data.phone || prev.phone,
+                  email: result.data.email || prev.email,
+                  pkg: result.data.pkg || result.data.packageSelected || prev.pkg,
+                  orderId: orderId
+                }));
+                console.log('✅ Restored partial data from backend:', result.data);
+                toast.success('Welcome back! We restored your details.');
+              }
+            }
+          } catch (e) {
+            console.warn('Backend partial restore failed:', e);
+          }
+        })();
+      }
+      
+      // Mark sent to prevent re-firing partial webhook for recovered orders
+      setSent(true);
+
       // Auto-scroll to order form after a short delay
       const timer = setTimeout(() => {
         const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
@@ -729,15 +811,14 @@ function OrderFormEmbed() {
           formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
           console.log('📍 Scrolled to order form');
         } else {
-          // Fallback: scroll to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
           console.log('📍 Scrolled to top (form not found)');
         }
-      }, 1000); // Wait 1 second for page to load
+      }, 800);
 
       return () => clearTimeout(timer);
     }
-  }, [isRecoveryLink]);
+  }, [isRecoveryLink, orderId]);
 
   useEffect(() => {
     if (step === 2 && !form.state) {
