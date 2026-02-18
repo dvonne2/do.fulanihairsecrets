@@ -1640,16 +1640,16 @@ function OrderFormEmbed() {
                 
                 setStep(2);
                 
-                // Force scroll to step indicator when moving to Step 2
-                requestAnimationFrame(() => {
+                // Smooth scroll to step indicator — "walk" the user to Step 2
+                setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
                     stepIndicator.scrollIntoView({ 
-                      behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
+                      behavior: 'smooth',
                       block: 'start'
                     });
                   }
-                }); // Removed setTimeout for instant response
+                }, 100);
               }}
             >
               CONTINUE
@@ -1658,7 +1658,31 @@ function OrderFormEmbed() {
         )}
 
         {step === 2 && (
-          <>
+          <div className="step2-enter">
+            {/* Package Selection Summary */}
+            {selectedPackage && (
+              <div style={{
+                background: '#F0FDF4', border: '1.5px solid #BBF7D0',
+                borderRadius: 10, padding: '12px 14px', marginBottom: 16,
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#16A34A', textTransform: 'uppercase' as const }}>
+                    ✓ Your Selection
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: '#14532D' }}>
+                    {packageMapping[form.pkg] || form.pkg}
+                  </div>
+                </div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#14532D' }}>
+                  ₦{selectedPackage.price.toLocaleString()}
+                </div>
+              </div>
+            )}
+            <p style={{ fontSize: 13, color: '#6B7280', textAlign: 'center' as const, margin: '0 0 14px', fontWeight: 500 }}>
+              Almost done! Just tell us where to deliver 📦
+            </p>
+
             {/* Alternative phone */}
             <label style={S.label}>ALTERNATIVE PHONE NUMBER (WHATSAPP)</label>
             <input
@@ -2054,16 +2078,12 @@ function OrderFormEmbed() {
             <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
               <button style={S.back} onClick={() => {
                 setStep(1);
-                // Force scroll to step indicator when going back to Step 1
-                requestAnimationFrame(() => {
+                setTimeout(() => {
                   const stepIndicator = document.getElementById('step-indicator');
                   if (stepIndicator) {
-                    stepIndicator.scrollIntoView({ 
-                      behavior: 'auto', // Changed from 'smooth' to 'auto' for faster performance on mobile data
-                      block: 'start'
-                    });
+                    stepIndicator.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
-                }); // Removed setTimeout for instant response
+                }, 100);
               }}>← Back</button>
               <button
                 style={{ ...S.btn, flex: 1, ...(submitting ? S.btnDis : {}) }}
@@ -2119,7 +2139,7 @@ function OrderFormEmbed() {
                 {submitting ? 'PROCESSING...' : '→ SUBMIT'}
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
