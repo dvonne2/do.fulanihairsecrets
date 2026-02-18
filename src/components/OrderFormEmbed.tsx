@@ -948,21 +948,15 @@ function OrderFormEmbed() {
 
       console.log("🚀 Sending Complete Order:", completePayload);
 
-      // Fire-and-forget: send webhook via sendBeacon (survives page navigation)
-      // then redirect immediately — no waiting for response since no-cors can't read it anyway
-      const blob = new Blob([JSON.stringify(completePayload)], { type: 'application/json' });
-      const beaconSent = navigator.sendBeacon(WEBHOOK_URL, blob);
-      
-      // Fallback: if sendBeacon fails, fire fetch without awaiting
-      if (!beaconSent) {
-        fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(completePayload),
-          mode: 'no-cors',
-          keepalive: true
-        }).catch(err => console.error('Webhook fallback error:', err));
-      }
+      // Fire webhook (keepalive ensures it completes even after navigation)
+      // Do NOT await — redirect immediately for instant UX
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(completePayload),
+        mode: 'no-cors',
+        keepalive: true
+      }).catch(err => console.error('Webhook error:', err));
 
       // Redirect instantly — order data already in sessionStorage
       window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
