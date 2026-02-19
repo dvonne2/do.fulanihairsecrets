@@ -424,36 +424,20 @@ function OrderFormEmbed() {
     // STRICT: Both must be valid
     if (!isEmailValid || !isPhoneValid) return;
 
-    // Fire AddToCart
+    // STRICT: Package must be selected before firing
+    if (!form.pkg || !selectedPackage) return;
+
+    // All conditions met — fire AddToCart and lock
     hasTriggeredAddToCart.current = true;
     
-    console.log('[AddToCart] Firing on Step 1 — email + phone valid');
+    console.log('[AddToCart] Firing on Step 1 — email + phone valid + package selected');
 
-    // Build payload with available data
-    const payload: any = {
-      fullName: form.name || '',
-      email: form.email?.trim().toLowerCase() || '',
-      phone: form.phone?.replace(/\D/g, '') || '',
-      state: form.state || '',
-      lga: form.lga || '',
-      address: form.address || '',
-      
-      // Include package data if selected (optional)
-      ...(form.pkg && selectedPackage && {
-        packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
-        packagePrice: selectedPackage.price,
-      })
-    };
-
-    // Fire AddToCart event
-    if (form.pkg && selectedPackage) {
-      fireAddToCart({
-        packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
-        amount: selectedPackage.price,
-        email: form.email,
-        phone: form.phone,
-      });
-    }
+    fireAddToCart({
+      packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
+      amount: selectedPackage.price,
+      email: form.email,
+      phone: form.phone,
+    });
 
     }, [step, form.email, form.phone, form.pkg, selectedPackage]); // Note: step is in dependencies to enforce Rule 1
 
