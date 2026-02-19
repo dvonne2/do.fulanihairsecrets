@@ -2004,7 +2004,7 @@ function OrderFormEmbed() {
                 const total = p.price + currentDeliveryFee;
                 const deliveryLabel = currentDeliveryFee === 0 ? 'Delivery (FREE - Pay Before Delivery orders only)' : 
                                      currentDeliveryFee === 5000 ? 'Delivery (24 Hours)' : 'Delivery (1-3 Days)';
-                const items = PACKAGE_CONTENTS[p.name] || [];
+                const items = PACKAGE_CONTENTS[p.webhookName] || PACKAGE_CONTENTS[p.name] || [];
                 const hasName = Boolean(form.name && form.name.trim());
                 const hasAddress = Boolean(form.address && form.address.trim());
                 const hasState = Boolean(form.state && form.state.trim());
