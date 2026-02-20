@@ -9,8 +9,80 @@ declare global {
   }
 }
 
-const browserFired = new Set<string>();
-const capiFired = new Set<string>();
+// ============================================
+// PERSISTENT DEDUP — survives page reloads
+// ============================================
+const DEDUP_STORAGE_KEY = 'fhg_meta_dedup';
+const DEDUP_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — same user, same day = 1 event
+
+function loadDedup(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DEDUP_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Date.now() < parsed.expiresAt) {
+        return new Set<string>(parsed.keys);
+      }
+      localStorage.removeItem(DEDUP_STORAGE_KEY);
+    }
+  } catch {}
+  return new Set<string>();
+}
+
+function saveDedup(set: Set<string>): void {
+  try {
+    localStorage.setItem(
+      DEDUP_STORAGE_KEY,
+      JSON.stringify({
+        keys: Array.from(set),
+        expiresAt: Date.now() + DEDUP_TTL_MS,
+      })
+    );
+  } catch {}
+}
+
+let dedupSet = loadDedup();
+
+function hasFired(key: string): boolean {
+  return dedupSet.has(key);
+}
+
+function markFired(key: string): void {
+  dedupSet.add(key);
+  saveDedup(dedupSet);
+}
+
+// ============================================
+// IDENTITY-BASED EVENT IDs — deterministic dedup
+// ============================================
+// Uses SHA-256 of (eventName + identity) so Browser + CAPI always
+// send the SAME event_id. Meta deduplicates them as one event.
+let _sessionSeed: string | null = null;
+function getSessionSeed(): string {
+  if (_sessionSeed) return _sessionSeed;
+  try {
+    const stored = localStorage.getItem('fhg_session_seed');
+    if (stored) { _sessionSeed = stored; return stored; }
+  } catch {}
+  _sessionSeed = Math.random().toString(36).slice(2);
+  try { localStorage.setItem('fhg_session_seed', _sessionSeed); } catch {}
+  return _sessionSeed;
+}
+
+async function makeEventId(eventName: string, identity?: string): Promise<string> {
+  const seed = identity || getSessionSeed();
+  const raw = `${eventName}_${seed}`;
+  const hash = await sha256raw(raw);
+  return hash.slice(0, 16); // 16-char hex = plenty unique
+}
+
+async function sha256raw(value: string): Promise<string> {
+  const data = new TextEncoder().encode(value.trim().toLowerCase());
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 async function sha256(value: string): Promise<string> {
   const data = new TextEncoder().encode(value.trim().toLowerCase());
@@ -79,21 +151,20 @@ function fireBrowserEvent(
   type: 'track' | 'trackCustom',
   eventName: string,
   data: Record<string, any>,
-  eventId?: string
+  eventId: string
 ): void {
-  const key = `${type}_${eventName}`;
-  if (browserFired.has(key)) {
-    console.log(`[Meta] Browser skip duplicate: ${eventName}`);
+  const key = `browser_${eventName}`;
+  if (hasFired(key)) {
+    console.log(`[Meta] Browser skip duplicate (persisted): ${eventName}`);
     return;
   }
-  browserFired.add(key);
+  markFired(key);
   if (typeof window.fbq !== 'function') {
     console.warn(`[Meta] fbq not loaded, skipping: ${eventName}`);
     return;
   }
-  const options = eventId ? { eventID: eventId } : undefined;
-  window.fbq(type, eventName, data, options);
-  console.log(`[Meta] Browser ${type}: ${eventName}`, data);
+  window.fbq(type, eventName, data, { eventID: eventId });
+  console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
 }
 
 async function fireCAPIEvent(
@@ -103,11 +174,11 @@ async function fireCAPIEvent(
   customData: Record<string, any>
 ): Promise<void> {
   const key = `capi_${eventName}`;
-  if (capiFired.has(key)) {
-    console.log(`[Meta] CAPI skip duplicate: ${eventName}`);
+  if (hasFired(key)) {
+    console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName}`);
     return;
   }
-  capiFired.add(key);
+  markFired(key);
   const fbp = getFbp();
   const fbc = getFbc();
   if (fbp) userData.fbp = fbp;
@@ -222,8 +293,8 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   const prefix = (order.paymentType || 'PBD').toUpperCase() === 'PBD' ? 'pbd' : 'pod';
   const valueEventName = `${prefix}${pkgAmount}`;
 
-  // 1. PURCHASE
-  const purchaseId = `purchase_${order.orderId}_${Date.now()}`;
+  // 1. PURCHASE — orderId is the stable identity
+  const purchaseId = await makeEventId('Purchase', order.orderId);
   fireBrowserEvent('track', 'Purchase', {
     value: amount,
     currency: 'NGN',
@@ -239,7 +310,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   await delay(500);
 
   // 2. VALUE-BASED EVENT
-  const valueId = `${prefix}_${order.orderId}_${Date.now()}`;
+  const valueId = await makeEventId(valueEventName, order.orderId);
   fireBrowserEvent('trackCustom', valueEventName, {
     value: amount,
     currency: 'NGN',
@@ -254,7 +325,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
 
   // 3. HIGH VALUE PURCHASE
   if (amount >= 50000) {
-    const hvpId = `hvp_${order.orderId}_${Date.now()}`;
+    const hvpId = await makeEventId('HighValuePurchase', order.orderId);
     fireBrowserEvent('trackCustom', 'HighValuePurchase', {
       value: amount,
       currency: 'NGN',
@@ -268,7 +339,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   }
 
   // 4. COMPLETE REGISTRATION
-  const crId = `cr_${order.orderId}_${Date.now()}`;
+  const crId = await makeEventId('CompleteRegistration', order.orderId);
   fireBrowserEvent('track', 'CompleteRegistration', {
     value: amount,
     currency: 'NGN',
@@ -290,7 +361,8 @@ export async function fireLeadSync(info: {
   if (!info.email && !info.phone) return;
   leadSyncFired = true;
   const userData = await buildUserData(info);
-  const eventId = `leadsync_${Date.now()}`;
+  const identity = info.phone || info.email || '';
+  const eventId = await makeEventId('LeadSync', identity);
   fireBrowserEvent('trackCustom', 'LeadSync', {
     content_category: 'identity_capture',
   }, eventId);
@@ -315,7 +387,7 @@ export async function fireLeadSync(info: {
 }
 
 export async function fireFormStart(): Promise<void> {
-  const eventId = `formstart_${Date.now()}`;
+  const eventId = await makeEventId('FormStart');
   fireBrowserEvent('trackCustom', 'FormStart', {}, eventId);
   const userData = await getStoredIdentity();
   await fireCAPIEvent('FormStart', eventId, userData, {
@@ -330,7 +402,8 @@ export async function fireAddToCart(data: {
   email?: string;
   phone?: string;
 }): Promise<void> {
-  const eventId = `atc_${Date.now()}`;
+  const identity = data.phone || data.email || '';
+  const eventId = await makeEventId('AddToCart', identity);
   fireBrowserEvent('track', 'AddToCart', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
@@ -355,7 +428,8 @@ export async function fireInitiateCheckout(data: {
   firstName?: string;
   lastName?: string;
 }): Promise<void> {
-  const eventId = `ic_${Date.now()}`;
+  const identity = data.phone || data.email || '';
+  const eventId = await makeEventId('InitiateCheckout', identity);
   fireBrowserEvent('track', 'InitiateCheckout', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
@@ -383,7 +457,7 @@ export async function fireCartRecovery(data: {
   packageName?: string;
   amount?: number;
 }): Promise<void> {
-  const eventId = `recovery_${data.orderId}_${Date.now()}`;
+  const eventId = await makeEventId('CartRecovery', data.orderId);
   fireBrowserEvent('trackCustom', 'CartRecovery', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
@@ -414,18 +488,20 @@ export async function fireCartRecovery(data: {
  */
 export function markEventsAsFired(events: string[]): void {
   for (const event of events) {
-    browserFired.add(`trackCustom_${event}`);
-    browserFired.add(`track_${event}`);
-    capiFired.add(`capi_${event}`);
+    markFired(`browser_${event}`);
+    markFired(`capi_${event}`);
   }
   if (events.includes('LeadSync')) {
     leadSyncFired = true;
   }
-  console.log('[Meta] Pre-marked events as fired:', events);
+  console.log('[Meta] Pre-marked events as fired (persisted):', events);
 }
 
 export function resetTracking(): void {
-  browserFired.clear();
-  capiFired.clear();
+  dedupSet.clear();
+  saveDedup(dedupSet);
   leadSyncFired = false;
+  _sessionSeed = null;
+  try { localStorage.removeItem('fhg_session_seed'); } catch {}
+  try { localStorage.removeItem(DEDUP_STORAGE_KEY); } catch {}
 }
