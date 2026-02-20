@@ -26,15 +26,6 @@ const LimitedStockWarning = lazy(() =>
 const TrustLogos = lazy(() =>
   import('@/components/landing/TrustLogos').then((m) => ({ default: m.TrustLogos }))
 );
-const TransformationGallery = lazy(() =>
-  import('@/components/landing/TransformationGallery').then((m) => ({ default: m.TransformationGallery }))
-);
-const BeforeAfterSection = lazy(() =>
-  import('@/components/landing/BeforeAfterSection').then((m) => ({ default: m.BeforeAfterSection }))
-);
-const ProgressTimeline = lazy(() =>
-  import('@/components/landing/ProgressTimeline').then((m) => ({ default: m.ProgressTimeline }))
-);
 const ProblemAgitation = lazy(() =>
   import('@/components/landing/ProblemAgitation').then((m) => ({ default: m.ProblemAgitation }))
 );
@@ -408,7 +399,6 @@ const Index = () => {
             <GrandmothersPermission />
             <LimitedStockWarning stockCount={stockCount} />
             <TrustLogos />
-            <TransformationGallery />
           </>
         </LazySection>
 
@@ -431,8 +421,6 @@ const Index = () => {
 
         <LazySection minHeightClassName="min-h-[200px]">
           <>
-            <BeforeAfterSection />
-            <ProgressTimeline />
             <ProblemAgitation />
             <FounderStory />
             <IndustryTruth />

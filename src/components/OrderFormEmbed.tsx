@@ -1853,7 +1853,7 @@ function OrderFormEmbed() {
             )}
 
             {/* How did you hear */}
-            <label style={{ ...S.label, textAlign: 'center' }}>HOW DID YOU HEAR ABOUT US? <span style={S.req}>*</span></label>
+            <label style={{ ...S.label, textAlign: 'center' }}>HOW DID YOU HEAR ABOUT US?</label>
             <div style={window.innerWidth < 768 ? S.hearAboutUsGridMobile : { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
               {[
                 'Facebook Ads',
@@ -2073,16 +2073,14 @@ function OrderFormEmbed() {
                   const emailOk = !!form.email.trim();
                   const addressOk = !!form.address.trim();
                   const stateOk = !!form.state;
-                  const heardOk = !!form.heardAboutUs;
                   const dateOk = !!form.deliveryDate && !deliveryDateError;
                   const timeOk = !!form.deliveryTimeWindow;
                   const termsOk = form.paymentMethod === 'Pay on Delivery' ? !!form.agreeToTerms : true;
 
-                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !heardOk || !dateOk || !timeOk || !termsOk) {
+                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !dateOk || !timeOk || !termsOk) {
                     const missing = [];
                     if (!addressOk) missing.push('Address');
                     if (!stateOk) missing.push('State');
-                    if (!heardOk) missing.push('How you heard about us');
                     if (!dateOk) missing.push('Delivery date');
                     if (!timeOk) missing.push('Delivery time');
                     if (!termsOk) missing.push('Terms agreement');
@@ -2095,9 +2093,6 @@ function OrderFormEmbed() {
                       const el = document.querySelector('textarea[placeholder="Full address"]') as HTMLElement;
                       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                       el?.focus();
-                    } else if (!heardOk) {
-                      const el = document.querySelector('[name="heardAboutUs"]') as HTMLElement;
-                      el?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     } else if (!dateOk) {
                       const el = document.querySelector('input[type="date"]') as HTMLElement;
                       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });

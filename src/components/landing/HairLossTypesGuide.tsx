@@ -5,7 +5,6 @@ import {
   careTips,
   expectations,
   bundleImg,
-  follicleBeforeAfter,
   hairStrandRepair,
   denseScalp
 } from './hairLossTypesData';
@@ -32,8 +31,8 @@ export const HairLossTypesGuide = () => {
         <div className="mb-10 md:mb-12 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-card/40 border border-gold/25 rounded-2xl p-3 flex items-center justify-center">
             <OptimizedImage
-              src={follicleBeforeAfter}
-              alt="Illustration showing a weak follicle transforming into a strong, healthy follicle"
+              src={bundleImg}
+              alt="Fulani Hair Gro complete product system"
               className="w-full max-w-xs object-contain"
               width={480}
               height={472}

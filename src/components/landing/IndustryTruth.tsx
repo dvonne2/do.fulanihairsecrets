@@ -41,7 +41,7 @@ export const IndustryTruth: React.FC = () => {
             <div className="bg-background/60 rounded-2xl border border-gold/20 p-3 md:p-4 flex items-center justify-center">
               <img
                 src={dhtDiagram}
-                alt="Simple illustration showing how DHT affects hair follicles before and after treatment"
+                alt="Simple illustration showing how DHT affects hair follicles"
                 className="w-full max-w-xs md:max-w-sm object-contain"
               />
             </div>
