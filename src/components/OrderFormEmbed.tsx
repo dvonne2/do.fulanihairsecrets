@@ -1279,14 +1279,14 @@ function OrderFormEmbed() {
                       marginBottom: '8px',
                       paddingLeft: '26px'
                     }}>
-                      <div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{
-                          fontSize: isFeatured ? '15px' : '12.5px',
+                          fontSize: isFeatured ? '14px' : '12.5px',
                           fontWeight: '800',
                           color: '#111111',
                           lineHeight: '1.3',
                           letterSpacing: '-0.2px',
-                          whiteSpace: 'nowrap' as const
+                          wordBreak: 'break-word' as const
                         }}>
                           {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'The Trial Kit')
                            .replace('SELF LOVE PLUS B2GOF', 'Self Love Plus B2GOF')
@@ -1320,7 +1320,7 @@ function OrderFormEmbed() {
                           ₦{p.originalPrice.toLocaleString()}
                         </div>
                         <div style={{
-                          fontSize: isFeatured ? '26px' : '20px',
+                          fontSize: isFeatured ? '22px' : '20px',
                           fontWeight: '800',
                           color: isBestValue ? '#946B00' : '#0F6B3A',
                           lineHeight: '1.1',
