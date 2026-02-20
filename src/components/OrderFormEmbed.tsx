@@ -105,8 +105,8 @@ const lgasByState: { [key: string]: string[] } = {
 const packages = [
   { id: 'PKG-001', name: 'THE TRIAL KIT (Self Love Plus)', webhookName: 'SELF LOVE PLUS', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
   { id: 'PKG-002', name: 'SELF LOVE RETURN', webhookName: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade 🧴', supply: '3-Month Maintenance: Best for returning fans to keep growth consistent. Not for first-timers—you need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
-  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade + 🎁 FREE: 1 Shampoo + 1 Pomade', supply: '🧴 3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '', isPopular: false },
-  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner + 🎁 FREE: 1 Shampoo + 1 Pomade + 1 Conditioner', supply: '🧴 3-Month Recovery System: The complete professional routine. Essential for first-timers to purify, nourish, and seal for a full biological growth cycle.', freeItems: '', isPopular: true },
+  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '🧴 3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade', isPopular: false },
+  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🧴 3-Month Recovery System: The complete professional routine. Essential for first-timers to purify, nourish, and seal for a full biological growth cycle.', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade + 1 Conditioner', isPopular: true },
   { id: 'PKG-005', name: 'FAMILY SAVES', webhookName: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ 🎁 FREE: 4 Shampoos + 4 Pomades + 4 Conditioners', isPopular: false },
 ];
 
@@ -1281,11 +1281,12 @@ function OrderFormEmbed() {
                     }}>
                       <div>
                         <div style={{
-                          fontSize: isFeatured ? '16px' : '13.5px',
+                          fontSize: isFeatured ? '15px' : '12.5px',
                           fontWeight: '800',
                           color: '#111111',
-                          lineHeight: '1.2',
-                          letterSpacing: '-0.2px'
+                          lineHeight: '1.3',
+                          letterSpacing: '-0.2px',
+                          whiteSpace: 'nowrap' as const
                         }}>
                           {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'The Trial Kit')
                            .replace('SELF LOVE PLUS B2GOF', 'Self Love Plus B2GOF')
