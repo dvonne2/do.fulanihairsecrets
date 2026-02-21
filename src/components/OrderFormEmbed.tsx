@@ -648,22 +648,41 @@ function OrderFormEmbed() {
     if (value.length === 11 && value !== lastFiredPhone) {
       // Skip partial webhook for recovery links (order already exists)
       if (!isRecoveryLink) {
-        const partialPayload = {
-          secret: WEBHOOK_SECRET,
-          type: "partial",
-          orderId: orderId,
-          phone: value,
-          name: form.name,
-          email: form.email,
-          // Meta tracking identifiers for offline conversion matching
-          fbp: '',
-          fbc: '',
-          fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
-        };
-        
-        sendToWebhook(partialPayload);
-        setLastFiredPhone(value); // Prevent re-firing for same number
-        console.log("🎯 Partial Lead Captured:", value, "Order ID:", orderId);
+        // Dedup across page refreshes: check localStorage for recent partial with same phone
+        let alreadyFired = false;
+        try {
+          const dedupKey = `fhg_partial_dedup_${value}`;
+          const prev = localStorage.getItem(dedupKey);
+          if (prev) {
+            const ts = parseInt(prev, 10);
+            // Suppress duplicate if fired within last 30 minutes
+            if (Date.now() - ts < 30 * 60 * 1000) {
+              alreadyFired = true;
+              console.log("🔕 Partial already fired for", value, "within 30min — skipping duplicate");
+            }
+          }
+        } catch { /* localStorage unavailable */ }
+
+        if (!alreadyFired) {
+          const partialPayload = {
+            secret: WEBHOOK_SECRET,
+            type: "partial",
+            orderId: orderId,
+            phone: value,
+            name: form.name,
+            email: form.email,
+            // Meta tracking identifiers for offline conversion matching
+            fbp: '',
+            fbc: '',
+            fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
+          };
+          
+          sendToWebhook(partialPayload);
+          // Persist dedup timestamp
+          try { localStorage.setItem(`fhg_partial_dedup_${value}`, String(Date.now())); } catch {}
+          console.log("🎯 Partial Lead Captured:", value, "Order ID:", orderId);
+        }
+        setLastFiredPhone(value); // Prevent re-firing for same number (in-memory)
       } else {
         console.log("🔄 Recovery link detected - skipping partial webhook for existing order:", orderId);
         setLastFiredPhone(value); // Still set to prevent re-firing
@@ -1031,90 +1050,11 @@ function OrderFormEmbed() {
               </div>
             </div>
 
-            {/* Name */}
-            <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
-            <div style={{ position: 'relative' }} id="nameFieldWrapper">
-              <input
-                style={S.input}
-                placeholder="Enter your full name"
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                ref={nameInputRef}
-                onFocus={() => handleInputFocus(nameInputRef)}
-              />
-              <span className="field-check" style={{
-                position: 'absolute',
-                right: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '18px',
-                opacity: '0',
-                transition: 'opacity 0.3s ease',
-                color: '#14532d',
-                pointerEvents: 'none'
-              }}>✓</span>
-            </div>
-
-            {/* Phone */}
-            <label style={S.label}>PHONE NUMBER <span style={S.req}>*</span></label>
-            <div style={{ position: 'relative' }} id="phoneFieldWrapper">
-              <input
-                style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
-                type="tel"
-                inputMode="numeric"
-                placeholder="08012345678"
-                value={form.phone}
-                onChange={handlePhoneChange}
-                ref={phoneInputRef}
-                onFocus={() => handleInputFocus(phoneInputRef)}
-              />
-              <span className="field-check" style={{
-                position: 'absolute',
-                right: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '18px',
-                opacity: '0',
-                transition: 'opacity 0.3s ease',
-                color: '#14532d',
-                pointerEvents: 'none'
-              }}>✓</span>
-            </div>
-            {phoneError && (
-              <p style={{ margin: '6px 0 0', color: '#ff3b30', fontSize: 12, fontWeight: 800 }}>
-                ⚠️ {phoneError}
-              </p>
-            )}
-            <p style={S.hint}>We call you before delivery"</p>
-
-            {/* Email */}
-            <label style={S.label}>EMAIL ADDRESS <span style={S.req}>*</span></label>
-            <div style={{ position: 'relative' }} id="emailFieldWrapper">
-              <input
-                style={S.input}
-                type="email"
-                placeholder="your@email.com"
-                value={form.email}
-                onChange={e => setForm({ ...form, email: e.target.value })}
-                ref={emailInputRef}
-                onFocus={() => handleInputFocus(emailInputRef)}
-              />
-              <span className="field-check" style={{
-                position: 'absolute',
-                right: '12px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '18px',
-                opacity: '0',
-                transition: 'opacity 0.3s ease',
-                color: '#14532d',
-                pointerEvents: 'none'
-              }}>✓</span>
-            </div>
-            <p style={S.hint}>For order confirmation and updates</p>
-
-            {/* Packages */}
-            <label style={S.label}>CHOOSE YOUR RECOVERY SYSTEM <span style={S.req}>*</span></label>
+            {/* Packages — shown FIRST so customers commit to a plan before entering details */}
+            <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
+            <p style={{ fontSize: '12px', color: '#6B7280', margin: '-4px 0 8px', fontWeight: '500' }}>
+              Select a package below, then fill in your details to complete your order.
+            </p>
             <div style={{
               fontFamily: 'DM Sans, sans-serif',
               background: '#F3F0EC',
@@ -1524,14 +1464,15 @@ function OrderFormEmbed() {
                         e.stopPropagation();
                         setForm({ ...form, pkg: p.id });
                         
-                        // Auto-advance to Step 2 after brief confirmation delay
+                        // Scroll to contact fields so user fills in their details
                         setTimeout(() => {
-                          // Trigger continue button click to advance to Step 2
-                          const continueBtn = document.querySelector('button');
-                          if (continueBtn && continueBtn.textContent?.includes('CONTINUE')) {
-                            continueBtn.click();
+                          const nameField = document.getElementById('nameFieldWrapper');
+                          if (nameField) {
+                            nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            const input = nameField.querySelector('input');
+                            if (input) input.focus();
                           }
-                        }, 600);
+                        }, 400);
                       }}
                     >
                       {p.id === 'PKG-001' && 'Select Trial Kit →'}
@@ -1561,8 +1502,107 @@ function OrderFormEmbed() {
               </div>
             </div>
 
+            {/* Contact Details — shown AFTER package selection */}
+            {form.pkg && (
+              <div style={{
+                background: '#F0FDF4',
+                border: '1.5px solid #BBF7D0',
+                borderRadius: '8px',
+                padding: '10px 14px',
+                margin: '16px 0 8px',
+                textAlign: 'center',
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#15803D'
+              }}>
+                ✓ Great choice! Now fill in your details below to complete your order.
+              </div>
+            )}
+
+            {/* Name */}
+            <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
+            <div style={{ position: 'relative' }} id="nameFieldWrapper">
+              <input
+                style={S.input}
+                placeholder="Enter your full name"
+                value={form.name}
+                onChange={e => setForm({ ...form, name: e.target.value })}
+                ref={nameInputRef}
+                onFocus={() => handleInputFocus(nameInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
+
+            {/* Phone */}
+            <label style={S.label}>PHONE NUMBER <span style={S.req}>*</span></label>
+            <div style={{ position: 'relative' }} id="phoneFieldWrapper">
+              <input
+                style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
+                type="tel"
+                inputMode="numeric"
+                placeholder="08012345678"
+                value={form.phone}
+                onChange={handlePhoneChange}
+                ref={phoneInputRef}
+                onFocus={() => handleInputFocus(phoneInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
+            {phoneError && (
+              <p style={{ margin: '6px 0 0', color: '#ff3b30', fontSize: 12, fontWeight: 800 }}>
+                ⚠️ {phoneError}
+              </p>
+            )}
+            <p style={S.hint}>We call you before delivery</p>
+
+            {/* Email */}
+            <label style={S.label}>EMAIL ADDRESS <span style={S.req}>*</span></label>
+            <div style={{ position: 'relative' }} id="emailFieldWrapper">
+              <input
+                style={S.input}
+                type="email"
+                placeholder="your@email.com"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                ref={emailInputRef}
+                onFocus={() => handleInputFocus(emailInputRef)}
+              />
+              <span className="field-check" style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '18px',
+                opacity: '0',
+                transition: 'opacity 0.3s ease',
+                color: '#14532d',
+                pointerEvents: 'none'
+              }}>✓</span>
+            </div>
+            <p style={S.hint}>For order confirmation and updates</p>
+
             {/* Pay text */}
-            <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery"</p>
+            <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery</p>
 
             {/* Continue button */}
             <button
