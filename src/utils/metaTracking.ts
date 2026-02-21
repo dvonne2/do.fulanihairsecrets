@@ -43,8 +43,16 @@ function saveDedup(set: Set<string>): void {
 
 let dedupSet = loadDedup();
 
+// Blanket-blocked events: these event names should never fire again (e.g. recovery links)
+const blanketBlocked = new Set<string>();
+
 function hasFired(key: string): boolean {
-  return dedupSet.has(key);
+  if (dedupSet.has(key)) return true;
+  // Check blanket block: if key starts with any blocked prefix (e.g. "browser_FormStart")
+  for (const blocked of blanketBlocked) {
+    if (key.startsWith(blocked)) return true;
+  }
+  return false;
 }
 
 function markFired(key: string): void {
@@ -153,9 +161,10 @@ function fireBrowserEvent(
   data: Record<string, any>,
   eventId: string
 ): void {
-  const key = `browser_${eventName}`;
+  // Use eventId in dedup key so different orders can fire but same order can't double-fire
+  const key = `browser_${eventName}_${eventId}`;
   if (hasFired(key)) {
-    console.log(`[Meta] Browser skip duplicate (persisted): ${eventName}`);
+    console.log(`[Meta] Browser skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
   markFired(key);
@@ -173,9 +182,10 @@ async function fireCAPIEvent(
   userData: Record<string, any>,
   customData: Record<string, any>
 ): Promise<void> {
-  const key = `capi_${eventName}`;
+  // Use eventId in dedup key so different orders can fire but same order can't double-fire
+  const key = `capi_${eventName}_${eventId}`;
   if (hasFired(key)) {
-    console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName}`);
+    console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
   markFired(key);
@@ -275,6 +285,15 @@ export interface OrderData {
 }
 
 export async function fireThankYouEvents(order: OrderData): Promise<void> {
+  // Guard: only fire once per order, even across page refreshes
+  const thankYouKey = `fhg_ty_fired_${order.orderId}`;
+  try {
+    if (sessionStorage.getItem(thankYouKey)) {
+      console.log('[Meta] Thank-you events already fired for order:', order.orderId, '— skipping');
+      return;
+    }
+    sessionStorage.setItem(thankYouKey, '1');
+  } catch {}
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
   const nameParts = (order.fullName || '').trim().split(' ');
   const firstName = nameParts[0] || '';
@@ -488,13 +507,14 @@ export async function fireCartRecovery(data: {
  */
 export function markEventsAsFired(events: string[]): void {
   for (const event of events) {
-    markFired(`browser_${event}`);
-    markFired(`capi_${event}`);
+    // Blanket-block these event names so no future eventId variant can fire
+    blanketBlocked.add(`browser_${event}`);
+    blanketBlocked.add(`capi_${event}`);
   }
   if (events.includes('LeadSync')) {
     leadSyncFired = true;
   }
-  console.log('[Meta] Pre-marked events as fired (persisted):', events);
+  console.log('[Meta] Blanket-blocked events (persisted):', events);
 }
 
 export function resetTracking(): void {
