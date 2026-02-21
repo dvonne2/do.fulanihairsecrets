@@ -976,8 +976,13 @@ function OrderFormEmbed() {
     <div style={{ ...S.container, ...(window.innerWidth < 768 ? S.containerMobile : {}) }}>
       <div style={{ ...S.box, ...(window.innerWidth < 768 ? S.boxMobile : {}) }}>
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
-        <div id="step-indicator" style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '20px', color: '#000', padding: '10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
-          Step {step} of 2
+        <div id="step-indicator" style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '16px', color: '#000', padding: '12px 10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
+          <div style={{ fontSize: '20px', marginBottom: '2px' }}>
+            Step {step} of 2
+          </div>
+          <div style={{ fontSize: '12px', fontWeight: '500', color: '#6B7280' }}>
+            {step === 1 ? '📦 Choose Package & Enter Details' : '📍 Delivery Address & Confirm'}
+          </div>
         </div>
         <div style={{
           width: '100%',
@@ -1604,6 +1609,23 @@ function OrderFormEmbed() {
             {/* Pay text */}
             <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery</p>
 
+            {/* Step 2 preview hint */}
+            <div style={{
+              textAlign: 'center',
+              padding: '10px',
+              marginBottom: '8px',
+              background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)',
+              borderRadius: '8px',
+              border: '1px solid #C7D2FE'
+            }}>
+              <p style={{ margin: 0, fontSize: '12px', fontWeight: '600', color: '#4338CA' }}>
+                📍 Next: Tell us your delivery address (Step 2 of 2)
+              </p>
+              <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#6366F1', fontWeight: '500' }}>
+                Almost done — just your address and you're set!
+              </p>
+            </div>
+
             {/* Continue button */}
             <button
               style={{
@@ -1674,7 +1696,8 @@ function OrderFormEmbed() {
                 }, 100);
               }}
             >
-              CONTINUE
+              CONTINUE TO STEP 2 →
+              <span style={{ display: 'block', fontSize: '11px', fontWeight: '500', opacity: 0.9, marginTop: '2px' }}>Delivery Address & Confirm Order</span>
             </button>
           </>
         )}
