@@ -606,6 +606,7 @@ function OrderFormEmbed() {
       phone: formData.phone || formData.phoneNumber,
       name: formData.name || '',
       email: formData.email || '',
+      packageName: formData.packageSelected || '',
       packageSelected: formData.packageSelected || ''
     };
 
@@ -671,6 +672,7 @@ function OrderFormEmbed() {
             phone: value,
             name: form.name,
             email: form.email,
+            packageName: form.pkg ? (packageMapping[form.pkg] || form.pkg) : '',
             // Meta tracking identifiers for offline conversion matching
             fbp: '',
             fbc: '',
@@ -688,7 +690,7 @@ function OrderFormEmbed() {
         setLastFiredPhone(value); // Still set to prevent re-firing
       }
     }
-  }, [lastFiredPhone, orderId, form.name, form.email, isRecoveryLink]);
+  }, [lastFiredPhone, orderId, form.name, form.email, form.pkg, isRecoveryLink]);
 
   // Effect to handle debounced phone validation and partial save
   useEffect(() => {
@@ -941,9 +943,9 @@ function OrderFormEmbed() {
         paymentMethod: formData.paymentMethod || 'Pay on Delivery',
         heardAboutUs: formData.heardAboutUs || '',
         
-        // Meta tracking identifiers for offline conversion matching
-        fbp: '',
-        fbc: '',
+        // Meta tracking identifiers — passed to Apps Script for true server-side CAPI
+        fbp: (() => { try { const m = document.cookie.match(/(^| )_fbp=([^;]+)/); return m ? decodeURIComponent(m[2]) : ''; } catch { return ''; } })(),
+        fbc: (() => { try { const m = document.cookie.match(/(^| )_fbc=([^;]+)/); if (m) return decodeURIComponent(m[2]); const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbc || '' : ''; } catch { return ''; } })(),
         fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         eventId: orderId,
         userAgent: navigator.userAgent,

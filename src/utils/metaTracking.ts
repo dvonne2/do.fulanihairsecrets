@@ -321,11 +321,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     content_name: order.packageName || 'Fulani Hair Gro',
     num_items: order.numItems || 1,
   }, purchaseId);
-  await fireCAPIEvent('Purchase', purchaseId, userData, {
-    value: amount,
-    content_name: order.packageName || 'Fulani Hair Gro',
-    num_items: order.numItems || 1,
-  });
+  // CAPI Purchase fires from Google Apps Script (true server-side) — not browser
   await delay(500);
 
   // 2. VALUE-BASED EVENT
@@ -336,10 +332,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     content_type: 'product',
     content_name: `${order.paymentType}_${order.packageName}`,
   }, valueId);
-  await fireCAPIEvent(valueEventName, valueId, userData, {
-    value: amount,
-    content_name: `${order.paymentType}_${order.packageName}`,
-  });
+  // CAPI value event fires from Google Apps Script (true server-side) — not browser
   await delay(500);
 
   // 3. HIGH VALUE PURCHASE
@@ -351,10 +344,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
       content_type: 'product',
       content_name: order.packageName || 'Fulani Hair Gro',
     }, hvpId);
-    await fireCAPIEvent('HighValuePurchase', hvpId, userData, {
-      value: amount,
-      content_name: order.packageName || 'Fulani Hair Gro',
-    });
+    // CAPI HighValuePurchase fires from Google Apps Script (true server-side) — not browser
   }
 
   // 4. COMPLETE REGISTRATION
