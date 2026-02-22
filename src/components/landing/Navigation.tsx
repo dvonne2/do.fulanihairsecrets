@@ -6,7 +6,56 @@ interface NavigationProps {
 
 export const Navigation = ({ viewerCount }: NavigationProps) => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b-2 border-gold/50">
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      {/* Trust Bar */}
+      <div style={{
+        background: '#000',
+        padding: '8px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '24px',
+        flexWrap: 'wrap',
+      }}>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          ♥ 1000+ Happy Customers
+        </span>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          🚚 Payment On Delivery
+        </span>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          🛡 Money-Back Guarantee
+        </span>
+      </div>
+      {/* Main Nav */}
+      <div className="bg-background/95 backdrop-blur-md border-b-2 border-gold/50">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -41,6 +90,7 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </nav>
   );

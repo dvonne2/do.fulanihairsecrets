@@ -354,6 +354,54 @@ const Index = () => {
         />
       )}
       
+      {/* Trust Bar */}
+      <div style={{
+        background: '#000',
+        padding: '8px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '24px',
+        flexWrap: 'wrap',
+      }}>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          ♥ 1000+ Happy Customers
+        </span>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          🚚 Payment On Delivery
+        </span>
+        <span style={{
+          color: '#fff',
+          fontSize: '12px',
+          fontWeight: '600',
+          fontFamily: 'Montserrat, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          whiteSpace: 'nowrap',
+        }}>
+          🛡 Money-Back Guarantee
+        </span>
+      </div>
+
       {/* Valentine promo ended - countdown removed */}
       <UrgencyBanner countdown={countdown} />
       
