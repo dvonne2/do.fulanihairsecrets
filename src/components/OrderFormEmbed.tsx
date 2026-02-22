@@ -243,7 +243,9 @@ function OrderFormEmbed() {
     paymentMethod: 'Pay on Delivery',
     comment: '',
     agreeToTerms: false,
-    orderId: orderId // Set generated orderId
+    orderId: orderId, // Set generated orderId
+    couponCode: '',
+    couponApplied: false,
   });
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -558,9 +560,13 @@ function OrderFormEmbed() {
     if (form.paymentMethod === 'Pay Before Delivery') {
       return 0;
     }
+    // Free delivery when valid coupon applied
+    if (form.couponApplied) {
+      return 0;
+    }
     // Use user's selected delivery fee for Pay on Delivery
     return form.deliveryFee || (form.state === 'Lagos' ? 3000 : 5000);
-  }, [form.state, form.paymentMethod, form.deliveryFee]);
+  }, [form.state, form.paymentMethod, form.deliveryFee, form.couponApplied]);
 
   // Memoize total calculation
   const total = useMemo(() => {
@@ -942,6 +948,8 @@ function OrderFormEmbed() {
         deliveryTimeWindow: formData.deliveryTimeWindow || '',
         paymentMethod: formData.paymentMethod || 'Pay on Delivery',
         heardAboutUs: formData.heardAboutUs || '',
+        couponCode: form.couponApplied ? form.couponCode : '',
+        deliveryFee: calculatedDeliveryFee,
         
         // Meta tracking identifiers — passed to Apps Script for true server-side CAPI
         fbp: (() => { try { const m = document.cookie.match(/(^| )_fbp=([^;]+)/); return m ? decodeURIComponent(m[2]) : ''; } catch { return ''; } })(),
@@ -1918,6 +1926,74 @@ function OrderFormEmbed() {
               </>
             )}
 
+            {/* Coupon Code */}
+            <label style={S.label}>HAVE A COUPON CODE?</label>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+              <input
+                type="text"
+                placeholder="Enter coupon code"
+                value={form.couponCode}
+                onChange={e => setForm({ ...form, couponCode: e.target.value.toUpperCase(), couponApplied: false })}
+                disabled={form.couponApplied}
+                style={{
+                  ...S.input,
+                  flex: 1,
+                  marginBottom: 0,
+                  textTransform: 'uppercase' as const,
+                  ...(form.couponApplied ? { background: '#F0FFF4', borderColor: '#38A169', color: '#276749' } : {})
+                }}
+              />
+              {!form.couponApplied ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const code = form.couponCode.trim().toUpperCase();
+                    if (code === 'CLASSROOM15') {
+                      setForm(prev => ({ ...prev, couponApplied: true }));
+                    } else if (code) {
+                      alert('Invalid coupon code. Please check and try again.');
+                    }
+                  }}
+                  style={{
+                    padding: '10px 20px',
+                    background: '#14532d',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 8,
+                    fontWeight: 700,
+                    fontSize: 13,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                  }}
+                >
+                  Apply
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setForm(prev => ({ ...prev, couponCode: '', couponApplied: false }))}
+                  style={{
+                    padding: '10px 16px',
+                    background: '#FEE2E2',
+                    color: '#DC2626',
+                    border: '1px solid #DC2626',
+                    borderRadius: 8,
+                    fontWeight: 700,
+                    fontSize: 13,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                  }}
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            {form.couponApplied && (
+              <p style={{ color: '#38A169', fontWeight: 700, fontSize: 13, marginBottom: 12 }}>
+                ✅ Coupon applied! You get FREE delivery.
+              </p>
+            )}
+
             {/* How did you hear */}
             <label style={{ ...S.label, textAlign: 'center' }}>HOW DID YOU HEAR ABOUT US?</label>
             <div style={window.innerWidth < 768 ? S.hearAboutUsGridMobile : { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', columnGap: 22, rowGap: 16, marginTop: 12 }}>
@@ -2068,7 +2144,8 @@ function OrderFormEmbed() {
 
                 const currentDeliveryFee = deliveryFee; // Use memoized value
                 const total = p.price + currentDeliveryFee;
-                const deliveryLabel = currentDeliveryFee === 0 ? 'Delivery (FREE - Pay Before Delivery orders only)' : 
+                const deliveryLabel = form.couponApplied ? 'Delivery (FREE — Coupon Applied 🎉)' :
+                                     currentDeliveryFee === 0 ? 'Delivery (FREE - Pay Before Delivery orders only)' : 
                                      currentDeliveryFee === 5000 ? 'Delivery (24 Hours)' : 'Delivery (1-3 Days)';
                 const items = PACKAGE_CONTENTS[p.webhookName] || PACKAGE_CONTENTS[p.name] || [];
                 const hasName = Boolean(form.name && form.name.trim());
