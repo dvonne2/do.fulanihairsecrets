@@ -24,6 +24,14 @@ if (!$input || !isset($input['event_name'])) {
     exit;
 }
 
+// Log event_id for dedup debugging
+error_log("CAPI event: " . $input['event_name'] . " event_id: " . ($input['event_id'] ?? 'MISSING'));
+
+// Normalize event_source_url: strip query params and fragments to match browser pixel
+$sourceUrl = $input['event_source_url'] ?? 'https://fulanihairsecrets.com';
+$parsedUrl = parse_url($sourceUrl);
+$normalizedUrl = ($parsedUrl['scheme'] ?? 'https') . '://' . ($parsedUrl['host'] ?? 'fulanihairsecrets.com') . ($parsedUrl['path'] ?? '/');
+
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
 if (isset($input['user_data'])) {
     $input['user_data']['client_ip_address'] = $ip;
@@ -36,7 +44,7 @@ $payload = json_encode([
         'event_time' => $input['event_time'] ?? time(),
         'event_id' => $input['event_id'] ?? '',
         'action_source' => 'website',
-        'event_source_url' => $input['event_source_url'] ?? 'https://fulanihairsecrets.com',
+        'event_source_url' => $normalizedUrl,
         'user_data' => $input['user_data'] ?? new stdClass(),
         'custom_data' => $input['custom_data'] ?? new stdClass()
     ]]

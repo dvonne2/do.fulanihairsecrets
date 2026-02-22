@@ -201,7 +201,7 @@ async function fireCAPIEvent(
         event_name: eventName,
         event_id: eventId,
         event_time: Math.floor(Date.now() / 1000),
-        event_source_url: window.location.href,
+        event_source_url: window.location.origin + window.location.pathname,
         user_data: userData,
         custom_data: {
           ...customData,
@@ -321,7 +321,11 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     content_name: order.packageName || 'Fulani Hair Gro',
     num_items: order.numItems || 1,
   }, purchaseId);
-  // CAPI removed — browser pixel is sufficient. Firing both caused double-counting.
+  await fireCAPIEvent('Purchase', purchaseId, userData, {
+    value: amount,
+    content_name: order.packageName || 'Fulani Hair Gro',
+    num_items: order.numItems || 1,
+  });
   await delay(500);
 
   // 2. VALUE-BASED EVENT
@@ -332,6 +336,10 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     content_type: 'product',
     content_name: `${order.paymentType}_${order.packageName}`,
   }, valueId);
+  await fireCAPIEvent(valueEventName, valueId, userData, {
+    value: amount,
+    content_name: `${order.paymentType}_${order.packageName}`,
+  });
   await delay(500);
 
   // 3. HIGH VALUE PURCHASE
@@ -343,6 +351,10 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
       content_type: 'product',
       content_name: order.packageName || 'Fulani Hair Gro',
     }, hvpId);
+    await fireCAPIEvent('HighValuePurchase', hvpId, userData, {
+      value: amount,
+      content_name: order.packageName || 'Fulani Hair Gro',
+    });
   }
 
   // 4. COMPLETE REGISTRATION
@@ -373,7 +385,10 @@ export async function fireLeadSync(info: {
   fireBrowserEvent('trackCustom', 'LeadSync', {
     content_category: 'identity_capture',
   }, eventId);
-  // CAPI removed — browser pixel is sufficient
+  await fireCAPIEvent('LeadSync', eventId, userData, {
+    value: 0,
+    content_category: 'identity_capture',
+  });
   try {
     localStorage.setItem(
       'fhg_identity',
@@ -393,6 +408,11 @@ export async function fireLeadSync(info: {
 export async function fireFormStart(): Promise<void> {
   const eventId = await makeEventId('FormStart');
   fireBrowserEvent('trackCustom', 'FormStart', {}, eventId);
+  const userData = await getStoredIdentity();
+  await fireCAPIEvent('FormStart', eventId, userData, {
+    value: 0,
+    content_category: 'checkout',
+  });
 }
 
 export async function fireAddToCart(data: {
@@ -409,6 +429,14 @@ export async function fireAddToCart(data: {
     content_type: 'product',
     content_name: data.packageName,
   }, eventId);
+  const userData = await buildUserData({
+    email: data.email,
+    phone: data.phone,
+  });
+  await fireCAPIEvent('AddToCart', eventId, userData, {
+    value: Number(data.amount) || 0,
+    content_name: data.packageName,
+  });
 }
 
 export async function fireInitiateCheckout(data: {
@@ -427,6 +455,16 @@ export async function fireInitiateCheckout(data: {
     content_type: 'product',
     content_name: data.packageName,
   }, eventId);
+  const userData = await buildUserData({
+    email: data.email,
+    phone: data.phone,
+    firstName: data.firstName,
+    lastName: data.lastName,
+  });
+  await fireCAPIEvent('InitiateCheckout', eventId, userData, {
+    value: Number(data.amount) || 0,
+    content_name: data.packageName,
+  });
 }
 
 export async function fireCartRecovery(data: {
@@ -446,6 +484,19 @@ export async function fireCartRecovery(data: {
     content_name: data.packageName || 'Fulani Hair Gro',
     order_id: data.orderId,
   }, eventId);
+  const userData = await buildUserData({
+    email: data.email,
+    phone: data.phone,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    externalId: data.orderId,
+  });
+  await fireCAPIEvent('CartRecovery', eventId, userData, {
+    value: Number(data.amount) || 0,
+    content_category: 'abandoned_cart',
+    content_name: data.packageName || 'Fulani Hair Gro',
+    order_id: data.orderId,
+  });
   console.log('[Meta] CartRecovery fired for order:', data.orderId);
 }
 
