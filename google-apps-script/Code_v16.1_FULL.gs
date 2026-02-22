@@ -410,6 +410,7 @@ function handlePartialOrder(data) {
   if (!phone) return;
 
   var packageName = data.packageName || data.packageSelected || '';
+  var packageAmount = Number(data.packageAmount) || 0;
 
   for (var i = rows.length - 1; i >= 1; i--) {
     if (rows[i][0] == orderId) {
@@ -421,6 +422,7 @@ function handlePartialOrder(data) {
         sheet.getRange(i + 1, 7).setValue(packageName);
         sheet.getRange(i + 1, 8).setValue(packageName);
       }
+      if (packageAmount > 0) sheet.getRange(i + 1, 10).setValue(packageAmount);
       return;
     }
   }
@@ -428,7 +430,7 @@ function handlePartialOrder(data) {
   var ts = getNextTelesales();
   sheet.appendRow([
     orderId, new Date(), data.name || "", phone, data.email || "", data.phone || "",
-    packageName, packageName, "No", 0, "", "", "", "", "", "", "", "", "",
+    packageName, packageName, "No", packageAmount, "", "", "", "", "", "", "", "", "",
     "Partial", ts.name, "", "", "", "", "", "", "", "", "",
     "No", "", "", ts.phone, 0, 0, 0, ""
   ]);
@@ -437,6 +439,7 @@ function handlePartialOrder(data) {
     + "📞 " + phone + "\n"
     + "👤 Name: " + (data.name || "Not entered yet") + "\n"
     + "📦 Package: " + (packageName || "Not selected yet") + "\n"
+    + "💰 Price: " + (packageAmount > 0 ? "₦" + packageAmount.toLocaleString() : "N/A") + "\n"
     + "📍 Location: Not entered yet\n\n"
     + "⚠️ Customer started form but did NOT complete!\n\n"
     + "👤 Assigned to: " + ts.name + "\n"

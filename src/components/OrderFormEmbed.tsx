@@ -605,6 +605,7 @@ function OrderFormEmbed() {
       console.warn('localStorage save failed:', e);
     }
 
+    const partialPkg = packages.find(p => p.id === form.pkg);
     const payload = {
       secret: WEBHOOK_SECRET,
       type: 'partial',
@@ -613,7 +614,8 @@ function OrderFormEmbed() {
       name: formData.name || '',
       email: formData.email || '',
       packageName: formData.packageSelected || '',
-      packageSelected: formData.packageSelected || ''
+      packageSelected: formData.packageSelected || '',
+      packageAmount: partialPkg ? String(partialPkg.price) : ''
     };
 
     const body = new URLSearchParams(
@@ -671,6 +673,7 @@ function OrderFormEmbed() {
         } catch { /* localStorage unavailable */ }
 
         if (!alreadyFired) {
+          const partialPkg = packages.find(p => p.id === form.pkg);
           const partialPayload = {
             secret: WEBHOOK_SECRET,
             type: "partial",
@@ -679,6 +682,7 @@ function OrderFormEmbed() {
             name: form.name,
             email: form.email,
             packageName: form.pkg ? (packageMapping[form.pkg] || form.pkg) : '',
+            packageAmount: partialPkg ? String(partialPkg.price) : '',
             // Meta tracking identifiers for offline conversion matching
             fbp: '',
             fbc: '',
