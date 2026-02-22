@@ -1949,7 +1949,13 @@ function OrderFormEmbed() {
                   onClick={() => {
                     const code = form.couponCode.trim().toUpperCase();
                     if (code === 'CLASSROOM15') {
-                      setForm(prev => ({ ...prev, couponApplied: true }));
+                      const now = new Date();
+                      const expiresAt = new Date('2026-02-24T18:00:00Z'); // 48hrs from Feb 22 7PM WAT (UTC+1)
+                      if (now > expiresAt) {
+                        alert('Sorry, this coupon has expired.');
+                      } else {
+                        setForm(prev => ({ ...prev, couponApplied: true }));
+                      }
                     } else if (code) {
                       alert('Invalid coupon code. Please check and try again.');
                     }
