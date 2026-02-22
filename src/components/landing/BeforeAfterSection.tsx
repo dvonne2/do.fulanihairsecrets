@@ -1,18 +1,9 @@
 import result1 from '@/assets-optimized/results/result-1.webp';
 import result2 from '@/assets-optimized/results/result-2.webp';
-import result3 from '@/assets-optimized/results/result-3.webp';
 import result4 from '@/assets-optimized/results/result-4.webp';
 import result5 from '@/assets-optimized/results/result-5.webp';
-import result6 from '@/assets-optimized/results/result-6.webp';
-import result8 from '@/assets-optimized/results/result-8.webp';
 import result11 from '@/assets-optimized/results/result-11.webp';
-import result12 from '@/assets-optimized/results/result-12.webp';
-import result14 from '@/assets-optimized/results/result-14.webp';
 import result16 from '@/assets-optimized/results/result-16.webp';
-import result17 from '@/assets-optimized/results/result-17.webp';
-import result19 from '@/assets-optimized/results/result-19.webp';
-import result20 from '@/assets-optimized/results/result-20.webp';
-import result22 from '@/assets-optimized/results/result-22.webp';
 import fourteenDayCollage from '@/assets-optimized/products/before-and-after-14-days-2013x2048.webp';
 
 const transformations = [
@@ -31,13 +22,6 @@ const transformations = [
     caption: "Post-baby shedding calmed and volume returned in just 2 months."
   },
   {
-    after: result3,
-    name: "Blessing N.",
-    problem: "Chemical damage from relaxer",
-    duration: "4 months",
-    caption: "Relaxer-damaged hair looks fuller and healthier after 4 months."
-  },
-  {
     after: result4,
     name: "Hajia Maryam",
     problem: "Age-related thinning",
@@ -52,20 +36,6 @@ const transformations = [
     caption: "Stress breakage reduced and hairline looks stronger in 6 weeks."
   },
   {
-    after: result6,
-    name: "Aisha B.",
-    problem: "Crown thinning from styling",
-    duration: "3.5 months",
-    caption: "Thin crown filled in gradually over 3½ months of consistent use."
-  },
-  {
-    after: result8,
-    name: "Mama Titi",
-    problem: "Menopausal hair changes",
-    duration: "5 months",
-    caption: "Menopause-related thinning improved with steady growth over 5 months."
-  },
-  {
     after: result11,
     name: "Yetunde M.",
     problem: "Edge restoration",
@@ -73,53 +43,11 @@ const transformations = [
     caption: "Bald edges now covered with new growth in about 10 weeks."
   },
   {
-    after: result12,
-    name: "Funke A.",
-    problem: "Edges from tight styles",
-    duration: "2 months",
-    caption: "Tight-style damage reversed and edges look fuller in 2 months."
-  },
-  {
-    after: result14,
-    name: "Chiamaka D.",
-    problem: "Overall thinning",
-    duration: "4 months",
-    caption: "Overall thinning replaced with thicker strands over 4 months."
-  },
-  {
     after: result16,
     name: "Mrs. Folake T.",
     problem: "Hormonal hair loss",
     duration: "4.5 months",
     caption: "Hormonal shedding slowed and fullness returned in 4½ months."
-  },
-  {
-    after: result17,
-    name: "Zainab O.",
-    problem: "Styling damage repair",
-    duration: "3.5 months",
-    caption: "Broken, over-styled hair looks smoother and denser after 3½ months."
-  },
-  {
-    after: result19,
-    name: "Nkechi I.",
-    problem: "Breakage from extensions",
-    duration: "2.5 months",
-    caption: "Extension breakage reduced and length retained in about 10 weeks."
-  },
-  {
-    after: result20,
-    name: "Ifeoma C.",
-    problem: "Dry, brittle hair",
-    duration: "3 months",
-    caption: "Dry, brittle strands now softer and fuller after 3 months."
-  },
-  {
-    after: result22,
-    name: "Adaora M.",
-    problem: "Natural hair growth",
-    duration: "5 months",
-    caption: "Slow natural growth sped up with visible length in 5 months."
   },
 ];
 

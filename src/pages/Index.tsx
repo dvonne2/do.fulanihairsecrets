@@ -51,6 +51,9 @@ const ProtectedRecipe = lazy(() =>
 const WhyWeRestrict = lazy(() =>
   import('@/components/landing/WhyWeRestrict').then((m) => ({ default: m.WhyWeRestrict }))
 );
+const BeforeAfterSection = lazy(() =>
+  import('@/components/landing/BeforeAfterSection').then((m) => ({ default: m.BeforeAfterSection }))
+);
 const BundleSection = lazy(() =>
   import('@/components/landing/BundleSection').then((m) => ({ default: m.BundleSection }))
 );
@@ -474,6 +477,10 @@ const Index = () => {
             <IndustryTruth />
             <ProductSystem />
           </>
+        </LazySection>
+
+        <LazySection minHeightClassName="min-h-[200px]">
+          <BeforeAfterSection />
         </LazySection>
 
         <section className="py-10 bg-background px-4">
