@@ -232,7 +232,7 @@ function fireMetaCAPI(eventName, eventId, userData, customData) {
       event_time: Math.floor(new Date().getTime() / 1000),
       event_id: eventId,
       action_source: 'website',
-      event_source_url: CONFIG.BASE_URL + '/',
+      event_source_url: CONFIG.BASE_URL + '/thank-you',
       user_data: metaUserData,
       custom_data: customData || {}
     };
