@@ -313,40 +313,15 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   const prefix = (order.paymentType || 'PBD').toUpperCase() === 'PBD' ? 'pbd' : 'pod';
   const valueEventName = `${prefix}${pkgAmount}`;
 
-  // 1. PURCHASE — orderId is the stable identity
-  const purchaseId = await makeEventId('Purchase', order.orderId);
-  fireBrowserEvent('track', 'Purchase', {
-    value: amount,
-    currency: 'NGN',
-    content_type: 'product',
-    content_name: order.packageName || 'Fulani Hair Gro',
-    num_items: order.numItems || 1,
-  }, purchaseId);
-  // CAPI Purchase fires from Google Apps Script (true server-side) — not browser
-  await delay(500);
+  // 1. PURCHASE — fires ONLY from Apps Script CAPI (true server-side)
+  // Browser pixel removed to prevent double-counting (Meta fails to dedup)
+  console.log('[Meta] Purchase skipped browser — Apps Script CAPI handles it');
 
-  // 2. VALUE-BASED EVENT
-  const valueId = await makeEventId(valueEventName, order.orderId);
-  fireBrowserEvent('trackCustom', valueEventName, {
-    value: amount,
-    currency: 'NGN',
-    content_type: 'product',
-    content_name: `${order.paymentType}_${order.packageName}`,
-  }, valueId);
-  // CAPI value event fires from Google Apps Script (true server-side) — not browser
-  await delay(500);
+  // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
+  console.log('[Meta] Value event skipped browser — Apps Script CAPI handles it');
 
-  // 3. HIGH VALUE PURCHASE
-  if (amount >= 50000) {
-    const hvpId = await makeEventId('HighValuePurchase', order.orderId);
-    fireBrowserEvent('trackCustom', 'HighValuePurchase', {
-      value: amount,
-      currency: 'NGN',
-      content_type: 'product',
-      content_name: order.packageName || 'Fulani Hair Gro',
-    }, hvpId);
-    // CAPI HighValuePurchase fires from Google Apps Script (true server-side) — not browser
-  }
+  // 3. HIGH VALUE PURCHASE — fires ONLY from Apps Script CAPI
+  // (no browser pixel needed)
 
   // 4. COMPLETE REGISTRATION
   const crId = await makeEventId('CompleteRegistration', order.orderId);
