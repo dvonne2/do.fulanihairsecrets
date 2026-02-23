@@ -251,25 +251,34 @@ const ThankYou = () => {
     </div>;
   }
 
-  // No data fallback
+  // No sessionStorage data — show a reassuring confirmation with orderId from URL
   if (!orderData && !window.location.search.includes('test=1')) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
-        <h1 className="text-2xl font-bold text-white mb-4">Order Details Not Found</h1>
-        <p className="text-gray-400 mb-6 max-w-md">
-          We couldn't find your order details. This can happen if you refreshed the page or visited this link directly.
+        <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center mb-6">
+          <Check className="w-8 h-8 text-white" />
+        </div>
+        <h1 className="text-3xl font-bold text-white mb-2">Order Confirmed! 🎉</h1>
+        {orderNumber && orderNumber !== 'UNKNOWN' && (
+          <p className="text-[#DAA520] font-semibold text-lg mb-4">Order #{orderNumber}</p>
+        )}
+        <p className="text-gray-300 mb-2 max-w-md">
+          Your order has been received and is being processed.
         </p>
-        <p className="text-gray-400 mb-8">
-          Need help? Contact us on WhatsApp and we'll look up your order.
+        <p className="text-gray-400 mb-8 max-w-md text-sm">
+          You'll receive a WhatsApp confirmation shortly with your delivery details. If you refreshed this page, don't worry — your order is safe!
         </p>
         <a
           href={WHATSAPP_ORDER_HELP_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
+          className="bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition mb-4"
         >
-          Chat on WhatsApp
+          Chat on WhatsApp for Updates
         </a>
+        <p className="text-gray-500 text-xs mt-4">
+          Questions? Call us at <a href={PHONE_TEL} className="text-[#DAA520] underline">{PHONE_DISPLAY}</a>
+        </p>
       </div>
     );
   }
