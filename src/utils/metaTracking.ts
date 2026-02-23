@@ -6,6 +6,7 @@ import { CAPI_ENDPOINT } from '@/config/api';
 declare global {
   interface Window {
     fbq: (...args: any[]) => void;
+    __pvEventId?: string;
   }
 }
 
@@ -408,6 +409,43 @@ export async function fireFormStart(): Promise<boolean> {
     content_category: 'checkout',
   });
   return true;
+}
+
+export async function firePageViewCAPI(): Promise<void> {
+  const eventId = window.__pvEventId || '';
+  if (!eventId) {
+    console.warn('[Meta] No PageView event_id found, skipping CAPI');
+    return;
+  }
+  const key = `capi_PageView_${eventId}`;
+  if (hasFired(key)) {
+    console.log('[Meta] CAPI skip duplicate PageView');
+    return;
+  }
+  const userData = await getStoredIdentity();
+  const fbp = getFbp();
+  const fbc = getFbc();
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+  try {
+    const res = await fetch(CAPI_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event_name: 'PageView',
+        event_id: eventId,
+        event_time: Math.floor(Date.now() / 1000),
+        event_source_url: window.location.origin + window.location.pathname,
+        user_data: userData,
+        custom_data: { currency: 'NGN' },
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    markFired(key);
+    console.log('[Meta] CAPI PageView sent, eventID=' + eventId);
+  } catch (err) {
+    console.error('[Meta] CAPI PageView error:', err);
+  }
 }
 
 export async function fireAddToCart(data: {

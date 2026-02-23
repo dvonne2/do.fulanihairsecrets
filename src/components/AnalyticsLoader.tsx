@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { firePageViewCAPI } from '@/utils/metaTracking';
 
 declare global {
   interface Window {
@@ -39,6 +40,11 @@ export function AnalyticsLoader({ delayMs = defaultDelay }: Props) {
       setIsLoaded(true);
     }
   };
+
+  // Fire PageView CAPI immediately — don't wait for GA4 delay
+  useEffect(() => {
+    firePageViewCAPI();
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(load, delayMs);
