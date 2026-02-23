@@ -167,11 +167,11 @@ function fireBrowserEvent(
     console.log(`[Meta] Browser skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
-  markFired(key);
   if (typeof window.fbq !== 'function') {
     console.warn(`[Meta] fbq not loaded, skipping: ${eventName}`);
-    return;
+    return; // Don't markFired — pixel may load later and event should retry
   }
+  markFired(key);
   window.fbq(type, eventName, data, { eventID: eventId });
   console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
 }
@@ -188,7 +188,6 @@ async function fireCAPIEvent(
     console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
-  markFired(key);
   const fbp = getFbp();
   const fbc = getFbc();
   if (fbp) userData.fbp = fbp;
@@ -213,6 +212,7 @@ async function fireCAPIEvent(
       throw new Error(`CAPI request failed: HTTP ${res.status}`);
     }
     const result = await res.json();
+    markFired(key);
     console.log(`[Meta] CAPI sent: ${eventName}`, result);
   } catch (err) {
     console.error(`[Meta] CAPI error: ${eventName}`, err);
@@ -395,7 +395,11 @@ export async function fireLeadSync(info: {
   console.log('[Meta] LeadSync fired');
 }
 
-export async function fireFormStart(): Promise<void> {
+export async function fireFormStart(): Promise<boolean> {
+  if (typeof window.fbq !== 'function') {
+    console.warn('[Meta] fbq not loaded yet, FormStart will retry on next keystroke');
+    return false;
+  }
   const eventId = await makeEventId('FormStart');
   fireBrowserEvent('trackCustom', 'FormStart', {}, eventId);
   const userData = await getStoredIdentity();
@@ -403,6 +407,7 @@ export async function fireFormStart(): Promise<void> {
     value: 0,
     content_category: 'checkout',
   });
+  return true;
 }
 
 export async function fireAddToCart(data: {

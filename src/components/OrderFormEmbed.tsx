@@ -455,10 +455,10 @@ function OrderFormEmbed() {
       (form.email && form.email.length > 0);
 
     if (hasStartedTyping) {
-      hasTriggeredFormStart.current = true;
-      
       console.log('[FormStart] User began typing');
-      fireFormStart();
+      fireFormStart().then(success => {
+        if (success) hasTriggeredFormStart.current = true;
+      });
     }
   }, [form.name, form.phone, form.email]);
 
