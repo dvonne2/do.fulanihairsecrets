@@ -313,15 +313,31 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   const prefix = (order.paymentType || 'PBD').toUpperCase() === 'PBD' ? 'pbd' : 'pod';
   const valueEventName = `${prefix}${pkgAmount}`;
 
-  // 1. PURCHASE — fires ONLY from Apps Script CAPI (true server-side)
-  // Browser pixel removed to prevent double-counting (Meta fails to dedup)
-  console.log('[Meta] Purchase skipped browser — Apps Script CAPI handles it');
+  // 1. PURCHASE — Browser Pixel + CAPI (Deduplicated)
+  const purchaseEventId = await makeEventId('Purchase', order.orderId);
+  const purchaseData = {
+    value: amount,
+    currency: 'NGN',
+    content_name: order.packageName || 'Fulani Hair Gro',
+    content_type: 'product',
+    event_id: purchaseEventId
+  };
+  
+  // Fire Browser Pixel (Fast Signal)
+  fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
+  
+  // Fire CAPI (Reliable Signal) - deduplication handled by matching event_id
+  await fireCAPIEvent('Purchase', purchaseEventId, userData, {
+    value: amount,
+    content_name: order.packageName || 'Fulani Hair Gro',
+    content_type: 'product',
+  });
 
   // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
-  console.log('[Meta] Value event skipped browser — Apps Script CAPI handles it');
+  console.log('[Meta] Value event handled by Apps Script CAPI');
 
   // 3. HIGH VALUE PURCHASE — fires ONLY from Apps Script CAPI
-  // (no browser pixel needed)
+  console.log('[Meta] High Value Purchase handled by Apps Script CAPI');
 
   // 4. COMPLETE REGISTRATION
   const crId = await makeEventId('CompleteRegistration', order.orderId);

@@ -10,10 +10,10 @@ const transformations = [];
 
 export const BeforeAfterSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section className="pt-0 pb-16 md:pt-0 md:pb-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-4 md:mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B80F66]/10 border border-[#B80F66]/30 mb-6">
             <span className="text-[#B80F66] text-sm font-bold"></span>
           </div>

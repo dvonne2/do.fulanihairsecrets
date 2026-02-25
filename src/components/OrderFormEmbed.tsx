@@ -136,8 +136,8 @@ const getOrderIdFromURL = (): string => {
 
 // All styles as objects
 const S: { [key: string]: CSSProperties } = {
-  container: { margin: '0 auto', padding: '40px 20px', fontFamily: 'DM Sans, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f0ede8' },
-  box: { background: '#fff', borderRadius: 24, padding: '32px 28px 28px', width: '100%', position: 'relative', overflow: 'hidden' },
+  container: { margin: '0 auto', padding: '40px 20px', fontFamily: 'Inter, system-ui, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#fafbfc' },
+  box: { background: '#ffffff', borderRadius: 16, padding: '36px 32px 32px', width: '100%', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)' },
   // Mobile-specific container styles
   containerMobile: { padding: '0', maxWidth: '100%' },
   boxMobile: { padding: '16px 8px', borderRadius: 0 },
@@ -149,22 +149,22 @@ const S: { [key: string]: CSSProperties } = {
   input: { width: '100%', padding: '14px 16px', background: '#F9F9F9', border: '2px solid #DAA520', borderRadius: 10, fontSize: 16, fontWeight: 600, color: '#1a1a1a', outline: 'none', boxSizing: 'border-box' as const, fontFamily: 'inherit' },
   inputFocus: { borderColor: '#DAA520' },
   hint: { fontSize: 12, color: '#666', margin: '6px 0 0' },
-  pkgs: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
-  card: { display: 'block', position: 'relative' as const, padding: '18px 16px', background: '#faf9f7', border: '1px solid #eeebe5', borderRadius: 12, cursor: 'pointer', transition: 'background 0.2s' },
-  cardSel: { borderColor: '#DAA520', background: '#FFFBF0' },
+  pkgs: { display: 'flex', flexDirection: 'column' as const, gap: 10, marginTop: 12 },
+  card: { display: 'block', position: 'relative' as const, padding: '20px 18px', background: '#ffffff', border: '2px solid #e5e7eb', borderRadius: 12, cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' },
+  cardSel: { borderColor: '#059669', background: '#f0fdf4', boxShadow: '0 4px 12px rgba(5, 150, 105, 0.15)' },
   // Mobile-specific styles
   cardMobile: { padding: '10px 10px 10px 36px' },
   cardSelMobile: { padding: '10px 10px 10px 36px' },
-  radio: { position: 'absolute' as const, left: 14, top: 16, width: 22, height: 22, border: '3px solid #CCC', borderRadius: '50%', background: '#fff', boxSizing: 'border-box' as const, display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  radioSel: { borderColor: '#DAA520', background: '#DAA520' },
-  check: { color: '#fff', fontSize: 12, fontWeight: 'bold' as const },
-  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#D30000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const },
-  r1: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
-  name: { fontSize: 14, fontWeight: 800, color: '#1a1a1a' },
-  nameMobile: { fontSize: 13 },
+  radio: { position: 'absolute' as const, left: 16, top: 18, width: 24, height: 24, border: '3px solid #d1d5db', borderRadius: '50%', background: '#fff', boxSizing: 'border-box' as const, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  radioSel: { borderColor: '#059669', background: '#059669' },
+  check: { color: '#fff', fontSize: 14, fontWeight: 'bold' as const },
+  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#dc2626', color: '#fff', fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 12, textTransform: 'uppercase' as const },
+  r1: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 },
+  name: { fontSize: 15, fontWeight: 700, color: '#111827', lineHeight: '1.3' },
+  nameMobile: { fontSize: 14 },
   pr: { textAlign: 'right' as const },
-  old: { fontSize: 11, color: '#4b5563', textDecoration: 'line-through', marginRight: 4 },
-  newP: { fontSize: 18, fontWeight: 900, color: '#D30000' },
+  old: { fontSize: 12, color: '#6b7280', textDecoration: 'line-through', marginRight: 6 },
+  newP: { fontSize: 20, fontWeight: 800, color: '#059669' },
   newPMobile: { fontSize: 16 },
   r2: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   items: { fontSize: 12, fontWeight: 600, color: '#555' },
@@ -180,8 +180,8 @@ const S: { [key: string]: CSSProperties } = {
   hearAboutUsGridMobile: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
   hearAboutUsOptionMobile: { display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 44, padding: '12px', background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 8, fontSize: 14, fontWeight: 600, transition: 'background 0.2s' },
   hearAboutUsOptionHoverMobile: { background: '#F0F0F0', borderColor: '#DAA520' },
-  btn: { width: '100%', background: '#1f4d34', color: '#fff', border: 'none', borderRadius: 14, padding: '18px 24px', fontSize: 16, fontWeight: '600', letterSpacing: '0.04em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', transition: 'background 0.25s ease', fontFamily: 'DM Sans, sans-serif' },
-  btnDis: { background: '#ccc', cursor: 'not-allowed' },
+  btn: { width: '100%', background: 'linear-gradient(135deg, #059669, #047857)', color: '#fff', border: 'none', borderRadius: 12, padding: '20px 24px', fontSize: 17, fontWeight: '700', letterSpacing: '0.02em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', transition: 'all 0.3s ease', fontFamily: 'Inter, system-ui, sans-serif', boxShadow: '0 4px 12px rgba(5, 150, 105, 0.3)', textTransform: 'none' as const },
+  btnDis: { background: '#d1d5db', cursor: 'not-allowed', boxShadow: 'none' },
   back: { background: '#F0F0F0', color: '#666', border: 'none', borderRadius: 10, padding: '18px 24px', fontSize: 14, fontWeight: 'bold' as const, cursor: 'pointer', fontFamily: 'inherit' },
   sum: { background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 10, padding: 16, marginTop: 16 },
   sr: { display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#666', margin: '8px 0' },
@@ -1046,8 +1046,8 @@ function OrderFormEmbed() {
               Select a package below, then fill in your details to complete your order.
             </p>
             <div style={{
-              fontFamily: 'DM Sans, sans-serif',
-              background: '#F3F0EC',
+              fontFamily: 'Inter, system-ui, sans-serif',
+              background: '#ffffff',
               padding: '16px 12px 40px',
               borderRadius: '12px',
               border: '1.5px solid #E5E7EB'
@@ -1346,7 +1346,7 @@ function OrderFormEmbed() {
                       margin: p.id === 'PKG-001' ? '0' : '6px 0',
                       fontWeight: p.id === 'PKG-002' ? '400' : '400'
                     }}>
-                                            {p.id === 'PKG-001' && 'You\'ll start noticing tiny new hairs and experience immediate scalp relief as you test the formula before committing to a full recovery.'}
+                                            {p.id === 'PKG-001' && 'Within 2 weeks, many women start seeing tiny baby hairs and feeling relief on their scalp. But let\'s be honest, one bundle won\'t carry you through a full growth cycle. That\'s why women who are serious about hair growth move to the 3-Month Recovery System below for fuller, longer hair.'}
                       {p.id === 'PKG-002' && (
                         <>
                           <strong>For returning customers only</strong> — first-timers need the Shampoo to purify your scalp for real results.
@@ -1360,7 +1360,8 @@ function OrderFormEmbed() {
                       )}
                       {p.id === 'PKG-005' && (
                         <>
-                          🧴 12-Month Institutional Pack: The Gold Standard for total restoration. Ideal for high-level consistency or shared "Group Buying" with friends to secure the 61% discount. <strong>Includes ₦20,500 in VIP Gifts.</strong>
+                          🧴 12-Month Institutional Pack — The Gold Standard
+Total restoration. Maximum consistency. This is the pack for women who are ready to feed their hair for fuller, longer growth. Share it with friends through Group Buying and unlock a massive 61% discount — plus ₦20,500 in exclusive VIP Gifts included.
                         </>
                       )}
                     </p>

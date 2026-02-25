@@ -16,9 +16,6 @@ const Footer = lazy(() =>
 const BeforeAfterSection = lazy(() =>
   import('@/components/landing/BeforeAfterSection').then((m) => ({ default: m.BeforeAfterSection }))
 );
-const GrandmothersPermission = lazy(() =>
-  import('@/components/landing/GrandmothersPermission').then((m) => ({ default: m.GrandmothersPermission }))
-);
 const Guarantee = lazy(() =>
   import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
 );
@@ -394,37 +391,11 @@ const Index = () => {
 
         <DisqualificationWarning stockCount={stockCount} />
 
-        <LazySection minHeightClassName="min-h-[400px]">
-          <GrandmothersPermission />
-        </LazySection>
-
         <LazySection minHeightClassName="min-h-[200px]">
           <BeforeAfterSection />
         </LazySection>
 
-        {/* Cash on delivery visuals (text + banner) */}
-        <section className="bg-white pb-4 px-4">
-          <div className="max-w-3xl mx-auto flex flex-col items-center gap-3 md:gap-4 text-center">
-            <p className="font-sans text-base md:text-lg font-semibold text-gray-900">
-              Pay on Delivery Available
-            </p>
-            <p className="font-sans text-sm md:text-base text-gray-700">
-              (Inspect package before you pay. Zero risk.)
-            </p>
-            <img
-              src={cashOnDeliveryImg}
-              alt="Cash on Delivery available"
-              className="w-full max-w-md object-contain"
-              width="1024"
-              height="345"
-            />
-          </div>
-        </section>
-
-        <LazySection minHeightClassName="min-h-[120px]">
-          <Guarantee />
-        </LazySection>
-
+        
         {mounted && loadNonCritical && (
           <Suspense fallback={null}>
             <FAQ />

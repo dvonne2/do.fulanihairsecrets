@@ -49,9 +49,6 @@ export const GrandmothersPermission = () => {
       ref={sectionRef}
       className="relative py-16 md:py-24 overflow-hidden bg-gray-50"
     >
-      {/* Soft gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-100/50 via-transparent to-gray-100/50" />
-
       <div className="max-w-3xl mx-auto px-6 md:px-8 relative z-10">
         {/* Decorative aged gold frame */}
         <div className="relative">
