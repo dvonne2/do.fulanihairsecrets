@@ -7,21 +7,22 @@ on:
 
 jobs:
   deploy:
-    name: 🎉 Deploy via SFTP (SSH)
+    name: 🎉 Deploy via FTP
     runs-on: ubuntu-latest
 
     steps:
       - name: 🚚 Checkout latest code
         uses: actions/checkout@v4
 
-      - name: 📂 Sync files via SFTP
+      - name: 📂 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
+          protocol: ftps
           port: 21
           local-dir: ./
-          server-dir: public_html/
+          server-dir: ./
           timeout: 190000
+          security: loose
