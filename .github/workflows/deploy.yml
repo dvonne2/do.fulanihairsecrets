@@ -1,24 +1,26 @@
-name: Deploy to Namecheap
+name: 🚀 Deploy bot on push
+
 
 on:
   push:
     branches:
-      - main
+      - deploy
 
 jobs:
-  ftp-deploy:
-    name: Upload via FTP
+  build-and-deploy:
+    name: 🎉 Build and Deploy Website
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
 
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./
-        server-dir: ./
+      - name: 📂 Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: public_html/
+          timeout: 190000
