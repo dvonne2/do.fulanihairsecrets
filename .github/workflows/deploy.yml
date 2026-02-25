@@ -1,26 +1,27 @@
 name: 🚀 Deploy bot on push
 
-
 on:
   push:
     branches:
-      - deploy
+      - main
 
 jobs:
-  build-and-deploy:
-    name: 🎉 Build and Deploy Website
+  deploy:
+    name: 🎉 Deploy via SFTP (SSH)
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🚚 Get latest code
+      - name: 🚚 Checkout latest code
         uses: actions/checkout@v4
 
-      - name: 📂 Sync files via FTP
+      - name: 📂 Sync files via SFTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: sftp
+          port: 22
           local-dir: ./
-          server-dir: public_html/
+          server-dir: ./
           timeout: 190000
