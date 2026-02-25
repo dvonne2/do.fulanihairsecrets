@@ -183,7 +183,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
         </div>
         
         <p className="text-xl text-[#333333]">
-          ✓ Pay on Delivery Available &nbsp;•&nbsp; ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦66,750 &amp; ₦215,000 bundles (pay before delivery orders only)
+          ✓ 365-Day Guarantee &nbsp;•&nbsp; ✓ Free Shipping on ₦66,750 &amp; ₦215,000 bundles (pay before delivery orders only)
         </p>
       </div>
     </section>

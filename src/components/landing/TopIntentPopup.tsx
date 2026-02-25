@@ -43,7 +43,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
 
   return (
     <div
-      className="fixed inset-0 z-[220] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-[220] flex items-center justify-center p-4 bg-black/75"
       onClick={onClose}
     >
       <div
@@ -154,10 +154,7 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                   ORDER NOW  PAY ON DELIVERY
                 </button>
 
-                <p className="font-serif text-sm md:text-lg leading-snug text-[#F5F5F5] mt-1">
-                  Inspect package before you pay. No upfront payment.
-                </p>
-              </div>
+                              </div>
 
               {/* FREE ebook bonus under form */}
               <div className="mt-3 flex items-center gap-3 rounded-lg border border-gold/40 bg-background/80 px-3 py-2">

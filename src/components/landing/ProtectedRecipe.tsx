@@ -28,7 +28,7 @@ export const ProtectedRecipe = () => {
               </div>
             </div>
             {/* Seal shine */}
-            <div className="absolute top-2 left-4 w-3 h-3 rounded-full bg-white/50 blur-sm" />
+            <div className="absolute top-2 left-4 w-3 h-3 rounded-full bg-white/50" />
           </div>
 
           {/* Content */}

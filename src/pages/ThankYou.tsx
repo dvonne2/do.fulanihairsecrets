@@ -802,16 +802,78 @@ const ThankYou = () => {
             📦 Order ID: {orderNumber} • Est. Delivery: {deliveryEstimate}
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black text-xs">
-              TRACK ORDER
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="relative border-gold text-gold hover:bg-gold hover:text-black text-xs overflow-hidden group transition-all duration-300"
+              style={{
+                animation: 'bling-pulse-footer 3s ease-in-out infinite',
+                boxShadow: '0 0 15px rgba(218, 165, 32, 0.4)'
+              }}
+            >
+              {/* Sparkles for TRACK ORDER */}
+              <span className="absolute inset-0 overflow-hidden">
+                <span className="absolute top-1 left-1 w-1 h-1 bg-yellow-300 rounded-full animate-ping" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute bottom-1 right-1 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1.5s' }}></span>
+              </span>
+              <span className="relative z-10" style={{ textShadow: '0 0 8px rgba(218, 165, 32, 0.6)' }}>
+                ✨ TRACK ORDER
+              </span>
             </Button>
-            <Button size="sm" className="bg-green-500 hover:bg-green-600 text-white text-xs">
-              WHATSAPP SUPPORT
+            
+            <Button 
+              size="sm" 
+              className="relative bg-green-500 hover:bg-green-600 text-white text-xs overflow-hidden group transition-all duration-300"
+              style={{
+                animation: 'bling-pulse-footer 3s ease-in-out infinite',
+                animationDelay: '1s',
+                boxShadow: '0 0 15px rgba(34, 197, 94, 0.4)'
+              }}
+            >
+              {/* Sparkles for WHATSAPP SUPPORT */}
+              <span className="absolute inset-0 overflow-hidden">
+                <span className="absolute top-1 right-1 w-1 h-1 bg-green-300 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></span>
+                <span className="absolute bottom-1 left-1 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '2s' }}></span>
+              </span>
+              <span className="relative z-10" style={{ textShadow: '0 0 8px rgba(34, 197, 94, 0.6)' }}>
+                💬 WHATSAPP SUPPORT
+              </span>
             </Button>
-            <Button size="sm" variant="outline" className="border-gold text-gold hover:bg-gold hover:text-black text-xs hidden md:inline-flex">
-              DOWNLOAD BONUSES
+            
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="relative border-gold text-gold hover:bg-gold hover:text-black text-xs hidden md:inline-flex overflow-hidden group transition-all duration-300"
+              style={{
+                animation: 'bling-pulse-footer 3s ease-in-out infinite',
+                animationDelay: '2s',
+                boxShadow: '0 0 15px rgba(218, 165, 32, 0.4)'
+              }}
+            >
+              {/* Sparkles for DOWNLOAD BONUSES */}
+              <span className="absolute inset-0 overflow-hidden">
+                <span className="absolute top-1 left-2 w-1 h-1 bg-yellow-200 rounded-full animate-ping" style={{ animationDelay: '1s' }}></span>
+                <span className="absolute bottom-1 right-2 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '2.5s' }}></span>
+              </span>
+              <span className="relative z-10" style={{ textShadow: '0 0 8px rgba(218, 165, 32, 0.6)' }}>
+                🎁 DOWNLOAD BONUSES
+              </span>
             </Button>
           </div>
+          
+          {/* Add CSS animations for footer buttons */}
+          <style>{`
+            @keyframes bling-pulse-footer {
+              0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(218, 165, 32, 0.4);
+              }
+              50% {
+                transform: scale(1.03);
+                box-shadow: 0 0 25px rgba(218, 165, 32, 0.8);
+              }
+            }
+          `}</style>
         </div>
       </div>
 

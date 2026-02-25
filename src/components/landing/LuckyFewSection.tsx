@@ -32,7 +32,7 @@ export const LuckyFewSection = ({ stockCount }: LuckyFewSectionProps) => {
       <div className="absolute inset-0 bg-gradient-to-b from-background via-gold/5 to-background" />
       
       {/* Decorative glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/10 rounded-full" />
 
       <div className="max-w-4xl mx-auto px-6 md:px-8 relative z-10">
         {/* Crown icon */}

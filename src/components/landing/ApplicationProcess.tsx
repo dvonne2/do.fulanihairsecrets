@@ -75,16 +75,7 @@ export const ApplicationProcess = ({ stockCount }: ApplicationProcessProps) => {
           ))}
         </div>
 
-        {/* Info box */}
-        <div className="bg-gold/10 border border-gold/30 rounded-xl p-6 mb-10 text-center">
-          <p className="font-sans text-sm font-bold text-gold mb-2">
-            🚚 Pay on Delivery Available
-          </p>
-          <p className="font-serif text-muted-foreground">
-            (Inspect package before you pay. Zero risk.)
-          </p>
-        </div>
-
+        
         {/* Divider */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-10" />
 

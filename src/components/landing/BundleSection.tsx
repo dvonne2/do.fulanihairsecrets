@@ -28,7 +28,7 @@ export const BundleSection = () => {
   return (
     <section className="py-16 md:py-24 bg-background relative overflow-hidden">
       {/* Ambient glow effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/5 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
@@ -48,22 +48,20 @@ export const BundleSection = () => {
         {/* Bundle Hero Display */}
         <div className="relative mb-16 md:mb-20">
           {/* Reflective gold surface effect */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-20 bg-gradient-to-t from-gold/10 via-gold/5 to-transparent blur-sm rounded-full" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-20 bg-gradient-to-t from-gold/10 via-gold/5 to-transparent rounded-full" />
           
           {/* Desktop: Arc formation / Mobile: Stacked */}
           <div className="relative flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
             {/* Step 1 - Shampoo (Left) */}
-            <div className="relative group md:-mr-8 md:mt-12 order-2 md:order-1">
-              <div className="absolute inset-0 bg-gold/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-gradient-to-b from-muted/50 to-background/80 backdrop-blur-sm rounded-2xl p-6 border border-gold/20 transition-all duration-500 group-hover:scale-105 group-hover:border-gold/50">
+            <div className="relative md:-mr-8 md:mt-12 order-2 md:order-1">
+              <div className="relative bg-gradient-to-b from-muted/50 to-background/80 rounded-2xl p-6 border border-gold/20">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-royal text-gold text-xs font-bold rounded-full border border-gold/30">
                   STEP 1
                 </div>
                 <OptimizedImage
                   src={shampooImg}
                   alt="Heritage Shampoo"
-                  className="w-32 h-40 md:w-40 md:h-52 object-contain drop-shadow-2xl mx-auto"
-                  style={{ filter: 'drop-shadow(0 20px 40px rgba(212,175,55,0.2))' }}
+                  className="w-32 h-40 md:w-40 md:h-52 object-contain mx-auto"
                   width={160}
                   height={208}
                 />
@@ -74,16 +72,14 @@ export const BundleSection = () => {
 
             {/* Step 2 - Conditioner (Center) */}
             <div className="relative group z-20 md:-mt-8 order-1 md:order-2">
-              <div className="absolute inset-0 bg-gold/30 blur-3xl rounded-full animate-glow-pulse" />
-              <div className="relative bg-gradient-to-b from-gold/20 to-background/90 backdrop-blur-sm rounded-2xl p-8 border-2 border-gold transition-all duration-500 group-hover:scale-105 mega-glow">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-royal text-gold text-xs font-bold rounded-full flex items-center gap-1.5 shadow-lg border border-gold/40">
+              <div className="relative bg-gradient-to-b from-gold/20 to-background/90 rounded-2xl p-8 border border-gold">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-royal text-gold text-xs font-bold rounded-full flex items-center gap-1.5 border border-gold/40">
                   STEP 2
                 </div>
                 <OptimizedImage
                   src={conditionerImg}
                   alt="Voluminous Conditioner"
-                  className="w-40 h-40 md:w-44 md:h-44 object-contain drop-shadow-2xl mx-auto"
-                  style={{ filter: 'drop-shadow(0 30px 50px rgba(212,175,55,0.4))' }}
+                  className="w-40 h-40 md:w-44 md:h-44 object-contain mx-auto"
                   width={176}
                   height={176}
                 />
@@ -94,16 +90,14 @@ export const BundleSection = () => {
 
             {/* Step 3 - Pomade (Right) */}
             <div className="relative group md:-ml-8 md:mt-12 order-3">
-              <div className="absolute inset-0 bg-gold/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-gradient-to-b from-muted/50 to-background/80 backdrop-blur-sm rounded-2xl p-6 border border-gold/20 transition-all duration-500 group-hover:scale-105 group-hover:border-gold/50">
+              <div className="relative bg-gradient-to-b from-muted/50 to-background/80 rounded-2xl p-6 border border-gold/20">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-royal text-gold text-xs font-bold rounded-full border border-gold/30">
                   STEP 3
                 </div>
                 <OptimizedImage
                   src={pomadeImg}
                   alt="Growth Pomade"
-                  className="w-32 h-40 md:w-40 md:h-52 object-contain drop-shadow-2xl mx-auto"
-                  style={{ filter: 'drop-shadow(0 20px 40px rgba(212,175,55,0.2))' }}
+                  className="w-32 h-40 md:w-40 md:h-52 object-contain mx-auto"
                   width={160}
                   height={208}
                 />

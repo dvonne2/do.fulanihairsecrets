@@ -27,13 +27,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
       icon: "✨",
       title: "FREE Express Shipping (pay before delivery orders only)",
       description: "On ₦66,750 & ₦215,000 bundles only"
-    },
-    {
-      icon: "✨",
-      title: "Pay on Delivery Available",
-      description: "Inspect before you pay. Zero risk."
-    }
-  ];
+      ];
 
   return (
     <section className="relative py-16 md:py-24 overflow-hidden">
@@ -72,7 +66,7 @@ export const TheOffer = ({ stockCount }: TheOfferProps) => {
             {bonuses.map((bonus, i) => (
               <div 
                 key={i} 
-                className="flex items-start gap-4 text-left bg-card/50 backdrop-blur-sm border border-gold/20 rounded-lg p-4 hover:border-gold/40 transition-colors"
+                className="flex items-start gap-4 text-left bg-card/50 border border-gold/20 rounded-lg p-4 hover:border-gold/40 transition-colors"
               >
                 <span className="text-2xl flex-shrink-0">{bonus.icon}</span>
                 <div>

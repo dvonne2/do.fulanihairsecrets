@@ -4,7 +4,7 @@ interface UrgencyBannerProps {
 
 export const UrgencyBanner = ({ countdown }: UrgencyBannerProps) => {
   return (
-    <div className="relative md:fixed md:top-0 md:left-0 md:right-0 z-40 bg-gradient-to-r from-[#B80F66] via-[#FF69B4] to-[#B80F66] py-2.5 text-center">
+    <div className="relative md:fixed md:top-0 md:left-0 md:right-0 z-40 bg-black py-2.5 text-center">
       <div className="max-w-7xl mx-auto px-3">
         <p className="font-sans text-xs md:text-sm text-white leading-snug md:leading-tight">
           ⚡ <span className="font-bold">HURRY!</span> ⚡

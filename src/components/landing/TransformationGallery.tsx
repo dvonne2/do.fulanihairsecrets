@@ -109,7 +109,7 @@ export const TransformationGallery = () => {
         </div>
 
         {/* Stats bar */}
-        <div className="mt-12 md:mt-16 p-6 md:p-8 rounded-2xl bg-background/20 border border-gold/30 backdrop-blur-sm">
+        <div className="mt-12 md:mt-16 p-6 md:p-8 rounded-2xl bg-background/20 border border-gold/30">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { value: "5,247+", label: "Happy Customers" },

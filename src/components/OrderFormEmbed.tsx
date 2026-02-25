@@ -104,10 +104,10 @@ const lgasByState: { [key: string]: string[] } = {
 
 const packages = [
   { id: 'PKG-001', name: 'THE TRIAL KIT (Self Love Plus)', webhookName: 'SELF LOVE PLUS', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
-  { id: 'PKG-002', name: 'SELF LOVE RETURN', webhookName: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade 🧴', supply: '3-Month Maintenance: Best for returning fans to keep growth consistent. Not for first-timers—you need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
-  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '🧴 3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade', isPopular: false },
-  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🧴 3-Month Recovery System: The complete professional routine. Essential for first-timers to purify, nourish, and seal for a full biological growth cycle.', freeItems: '+ 🎁 FREE: 1 Shampoo + 1 Pomade + 1 Conditioner', isPopular: true },
-  { id: 'PKG-005', name: 'FAMILY SAVES', webhookName: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ 🎁 FREE: 4 Shampoos + 4 Pomades + 4 Conditioners', isPopular: false },
+  { id: 'PKG-002', name: 'SELF LOVE RETURN', webhookName: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade', supply: '3-Month Maintenance: <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
+  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade', isPopular: false },
+  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🔥 3-Month Hair Recovery System - If your hair is breaking, thinning, or refusing to grow, this set is your reset. In just 90 days, it will wake up dormant follicles, restore your scalp, and have you seeing the fuller, longer hair you\'ve been waiting for. Affordable. Effective. Built for serious results.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade + 1 500ml Conditioner', isPopular: true },
+  { id: 'PKG-005', name: 'FAMILY SAVES', webhookName: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ FREE: 4 500ml Shampoos + 4 150g Pomades + 4 500ml Conditioners', isPopular: false },
 ];
 
 // Generate unique Order ID - YYMMDDHHmm format
@@ -136,28 +136,29 @@ const getOrderIdFromURL = (): string => {
 
 // All styles as objects
 const S: { [key: string]: CSSProperties } = {
-  container: { maxWidth: 500, margin: '0 auto', padding: '0 16px', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif' },
-  box: { background: '#fff', border: '2px solid #DAA520', borderRadius: 16, padding: '24px 20px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)' },
+  container: { margin: '0 auto', padding: '40px 20px', fontFamily: 'DM Sans, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#f0ede8' },
+  box: { background: '#fff', borderRadius: 24, padding: '32px 28px 28px', width: '100%', position: 'relative', overflow: 'hidden' },
   // Mobile-specific container styles
-  containerMobile: { padding: '0 12px' },
-  boxMobile: { padding: '16px 12px', borderRadius: 12 },
+  containerMobile: { padding: '0', maxWidth: '100%' },
+  boxMobile: { padding: '16px 8px', borderRadius: 0 },
   step: { fontSize: 14, fontWeight: 600, color: '#666', margin: '0 0 8px' },
   bar: { height: 8, background: '#E0E0E0', borderRadius: 4, overflow: 'hidden', marginBottom: 20 },
   fill: { height: '100%', background: 'linear-gradient(90deg, #36CA37, #2eb82e)', transition: 'width 0.3s' },
   label: { display: 'block', fontSize: 13, fontWeight: 800, color: '#1a1a1a', textTransform: 'uppercase' as const, margin: '16px 0 8px' },
   req: { color: '#D30000' },
-  input: { width: '100%', padding: '14px 16px', background: '#F9F9F9', border: '2px solid #E0E0E0', borderRadius: 10, fontSize: 16, fontWeight: 600, color: '#1a1a1a', outline: 'none', boxSizing: 'border-box' as const, fontFamily: 'inherit' },
+  input: { width: '100%', padding: '14px 16px', background: '#F9F9F9', border: '2px solid #DAA520', borderRadius: 10, fontSize: 16, fontWeight: 600, color: '#1a1a1a', outline: 'none', boxSizing: 'border-box' as const, fontFamily: 'inherit' },
+  inputFocus: { borderColor: '#DAA520' },
   hint: { fontSize: 12, color: '#666', margin: '6px 0 0' },
   pkgs: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
-  card: { display: 'block', position: 'relative' as const, padding: '14px 14px 14px 48px', background: '#fff', border: '2px solid #E0E0E0', borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s' },
-  cardSel: { borderColor: '#DAA520', background: '#FFFBF0', boxShadow: '0 4px 12px rgba(218,165,32,0.2)' },
+  card: { display: 'block', position: 'relative' as const, padding: '18px 16px', background: '#faf9f7', border: '1px solid #eeebe5', borderRadius: 12, cursor: 'pointer', transition: 'background 0.2s' },
+  cardSel: { borderColor: '#DAA520', background: '#FFFBF0' },
   // Mobile-specific styles
   cardMobile: { padding: '10px 10px 10px 36px' },
   cardSelMobile: { padding: '10px 10px 10px 36px' },
   radio: { position: 'absolute' as const, left: 14, top: 16, width: 22, height: 22, border: '3px solid #CCC', borderRadius: '50%', background: '#fff', boxSizing: 'border-box' as const, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   radioSel: { borderColor: '#DAA520', background: '#DAA520' },
   check: { color: '#fff', fontSize: 12, fontWeight: 'bold' as const },
-  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#D30000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const, boxShadow: '0 2px 8px rgba(211,0,0,0.3)' },
+  pop: { position: 'absolute' as const, top: -10, right: 10, background: '#D30000', color: '#fff', fontSize: 9, fontWeight: 800, padding: '4px 10px', borderRadius: 20, textTransform: 'uppercase' as const },
   r1: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 },
   name: { fontSize: 14, fontWeight: 800, color: '#1a1a1a' },
   nameMobile: { fontSize: 13 },
@@ -174,13 +175,13 @@ const S: { [key: string]: CSSProperties } = {
   freeMobile: { fontSize: 10, padding: '4px 8px', margin: '4px 0' },
   dur: { fontSize: 10, fontWeight: 600, color: '#888', textAlign: 'center' as const, marginTop: 4 },
   durMobile: { fontSize: 9, marginTop: 2 },
-  pay: { fontSize: 14, color: '#666', textAlign: 'center' as const, margin: '16px 0' },
+  pay: { fontSize: 10, color: '#666', textAlign: 'center' as const, margin: '16px 0' },
   // Mobile styles for "How did you hear about us"
   hearAboutUsGridMobile: { display: 'flex', flexDirection: 'column' as const, gap: 12, marginTop: 12 },
-  hearAboutUsOptionMobile: { display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 44, padding: '12px', background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 8, fontSize: 14, fontWeight: 600, transition: 'all 0.2s' },
+  hearAboutUsOptionMobile: { display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', color: '#1a1a1a', minHeight: 44, padding: '12px', background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 8, fontSize: 14, fontWeight: 600, transition: 'background 0.2s' },
   hearAboutUsOptionHoverMobile: { background: '#F0F0F0', borderColor: '#DAA520' },
-  btn: { width: '100%', background: '#36CA37', color: '#fff', border: 'none', borderRadius: 10, padding: 18, fontSize: 16, fontWeight: 'bold' as const, textTransform: 'uppercase' as const, cursor: 'pointer', boxShadow: '0 6px 20px rgba(54,202,55,0.4)', fontFamily: 'inherit' },
-  btnDis: { background: '#ccc', cursor: 'not-allowed', boxShadow: 'none' },
+  btn: { width: '100%', background: '#1f4d34', color: '#fff', border: 'none', borderRadius: 14, padding: '18px 24px', fontSize: 16, fontWeight: '600', letterSpacing: '0.04em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', transition: 'background 0.25s ease', fontFamily: 'DM Sans, sans-serif' },
+  btnDis: { background: '#ccc', cursor: 'not-allowed' },
   back: { background: '#F0F0F0', color: '#666', border: 'none', borderRadius: 10, padding: '18px 24px', fontSize: 14, fontWeight: 'bold' as const, cursor: 'pointer', fontFamily: 'inherit' },
   sum: { background: '#F9F9F9', border: '1px solid #E0E0E0', borderRadius: 10, padding: 16, marginTop: 16 },
   sr: { display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#666', margin: '8px 0' },
@@ -323,12 +324,6 @@ function OrderFormEmbed() {
       if (packageValid) completed++;
 
       const percent = (completed / 4) * 100;
-      const progressFill = document.getElementById('progressFill');
-      const progressText = document.getElementById('progressText');
-      
-      if (progressFill) {
-        progressFill.style.width = percent + '%';
-      }
 
       // Update field checkmarks
       const nameWrapper = document.getElementById('nameFieldWrapper');
@@ -354,17 +349,7 @@ function OrderFormEmbed() {
         }
       }
 
-      // Update progress text
-      if (progressText) {
-        if (completed === 0) {
-          progressText.textContent = 'Step 1 of 2 — Complete your details';
-        } else if (completed < 4) {
-          progressText.textContent = `Step 1 of 2 — ${completed} of 4 complete`;
-        } else {
-          progressText.textContent = 'Step 1 of 2 — All set! Moving to delivery...';
-        }
-      }
-
+      
       // Auto-advance when all 4 are valid (2.5s delay so user can finish typing)
       if (completed === 4 && !hasAutoAdvanced.current) {
         setTimeout(() => {
@@ -986,18 +971,27 @@ function OrderFormEmbed() {
     }
   };
 
+  // Validation variables for checkmarks
+  const nameValid = form.name.trim().length >= 2;
+  const phoneValid = form.phone.replace(/\D/g, '').length >= 10;
+  const emailValid = form.email.includes('@') && form.email.includes('.') && form.email.length >= 5;
+
   return (
     <div style={{ ...S.container, ...(window.innerWidth < 768 ? S.containerMobile : {}) }}>
-      <div style={{ ...S.box, ...(window.innerWidth < 768 ? S.boxMobile : {}) }}>
+      <div style={{ ...S.box, ...(window.innerWidth < 768 ? S.boxMobile : {}), position: 'relative' }}>
+        {/* Gradient top border */}
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0,
+          height: '3px',
+          background: 'linear-gradient(90deg, #1f4d34, #3a8c5c, #1f4d34)'
+        }} />
         {/* PROGRESS BAR - ADD THIS AT THE TOP OF THE FORM */}
         <div id="step-indicator" style={{textAlign: 'center', fontWeight: 'bold', marginBottom: '10px', fontSize: '16px', color: '#000', padding: '12px 10px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '8px'}} className="step-indicator-text">
           <div style={{ fontSize: '20px', marginBottom: '2px' }}>
-            Step {step} of 2
+            {step === 1 ? 'Step 1 of 2' : '📍 STEP 2: Tell us your delivery address (Step 2 of 2)'}
           </div>
-          <div style={{ fontSize: '12px', fontWeight: '500', color: '#6B7280' }}>
-            {step === 1 ? '📦 Choose Package & Enter Details' : '📍 Delivery Address & Confirm'}
-          </div>
-        </div>
+                  </div>
         <div style={{
           width: '100%',
           height: '8px',
@@ -1021,29 +1015,7 @@ function OrderFormEmbed() {
               marginBottom: '20px',
               textAlign: 'center'
             }}>
-              <div style={{
-                width: '100%',
-                height: '6px',
-                background: '#E5E7EB',
-                borderRadius: '100px',
-                overflow: 'hidden',
-                marginBottom: '8px'
-              }}>
-                <div id="progressFill" style={{
-                  height: '100%',
-                  width: '0%',
-                  background: 'linear-gradient(90deg, #14532d, #16a34a)',
-                  borderRadius: '100px',
-                  transition: 'width 0.4s ease'
-                }} />
-              </div>
-              <p id="progressText" style={{
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#6B7280',
-                margin: '0'
-              }}>Step 1 of 2 — Complete your details</p>
-            </div>
+                          </div>
 
             {/* 20-Minute Countdown Timer */}
             <div style={{
@@ -1055,7 +1027,6 @@ function OrderFormEmbed() {
               marginBottom: '16px',
               fontSize: '14px',
               fontWeight: '600',
-              boxShadow: timerActive ? '0 4px 12px rgba(204,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.2)',
               border: timerActive ? '2px solid #CC0000' : '2px solid #666'
             }}>
               <div style={{ fontSize: '12px', marginBottom: '4px', textTransform: 'uppercase' }}>
@@ -1126,12 +1097,7 @@ function OrderFormEmbed() {
                       position: 'relative',
                       cursor: 'pointer',
                       marginBottom: '10px',
-                      opacity: isFeatured ? 1 : (selected ? 1 : 0.7),
-                      boxShadow: isFeatured 
-                        ? '0 0 0 4px rgba(20,83,45,0.1), 0 4px 20px rgba(20,83,45,0.18), 0 8px 40px rgba(20,83,45,0.08)'
-                        : isBestValue 
-                        ? '0 2px 14px rgba(212,175,55,0.15)'
-                        : 'none',
+                      opacity: 1.0,
                       background: isFeatured ? 'linear-gradient(180deg, #f8fefb 0%, #ffffff 100%)' : '#fff',
                       transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
                       WebkitFontSmoothing: 'antialiased',
@@ -1140,30 +1106,22 @@ function OrderFormEmbed() {
                     onMouseEnter={(e) => {
                       const card = e.currentTarget;
                       if (isFeatured) {
-                        card.style.boxShadow = '0 0 0 5px rgba(26,122,74,0.12), 0 6px 24px rgba(26,122,74,0.22)';
                       } else if (isBestValue) {
-                        card.style.boxShadow = '0 6px 20px rgba(212,175,55,0.25)';
                         card.style.borderColor = '#D4AF37';
                       } else {
-                        card.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)';
                         card.style.borderColor = '#aaa';
                       }
-                      card.style.opacity = '1';
-                    }}
+                                          }}
                     onMouseLeave={(e) => {
                       const card = e.currentTarget;
                       if (isFeatured) {
-                        card.style.boxShadow = '0 0 0 4px rgba(20,83,45,0.1), 0 4px 20px rgba(20,83,45,0.18), 0 8px 40px rgba(20,83,45,0.08)';
                         card.style.borderColor = '3px solid #14532d';
                       } else if (isBestValue) {
-                        card.style.boxShadow = '0 2px 14px rgba(212,175,55,0.15)';
                         card.style.borderColor = '2px solid #D4AF37';
                       } else {
-                        card.style.boxShadow = 'none';
                         card.style.borderColor = '1.5px solid #E5E7EB';
                       }
-                      card.style.opacity = selected || isFeatured ? '1' : '0.7';
-                    }}
+                                          }}
                   >
                     {/* Radio circle */}
                     <div style={{
@@ -1247,27 +1205,27 @@ function OrderFormEmbed() {
                           letterSpacing: '-0.2px',
                           wordBreak: 'break-word' as const
                         }}>
-                          {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'The Trial Kit')
+                          <div style={{ textAlign: 'left' }}>
+                          {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'Self Love Plus')
                            .replace('SELF LOVE PLUS B2GOF', 'Self Love Plus B2GOF')
                            .replace('SELF LOVE B2GOF', 'Self Love B2GOF')
                            .replace('SELF LOVE RETURN', 'Self Love Return')
                            .replace('FAMILY SAVES', 'Family Saves')}
-                          {p.id === 'PKG-001' && (
-                            <span style={{
-                              fontWeight: '500',
-                              color: '#6B7280',
-                              fontSize: '11px'
-                            }}> (Self Love Plus)</span>
-                          )}
+                        </div>
                         </div>
                         <div style={{
                           fontSize: '10px',
                           fontWeight: '600',
                           color: '#6B7280',
                           marginTop: '1px',
-                          letterSpacing: '0.1px'
+                          letterSpacing: '0.1px',
+                          textAlign: 'left'
                         }}>
-                          {p.supply.split(':')[0]}
+                          {p.id === 'PKG-001' && 'The 30-Day Test'}
+                          {p.id === 'PKG-002' && '3-Month Maintenance'}
+                          {p.id === 'PKG-003' && '3-Month Scalp Reset'}
+                          {p.id === 'PKG-004' && '🔥 3-Month Hair Recovery System'}
+                          {p.id === 'PKG-005' && '12 Month Supply'}
                         </div>
                       </div>
                       <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -1303,78 +1261,81 @@ function OrderFormEmbed() {
                     </div>
 
                     {/* Items */}
+                    
+                    {/* Update package items styling with elegant design */}
                     <div style={{
                       display: 'flex',
-                      gap: '5px',
-                      flexWrap: 'wrap',
+                      flexDirection: 'column',
+                      gap: '8px',
                       marginBottom: '6px',
                       paddingLeft: '26px'
                     }}>
                       {p.items.split(' | ').map((item, idx) => {
                         const [quantity, product] = item.split('× ');
+                        
+                        // Check if there's a free item for this product
+                        const freeItems = p.freeItems ? p.freeItems.replace('+ ', '').split(' + ') : [];
+                        const freeItemForThisProduct = freeItems.find(freeItem => 
+                          freeItem.toLowerCase().includes(product.toLowerCase())
+                        );
+                        
                         return (
-                          <span key={idx} style={{
-                            background: '#F3F4F6',
-                            borderRadius: '5px',
-                            padding: isFeatured ? '5px 9px' : '3.5px 7px',
-                            fontSize: isFeatured ? '12.5px' : '11px',
-                            fontWeight: '600',
-                            color: '#1F2937',
+                          <div key={idx} style={{
+                            fontSize: '15px',
+                            fontWeight: '500',
+                            color: '#1a1a1a',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '3px'
+                            gap: '13px',
+                            lineHeight: '1.3',
+                            letterSpacing: '0.01em'
                           }}>
                             <span style={{
-                              background: '#14532d',
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '8px',
+                              background: '#1f4d34',
                               color: '#fff',
-                              fontSize: isFeatured ? '10px' : '8.5px',
-                              fontWeight: '700',
-                              padding: isFeatured ? '2px 5px' : '1px 4px',
-                              borderRadius: '3px'
+                              fontSize: '12px',
+                              fontWeight: '600',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              letterSpacing: '0.02em'
                             }}>
                               {quantity}×
                             </span>
-                            {product}
-                          </span>
+                            {product.toLowerCase().includes('shampoo') ? '500ml ' : ''}{product.toLowerCase().includes('conditioner') ? '500ml ' : ''}{product.toLowerCase().includes('pomade') ? '150g ' : ''}{product}
+                            {freeItemForThisProduct && (
+                              <>
+                                <span style={{
+                                  color: '#D97706',
+                                  fontSize: isFeatured ? '14px' : '12px',
+                                  fontWeight: '700'
+                                }}>
+                                  +
+                                </span>
+                                <span style={{
+                                  background: '#FFFBEB',
+                                  border: '1px dashed #D97706',
+                                  borderRadius: '5px',
+                                  padding: '4px 8px',
+                                  fontSize: isFeatured ? '14px' : '12px',
+                                  fontWeight: '700',
+                                  color: '#92400E',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}>
+                                  FREE {freeItemForThisProduct.replace('FREE: ', '')}
+                                </span>
+                              </>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
-
-                    {/* Bonus items */}
-                    {p.freeItems && p.freeItems.includes('FREE:') && (
-                      <div style={{
-                        background: '#FFFBEB',
-                        border: '1px dashed #D97706',
-                        borderRadius: '7px',
-                        padding: '6px 9px',
-                        fontSize: isFeatured ? '12px' : '10.5px',
-                        fontWeight: '600',
-                        color: '#92400E',
-                        margin: '6px 0',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '5px'
-                      }}>
-                        <span style={{ fontSize: '13px', flexShrink: 0 }}>🎁</span>
-                        {p.freeItems.replace('+ ', '')}
-                      </div>
-                    )}
-
-                    {/* Callout for trial kit */}
-                    {p.id === 'PKG-001' && (
-                      <div style={{
-                        background: 'linear-gradient(135deg, #14532d, #16a34a)',
-                        borderRadius: '8px',
-                        padding: '10px 12px',
-                        margin: '8px 0 6px',
-                        color: '#fff',
-                        fontSize: '11px',
-                        fontWeight: '600',
-                        lineHeight: '1.45'
-                      }}>
-                        <strong>Important:</strong> Hair recovery is a biological cycle. The Trial Kit resets your scalp but permanent edge restoration & follicle wake-up typically require 60–90 days of consistent 3-step use.
-                      </div>
-                    )}
 
                     {/* Description */}
                     <p style={{
@@ -1385,16 +1346,16 @@ function OrderFormEmbed() {
                       margin: p.id === 'PKG-001' ? '0' : '6px 0',
                       fontWeight: p.id === 'PKG-002' ? '400' : '400'
                     }}>
-                      {p.id === 'PKG-001' && 'Experience immediate scalp relief and test the formula before committing to a full 3 month hair recovery.'}
+                                            {p.id === 'PKG-001' && 'You\'ll start noticing tiny new hairs and experience immediate scalp relief as you test the formula before committing to a full recovery.'}
                       {p.id === 'PKG-002' && (
                         <>
-                          Keep growth consistent. <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.
+                          <strong>For returning customers only</strong> — first-timers need the Shampoo to purify your scalp for real results.
                         </>
                       )}
                       {p.id === 'PKG-003' && 'Purify the scalp & clear dandruff so the Pomade can trigger real growth.'}
                       {p.id === 'PKG-004' && (
                         <>
-                          🧴 3-Month Recovery System: The complete professional routine. <strong>Essential for first-timers</strong> to purify, nourish, and seal for a full biological hair growth cycle.
+                          {p.supply.split(':')[0]}
                         </>
                       )}
                       {p.id === 'PKG-005' && (
@@ -1471,13 +1432,8 @@ function OrderFormEmbed() {
                           ? (isBestValue ? '#1a2744' : '#fff')
                           : '#6B7280',
                         border: selected ? 'none' : '1.5px solid #D1D5DB',
-                        boxShadow: selected 
-                          ? (isBestValue 
-                            ? '0 4px 14px rgba(212,175,55,0.35), inset 0 1px 0 rgba(255,255,255,0.3)'
-                            : '0 4px 16px rgba(20,83,45,0.4)')
-                          : 'none',
                         letterSpacing: selected ? '0.3px' : '0',
-                        textShadow: selected ? '0 1px 0 rgba(255,255,255,0.2)' : 'none'
+                        textShadow: selected ? '0 1px 0 rgba(255,255,255,0.2)' : 'none',
                       }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1494,11 +1450,11 @@ function OrderFormEmbed() {
                         }, 400);
                       }}
                     >
-                      {p.id === 'PKG-001' && 'Select Trial Kit →'}
-                      {p.id === 'PKG-002' && 'Select This Plan →'}
-                      {p.id === 'PKG-003' && 'Select This Plan →'}
-                      {p.id === 'PKG-004' && 'Start My Hair Recovery →'}
-                      {p.id === 'PKG-005' && 'Secure the Gold Standard Pack →'}
+                      {p.id === 'PKG-001' && 'Select This Bundle →'}
+                      {p.id === 'PKG-002' && 'Select This Bundle →'}
+                      {p.id === 'PKG-003' && 'Select This Bundle →'}
+                      {p.id === 'PKG-004' && 'Select This Bundle →'}
+                      {p.id === 'PKG-005' && 'Select This Bundle →'}
                     </button>
                   </div>
                 );
@@ -1542,12 +1498,25 @@ function OrderFormEmbed() {
             <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
             <div style={{ position: 'relative' }} id="nameFieldWrapper">
               <input
-                style={S.input}
-                placeholder="Enter your full name"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your full name"
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
                 ref={nameInputRef}
-                onFocus={() => handleInputFocus(nameInputRef)}
+                onFocus={() => {
+                  handleInputFocus(nameInputRef);
+                  if (nameInputRef.current) {
+                    Object.assign(nameInputRef.current.style, S.inputFocus);
+                  }
+                }}
+                onBlur={() => {
+                  if (nameInputRef.current) {
+                    nameInputRef.current.style.borderColor = '#E0E0E0';
+                  }
+                }}
+                style={{ ...S.input }}
               />
               <span className="field-check" style={{
                 position: 'absolute',
@@ -1555,7 +1524,7 @@ function OrderFormEmbed() {
                 top: '50%',
                 transform: 'translateY(-50%)',
                 fontSize: '18px',
-                opacity: '0',
+                opacity: nameValid ? '1' : '0',
                 transition: 'opacity 0.3s ease',
                 color: '#14532d',
                 pointerEvents: 'none'
@@ -1566,14 +1535,25 @@ function OrderFormEmbed() {
             <label style={S.label}>PHONE NUMBER <span style={S.req}>*</span></label>
             <div style={{ position: 'relative' }} id="phoneFieldWrapper">
               <input
-                style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
                 type="tel"
-                inputMode="numeric"
-                placeholder="08012345678"
+                id="phone"
+                name="phone"
+                placeholder="Phone number (e.g., 08012345678)"
                 value={form.phone}
                 onChange={handlePhoneChange}
                 ref={phoneInputRef}
-                onFocus={() => handleInputFocus(phoneInputRef)}
+                onFocus={() => {
+                  handleInputFocus(phoneInputRef);
+                  if (phoneInputRef.current) {
+                    Object.assign(phoneInputRef.current.style, S.inputFocus);
+                  }
+                }}
+                onBlur={() => {
+                  if (phoneInputRef.current) {
+                    phoneInputRef.current.style.borderColor = '#E0E0E0';
+                  }
+                }}
+                style={{ ...S.input, border: phoneError ? '2px solid #ff3b30' : S.input.border }}
               />
               <span className="field-check" style={{
                 position: 'absolute',
@@ -1581,7 +1561,7 @@ function OrderFormEmbed() {
                 top: '50%',
                 transform: 'translateY(-50%)',
                 fontSize: '18px',
-                opacity: '0',
+                opacity: phoneValid ? '1' : '0',
                 transition: 'opacity 0.3s ease',
                 color: '#14532d',
                 pointerEvents: 'none'
@@ -1598,13 +1578,25 @@ function OrderFormEmbed() {
             <label style={S.label}>EMAIL ADDRESS <span style={S.req}>*</span></label>
             <div style={{ position: 'relative' }} id="emailFieldWrapper">
               <input
-                style={S.input}
                 type="email"
-                placeholder="your@email.com"
+                id="email"
+                name="email"
+                placeholder="Email address"
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
                 ref={emailInputRef}
-                onFocus={() => handleInputFocus(emailInputRef)}
+                onFocus={() => {
+                  handleInputFocus(emailInputRef);
+                  if (emailInputRef.current) {
+                    Object.assign(emailInputRef.current.style, S.inputFocus);
+                  }
+                }}
+                onBlur={() => {
+                  if (emailInputRef.current) {
+                    emailInputRef.current.style.borderColor = '#E0E0E0';
+                  }
+                }}
+                style={{ ...S.input }}
               />
               <span className="field-check" style={{
                 position: 'absolute',
@@ -1612,13 +1604,13 @@ function OrderFormEmbed() {
                 top: '50%',
                 transform: 'translateY(-50%)',
                 fontSize: '18px',
-                opacity: '0',
+                opacity: emailValid ? '1' : '0',
                 transition: 'opacity 0.3s ease',
                 color: '#14532d',
                 pointerEvents: 'none'
               }}>✓</span>
             </div>
-            <p style={S.hint}>For order confirmation and updates</p>
+            <p style={S.hint}>For hair growth information</p>
 
             {/* Pay text */}
             <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery</p>
@@ -1633,12 +1625,9 @@ function OrderFormEmbed() {
               border: '1px solid #C7D2FE'
             }}>
               <p style={{ margin: 0, fontSize: '12px', fontWeight: '600', color: '#4338CA' }}>
-                📍 Next: Tell us your delivery address (Step 2 of 2)
+                📍 STEP 2: Tell us your delivery address (Step 2 of 2)
               </p>
-              <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#6366F1', fontWeight: '500' }}>
-                Almost done — just your address and you're set!
-              </p>
-            </div>
+                          </div>
 
             {/* Continue button */}
             <button
@@ -1646,7 +1635,6 @@ function OrderFormEmbed() {
                 ...S.btn,
                 ...(form.pkg ? {
                   background: 'linear-gradient(135deg, #1a7a4a, #16a34a)',
-                  boxShadow: '0 4px 16px rgba(20,83,45,0.4)',
                   cursor: 'pointer'
                 } : S.btnDis)
               }}
@@ -1803,7 +1791,7 @@ function OrderFormEmbed() {
             <label style={S.label}>PAYMENT METHOD</label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
               {['Pay on Delivery', 'Pay Before Delivery'].map(opt => (
-                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
+                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a', fontWeight: opt === 'Pay Before Delivery' ? '800' : '400' }}>
                   <input
                     type="radio"
                     name="paymentMethod"
@@ -1811,7 +1799,7 @@ function OrderFormEmbed() {
                     checked={form.paymentMethod === opt}
                     onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
                   />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
+                  <span style={{ fontSize: opt === 'Pay Before Delivery' ? 15 : 13, fontWeight: opt === 'Pay Before Delivery' ? 800 : 700, color: '#1a1a1a' }}>{opt}</span>
                 </label>
               ))}
             </div>
@@ -1999,8 +1987,8 @@ function OrderFormEmbed() {
               )}
             </div>
             {form.couponApplied && (
-              <p style={{ color: '#38A169', fontWeight: 700, fontSize: 13, marginBottom: 12 }}>
-                ✅ Coupon applied! You get FREE delivery.
+              <p style={{ color: '#38A169', fontWeight: 800, fontSize: 16, marginBottom: 12 }}>
+                ✅ Coupon applied! You get **FREE** delivery.
               </p>
             )}
 
@@ -2166,7 +2154,7 @@ function OrderFormEmbed() {
 
                 return (
                   <>
-                    <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.08)', border: '1px solid #EDEDED' }}>
+                    <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 12, border: '1px solid #EDEDED' }}>
                       {hasName && (
                         <div style={{ fontSize: 18, fontWeight: 900, color: '#111', lineHeight: 1.2 }}>{form.name}</div>
                       )}

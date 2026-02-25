@@ -155,7 +155,7 @@ export const MaiduguriSecret = () => {
               </div>
             </div>
             {/* Shine effect */}
-            <div className="absolute top-2 left-6 w-4 h-4 rounded-full bg-white/40 blur-sm" />
+            <div className="absolute top-2 left-6 w-4 h-4 rounded-full bg-white/40" />
           </div>
 
           <blockquote className="font-cinzel text-xl md:text-2xl lg:text-3xl text-foreground mb-6 leading-relaxed">

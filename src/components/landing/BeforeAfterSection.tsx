@@ -6,75 +6,28 @@ import result11 from '@/assets-optimized/results/result-11.webp';
 import result16 from '@/assets-optimized/results/result-16.webp';
 import fourteenDayCollage from '@/assets-optimized/products/before-and-after-14-days-2013x2048.webp';
 
-const transformations = [
-  {
-    after: result1,
-    name: "Amina K.",
-    problem: "Severe traction alopecia from braids",
-    duration: "3 months",
-    caption: "Edges filled back in after 3 months of gentle Fulani Hair Gro routine."
-  },
-  {
-    after: result2,
-    name: "Fatima A.",
-    problem: "Postpartum hair loss",
-    duration: "2 months",
-    caption: "Post-baby shedding calmed and volume returned in just 2 months."
-  },
-  {
-    after: result4,
-    name: "Hajia Maryam",
-    problem: "Age-related thinning",
-    duration: "2.5 months",
-    caption: "Age-related thinning softened and density improved in 2½ months."
-  },
-  {
-    after: result5,
-    name: "Chioma E.",
-    problem: "Stress-induced hair loss",
-    duration: "1.5 months",
-    caption: "Stress breakage reduced and hairline looks stronger in 6 weeks."
-  },
-  {
-    after: result11,
-    name: "Yetunde M.",
-    problem: "Edge restoration",
-    duration: "2.5 months",
-    caption: "Bald edges now covered with new growth in about 10 weeks."
-  },
-  {
-    after: result16,
-    name: "Mrs. Folake T.",
-    problem: "Hormonal hair loss",
-    duration: "4.5 months",
-    caption: "Hormonal shedding slowed and fullness returned in 4½ months."
-  },
-];
+const transformations = [];
 
 export const BeforeAfterSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-royal relative overflow-hidden">
-      <div className="absolute inset-0 moroccan-tile opacity-20" />
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-      
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+    <section className="py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 mb-6">
-            <span className="text-gold text-sm font-bold">✨ BEFORE & AFTER</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#B80F66]/10 border border-[#B80F66]/30 mb-6">
+            <span className="text-[#B80F66] text-sm font-bold"></span>
           </div>
-          <h2 className="font-cinzel text-3xl md:text-5xl text-foreground mb-4">
-            From <span className="text-destructive">Struggling</span> to <span className="text-gold">Stunning</span>
+          <h2 className="font-sans text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+            From <span className="text-red-600">Struggling</span> to <span className="text-[#B80F66]">Stunning</span>
           </h2>
-          <p className="font-sans text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-sans text-lg text-gray-500 max-w-2xl mx-auto">
             Real transformations. No filters. No photoshop. Just pure results.
           </p>
         </div>
 
         {/* Featured 14-day transformation */}
         <div className="mb-8 md:mb-10">
-          <div className="rounded-2xl overflow-hidden border-2 border-gold/60 bg-background/10">
+          <div className="rounded-2xl overflow-hidden border-2 border-gray-200">
             <img
               src={fourteenDayCollage}
               alt="Dramatic 14-day before and after hair growth transformation collage"
@@ -92,18 +45,18 @@ export const BeforeAfterSection = () => {
           {transformations.map((item, i) => (
             <div 
               key={i}
-              className="group rounded-2xl overflow-hidden border-2 border-gold/20 hover:border-gold/60 transition-all duration-300 bg-background/10 backdrop-blur-sm"
+              className="group rounded-2xl overflow-hidden border border-gray-200 hover:border-[#B80F66]/40 transition-all duration-300 bg-white shadow-sm"
             >
               {/* Before/After Compare */}
               <div className="relative">
                 <div className="grid grid-cols-2">
                   {/* Before placeholder */}
-                  <div className="relative aspect-square bg-muted flex items-center justify-center border-r border-gold/20">
+                  <div className="relative aspect-square bg-gray-100 flex items-center justify-center border-r border-gray-200">
                     <div className="text-center p-4">
                       <span className="text-4xl mb-2 block">😔</span>
-                      <p className="font-sans text-xs text-muted-foreground">{item.problem}</p>
+                      <p className="font-sans text-xs text-gray-500">{item.problem}</p>
                     </div>
-                    <div className="absolute top-2 left-2 px-2 py-1 bg-destructive/80 text-foreground text-[10px] font-bold rounded">
+                    <div className="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-[10px] font-bold rounded">
                       BEFORE
                     </div>
                   </div>
@@ -119,27 +72,27 @@ export const BeforeAfterSection = () => {
                       width={600}
                       height={600}
                     />
-                    <div className="absolute top-2 right-2 px-2 py-1 bg-success text-background text-[10px] font-bold rounded">
+                    <div className="absolute top-2 right-2 px-2 py-1 bg-green-600 text-white text-[10px] font-bold rounded">
                       AFTER
                     </div>
                   </div>
                 </div>
                 
                 {/* Duration badge */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-4 py-2 bg-gold text-background text-2xl md:text-3xl font-bold rounded-full shadow-lg z-10">
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-4 py-2 bg-[#B80F66] text-white text-2xl md:text-3xl font-bold rounded-full shadow-lg z-10">
                   {item.duration}
                 </div>
               </div>
               
               {/* Info */}
               <div className="p-4 pt-6 text-center">
-                <p className="font-cinzel text-lg text-gold font-semibold">{item.name}</p>
+                <p className="font-sans text-lg text-[#B80F66] font-semibold">{item.name}</p>
                 <div className="flex justify-center gap-0.5 mt-2">
                   {Array(5).fill(0).map((_, j) => (
-                    <span key={j} className="text-gold text-sm">★</span>
+                    <span key={j} className="text-yellow-500 text-sm">★</span>
                   ))}
                 </div>
-                <p className="font-serif text-lg md:text-xl text-foreground/90 mt-3 max-w-xs mx-auto">
+                <p className="font-sans text-base md:text-lg text-gray-700 mt-3 max-w-xs mx-auto">
                   {item.caption}
                 </p>
               </div>
@@ -149,13 +102,13 @@ export const BeforeAfterSection = () => {
 
         {/* Bottom CTA */}
         <div className="text-center mt-12">
-          <p className="font-serif text-lg text-foreground/80 italic mb-4">
+          <p className="font-sans text-lg text-gray-600 italic mb-4">
             Your "after" photo is waiting to be taken
           </p>
           <a 
             href="#order-form"
             data-form-cta="true"
-            className="inline-flex items-center gap-2 gold-gradient text-background font-sans text-sm tracking-wider uppercase px-8 py-3 rounded-xl font-bold btn-luxury"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B80F66] to-[#D30000] text-white font-sans text-sm tracking-wider uppercase px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform"
           >
             <span>Order Now</span>
           </a>

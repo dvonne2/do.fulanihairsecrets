@@ -25,13 +25,15 @@
     
     <link rel="preload" as="image" href="/assets/hero-fulani-700.webp" type="image/webp" fetchpriority="high">
 
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+
     <!-- Critical above-the-fold CSS (urgency banner + hero) -->
     <style>
       @font-face{font-family:'Montserrat';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/montserrat-400-normal.woff2') format('woff2')}
       @font-face{font-family:'Montserrat';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/montserrat-600-normal.woff2') format('woff2')}
       @font-face{font-family:'Cinzel';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/cinzel-600-normal.woff2') format('woff2')}
-      :root{--valentine-red:#B80F66;--valentine-rose:#FF69B4;--background:0 0% 0%;--foreground:0 0% 100%;--gold:45 100% 35%;--gold-bright:50 100% 50%;--gold-dark:42 100% 25%;--gold-light:48 100% 75%;--royal-blue:230 100% 25%;--royal-blue-light:225 100% 50%;--destructive:0 100% 60%;--destructive-foreground:0 0% 100%;--card:0 0% 4%;--card-foreground:0 0% 100%;--primary:45 100% 55%;--primary-foreground:0 0% 0%;--muted:0 0% 15%;--muted-foreground:0 0% 70%;--accent:45 100% 55%;--accent-foreground:0 0% 0%;--border:45 100% 55%;--input:0 0% 15%;--ring:45 100% 55%;--radius:0.75rem}
-      body{margin:0;background:hsl(0 0% 0%);color:hsl(0 0% 100%)}
+      :root{--valentine-red:#B80F66;--valentine-rose:#FF69B4;--background:0 0% 100%;--foreground:0 0% 10%;--gold:45 100% 35%;--gold-bright:50 100% 50%;--gold-dark:42 100% 25%;--gold-light:48 100% 75%;--royal-blue:230 100% 25%;--royal-blue-light:225 100% 50%;--destructive:0 85% 50%;--destructive-foreground:0 0% 100%;--card:0 0% 100%;--card-foreground:0 0% 10%;--primary:340 85% 45%;--primary-foreground:0 0% 100%;--muted:0 0% 96%;--muted-foreground:0 0% 45%;--accent:0 0% 96%;--accent-foreground:0 0% 10%;--border:0 0% 88%;--input:0 0% 88%;--ring:340 85% 45%;--radius:0.75rem}
+      body{margin:0;background:hsl(0 0% 100%);color:hsl(0 0% 10%)}
       *,*::before,*::after{box-sizing:border-box}
       .font-cinzel{font-family:'Cinzel',serif;font-weight:600}
       .font-sans{font-family:'Montserrat',sans-serif}
@@ -61,12 +63,8 @@
       // Generate event_id for PageView dedup (browser pixel + server CAPI)
       window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
       fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
-      // Defer fbevents.js load until after first paint
-      (function(){function load(){var t=document.createElement('script');t.async=!0;
-      t.src='https://connect.facebook.net/en_US/fbevents.js';
-      document.head.appendChild(t)}
-      if('requestIdleCallback' in window){requestIdleCallback(load)}
-      else{setTimeout(load,2000)}})();
+      // Facebook Pixel script disabled to prevent proxy authentication popup
+      // The Meta CAPI server-side tracking handles all events without client-side pixel
     </script>
     
     <!-- GA4: defer load like FB Pixel to avoid blocking render -->
@@ -83,7 +81,6 @@
     </script>
 
     <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/hero.webp" />
     <meta name="theme-color" content="#DAA520" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -214,18 +211,7 @@
       @media(min-width:1024px){.lg\:text-6xl{font-size:3.75rem}}
     </style>
 
-    <script>
-      document.addEventListener('contextmenu', e => e.preventDefault());
-      document.addEventListener('selectstart', e => e.preventDefault());
-      document.addEventListener('copy', e => e.preventDefault());
-      document.addEventListener('dragstart', e => e.preventDefault());
-      document.addEventListener('keydown', e => {
-        if (e.ctrlKey && ['c','u','s','a'].includes(e.key.toLowerCase())) e.preventDefault();
-        if (e.key === 'F12') e.preventDefault();
-        if (e.ctrlKey && e.shiftKey && ['i','j'].includes(e.key.toLowerCase())) e.preventDefault();
-      });
-    </script>
-
+    
   </head>
 
   <body>

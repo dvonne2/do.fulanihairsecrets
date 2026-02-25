@@ -1,5 +1,5 @@
 import React from 'react';
-import dhtDiagram from '@/assets-optimized/products/1756204944-ChatGPT Image Aug 7, 2025, 08_55_46 PM.webp';
+import dhtDiagram from '@/assets-optimized/products/1756204944-ChatGPT%20Image%20Aug%207,%202025,%2008_55_46%20PM.webp';
 import follicleCloseup from '@/assets-optimized/products/1756205536-3704559303182528.webp';
 
 export const IndustryTruth: React.FC = () => {

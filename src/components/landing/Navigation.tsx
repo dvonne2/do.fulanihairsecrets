@@ -55,7 +55,7 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
         </span>
       </div>
       {/* Main Nav */}
-      <div className="bg-background/95 backdrop-blur-md border-b-2 border-gold/50">
+      <div className="bg-background/95 border-b-2 border-gold/50">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
