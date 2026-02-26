@@ -84,9 +84,10 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
             <a 
               href="#order-form" 
               data-form-cta="true"
-              className="bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white px-4 md:px-8 py-2 md:py-3 btn-luxury font-sans text-xs tracking-widest font-bold rounded-lg"
+              className="bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white px-4 md:px-8 py-2 md:py-3 btn-luxury font-sans text-xs tracking-widest font-bold rounded-lg cta-with-arrow"
             >
               👑 Order Now
+              <span className="arrow-indicator"></span>
             </a>
           </div>
         </div>

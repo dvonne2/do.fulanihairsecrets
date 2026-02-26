@@ -378,23 +378,175 @@ const Index = () => {
             fontFamily: 'Montserrat, sans-serif',
             letterSpacing: '0.3px'
           }}>
-            ★★★★★
           </span>
+        </div>
+        
+        {/* Mobile Verified Review */}
+        <div style={{
+          display: 'none',
+          textAlign: 'center',
+          padding: '4px 0',
+          fontSize: '12px',
+          fontWeight: '600',
+          color: '#2c3e50',
+          fontFamily: 'Montserrat, sans-serif'
+        }} className="md:hidden">
+          12,847 Verified Review
         </div>
         
         <a
           href="#order-form"
           data-form-cta="true"
-          className="cta-button-right"
+          className="cta-button-right cta-with-arrow"
         >
           Click Here To Buy Now
+          <span className="arrow-indicator"></span>
         </a>
+      </div>
+
+      {/* Review Stars with Social Proof */}
+      <div style={{
+        textAlign: 'center',
+        padding: '8px 12px 12px',
+        backgroundColor: '#f8f9fa',
+        borderBottom: '1px solid #e9ecef'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{
+            fontSize: '16px',
+            fontWeight: '700',
+            color: '#2c3e50',
+            fontFamily: 'Montserrat, sans-serif',
+            textAlign: 'center'
+          }}>
+            <span style={{
+              color: '#ffc83d',
+              letterSpacing: '2px',
+              marginRight: '8px'
+            }}>
+              ★★★★★
+            </span>
+            <span style={{
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#2c3e50',
+              marginRight: '12px'
+            }}>
+              4.89/5
+            </span>
+            12,847 Verified Reviews
+          </div>
+        </div>
       </div>
 
       {/* Valentine promo ended - countdown removed */}
       
       <main>
         <TopStoryBanner />
+
+        {/* WHAT TO EXPECT Section */}
+        <section className="py-12 bg-white">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 text-center">
+            <h2 className="font-sans text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+              WHAT TO EXPECT
+            </h2>
+            <div className="max-w-2xl mx-auto space-y-6 text-center">
+              {/* Week 1 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• Your scalp will feel nice and clear</li>
+                  <li>• Hair maybe visually more plumped & hydrated</li>
+                </ul>
+              </div>
+              
+              {/* Week 2 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• Your hair length and density will start to improve</li>
+                  <li>• You will start to get more compliments from people</li>
+                  <li>• Edges will start to grow</li>
+                  <li>• Hair will be more hydrated</li>
+                  <li>• Reduction of hair breakage will start to happen</li>
+                </ul>
+              </div>
+              
+              {/* Week 3 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• You will get an increase in length, density, thickness in your hair</li>
+                  <li>• You will notice you are more confident about your hair</li>
+                  <li>• You will notice dandruff is gone</li>
+                  <li>• You will notice alot of reduction in hair breakage</li>
+                  <li>• You will notice even fuller hair roots</li>
+                  <li>• Hair has grown 2-3 times faster than the normal growing speed</li>
+                </ul>
+              </div>
+              
+              {/* Week 4 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• You won't need to use haircare products as often</li>
+                  <li>• You'll flaunt your natural long, thick, soft hair</li>
+                  <li>• You'll feel younger and more confident</li>
+                  <li>• No More itching of scalp</li>
+                  <li>• Dandruff free guaranteed</li>
+                </ul>
+              </div>
+              
+              {/* Week 5 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• You won't need to use haircare products as often</li>
+                  <li>• You'll flaunt your natural long, thick, soft hair</li>
+                  <li>• You'll feel younger and more confident</li>
+                  <li>• No More itching of scalp</li>
+                  <li>• Dandruff free guaranteed</li>
+                </ul>
+              </div>
+              
+              {/* Week 6 */}
+              <div className="bg-gray-50 rounded-lg p-6 text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="font-sans text-lg font-semibold text-gray-900 mb-3">Download</h3>
+                <ul className="font-sans text-gray-600 text-sm space-y-2 text-center">
+                  <li>• You won't need to use haircare products as often</li>
+                  <li>• You'll flaunt your natural long, thick, soft hair</li>
+                  <li>• You'll feel younger and more confident</li>
+                  <li>• No More itching of scalp</li>
+                  <li>• Dandruff free guaranteed</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <DisqualificationWarning stockCount={stockCount} />
 

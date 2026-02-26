@@ -84,7 +84,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -110,7 +110,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -183,10 +183,11 @@ export const TopStoryBanner = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
+            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
             style={{ fontSize: '20px' }}
           >
             Click Here To Order Now and Get<br/>• 1 Hair Bonnet<br/>• 1 Hair Detangler Spray
+            <span className="arrow-indicator"></span>
           </a>
                     
           {/* Benefits Bullet Points */}
@@ -252,7 +253,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -278,7 +279,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -304,7 +305,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -342,7 +343,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
             fontSize: '31px',
             fontWeight: '700',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'uppercase',
             textDecoration: 'none'
           }}
@@ -366,14 +367,12 @@ export const TopStoryBanner = () => {
           <li 
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '16px',
-              fontWeight: '300',
-              textAlign: 'start',
-              lineHeight: '1.6',
-              textDecoration: 'none',
+              fontWeight: '400',
               textTransform: 'none',
-              marginBottom: '8px'
+              textDecoration: 'none',
+              textAlign: 'center'
             }}
           >
             • Your scalp will feel nice and clear
@@ -381,13 +380,12 @@ export const TopStoryBanner = () => {
           <li 
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '16px',
-              fontWeight: '300',
-              textAlign: 'start',
-              lineHeight: '1.6',
+              fontWeight: '400',
+              textTransform: 'none',
               textDecoration: 'none',
-              textTransform: 'none'
+              textAlign: 'center'
             }}
           >
             • Hair maybe visually more plumped & hydrated
@@ -424,7 +422,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -439,7 +437,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -454,7 +452,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -469,7 +467,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -484,7 +482,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -524,7 +522,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -539,7 +537,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -554,7 +552,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -569,7 +567,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -584,7 +582,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -599,7 +597,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -648,7 +646,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -663,7 +661,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -678,7 +676,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -693,7 +691,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -708,7 +706,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -764,7 +762,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -779,7 +777,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none',
@@ -794,7 +792,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -897,7 +895,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '700',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'none',
             textDecoration: 'none'
           }}
@@ -912,7 +910,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -939,7 +937,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '700',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'none',
             textDecoration: 'none'
           }}
@@ -954,7 +952,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -988,7 +986,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '700',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'none',
             textDecoration: 'none'
           }}
@@ -1003,7 +1001,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1019,7 +1017,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1035,7 +1033,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1051,7 +1049,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1067,7 +1065,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1465,7 +1463,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '24px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'none',
             textDecoration: 'none'
           }}
@@ -1480,7 +1478,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '18px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1496,7 +1494,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '18px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1688,7 +1686,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -1717,7 +1715,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -1732,7 +1730,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -1761,7 +1759,7 @@ export const TopStoryBanner = () => {
               fontFamily: 'Arvo, serif',
               fontSize: '16px',
               fontWeight: '300',
-              textAlign: 'start',
+              textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
               textTransform: 'none'
@@ -1863,7 +1861,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '28px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             textTransform: 'none',
             textDecoration: 'none'
           }}
@@ -1878,7 +1876,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1894,7 +1892,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1910,7 +1908,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1926,7 +1924,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1942,7 +1940,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1958,7 +1956,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1974,7 +1972,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -1990,7 +1988,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -2006,7 +2004,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -2022,7 +2020,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -2038,7 +2036,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'
@@ -2054,7 +2052,7 @@ export const TopStoryBanner = () => {
             fontFamily: 'Arvo, serif',
             fontSize: '16px',
             fontWeight: '300',
-            textAlign: 'start',
+            textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
             textTransform: 'none'

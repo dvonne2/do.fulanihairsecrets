@@ -73,21 +73,21 @@ export const Footer = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group"
+            className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group cta-with-arrow"
             style={{
               animation: 'bling-pulse 2s ease-in-out infinite',
-              boxShadow: '0 0 20px rgba(184, 15, 102, 0.5), 0 0 40px rgba(184, 15, 102, 0.3)'
+              background: 'linear-gradient(90deg, #5ec239 0%, #4cae4e 50%, #5ec239 100%)',
+              backgroundSize: '200% 100%',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundPosition = 'left center';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundPosition = 'right center';
             }}
           >
-            {/* Animated sparkles */}
-            <span className="absolute inset-0 overflow-hidden rounded-xl">
-              <span className="absolute top-0 left-0 w-2 h-2 bg-yellow-300 rounded-full animate-ping" style={{ animationDelay: '0s', top: '20%', left: '10%' }}></span>
-              <span className="absolute top-0 right-0 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s', top: '30%', right: '15%' }}></span>
-              <span className="absolute bottom-0 left-0 w-2 h-2 bg-yellow-200 rounded-full animate-ping" style={{ animationDelay: '1s', bottom: '25%', left: '20%' }}></span>
-              <span className="absolute bottom-0 right-0 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1.5s', bottom: '20%', right: '10%' }}></span>
-            </span>
-            
-            {/* Shimmer effect */}
+            <span className="relative z-10">ORDER NOW PAY ON DELIVERY</span>
+            <span className="arrow-indicator"></span>
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 group-hover:translate-x-full transition-transform duration-1000 ease-out"
               style={{ transform: 'translateX(-100%)' }}
             ></span>

@@ -60,8 +60,24 @@
   transform: scale(1.05);
 }
 
-.cta-button-right {
+.cta-button-right,
+[class*="bg-[#5ec239]"],
+[class*="bg-[#5DC238]"],
+[class*="bg-[#4cae4e]"],
+[class*="from-[#5ec239]"],
+[class*="from-[#5DC238]"],
+[class*="from-[#4cae4e]"] {
   animation: subtle-pulse 3s ease-in-out infinite;
+}
+
+.cta-button-right:hover,
+[class*="bg-[#5ec239]"]:hover,
+[class*="bg-[#5DC238]"]:hover,
+[class*="bg-[#4cae4e]"]:hover,
+[class*="from-[#5ec239]"]:hover,
+[class*="from-[#5DC238]"]:hover,
+[class*="from-[#4cae4e]"]:hover {
+  color: #000000 !important;
 }
 
 @keyframes subtle-pulse {
@@ -73,6 +89,37 @@
     transform: scale(1.02);
     box-shadow: 0 0 0 8px rgba(93, 194, 56, 0.1);
   }
+}
+
+/* Directional Arrow Styles */
+.arrow-indicator {
+  display: inline-block;
+  margin-left: 8px;
+  animation: arrow-bounce 2s ease-in-out infinite;
+}
+
+.arrow-indicator::after {
+  content: '→';
+  color: inherit;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+@keyframes arrow-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+}
+
+/* Arrow on hover for CTAs */
+.cta-with-arrow:hover .arrow-indicator {
+  animation: arrow-bounce 0.5s ease-in-out infinite;
 }
 
 @media (max-width: 768px) {
