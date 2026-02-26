@@ -17,7 +17,7 @@ const footerImages = [result1, result2, result3, result4, result5, result6, resu
 
 export const Footer = () => {
   return (
-    <footer className="py-12 bg-gray-50 border-t border-gray-200">
+    <footer className="py-12 border-t border-gray-200 footer-green">
       <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
         {/* Result Images Row */}
         <div className="mb-8">
@@ -73,7 +73,7 @@ export const Footer = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#B80F66] to-[#D30000] text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group"
+            className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group"
             style={{
               animation: 'bling-pulse 2s ease-in-out infinite',
               boxShadow: '0 0 20px rgba(184, 15, 102, 0.5), 0 0 40px rgba(184, 15, 102, 0.3)'

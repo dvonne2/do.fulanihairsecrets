@@ -362,25 +362,22 @@ const Index = () => {
       </div>
 
       {/* FULANI HAIR GRO Branding */}
-      <div style={{
-        padding: '20px 12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <a 
-          href="#"
-          style={{
-            color: '#A3A3A3',
-            fontSize: '20px',
-            fontWeight: '400',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-            textTransform: 'uppercase',
-            textDecoration: 'none',
-            textAlign: 'center',
-          }}
+      <div className="branding-container">
+        <div className="branding-center">
+          <a 
+            href="#"
+            className="branding-text"
+          >
+            FULANI HAIR GRO
+          </a>
+        </div>
+        
+        <a
+          href="#order-form"
+          data-form-cta="true"
+          className="cta-button-right"
         >
-          FULANI HAIR GRO
+          Click Here To Buy Now
         </a>
       </div>
 

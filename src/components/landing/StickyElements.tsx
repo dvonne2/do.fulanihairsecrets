@@ -63,7 +63,7 @@ export const StickyElements = ({
       >
         <div
           style={{
-            background: '#DAA520',
+            background: '#5ec239',
             padding: '10px 16px',
             paddingBottom: 'max(10px, env(safe-area-inset-bottom))',
             display: 'flex',
