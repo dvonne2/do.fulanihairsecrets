@@ -304,12 +304,12 @@ const Index = () => {
       {/* Trust Bar */}
       <div style={{
         background: '#000000',
-        padding: '8px 12px',
+        padding: '4px 8px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '24px',
-        flexWrap: 'wrap',
+        flexWrap: 'nowrap',
       }}>
         <span style={{
           color: '#FFFFFF',

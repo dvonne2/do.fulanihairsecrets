@@ -39,12 +39,12 @@ export const TopStoryBanner = () => {
     >
       <div className="mx-auto text-center">
         <p className="jandes-eyebrow text-black mb-6">
-          "Within 14 days of using Fulani Hair Gro, I began noticing tiny hairs on my edges." — Mrs. Ololade, Ikoyi
+          GROW YOUR FuLLER LONGER THICKER HAIR WITH FULANI HAIR GRO
         </p>
         <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
-          <h2 className="jandes-headline text-3xl md:text-5xl lg:text-6xl leading-snug text-[#B80F66] uppercase">
+          <h7 className="jandes-headline text-2xl md:text-3xl lg:text-4xl leading-tight text-[#B80F66] uppercase font-bold">
             Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
-          </h2>
+          </h7>
         </div>
 
         {/* Bundle Image */}
@@ -61,26 +61,27 @@ export const TopStoryBanner = () => {
           Cheaper Than A Hair Transplant In Turkey
         </p>
 
+        {/* Hero CTA — moved here */}
+        <div className="mt-6 text-center">
+          <a
+            href="#order-form"
+            data-form-cta="true"
+            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
+            style={{ fontSize: '20px' }}
+          >
+            ORDER NOW →
+            <span className="arrow-indicator"></span>
+          </a>
+        </div>
+
+        {/* ChatGPT Image */}
         <div className="mt-6">
-          <picture>
-            <source
-              media="(max-width: 767px)"
-              srcSet={heroMobile}
-              type="image/png"
-            />
-            <source
-              srcSet={heroFulani}
-              type="image/png"
-            />
-            <img
-              src={heroFulani}
-              alt="Fulani Hair Gro hero"
-              width={864}
-              height={864}
-              className="w-full h-auto"
-              {...({ fetchpriority: 'high' } as any)}
-            />
-          </picture>
+          <img
+            src={`${BASE_PATH}assets/ChatGPT%20Image%20Feb%2024,%202026,%2011_21_10%20PM.png`}
+            alt="ChatGPT Image"
+            className="w-full h-auto"
+            loading="lazy"
+          />
         </div>
 
         <div className="mt-8 text-left">
@@ -188,19 +189,7 @@ export const TopStoryBanner = () => {
           />
         </div>
 
-        {/* Hero CTA — smooth scroll to form after proof sections */}
-        <div className="mt-8 text-center">
-          <a
-            href="#order-form"
-            data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
-            style={{ fontSize: '20px' }}
-          >
-            Click Here To Order Now and Get<br/>• 1 Hair Bonnet<br/>• 1 Hair Detangler Spray
-            <span className="arrow-indicator"></span>
-          </a>
-                    
-          {/* Benefits Bullet Points */}
+        {/* Benefits Bullet Points */}
           <div className="mt-6 text-left">
             <div className="inline-flex flex-col items-start gap-2">
               <div className="flex items-center gap-2">
@@ -1240,6 +1229,29 @@ export const TopStoryBanner = () => {
         
         {/* Our Happy Customers Section */}
         <div className="mt-12 mb-8">
+          {/* Hero Image */}
+          <div className="mb-6">
+            <picture>
+              <source
+                media="(max-width: 767px)"
+                srcSet={heroMobile}
+                type="image/png"
+              />
+              <source
+                srcSet={heroFulani}
+                type="image/png"
+              />
+              <img
+                src={heroFulani}
+                alt="Fulani Hair Gro hero"
+                width={864}
+                height={864}
+                className="w-full h-auto"
+                {...({ fetchpriority: 'high' } as any)}
+              />
+            </picture>
+          </div>
+
           <h2 
             className="text-center mb-4"
             style={{
@@ -2159,16 +2171,6 @@ export const TopStoryBanner = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* ChatGPT Image */}
-        <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/ChatGPT%20Image%20Feb%2024,%202026,%2011_21_10%20PM.png`}
-            alt="ChatGPT Image"
-            className="w-full h-auto"
-            loading="lazy"
-          />
         </div>
 
         {/* How To Place Your Order Section */}
