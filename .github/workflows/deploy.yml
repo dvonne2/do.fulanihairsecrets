@@ -20,5 +20,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 21098
           source: "./"
           target: "/home/fulamwhx/public_html"
