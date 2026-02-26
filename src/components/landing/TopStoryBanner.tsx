@@ -2610,7 +2610,6 @@ export const TopStoryBanner = () => {
             </p>
           </div>
         </section>
-      </div>
     </section>
   );
 };
