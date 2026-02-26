@@ -142,6 +142,31 @@ export const TopStoryBanner = () => {
           </div>
         </div>
 
+        {/* Limited Time Sale Banner */}
+        <div className="mt-4 text-center">
+          <span 
+            style={{
+              color: '#ff0000',
+              fontWeight: '700',
+              fontStyle: 'normal',
+              fontVariant: 'normal',
+              fontKerning: 'auto',
+              fontOpticalSizing: 'auto',
+              fontStretch: '100%',
+              fontVariationSettings: 'normal',
+              fontFeatureSettings: 'normal',
+              textTransform: 'none',
+              textDecoration: 'none',
+              textAlign: 'left',
+              textIndent: '0px',
+              fontSize: '18px',
+              letterSpacing: '0.5px'
+            }}
+          >
+            LIMITED TIME - SALE ENDS TONIGHT
+          </span>
+        </div>
+
         {/* ChatGPT Image above first CTA */}
         <div className="mt-6 flex justify-center">
           <img

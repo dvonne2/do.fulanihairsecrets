@@ -363,13 +363,23 @@ const Index = () => {
 
       {/* FULANI HAIR GRO Branding */}
       <div className="branding-container">
-        <div className="branding-center">
+        <div className="branding-center" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <a 
             href="#"
             className="branding-text"
+            style={{ margin: 0 }}
           >
             FULANI HAIR GRO
           </a>
+          <span style={{
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#ffc83d',
+            fontFamily: 'Montserrat, sans-serif',
+            letterSpacing: '0.3px'
+          }}>
+            ★★★★★
+          </span>
         </div>
         
         <a
