@@ -39,7 +39,7 @@ export const TopStoryBanner = () => {
     >
       <div className="mx-auto text-center">
         <p className="jandes-eyebrow text-black mb-6">
-          GROW YOUR FuLLER LONGER THICKER HAIR WITH FULANI HAIR GRO
+          GROW FuLLER, LONGER, THICKER HAIR WITH FULANI HAIR GRO
         </p>
         
         {/* Bundle Image */}
@@ -134,13 +134,28 @@ export const TopStoryBanner = () => {
         </div>
 
           {/* Additional Benefits Bullet Points */}
+          <p 
+            className="mt-6 text-center"
+            style={{
+              color: '#0A0A0A',
+              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontSize: '18px',
+              fontWeight: '600',
+              textTransform: 'none',
+              textDecoration: 'none',
+              textAlign: 'center'
+            }}
+          >
+            After 3 months of use -
+          </p>
+          
           <ul className="mt-6 list-none p-0">
             <li 
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -152,8 +167,8 @@ export const TopStoryBanner = () => {
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -165,8 +180,8 @@ export const TopStoryBanner = () => {
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -178,8 +193,8 @@ export const TopStoryBanner = () => {
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -191,8 +206,8 @@ export const TopStoryBanner = () => {
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -204,8 +219,8 @@ export const TopStoryBanner = () => {
               style={{
                 color: '#0A0A0A',
                 fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
+                fontSize: '18px',
+                fontWeight: '600',
                 textTransform: 'none',
                 textDecoration: 'none',
                 textAlign: 'center'
@@ -247,8 +262,8 @@ export const TopStoryBanner = () => {
             style={{
               color: '#0A0A0A',
               fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
+              fontSize: '18px',
+              fontWeight: '600',
               textTransform: 'none',
               textDecoration: 'none',
               textAlign: 'center'
@@ -260,8 +275,8 @@ export const TopStoryBanner = () => {
             style={{
               color: '#0A0A0A',
               fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
+              fontSize: '18px',
+              fontWeight: '600',
               textTransform: 'none',
               textDecoration: 'none',
               textAlign: 'center'
@@ -273,8 +288,8 @@ export const TopStoryBanner = () => {
             style={{
               color: '#0A0A0A',
               fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
+              fontSize: '18px',
+              fontWeight: '600',
               textTransform: 'none',
               textDecoration: 'none',
               textAlign: 'center'
@@ -286,8 +301,8 @@ export const TopStoryBanner = () => {
             style={{
               color: '#0A0A0A',
               fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
+              fontSize: '18px',
+              fontWeight: '600',
               textTransform: 'none',
               textDecoration: 'none',
               textAlign: 'center'
@@ -299,8 +314,8 @@ export const TopStoryBanner = () => {
             style={{
               color: '#0A0A0A',
               fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
+              fontSize: '18px',
+              fontWeight: '600',
               textTransform: 'none',
               textDecoration: 'none',
               textAlign: 'center'
@@ -338,7 +353,7 @@ export const TopStoryBanner = () => {
             HOW TO USE:
           </strong>
           
-          <p 
+          <div 
             className="mt-6 text-left"
             style={{
               color: '#0A0A0A',
@@ -352,14 +367,26 @@ export const TopStoryBanner = () => {
               margin: '0 auto'
             }}
           >
-            For best results, apply shampoo generously (as regularly as you like) to your scalp & hair and leave it on for around 5 minutes, allowing the ingredients to deeply saturate your tresses then wash off.<br/><br/>
-            apply hair pomade to your scalp once a week and massage throughly, allowing the ingredients to deeply saturate your tresses
-          </p>
+            <p style={{ margin: '0 0 12px 0' }}>
+              <strong>Shampoo:</strong><br/>
+              Apply generously to scalp and hair. Leave for 3–5 minutes. Rinse thoroughly.
+            </p>
+            
+            <p style={{ margin: '0 0 12px 0' }}>
+              <strong>Conditioner:</strong><br/>
+              Apply to damp hair. Leave for 3–5 minutes. Rinse out.
+            </p>
+            
+            <p style={{ margin: '0 0 0 0' }}>
+              <strong>Pomade:</strong><br/>
+              Apply to scalp once daily. Massage gently. Do not rinse.
+            </p>
+          </div>
         </div>
 
                   </div>
 
-        <div className="mt-8 text-left">
+        <div className="mt-8 text-center">
           <strong 
             className="block"
             style={{
@@ -379,13 +406,17 @@ export const TopStoryBanner = () => {
               margin: '0 auto'
             }}
           >
-            WHY CHOOSE FULANI HAIR GRO
+            WHY CHOOSE FULANI HAIR GRO?
           </strong>
           
           <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10 mt-6 mb-6">
-            <h7 className="jandes-headline text-2xl md:text-3xl lg:text-4xl leading-tight text-[#B80F66] uppercase font-bold text-center">
-              Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
-            </h7>
+            <blockquote className="text-center">
+              <p className="leading-tight text-[#B80F66] uppercase font-bold relative" style={{ fontSize: '14px' }}>
+                <span className="absolute -left-4 -top-2 text-4xl text-[#B80F66] opacity-30">"</span>
+                Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
+                <span className="absolute -right-4 -bottom-2 text-4xl text-[#B80F66] opacity-30">"</span>
+              </p>
+            </blockquote>
           </div>
           
           <p className="font-semibold text-xl md:text-2xl leading-snug text-black">
@@ -436,22 +467,22 @@ export const TopStoryBanner = () => {
 
         {/* Guarantee Bullet Points */}
         <div className="mt-6 text-center">
-          <div className="inline-flex flex-col items-center gap-2">
+          <div className="inline-flex flex-col sm:flex-row items-center justify-center flex-wrap gap-2 sm:gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-green-600">✅</span>
-              <span className="text-black font-medium">PAYMENT ON DELIVERY</span>
+              <span className="text-green-600 text-sm sm:text-base">✅</span>
+              <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">PAYMENT ON DELIVERY</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-green-600">✅</span>
-              <span className="text-black font-medium">30 Days Money Back Guarantee</span>
+              <span className="text-green-600 text-sm sm:text-base">✅</span>
+              <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">30 Days Money Back Guarantee</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-green-600">✅</span>
-              <span className="text-black font-medium">Grows Hair Like Magic</span>
+              <span className="text-green-600 text-sm sm:text-base">✅</span>
+              <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">Grows Hair Like Magic</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-green-600">✅</span>
-              <span className="text-black font-medium">1-Year Hair Growth Expert Support</span>
+              <span className="text-green-600 text-sm sm:text-base">✅</span>
+              <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">1-Year Hair Growth Expert Support</span>
             </div>
           </div>
         </div>
@@ -516,22 +547,22 @@ export const TopStoryBanner = () => {
           
           {/* Guarantee Bullet Points */}
           <div className="mt-6 text-center">
-            <div className="inline-flex flex-col items-center gap-2">
+            <div className="inline-flex flex-col sm:flex-row items-center justify-center flex-wrap gap-2 sm:gap-4">
               <div className="flex items-center gap-2">
-                <span className="text-green-600">✅</span>
-                <span className="text-black font-medium">PAYMENT ON DELIVERY</span>
+                <span className="text-green-600 text-sm sm:text-base">✅</span>
+                <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">PAYMENT ON DELIVERY</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-600">✅</span>
-                <span className="text-black font-medium">30 Days Money Back Guarantee</span>
+                <span className="text-green-600 text-sm sm:text-base">✅</span>
+                <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">30 Days Money Back Guarantee</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-600">✅</span>
-                <span className="text-black font-medium">Grows Hair Like Magic</span>
+                <span className="text-green-600 text-sm sm:text-base">✅</span>
+                <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">Grows Hair Like Magic</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-600">✅</span>
-                <span className="text-black font-medium">1-Year Hair Growth Expert Support</span>
+                <span className="text-green-600 text-sm sm:text-base">✅</span>
+                <span className="text-black font-medium text-sm sm:text-base whitespace-nowrap">1-Year Hair Growth Expert Support</span>
               </div>
             </div>
           </div>
