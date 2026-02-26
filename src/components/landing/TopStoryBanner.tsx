@@ -41,12 +41,7 @@ export const TopStoryBanner = () => {
         <p className="jandes-eyebrow text-black mb-6">
           GROW YOUR FuLLER LONGER THICKER HAIR WITH FULANI HAIR GRO
         </p>
-        <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10">
-          <h7 className="jandes-headline text-2xl md:text-3xl lg:text-4xl leading-tight text-[#B80F66] uppercase font-bold">
-            Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
-          </h7>
-        </div>
-
+        
         {/* Bundle Image */}
         <div className="mt-6">
           <img
@@ -94,7 +89,14 @@ export const TopStoryBanner = () => {
               fontWeight: '700',
               textAlign: 'center',
               textTransform: 'uppercase',
-              textDecoration: 'none'
+              textDecoration: 'none',
+              border: '3px solid #DAA520',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              backgroundColor: '#FFF8DC',
+              display: 'inline-block',
+              width: 'auto',
+              margin: '0 auto'
             }}
           >
             WHAT TO EXPECT
@@ -355,38 +357,37 @@ export const TopStoryBanner = () => {
           </p>
         </div>
 
-          {/* Expectations Bullet Points */}
-          <ul className="mt-6 list-none p-0">
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • Your scalp will feel nice and clear
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • Hair maybe visually more plumped & hydrated
-            </li>
-          </ul>
-        </div>
+                  </div>
 
         <div className="mt-8 text-left">
+          <strong 
+            className="block"
+            style={{
+              color: '#0A0A0A',
+              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontSize: '31px',
+              fontWeight: '700',
+              textAlign: 'center',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              border: '3px solid #DAA520',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              backgroundColor: '#FFF8DC',
+              display: 'inline-block',
+              width: 'auto',
+              margin: '0 auto'
+            }}
+          >
+            WHY CHOOSE FULANI HAIR GRO
+          </strong>
+          
+          <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10 mt-6 mb-6">
+            <h7 className="jandes-headline text-2xl md:text-3xl lg:text-4xl leading-tight text-[#B80F66] uppercase font-bold text-center">
+              Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO
+            </h7>
+          </div>
+          
           <p className="font-semibold text-xl md:text-2xl leading-snug text-black">
             The ancient Fulani secret that finally treats the root cause of thinning hair edges
           </p>
@@ -627,480 +628,7 @@ export const TopStoryBanner = () => {
           </a>
         </div>
         
-        <strong 
-          className="mt-6 block"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-            fontSize: '31px',
-            fontWeight: '700',
-            textAlign: 'center',
-            textTransform: 'uppercase',
-            textDecoration: 'none'
-          }}
-        >
-            WHAT TO EXPECT
-          </strong>
-
-            {/* Download (3) Image */}
-            {/* <div className="mt-6 flex justify-center">
-              <img
-                src={`${BASE_PATH}assets/download%20(3).avif`}
-                alt="Download"
-                className="w-auto h-auto max-w-md"
-                style={{ maxWidth: '400px' }}
-                loading="lazy"
-              />
-            </div> */}
-            
-            {/* Expectations Bullet Points */}
-            <ul className="mt-6 list-none p-0">
-              <li 
-                style={{
-                  color: '#0A0A0A',
-                  fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                  fontSize: '16px',
-                  fontWeight: '400',
-                  textTransform: 'none',
-                  textDecoration: 'none',
-                  textAlign: 'center'
-                }}
-              >
-                • Your scalp will feel nice and clear
-              </li>
-              <li 
-                style={{
-                  color: '#0A0A0A',
-                  fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                  fontSize: '16px',
-                  fontWeight: '400',
-                  textTransform: 'none',
-                  textDecoration: 'none',
-                  textAlign: 'center'
-                }}
-              >
-                • Hair maybe visually more plumped & hydrated
-              </li>
-            </ul>
-
-        {/* 1a GIF */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/1a.gif`}
-            alt="1a GIF"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Download (4) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(4).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
         
-        {/* After 1 Month Section */}
-        <p 
-          className="mt-6 text-center"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-            fontSize: '18px',
-            fontWeight: '600',
-            textTransform: 'none',
-            textDecoration: 'none',
-            textAlign: 'center'
-          }}
-        >
-          After 1 month:
-        </p>
-        
-        {/* Additional Benefits Bullet Points */}
-        <ul className="mt-6 list-none p-0">
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Your hair length and density will start to improve
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will start to get more compliments from people
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Edges will start to grow
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Hair will be more hydrated
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Reduction of hair breakage will start to happen
-          </li>
-        </ul>
-
-        {/* Download (5) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(5).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Download (7) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(7).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-        
-        {/* Week 2-3 Benefits Bullet Points */}
-        <ul className="mt-6 list-none p-0">
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will get an increase in length, density, thickness in your hair
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will notice you are more confident about your hair
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will notice dandruff is gone
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will notice alot of reduction in hair breakage
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will notice even fuller hair roots
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Hair has grown 2-3 times faster than the normal growing speed
-          </li>
-        </ul>
-
-        {/* Additional Long-term Benefits */}
-        <ul className="mt-6 list-none p-0">
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You won't need to use haircare products as often
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You'll flaunt your natural long, thick, soft hair
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You'll feel younger and more confident
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • No More itching of scalp
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Dandruff free guaranteed
-          </li>
-        </ul>
-
-        {/* HOW TO USE Section */}
-        <div className="mt-12 text-center">
-          <strong 
-            className="block"
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '24px',
-              fontWeight: '700',
-              textAlign: 'center',
-              textTransform: 'uppercase',
-              textDecoration: 'none'
-            }}
-          >
-            HOW TO USE:
-          </strong>
-          
-          <p 
-            className="mt-6 text-left"
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              lineHeight: '1.6',
-              maxWidth: '600px',
-              margin: '0 auto'
-            }}
-          >
-            For best results, apply shampoo generously (as regularly as you like) to your scalp & hair and leave it on for around 5 minutes, allowing the ingredients to deeply saturate your tresses then wash off.<br/><br/>
-            apply hair pomade to your scalp once a week and massage throughly, allowing the ingredients to deeply saturate your tresses
-          </p>
-        </div>
-
-        {/* Download (6) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(6).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Download (8) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(8).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-        
-        {/* Long-term Benefits Bullet Points */}
-        <ul className="mt-6 list-none p-0">
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will get 2x more hair length and density
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will be able to style your hair in different ways
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will feel more beautiful and confident
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will get more attention from people
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You will be able to go out without feeling self conscious
-          </li>
-        </ul>
-
-        {/* Download (9) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(9).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-lg"
-            style={{ maxWidth: '600px' }}
-            loading="lazy"
-          />
-        </div>
-
         {/* Download (10) Image */}
         <div className="mt-6 flex justify-center">
           <img
