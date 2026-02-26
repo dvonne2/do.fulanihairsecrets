@@ -25,4 +25,4 @@ jobs:
           local-dir: ./
           server-dir: /home/fulamwhx/public_html/
           timeout: 190000
-          security: loose/home/fulamwhx/public_html
+          security: loose
