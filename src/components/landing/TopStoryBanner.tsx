@@ -47,6 +47,16 @@ export const TopStoryBanner = () => {
           </h2>
         </div>
 
+        {/* Bundle Image */}
+        <div className="mt-6">
+          <img
+            src={`${BASE_PATH}assets/66750-bundle.webp`}
+            alt="Product Bundle"
+            className="w-full h-auto"
+            loading="lazy"
+          />
+        </div>
+
         <p className="mt-6 jandes-quote text-lg md:text-xl text-black max-w-3xl mx-auto leading-relaxed">
           Cheaper Than A Hair Transplant In Turkey
         </p>
@@ -233,16 +243,6 @@ export const TopStoryBanner = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Bundle Image */}
-        <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/66750-bundle.webp`}
-            alt="Product Bundle"
-            className="w-full h-auto"
-            loading="lazy"
-          />
         </div>
         
         {/* Hajara Personal Story */}

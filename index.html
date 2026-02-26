@@ -63,8 +63,16 @@
       // Generate event_id for PageView dedup (browser pixel + server CAPI)
       window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
       fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
-      // Facebook Pixel script disabled to prevent proxy authentication popup
-      // The Meta CAPI server-side tracking handles all events without client-side pixel
+      
+      // Load Facebook Pixel script (async, non-blocking)
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
     </script>
     
     <!-- GA4: defer load like FB Pixel to avoid blocking render -->
