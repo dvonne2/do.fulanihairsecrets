@@ -74,8 +74,68 @@ export const TopStoryBanner = () => {
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
             style={{ fontSize: '20px' }}
           >
-            🛒 ORDER NOW
+            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
           </a>
+        </div>
+
+        {/* Is This You? Section */}
+        <div className="mt-12 text-center">
+          <strong 
+            className="block"
+            style={{
+              color: '#0A0A0A',
+              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontSize: '31px',
+              fontWeight: '700',
+              fontStyle: 'normal',
+              fontVariant: 'normal',
+              fontKerning: 'auto',
+              fontOpticalSizing: 'auto',
+              fontStretch: '100%',
+              fontVariationSettings: 'normal',
+              fontFeatureSettings: 'normal',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              textAlign: 'center',
+              textIndent: '0px',
+              backgroundColor: '#FFF8DC',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              display: 'inline-block',
+              width: 'auto',
+              margin: '0 auto'
+            }}
+          >
+            💔 Is This You?
+          </strong>
+        </div>
+
+        {/* Pain Points Section */}
+        <div className="mt-12 text-center" style={{
+          color: '#0A0A0A', 
+          fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif', 
+          fontSize: '21px', 
+          lineHeight: '1.6',
+          fontWeight: '400',
+          fontStyle: 'normal',
+          fontVariant: 'normal',
+          fontKerning: 'auto',
+          fontOpticalSizing: 'auto',
+          fontStretch: '100%',
+          fontVariationSettings: 'normal',
+          fontFeatureSettings: 'normal',
+          textTransform: 'none',
+          textDecoration: 'none',
+          textAlign: 'start',
+          textIndent: '0px'
+        }}>
+          <p style={{marginBottom: '12px'}}>👉🏽 During intimate moments, are you constantly worried your wig might shift… and he'll finally see your real hairline?</p>
+          <p style={{marginBottom: '12px'}}>👉🏽 Are your edges disappearing, and you're secretly scared they may never grow back — especially after childbirth or as you've entered menopause?</p>
+          <p style={{marginBottom: '12px'}}>👉🏽 After becoming a mum or noticing hormonal changes, did your hair start thinning and never fully recover?</p>
+          <p style={{marginBottom: '12px'}}>👉🏽 Have you spent thousands on products that promised growth… yet your hairline is still slowly moving backwards and your hair keeps breaking?</p>
+          <p style={{marginBottom: '12px'}}>👉🏽 After braids, did your edges never fully come back?</p>
+          <p style={{marginBottom: '12px'}}>👉🏽 Can't you do the hairstyles you really want because they won't properly cover your temple area?</p>
+          <p style={{marginBottom: '24px'}}>👉🏽 Can you no longer confidently pack your natural hair without feeling exposed?</p>
         </div>
 
         {/* WHAT TO EXPECT Section */}
@@ -419,7 +479,18 @@ export const TopStoryBanner = () => {
             </blockquote>
           </div>
           
-          <p className="font-semibold text-xl md:text-2xl leading-snug text-black">
+          <p 
+            style={{
+              color: '#0A0A0A',
+              fontFamily: 'Arvo, serif',
+              fontSize: '16px',
+              fontWeight: '300',
+              textAlign: 'center',
+              lineHeight: '1.6',
+              textDecoration: 'none',
+              textTransform: 'none'
+            }}
+          >
             Fulani women are known for long hair, right? It's not by luck. It's not by "good genes" only. These women take their hair seriously. Herbs. Oils. Routine. Discipline. It's tradition.
           </p>
           
@@ -475,7 +546,17 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          I have my grandma's blessing to help women with this combination of herbs that my ancestors have used to grow their hair for centuries.
+          Fast forward after my second baby… ah.
+
+My hair disgraced me.
+
+My edges vanished. Both sides smooth like I polished it. Proper Iya eko situation. My scalp was itching like crazy. The dandruff was not small flakes o. The type that if you scratch, blood will almost come out. My hair became thin. Flat. No volume.
+
+I panicked.
+
+I bought premium shampoos. I did treatments. I went to my trichologist friend (yes, the same one that is now my co-founder). She checked everything and said it was hormones. She said stop wigs. Stop combing too much. Eat vegetables.
+
+I did all that.
         </p>
 
         {/* Fulani GIF */}
@@ -501,7 +582,37 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          My co-founder (a London trained tricologist) and I have successfully combined modern science and African herbs to create unique products that doesn't just work now but as worked for centuries.
+          Still nothing.
+
+By the time I turned 33, my grandfather passed. We travelled to Maiduguri for the burial. Very emotional time.
+
+Two days after the burial, my grandmother — 72 years old o — woke me up early morning and handed me one local shampoo and one pomade.
+
+She just said, "Use it once a week. Don't stop."
+
+That's it.
+
+No big explanation.
+
+I said okay.
+
+I started using it consistently.
+
+Before I knew it, the itching reduced. The dandruff cleared. Small small hairs started showing. My edges started filling up again. My hair became thicker.
+
+That was when I realized… these women were not playing all these years.
+
+With my grandmother's blessing, I carried that same herbal combination and worked with my co-founder (London-trained trichologist) to refine it properly with science.
+
+So when you choose Fulani Hair Gro, you're not buying vibes.
+
+You're using something that:
+
+Fulani women have used for generations.
+I personally used when my own hair was failing me.
+And we have now refined with proper scientific knowledge.
+
+This thing is not hype.
         </p>
 
         {/* Download (2) Image */}
@@ -514,6 +625,54 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
           />
         </div>
 
+        <p 
+          className="mt-6"
+          style={{
+            color: '#0A0A0A',
+            fontFamily: 'Arvo, serif',
+            fontSize: '16px',
+            fontWeight: '300',
+            textAlign: 'center',
+            lineHeight: '1.6',
+            textDecoration: 'none',
+            textTransform: 'none'
+          }}
+        >
+          It's heritage with sense.
+        </p>
+
+        <p 
+          className="mt-6"
+          style={{
+            color: '#0A0A0A',
+            fontFamily: 'Arvo, serif',
+            fontSize: '16px',
+            fontWeight: '300',
+            textAlign: 'center',
+            lineHeight: '1.6',
+            textDecoration: 'none',
+            textTransform: 'none'
+          }}
+        >
+          And if it brought my edges back from the dead, imagine what it can do for you.
+        </p>
+
+        <p 
+          className="mt-6"
+          style={{
+            color: '#0A0A0A',
+            fontFamily: 'Arvo, serif',
+            fontSize: '16px',
+            fontWeight: '300',
+            textAlign: 'center',
+            lineHeight: '1.6',
+            textDecoration: 'none',
+            textTransform: 'none'
+          }}
+        >
+          — Hajara 😌
+        </p>
+
         {/* Additional CTA Button */}
         <div className="mt-8 text-center">
           <a
@@ -522,7 +681,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
-            Click Here To Order Now and Get<br/>• 1 Hair Bonnet<br/>• 1 Hair Detangler Spray
+            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
           </a>
         </div>
         
@@ -551,32 +710,11 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textAlign: 'center'
           }}
         >
-          Net Shampoo Content: 500ml<br/>
-          Net Pomade Content: 150ml
+          Net Shampoo Content: 500ml
         </p>
 
-        {/* Download (11) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(11).avif`}
-            alt="Download"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
-
-        {/* 1ezgif Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/1ezgif-4-7ec1374048a8%20(2).gif`}
-            alt="1ezgif"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
         
+                
         <strong 
           className="mt-6 block"
           style={{
@@ -638,7 +776,17 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          Even though my ancestors have kept this secret very close to their heart. I have my grandma's blessing to help women with this combination of herbs that my ancestors have used to grow their hair for centuries.
+          Fast forward after my second baby… ah.
+
+My hair disgraced me.
+
+My edges vanished. Both sides smooth like I polished it. Proper Iya eko situation. My scalp was itching like crazy. The dandruff was not small flakes o. The type that if you scratch, blood will almost come out. My hair became thin. Flat. No volume.
+
+I panicked.
+
+I bought premium shampoos. I did treatments. I went to my trichologist friend (yes, the same one that is now my co-founder). She checked everything and said it was hormones. She said stop wigs. Stop combing too much. Eat vegetables.
+
+I did all that.
         </p>
 
         {/* Mung Bean and Red Clover Image */}
@@ -787,8 +935,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          *https://www.ncbi.nlm.nih.gov/pubmed/23449130
-        </p>
+                  </p>
         
         <p 
           className="mt-6"
@@ -803,8 +950,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          *https://www.ncbi.nlm.nih.gov/pubmed/23098745
-        </p>
+                  </p>
         
         <p 
           className="mt-6"
@@ -819,8 +965,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          *https://www.ncbi.nlm.nih.gov/pubmed/23098745
-        </p>
+                  </p>
         
         <p 
           className="mt-6"
@@ -835,8 +980,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             textTransform: 'none'
           }}
         >
-          **https://www.ncbi.nlm.nih.gov/pubmed/27213821
-        </p>
+                  </p>
         
         <strong 
           className="mt-6 block"
@@ -901,17 +1045,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
           Net Pomade Content: 150ml
         </p>
 
-        {/* Download (11) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(11).avif`}
-            alt="Download"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
-
+        
                 
         <strong 
           className="mt-6 block"
@@ -1176,7 +1310,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
-            Click Here To Order Now and Get<br/>• 1 Hair Bonnet<br/>• 1 Hair Detangler Spray
+            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
           </a>
         </div>
 
@@ -1392,7 +1526,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
                   fontSize: 'clamp(16px, 1.5vw, 20px)',
                   lineHeight: '1.55'
                 }}>
-                  Click the <b><u>Buy Now</u></b> button to order from us via our website form or our WhatsApp or call
+                  Click the <b><u><a href="#order-form" onClick={(e) => { e.preventDefault(); document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} style={{ color: '#14532d', cursor: 'pointer', textDecoration: 'underline' }}>Buy Now</a></u></b> button to order from us via our website form or our WhatsApp or call
                 </p>
               </div>
 
@@ -1656,27 +1790,8 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
                   />
                 </div>
 
-                <p className="font-semibold text-2xl md:text-3xl text-black mb-2">
-                  Choose Your Preferred Bundle Below
-                </p>
-                <p className="text-base text-gray-600 mb-4">
-                  Select a bundle, fill in your details, and we'll deliver to your doorstep.
-                </p>
                 <div className="grid grid-cols-1 gap-2">
-                  <button 
-                    onClick={() => {
-                      const orderForm = document.getElementById('order-form');
-                      if (orderForm) {
-                        orderForm.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="bg-[#DAA520] hover:bg-[#B8860B] transition-all duration-300 transform hover:scale-105 rounded-lg py-4 px-4 text-center cursor-pointer shadow-lg hover:shadow-xl"
-                  >
-                    <span className="text-white text-lg font-bold uppercase block">FREE SHIPPING</span>
-                    <span className="text-white/80 text-lg font-bold block">Pay Before Delivery Only</span>
-                    <span className="text-white text-sm font-normal block mt-1">Click to Order Now →</span>
-                  </button>
-                                                    </div>
+                </div>
               </div>
 
               <div id="order-form">

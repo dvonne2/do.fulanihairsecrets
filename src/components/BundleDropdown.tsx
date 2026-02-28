@@ -1,5 +1,7 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useRef, useEffect } from "react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+// Extend your existing Package type with these fields, or merge below into it.
 
 export interface BundleItem {
   name: string;
@@ -25,60 +27,66 @@ export interface BundlePackage {
 
 export interface BundleDropdownProps {
   packages: BundlePackage[];
-  value: string;
-  onChange: (pkgId: string) => void;
+  value: string;                      // selected package id — wire to form.pkg
+  onChange: (pkg: BundlePackage) => void;
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const fmt = (n: number) => "₦" + n.toLocaleString("en-NG");
 
+// ─── Per-bundle identity colours ──────────────────────────────────────────────
 const CARD_COLORS: Record<string, { idle: string; hover: string; sel: string; selBg: string; btn: string }> = {
-  "PKG-001": { idle: "#A5B4FC", hover: "#6366F1", sel: "#4338CA", selBg: "#EEF2FF", btn: "#4338CA" },
-  "PKG-002": { idle: "#FCA5A5", hover: "#F97316", sel: "#C2410C", selBg: "#FFF7ED", btn: "#C2410C" },
-  "PKG-003": { idle: "#6EE7B7", hover: "#10B981", sel: "#047857", selBg: "#ECFDF5", btn: "#047857" },
-  "PKG-004": { idle: "#FCA5A5", hover: "#EF4444", sel: "#DC2626", selBg: "#FEF2F2", btn: "#DC2626" },
-  "PKG-005": { idle: "#FCD34D", hover: "#D97706", sel: "#92400E", selBg: "#FFFBEB", btn: "#92400E" },
+  self_love_plus:       { idle: "#A5B4FC", hover: "#6366F1", sel: "#4338CA", selBg: "#EEF2FF", btn: "#4338CA" },
+  self_love_return:     { idle: "#FCA5A5", hover: "#F97316", sel: "#C2410C", selBg: "#FFF7ED", btn: "#C2410C" },
+  self_love_b2gof:      { idle: "#6EE7B7", hover: "#10B981", sel: "#047857", selBg: "#ECFDF5", btn: "#047857" },
+  self_love_plus_b2gof: { idle: "#FCA5A5", hover: "#EF4444", sel: "#DC2626", selBg: "#FEF2F2", btn: "#DC2626" },
+  family_saves:         { idle: "#FCD34D", hover: "#D97706", sel: "#92400E", selBg: "#FFFBEB", btn: "#92400E" },
 };
 const DEFAULT_COLOR = { idle: "#D1D5DB", hover: "#6B7280", sel: "#111827", selBg: "#F9FAFB", btn: "#111827" };
 
+// ─── Inject keyframes once ────────────────────────────────────────────────────
 if (typeof document !== "undefined" && !document.getElementById("bundle-shake-style")) {
   const s = document.createElement("style");
   s.id = "bundle-shake-style";
   s.textContent = `
     @keyframes bundleShake {
       0%,100% { transform: translateX(0); }
-      15% { transform: translateX(-4px); }
-      30% { transform: translateX(4px); }
-      45% { transform: translateX(-3px); }
-      60% { transform: translateX(3px); }
-      75% { transform: translateX(-1px); }
-      90% { transform: translateX(1px); }
+      15%      { transform: translateX(-4px); }
+      30%      { transform: translateX(4px); }
+      45%      { transform: translateX(-3px); }
+      60%      { transform: translateX(3px); }
+      75%      { transform: translateX(-1px); }
+      90%      { transform: translateX(1px); }
     }
     @keyframes cardGlow {
-      0% { box-shadow: 0 0 0px rgba(34,197,94,0); }
-      50% { box-shadow: 0 0 22px rgba(34,197,94,0.45); }
+      0%   { box-shadow: 0 0 0px rgba(34,197,94,0); }
+      50%  { box-shadow: 0 0 22px rgba(34,197,94,0.45); }
       100% { box-shadow: 0 0 0px rgba(34,197,94,0); }
     }
   `;
   document.head.appendChild(s);
 }
 
+// ─── CornerBadge ──────────────────────────────────────────────────────────────
 function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
   if (!badge) return null;
   const cfg = badge === "popular"
     ? { label: "🔥 MOST POPULAR", bg: "#DC2626", color: "#fff" }
-    : { label: "🏆 BEST VALUE", bg: "#B45309", color: "#fff" };
+    : { label: "🏆 BEST VALUE",   bg: "#B45309", color: "#fff" };
   return (
     <div style={{
       position: "absolute", top: -2, right: -2,
       background: cfg.bg, color: cfg.color,
       fontSize: 11, fontWeight: 800, padding: "5px 12px",
-      borderRadius: "0 10px 0 10px", letterSpacing: "0.04em", zIndex: 2,
+      borderRadius: "0 10px 0 10px", letterSpacing: "0.04em",
+      zIndex: 2,
     }}>
       {cfg.label}
     </div>
   );
 }
 
+// ─── ItemRow ──────────────────────────────────────────────────────────────────
 function ItemRow({ item }: { item: BundleItem }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
@@ -95,8 +103,10 @@ function ItemRow({ item }: { item: BundleItem }) {
         <>
           <span style={{ fontSize: 13, color: "#9CA3AF" }}>+</span>
           <div style={{
-            border: "1.5px dashed #D97706", borderRadius: 8, padding: "3px 10px",
-            fontSize: 12, fontWeight: 700, color: "#D97706", background: "#FFFBEB",
+            border: "1.5px dashed #D97706",
+            borderRadius: 8, padding: "3px 10px",
+            fontSize: 12, fontWeight: 700, color: "#D97706",
+            background: "#FFFBEB",
           }}>
             FREE {item.freeQty} {item.freeName}
           </div>
@@ -106,6 +116,7 @@ function ItemRow({ item }: { item: BundleItem }) {
   );
 }
 
+// ─── BundleCard ───────────────────────────────────────────────────────────────
 interface BundleCardProps {
   pkg: BundlePackage;
   isSelected: boolean;
@@ -139,43 +150,73 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
       }}
     >
       <CornerBadge badge={pkg.badge} />
+
+      {/* Name + price */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", paddingRight: pkg.badge ? 100 : 0 }}>
         <div>
           <div style={{ fontWeight: 800, fontSize: 15, color: "#111" }}>{pkg.name}</div>
-          {pkg.subtitle && <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{pkg.subtitle}</div>}
+          {pkg.subtitle && (
+            <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{pkg.subtitle}</div>
+          )}
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "line-through" }}>{fmt(pkg.originalPrice)}</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: "#166534", lineHeight: 1.1 }}>{fmt(pkg.price)}</div>
-          <div style={{ display: "inline-block", marginTop: 3, background: "#FEE2E2", color: "#DC2626", fontSize: 11, fontWeight: 800, padding: "2px 7px", borderRadius: 6 }}>
+          <div style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "line-through" }}>
+            {fmt(pkg.originalPrice)}
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: "#166534", lineHeight: 1.1 }}>
+            {fmt(pkg.price)}
+          </div>
+          <div style={{
+            display: "inline-block", marginTop: 3,
+            background: "#FEE2E2", color: "#DC2626",
+            fontSize: 11, fontWeight: 800, padding: "2px 7px", borderRadius: 6,
+          }}>
             {discount}% OFF
           </div>
         </div>
       </div>
+
+      {/* Items */}
       <div style={{ marginTop: 12 }}>
         {pkg.items.map((item, i) => <ItemRow key={i} item={item} />)}
       </div>
+
+      {/* Description */}
       {pkg.description && (
         <div style={{ fontSize: 12, color: "#4B5563", textAlign: "center", marginTop: 8, lineHeight: 1.5 }}>
           {pkg.description}
         </div>
       )}
+
+      {/* Best for */}
       <div style={{ textAlign: "center", marginTop: 10 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20, background: pkg.bestForBg, color: pkg.bestForColor }}>
+        <span style={{
+          fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20,
+          background: pkg.bestForBg, color: pkg.bestForColor,
+        }}>
           Best for: {pkg.bestFor}
         </span>
       </div>
+
+      {/* Social proof */}
       {pkg.socialProof && (
-        <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 8, background: "#ECFDF5", color: "#065F46", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
+        <div style={{
+          marginTop: 10, padding: "8px 12px", borderRadius: 8,
+          background: "#ECFDF5", color: "#065F46",
+          fontSize: 13, fontWeight: 700, textAlign: "center",
+        }}>
           {pkg.socialProof}
         </div>
       )}
+
+      {/* CTA */}
       <div style={{ marginTop: 12 }}>
         {isSelected ? (
           <div style={{
             width: "100%", padding: "12px 0", borderRadius: 10, boxSizing: "border-box",
             background: c.btn, color: "#fff", fontSize: 14, fontWeight: 800,
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            letterSpacing: "0.01em",
           }}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="7" stroke="#fff" strokeWidth="1.5" />
@@ -194,6 +235,7 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
             transition: "background 0.18s, border-color 0.18s, color 0.18s",
             animation: isHov ? "bundleShake 0.55s ease-out" : "none",
             boxShadow: isHov ? `0 4px 14px ${c.sel}66` : "none",
+            letterSpacing: "0.01em",
           }}>
             {isHov ? (
               <>
@@ -211,21 +253,15 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
   );
 }
 
+// ─── BundleDropdown (main export) ─────────────────────────────────────────────
 export function BundleDropdown({ packages, value, onChange }: BundleDropdownProps) {
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement | null>(null);
-  const [panelRect, setPanelRect] = useState<{ left: number; top: number; width: number } | null>(null);
-  const selected = packages.find((p) => {
-    const v = String(value ?? "");
-    const vn = v.trim().toLowerCase();
-    const pn = String(p.name ?? "").trim().toLowerCase();
-    const pid = String(p.id ?? "").trim().toLowerCase();
-    return pid === vn || pn === vn;
-  }) ?? null;
+  const selected = packages.find((p) => p.id === value) ?? null;
 
+  // Close on outside click
   useEffect(() => {
     const h = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) setOpen(false);
@@ -234,12 +270,14 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
     return () => document.removeEventListener("mousedown", h);
   }, []);
 
+  // Close on Escape
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     document.addEventListener("keydown", h);
     return () => document.removeEventListener("keydown", h);
   }, []);
 
+  // Scroll selected card into view when panel opens
   useEffect(() => {
     if (open && value && panelRef.current) {
       const el = panelRef.current.querySelector(`[data-id="${value}"]`);
@@ -247,50 +285,30 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
     }
   }, [open]);
 
-  useLayoutEffect(() => {
-    if (!open) return;
-
-    const update = () => {
-      const el = triggerRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      setPanelRect({
-        left: r.left,
-        top: r.bottom + 8,
-        width: r.width,
-      });
-    };
-
-    update();
-    window.addEventListener("scroll", update, true);
-    window.addEventListener("resize", update);
-
-    return () => {
-      window.removeEventListener("scroll", update, true);
-      window.removeEventListener("resize", update);
-    };
-  }, [open]);
-
   const discount = selected ? Math.round((1 - selected.price / selected.originalPrice) * 100) : null;
 
   return (
-    <div ref={containerRef} style={{ position: "relative", width: "100%", fontFamily: "'Segoe UI', system-ui, sans-serif", overflow: "visible", zIndex: 9999 }}>
-      <div ref={triggerRef}>
-        <button
-          type="button"
-          id="bundleSelect"
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          onClick={() => setOpen((o) => !o)}
-          style={{
-            width: "100%", display: "flex", alignItems: "center",
-            justifyContent: "space-between", padding: "14px 16px",
-            background: "#fff", cursor: "pointer",
-            border: `2px solid ${open ? "#2D5016" : "#D1D5DB"}`,
-            borderRadius: open ? "12px 12px 0 0" : "12px",
-            transition: "border-color 0.15s", outline: "none", boxSizing: "border-box",
-          }}
-        >
+    <div
+      ref={containerRef}
+      style={{ position: "relative", width: "100%", fontFamily: "'Segoe UI', system-ui, sans-serif" }}
+    >
+      {/* ── Trigger ── */}
+      <button
+        type="button"
+        id="bundleSelect"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          width: "100%", display: "flex", alignItems: "center",
+          justifyContent: "space-between", padding: "14px 16px",
+          background: "#fff", cursor: "pointer",
+          border: `2px solid ${open ? "#D4A017" : "#D4A017"}`,
+          borderRadius: "8px",
+          transition: "border-color 0.15s", outline: "none",
+          boxSizing: "border-box",
+        }}
+      >
         {selected ? (
           <span style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }}>
             <span style={{ fontWeight: 700, fontSize: 15, color: "#111" }}>{selected.name}</span>
@@ -305,56 +323,44 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
         ) : (
           <span style={{ color: "#9CA3AF", fontSize: 15 }}>Choose your bundle…</span>
         )}
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        <svg
+          width="18" height="18" viewBox="0 0 24 24" fill="none"
           stroke="#6B7280" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s", flexShrink: 0, marginLeft: 8 }}>
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s", flexShrink: 0, marginLeft: 8 }}
+        >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
-      </div>
-      {open && panelRect && createPortal(
-        <>
-          <div
-            onClick={(e) => { e.stopPropagation(); setOpen(false); }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(0,0,0,0.25)",
-            }}
-          />
-          <div
-            ref={panelRef}
-            role="listbox"
-            aria-label="Select a bundle"
-            style={{
-              position: "fixed",
-              left: panelRect.left,
-              top: panelRect.top,
-              width: panelRect.width,
-              zIndex: 999999,
-              background: "#F9FAFB", border: "2px solid #2D5016", borderTop: "none",
-              borderRadius: "0 0 16px 16px",
-              boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
-              padding: "10px 10px 14px",
-              maxHeight: "none", overflow: "visible", overflowY: "visible",
-              display: "flex", flexDirection: "column", gap: 8,
-            }}
-          >
-            {packages.map((pkg) => (
-              <div key={pkg.id} data-id={pkg.id}>
-                <BundleCard
-                  pkg={pkg}
-                  isSelected={pkg.id === value}
-                  isHov={pkg.id === hovered}
-                  onClick={(e) => { e.stopPropagation(); onChange(pkg.id); setOpen(false); }}
-                  onEnter={() => setHovered(pkg.id)}
-                  onLeave={() => setHovered(null)}
-                />
-              </div>
-            ))}
-          </div>
-        </>,
-        document.body
+
+      {/* ── Card panel ── */}
+      {open && (
+        <div
+          ref={panelRef}
+          role="listbox"
+          aria-label="Select a bundle"
+          style={{
+            position: "absolute", top: "100%", left: 0, right: 0, zIndex: 9999,
+            background: "#F9FAFB", border: "2px solid #2D5016", borderTop: "none",
+            borderRadius: "0 0 16px 16px",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+            padding: "10px 10px 14px",
+            maxHeight: 800, overflowY: "auto",
+            display: "flex", flexDirection: "column", gap: 8,
+          }}
+        >
+          {packages.map((pkg) => (
+            <div key={pkg.id} data-id={pkg.id}>
+              <BundleCard
+                pkg={pkg}
+                isSelected={pkg.id === value}
+                isHov={pkg.id === hovered}
+                onClick={() => { onChange(pkg); setOpen(false); }}
+                onEnter={() => setHovered(pkg.id)}
+                onLeave={() => setHovered(null)}
+              />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

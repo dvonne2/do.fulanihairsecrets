@@ -236,6 +236,7 @@ function OrderFormEmbed() {
     return false;
   });
   const [lastFiredPhone, setLastFiredPhone] = useState("");
+  const didRestoreRef = useRef(false);
   
   const [form, setForm] = useState({ 
     name: '', 
@@ -251,13 +252,13 @@ function OrderFormEmbed() {
     heardAboutUs: '',
     deliveryDate: '',
     deliveryTimeWindow: '',
-    paymentMethod: 'Pay on Delivery',
-    comment: '',
+    addressType: 'home' as 'home' | 'office' | 'other',
+    paymentMethod: 'pay_on_delivery' as 'pay_on_delivery' | 'pay_before_delivery',
     agreeToTerms: false,
-    orderId: orderId, // Set generated orderId
-    couponCode: '',
-    couponApplied: false,
+    agreeToMarketing: false,
+    orderId: ''
   });
+
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
@@ -426,8 +427,6 @@ function OrderFormEmbed() {
 
     // All conditions met — fire AddToCart and lock
     hasTriggeredAddToCart.current = true;
-    
-    console.log('[AddToCart] Firing on Step 1 — email + phone valid + package selected');
 
     fireAddToCart({
       packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
@@ -511,7 +510,6 @@ function OrderFormEmbed() {
       const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
       payload.packageName = packageName;
       payload.packagePrice = selectedPackage.price;
-      console.log('[InitiateCheckout] Package selected:', packageName);
       
       // Fire InitiateCheckout event
       const nameParts = form.name.trim().split(' ');
@@ -526,8 +524,6 @@ function OrderFormEmbed() {
         firstName,
         lastName,
       });
-    } else {
-      console.log('[InitiateCheckout] No package selected - firing with contact info only');
     }
 
     }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage]);
@@ -767,16 +763,21 @@ function OrderFormEmbed() {
       let restored = false;
       try {
         const saved = localStorage.getItem(`fhg_partial_${orderId}`);
-        if (saved) {
+        if (saved && !didRestoreRef.current) {
+          didRestoreRef.current = true;
           const data = JSON.parse(saved);
-          setForm(prev => ({
-            ...prev,
-            name: data.name || prev.name,
-            phone: data.phone || prev.phone,
-            email: data.email || prev.email,
-            pkg: resolvePkgId(data.pkg) || prev.pkg,
-            orderId: orderId
-          }));
+          setForm(prev => {
+            // IMPORTANT: do not overwrite a user-selected pkg
+            if (prev.pkg) return prev;
+            return {
+              ...prev,
+              name: data.name || prev.name,
+              phone: data.phone || prev.phone,
+              email: data.email || prev.email,
+              pkg: resolvePkgId(data.pkg) || prev.pkg,
+              orderId: orderId
+            };
+          });
           restored = true;
           console.log('✅ Restored partial data from localStorage:', data);
           toast.success('Welcome back! We restored your details.');
@@ -814,15 +815,20 @@ function OrderFormEmbed() {
             });
             if (response.ok) {
               const result = await response.json();
-              if (result.data) {
-                setForm(prev => ({
+              if (result.data && !didRestoreRef.current) {
+              didRestoreRef.current = true;
+              setForm(prev => {
+                // IMPORTANT: do not overwrite a user-selected pkg
+                if (prev.pkg) return prev;
+                return {
                   ...prev,
                   name: result.data.name || prev.name,
                   phone: result.data.phone || prev.phone,
                   email: result.data.email || prev.email,
                   pkg: resolvePkgId(result.data.pkg || result.data.packageSelected) || prev.pkg,
                   orderId: orderId
-                }));
+                };
+              });
                 console.log('✅ Restored partial data from backend:', result.data);
                 toast.success('Welcome back! We restored your details.');
                 const np = (result.data.name || '').trim().split(' ');
@@ -893,11 +899,6 @@ function OrderFormEmbed() {
         paymentMethod: form.paymentMethod,
         comment: form.comment,
       };
-
-      // Debug: Log the name value to investigate timing issues
-      console.log('[DEBUG] Submitting form with name:', formData.name);
-      console.log('[DEBUG] Form state name:', form.name);
-      console.log('[DEBUG] formData object:', formData);
 
       // Store order data in sessionStorage for ThankYou page
       try {
@@ -1112,24 +1113,23 @@ function OrderFormEmbed() {
               </div>
             </div>
 
-            
-
-            
-            {form.pkg && (
-              <div style={{
-                background: '#F0FDF4',
-                border: '1.5px solid #BBF7D0',
-                borderRadius: '8px',
-                padding: '10px 14px',
-                margin: '16px 0 8px',
-                textAlign: 'center',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: '#15803D'
-              }}>
-                ✓ Great choice! Now fill in your details below to complete your order.
-              </div>
-            )}
+            {/* Bundle Dropdown */}
+            <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
+            <BundleDropdown
+              packages={bundlePackages}
+              value={form.pkg}
+              onChange={(pkg) => {
+                setForm(f => ({ ...f, pkg: pkg.id }));
+                setTimeout(() => {
+                  const nameField = document.getElementById('nameFieldWrapper');
+                  if (nameField) {
+                    nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const input = nameField.querySelector('input');
+                    if (input) input.focus();
+                  }
+                }, 400);
+              }}
+            />
 
             {/* Name */}
             <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
@@ -1249,23 +1249,6 @@ function OrderFormEmbed() {
             </div>
             <p style={S.hint}>For hair growth information</p>
 
-            {/* Packages — choose your hair regrowth system */}
-            <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
-            <BundleDropdown
-              packages={bundlePackages}
-              value={form.pkg}
-              onChange={(pkgId) => {
-                setForm(f => ({ ...f, pkg: pkgId }));
-                setTimeout(() => {
-                  const nameField = document.getElementById('nameFieldWrapper');
-                  if (nameField) {
-                    nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    const input = nameField.querySelector('input');
-                    if (input) input.focus();
-                  }
-                }, 400);
-              }}
-            />
             <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 16, padding: '12px 8px', background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB' }}>
               {[['💳','Pay on Delivery'],['🚚','Free Delivery on Paid Orders'],['🇳🇬','Nationwide Shipping'],['📞','Support Active']].map(([icon, text]) => (
                 <div key={text} style={{ textAlign: 'center' }}>
