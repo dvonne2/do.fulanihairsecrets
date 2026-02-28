@@ -361,14 +361,14 @@ function OrderFormEmbed() {
       }
 
       
-      // Auto-advance when all 4 are valid (2.5s delay so user can finish typing)
+      // Auto-advance when all 4 are valid (1.0s delay so user can finish typing)
       if (completed === 4 && !hasAutoAdvanced.current) {
         setTimeout(() => {
           if (!hasAutoAdvanced.current && step === 1) {
             hasAutoAdvanced.current = true;
                         setStep(2);
           }
-        }, 2500);
+        }, 1000);
       }
     };
 

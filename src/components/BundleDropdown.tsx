@@ -285,12 +285,58 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
     }
   }, [open]);
 
+  // Position fixed panel relative to trigger button
+  useEffect(() => {
+    if (!open) return;
+
+    const updatePosition = () => {
+      if (panelRef.current && containerRef.current) {
+        const trigger = containerRef.current.querySelector('button');
+        if (trigger) {
+          const rect = trigger.getBoundingClientRect();
+          const panel = panelRef.current;
+          
+          // Position panel below the trigger, centered in viewport
+          panel.style.top = `${rect.bottom + 4}px`;
+          panel.style.left = '50%';
+          panel.style.transform = 'translateX(-50%)';
+          panel.style.width = 'min(90vw, 600px)';
+          
+          // Ensure panel doesn't go off screen on the right
+          const panelRect = panel.getBoundingClientRect();
+          if (panelRect.right > window.innerWidth) {
+            panel.style.left = `${window.innerWidth - panelRect.width / 2 - 10}px`;
+            panel.style.transform = 'translateX(-50%)';
+          }
+          // Ensure panel doesn't go off screen on the left
+          if (panelRect.left < 10) {
+            panel.style.left = `${panelRect.width / 2 + 10}px`;
+            panel.style.transform = 'translateX(-50%)';
+          }
+        }
+      }
+    };
+
+    // Initial position
+    updatePosition();
+
+    // Add event listeners for scroll and resize
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, [open]);
+
   const discount = selected ? Math.round((1 - selected.price / selected.originalPrice) * 100) : null;
 
   return (
     <div
       ref={containerRef}
-      style={{ position: "relative", width: "100%", fontFamily: "'Segoe UI', system-ui, sans-serif" }}
+      style={{ position: "relative", width: "100%", fontFamily: "'Segoe UI', system-ui, sans-serif", marginTop: "30px" }}
     >
       {/* ── Trigger ── */}
       <button
@@ -332,6 +378,23 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
         </svg>
       </button>
 
+      {/* ── Dark backdrop overlay ── */}
+      {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 99998,
+            backdropFilter: "blur(2px)"
+          }}
+          onClick={() => setOpen(false)}
+        />
+      )}
+
       {/* ── Card panel ── */}
       {open && (
         <div
@@ -339,12 +402,12 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
           role="listbox"
           aria-label="Select a bundle"
           style={{
-            position: "absolute", top: "100%", left: 0, right: 0, zIndex: 9999,
+            position: "fixed", zIndex: 99999,
             background: "#F9FAFB", border: "2px solid #2D5016", borderTop: "none",
             borderRadius: "0 0 16px 16px",
             boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
             padding: "10px 10px 14px",
-            maxHeight: 800, overflowY: "auto",
+            maxHeight: 900, overflowY: "auto",
             display: "flex", flexDirection: "column", gap: 8,
           }}
         >
