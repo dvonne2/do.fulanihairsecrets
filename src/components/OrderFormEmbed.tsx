@@ -3,6 +3,7 @@ import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
+import { BundleDropdown, BundlePackage } from "./BundleDropdown";
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -83,12 +84,21 @@ const packageMapping: Record<string, string> = {
   'PKG-005': 'FAMILY SAVES'
 };
 
+const packageNameToId: Record<string, string> = Object.fromEntries(Object.entries(packageMapping).map(([id, name]) => [String(name).trim().toUpperCase(), id]));
+const resolvePkgId = (v: any): string => {
+  const s = String(v ?? "").trim();
+  if (!s) return "";
+  if (s.startsWith("PKG-")) return s;
+  const key = s.toUpperCase();
+  return packageNameToId[key] || "";
+};
+
 const PACKAGE_CONTENTS: Record<string, string[]> = {
-  'SELF LOVE PLUS': ['1 Shampoo', '1 Pomade', '1 Conditioner'],
-  'SELF LOVE RETURN': ['3 Pomade'],
-  'SELF LOVE B2GOF': ['3 Shampoo', '3 Pomade'],
-  'SELF LOVE PLUS B2GOF': ['3 Shampoo', '3 Pomade', '3 Conditioner'],
-  'FAMILY SAVES': ['10 Shampoo', '10 Pomade', '10 Conditioner']
+  'SELF LOVE PLUS': ['1 500ml Net Shampoo', '1 150ml Net Pomade', '1 500ml Net Conditioner'],
+  'SELF LOVE RETURN': ['3 150ml Net Pomade'],
+  'SELF LOVE B2GOF': ['3 500ml Net Shampoo', '3 150ml Net Pomade'],
+  'SELF LOVE PLUS B2GOF': ['3 500ml Net Shampoo', '3 150ml Net Pomade', '3 500ml Net Conditioner'],
+  'FAMILY SAVES': ['10 500ml Net Shampoo', '10 150ml Net Pomade', '10 500ml Net Conditioner']
 };
 
 const nigerianStates = ['Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT', 'Gombe', 'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'];
@@ -137,7 +147,7 @@ const getOrderIdFromURL = (): string => {
 // All styles as objects
 const S: { [key: string]: CSSProperties } = {
   container: { margin: '0 auto', padding: '40px 20px', fontFamily: 'Inter, system-ui, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#fafbfc' },
-  box: { background: '#ffffff', borderRadius: 16, padding: '36px 32px 32px', width: '100%', position: 'relative', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)' },
+  box: { background: '#ffffff', borderRadius: 16, padding: '36px 32px 32px', width: '100%', position: 'relative', overflow: 'visible', boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)' },
   // Mobile-specific container styles
   containerMobile: { padding: '0', maxWidth: '100%' },
   boxMobile: { padding: '16px 8px', borderRadius: 0 },
@@ -764,7 +774,7 @@ function OrderFormEmbed() {
             name: data.name || prev.name,
             phone: data.phone || prev.phone,
             email: data.email || prev.email,
-            pkg: data.pkg || prev.pkg,
+            pkg: resolvePkgId(data.pkg) || prev.pkg,
             orderId: orderId
           }));
           restored = true;
@@ -810,7 +820,7 @@ function OrderFormEmbed() {
                   name: result.data.name || prev.name,
                   phone: result.data.phone || prev.phone,
                   email: result.data.email || prev.email,
-                  pkg: result.data.pkg || result.data.packageSelected || prev.pkg,
+                  pkg: resolvePkgId(result.data.pkg || result.data.packageSelected) || prev.pkg,
                   orderId: orderId
                 }));
                 console.log('✅ Restored partial data from backend:', result.data);
@@ -976,6 +986,68 @@ function OrderFormEmbed() {
   const phoneValid = form.phone.replace(/\D/g, '').length >= 10;
   const emailValid = form.email.includes('@') && form.email.includes('.') && form.email.length >= 5;
 
+
+  const bundlePackages: BundlePackage[] = [
+    {
+      id: "PKG-001", name: "Self Love Plus", subtitle: "The 30-Day Test",
+      price: 32750, originalPrice: 55000, badge: null,
+      description: "Within 2 weeks many women see baby hairs and feel scalp relief. One bundle resets your scalp — women serious about hair growth move to the 3-Month Recovery System for fuller, longer hair.",
+      bestFor: "Testing the system", bestForColor: "#4338CA", bestForBg: "#EEF2FF",
+      socialProof: null,
+      items: [
+        { name: "500ml Net Shampoo",     qty: 1, freeQty: 0, freeName: "" },
+        { name: "150ml Net Pomade",       qty: 1, freeQty: 0, freeName: "" },
+        { name: "500ml Net Conditioner", qty: 1, freeQty: 0, freeName: "" },
+      ],
+    },
+    {
+      id: "PKG-002", name: "Self Love Return", subtitle: "3-Month Maintenance",
+      price: 42750, originalPrice: 75000, badge: null,
+      description: "For returning customers only — first-timers need the Shampoo to purify your scalp for real results.",
+      bestFor: "Returning customers", bestForColor: "#C2410C", bestForBg: "#FFF7ED",
+      socialProof: null,
+      items: [
+        { name: "150ml Net Pomade", qty: 3, freeQty: 0, freeName: "" },
+      ],
+    },
+    {
+      id: "PKG-003", name: "Self Love B2GOF", subtitle: "3-Month Scalp Reset",
+      price: 52750, originalPrice: 110000, badge: null,
+      description: "Purify the scalp & clear dandruff so the Pomade can trigger real growth.",
+      bestFor: "Scalp Reset & Dandruff Clearing", bestForColor: "#047857", bestForBg: "#ECFDF5",
+      socialProof: null,
+      items: [
+        { name: "500ml Net Shampoo", qty: 2, freeQty: 1, freeName: "500ml Net Shampoo" },
+        { name: "150ml Net Pomade",   qty: 2, freeQty: 1, freeName: "150ml Net Pomade"   },
+      ],
+    },
+    {
+      id: "PKG-004", name: "Self Love Plus B2GOF", subtitle: "🔥 3-Month Hair Recovery System",
+      price: 66750, originalPrice: 165000, badge: "popular",
+      description: "🔥 If your hair is breaking, thinning, or refusing to grow — this is your reset. In 90 days it will wake up dormant follicles, restore your scalp, and give you the fuller, longer hair you've been waiting for.",
+      bestFor: "First-timers (recommended)", bestForColor: "#DC2626", bestForBg: "#FEF2F2",
+      socialProof: "👥 Chosen by 8 out of 10 customers",
+      items: [
+        { name: "500ml Net Shampoo",     qty: 2, freeQty: 1, freeName: "500ml Net Shampoo"      },
+        { name: "150ml Net Pomade",       qty: 2, freeQty: 1, freeName: "150ml Net Pomade"        },
+        { name: "500ml Net Conditioner", qty: 2, freeQty: 1, freeName: "500ml Net Conditioner" },
+      ],
+    },
+    {
+      id: "PKG-005", name: "Family Saves", subtitle: "12 Month Supply",
+      price: 215000, originalPrice: 550000, badge: "best_value",
+      description: "👆 The Gold Standard. Maximum consistency. Share with friends through Group Buying and unlock a massive 61% discount — plus ₦20,500 in exclusive VIP Gifts.",
+      bestFor: "Families & group buying", bestForColor: "#92400E", bestForBg: "#FFFBEB",
+      socialProof: null,
+      items: [
+        { name: "500ml Net Shampoo",     qty: 6, freeQty: 4, freeName: "500ml Net Shampoos"      },
+        { name: "150ml Net Pomade",       qty: 6, freeQty: 4, freeName: "150ml Net Pomades"        },
+        { name: "500ml Net Conditioner", qty: 6, freeQty: 4, freeName: "500ml Net Conditioners" },
+      ],
+    },
+  ];
+
+
   return (
     <div style={{ ...S.container, ...(window.innerWidth < 768 ? S.containerMobile : {}) }}>
       <div style={{ ...S.box, ...(window.innerWidth < 768 ? S.boxMobile : {}), position: 'relative' }}>
@@ -1040,445 +1112,9 @@ function OrderFormEmbed() {
               </div>
             </div>
 
-            {/* Packages — shown FIRST so customers commit to a plan before entering details */}
-            <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
-            <p style={{ fontSize: '12px', color: '#6B7280', margin: '-4px 0 8px', fontWeight: '500' }}>
-              Select a package below, then fill in your details to complete your order.
-            </p>
-            <div style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              background: '#ffffff',
-              padding: '16px 12px 40px',
-              borderRadius: '12px',
-              border: '1.5px solid #E5E7EB'
-            }}>
-              {currentPackages.map(p => {
-                const selected = form.pkg === p.id;
-                const isFeatured = p.id === 'PKG-004'; // Self Love Plus B2GOF
-                const isBestValue = p.id === 'PKG-005'; // Family Saves
-                
-                return (
-                  <div
-                    key={p.id}
-                    onClick={() => {
-                      // 1. Visual feedback - select this card
-                      setForm({ ...form, pkg: p.id });
-                      
-                      // 2. Error nudge if fields missing
-                      const nameValid = form.name.trim().length >= 2;
-                      const phoneValid = form.phone.replace(/\D/g, '').length >= 10;
-                      const emailValid = form.email.includes('@') && form.email.includes('.') && form.email.length >= 5;
-                      
-                      if (!nameValid || !phoneValid || !emailValid) {
-                        const nameInput = document.getElementById('nameFieldWrapper')?.querySelector('input');
-                        const phoneInput = document.getElementById('phoneFieldWrapper')?.querySelector('input');
-                        const emailInput = document.getElementById('emailFieldWrapper')?.querySelector('input');
-                        
-                        const firstEmpty = (!nameValid && nameInput) ? nameInput
-                          : (!phoneValid && phoneInput) ? phoneInput
-                          : emailInput;
+            
 
-                        if (firstEmpty) {
-                          firstEmpty.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          firstEmpty.style.outline = '2px solid #1a7a4a';
-                          firstEmpty.style.outlineOffset = '2px';
-                          firstEmpty.focus();
-                          setTimeout(() => {
-                            firstEmpty.style.outline = '';
-                            firstEmpty.style.outlineOffset = '';
-                          }, 2000);
-                        }
-                      }
-                    }}
-                    style={{
-                      border: isFeatured ? '3px solid #14532d' : isBestValue ? '2px solid #D4AF37' : '1.5px solid #E5E7EB',
-                      borderRadius: '12px',
-                      padding: isFeatured ? '18px' : '14px',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      marginBottom: '10px',
-                      opacity: 1.0,
-                      background: isFeatured ? 'linear-gradient(180deg, #f8fefb 0%, #ffffff 100%)' : '#fff',
-                      transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
-                      WebkitFontSmoothing: 'antialiased',
-                      MozOsxFontSmoothing: 'grayscale'
-                    }}
-                    onMouseEnter={(e) => {
-                      const card = e.currentTarget;
-                      if (isFeatured) {
-                      } else if (isBestValue) {
-                        card.style.borderColor = '#D4AF37';
-                      } else {
-                        card.style.borderColor = '#aaa';
-                      }
-                                          }}
-                    onMouseLeave={(e) => {
-                      const card = e.currentTarget;
-                      if (isFeatured) {
-                        card.style.borderColor = '3px solid #14532d';
-                      } else if (isBestValue) {
-                        card.style.borderColor = '2px solid #D4AF37';
-                      } else {
-                        card.style.borderColor = '1.5px solid #E5E7EB';
-                      }
-                                          }}
-                  >
-                    {/* Radio circle */}
-                    <div style={{
-                      width: '16px',
-                      height: '16px',
-                      borderRadius: '50%',
-                      border: selected ? '2px solid #14532d' : '2px solid #D1D5DB',
-                      position: 'absolute',
-                      top: isFeatured ? '18px' : '14px',
-                      left: '14px',
-                      background: selected ? 'radial-gradient(circle, #14532d 38%, transparent 39%)' : 'transparent'
-                    }} />
-
-                    {/* Tags */}
-                    {p.isPopular && (
-                      <span style={{
-                        position: 'absolute',
-                        top: '-10px',
-                        right: '14px',
-                        fontSize: '9.5px',
-                        fontWeight: '700',
-                        letterSpacing: '0.7px',
-                        textTransform: 'uppercase',
-                        padding: '3px 9px',
-                        borderRadius: '5px',
-                        color: '#fff',
-                        background: '#DC2626',
-                        zIndex: 10
-                      }}>
-                        🔥 Most Popular
-                      </span>
-                    )}
-                    {isBestValue && (
-                      <span style={{
-                        position: 'absolute',
-                        top: '-10px',
-                        right: '14px',
-                        fontSize: '9.5px',
-                        fontWeight: '700',
-                        letterSpacing: '0.7px',
-                        textTransform: 'uppercase',
-                        padding: '3px 9px',
-                        borderRadius: '5px',
-                        color: '#fff',
-                        background: 'linear-gradient(135deg, #B8860B, #D4AF37)',
-                        zIndex: 10
-                      }}>
-                        🏆 Best Value
-                      </span>
-                    )}
-
-                    {/* Ribbon for featured */}
-                    {isFeatured && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '0',
-                        left: '0',
-                        right: '0',
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #14532d, #16a34a, #22c55e, #16a34a, #14532d)',
-                        borderRadius: '12px 12px 0 0',
-                        zIndex: 0
-                      }} />
-                    )}
-
-                    {/* Top row */}
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      gap: '8px',
-                      marginBottom: '8px',
-                      paddingLeft: '26px'
-                    }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{
-                          fontSize: isFeatured ? '14px' : '12.5px',
-                          fontWeight: '800',
-                          color: '#111111',
-                          lineHeight: '1.3',
-                          letterSpacing: '-0.2px',
-                          wordBreak: 'break-word' as const
-                        }}>
-                          <div style={{ textAlign: 'left' }}>
-                          {p.name.replace('THE TRIAL KIT (Self Love Plus)', 'Self Love Plus')
-                           .replace('SELF LOVE PLUS B2GOF', 'Self Love Plus B2GOF')
-                           .replace('SELF LOVE B2GOF', 'Self Love B2GOF')
-                           .replace('SELF LOVE RETURN', 'Self Love Return')
-                           .replace('FAMILY SAVES', 'Family Saves')}
-                        </div>
-                        </div>
-                        <div style={{
-                          fontSize: '10px',
-                          fontWeight: '600',
-                          color: '#6B7280',
-                          marginTop: '1px',
-                          letterSpacing: '0.1px',
-                          textAlign: 'left'
-                        }}>
-                          {p.id === 'PKG-001' && 'The 30-Day Test'}
-                          {p.id === 'PKG-002' && '3-Month Maintenance'}
-                          {p.id === 'PKG-003' && '3-Month Scalp Reset'}
-                          {p.id === 'PKG-004' && '🔥 3-Month Hair Recovery System'}
-                          {p.id === 'PKG-005' && '12 Month Supply'}
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{
-                          fontSize: '10.5px',
-                          color: '#6B7280',
-                          textDecoration: 'line-through'
-                        }}>
-                          ₦{p.originalPrice.toLocaleString()}
-                        </div>
-                        <div style={{
-                          fontSize: isFeatured ? '22px' : '20px',
-                          fontWeight: '800',
-                          color: isBestValue ? '#946B00' : '#0F6B3A',
-                          lineHeight: '1.1',
-                          letterSpacing: '-0.3px'
-                        }}>
-                          ₦{p.price.toLocaleString()}
-                        </div>
-                        <span style={{
-                          display: 'inline-block',
-                          background: '#FEE2E2',
-                          color: '#DC2626',
-                          fontSize: '9.5px',
-                          fontWeight: '700',
-                          padding: '1.5px 5px',
-                          borderRadius: '3px',
-                          marginTop: '1px'
-                        }}>
-                          {p.discount}% OFF
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Items */}
-                    
-                    {/* Update package items styling with elegant design */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '8px',
-                      marginBottom: '6px',
-                      paddingLeft: '26px'
-                    }}>
-                      {p.items.split(' | ').map((item, idx) => {
-                        const [quantity, product] = item.split('× ');
-                        
-                        // Check if there's a free item for this product
-                        const freeItems = p.freeItems ? p.freeItems.replace('+ ', '').split(' + ') : [];
-                        const freeItemForThisProduct = freeItems.find(freeItem => 
-                          freeItem.toLowerCase().includes(product.toLowerCase())
-                        );
-                        
-                        return (
-                          <div key={idx} style={{
-                            fontSize: '15px',
-                            fontWeight: '500',
-                            color: '#1a1a1a',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '13px',
-                            lineHeight: '1.3',
-                            letterSpacing: '0.01em'
-                          }}>
-                            <span style={{
-                              width: '30px',
-                              height: '30px',
-                              borderRadius: '8px',
-                              background: '#1f4d34',
-                              color: '#fff',
-                              fontSize: '12px',
-                              fontWeight: '600',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              flexShrink: 0,
-                              letterSpacing: '0.02em'
-                            }}>
-                              {quantity}×
-                            </span>
-                            {product.toLowerCase().includes('shampoo') ? '500ml ' : ''}{product.toLowerCase().includes('conditioner') ? '500ml ' : ''}{product.toLowerCase().includes('pomade') ? '150g ' : ''}{product}
-                            {freeItemForThisProduct && (
-                              <>
-                                <span style={{
-                                  color: '#D97706',
-                                  fontSize: isFeatured ? '14px' : '12px',
-                                  fontWeight: '700'
-                                }}>
-                                  +
-                                </span>
-                                <span style={{
-                                  background: '#FFFBEB',
-                                  border: '1px dashed #D97706',
-                                  borderRadius: '5px',
-                                  padding: '4px 8px',
-                                  fontSize: isFeatured ? '14px' : '12px',
-                                  fontWeight: '700',
-                                  color: '#92400E',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '4px'
-                                }}>
-                                  FREE {freeItemForThisProduct.replace('FREE: ', '')}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Description */}
-                    <p style={{
-                      fontSize: isFeatured ? '12.5px' : '11px',
-                      color: '#4B5563',
-                      lineHeight: '1.4',
-                      paddingLeft: '26px',
-                      margin: p.id === 'PKG-001' ? '0' : '6px 0',
-                      fontWeight: p.id === 'PKG-002' ? '400' : '400'
-                    }}>
-                                            {p.id === 'PKG-001' && 'Within 2 weeks, many women start seeing tiny baby hairs and feeling relief on their scalp. But let\'s be honest, one bundle won\'t carry you through a full growth cycle. That\'s why women who are serious about hair growth move to the 3-Month Recovery System below for fuller, longer hair.'}
-                      {p.id === 'PKG-002' && (
-                        <>
-                          <strong>For returning customers only</strong> — first-timers need the Shampoo to purify your scalp for real results.
-                        </>
-                      )}
-                      {p.id === 'PKG-003' && 'Purify the scalp & clear dandruff so the Pomade can trigger real growth.'}
-                      {p.id === 'PKG-004' && (
-                        <>
-                          {p.supply.split(':')[0]}
-                        </>
-                      )}
-                      {p.id === 'PKG-005' && (
-                        <>
-                          🧴 12-Month Institutional Pack — The Gold Standard
-Total restoration. Maximum consistency. This is the pack for women who are ready to feed their hair for fuller, longer growth. Share it with friends through Group Buying and unlock a massive 61% discount — plus ₦20,500 in exclusive VIP Gifts included.
-                        </>
-                      )}
-                    </p>
-
-                    {/* For who tag */}
-                    <span style={{
-                      display: 'inline-block',
-                      background: p.id === 'PKG-001' ? '#EEF2FF' 
-                               : p.id === 'PKG-002' ? '#FFF7ED'
-                               : p.id === 'PKG-003' ? '#F0FDF4'
-                               : p.id === 'PKG-004' ? '#ECFDF5'
-                               : '#FDF8E8',
-                      color: p.id === 'PKG-001' ? '#4338CA'
-                           : p.id === 'PKG-002' ? '#C2410C'
-                           : p.id === 'PKG-003' ? '#15803D'
-                           : p.id === 'PKG-004' ? '#059669'
-                           : '#8B6914',
-                      fontSize: '9.5px',
-                      fontWeight: '700',
-                      padding: '2px 7px',
-                      borderRadius: '4px',
-                      marginTop: '6px',
-                      marginLeft: '26px'
-                    }}>
-                      Best for: {p.id === 'PKG-001' ? 'Testing the system'
-                               : p.id === 'PKG-002' ? 'Returning customers'
-                               : p.id === 'PKG-003' ? 'Scalp Reset & Dandruff Clearing'
-                               : p.id === 'PKG-004' ? 'First-timers (recommended)'
-                               : 'Families & group buying'}
-                    </span>
-
-                    {/* Social proof for featured */}
-                    {isFeatured && (
-                      <div style={{
-                        background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
-                        borderRadius: '7px',
-                        padding: '8px 12px',
-                        margin: '8px 0 4px',
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        color: '#15803D',
-                        textAlign: 'center',
-                        letterSpacing: '0.2px'
-                      }}>
-                        👥 Chosen by 8 out of 10 customers
-                      </div>
-                    )}
-
-                    {/* CTA Button */}
-                    <button
-                      style={{
-                        display: 'block',
-                        width: '100%',
-                        padding: isFeatured ? '15px' : '12px',
-                        borderRadius: '9px',
-                        fontFamily: 'DM Sans, sans-serif',
-                        fontSize: isFeatured ? '15px' : '12.5px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        marginTop: '10px',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        background: selected 
-                          ? (isBestValue 
-                            ? 'linear-gradient(135deg, #D4AF37 0%, #F5D76E 50%, #D4AF37 100%)'
-                            : 'linear-gradient(135deg, #14532d, #16a34a)')
-                          : '#F9FAFB',
-                        color: selected 
-                          ? (isBestValue ? '#1a2744' : '#fff')
-                          : '#6B7280',
-                        border: selected ? 'none' : '1.5px solid #D1D5DB',
-                        letterSpacing: selected ? '0.3px' : '0',
-                        textShadow: selected ? '0 1px 0 rgba(255,255,255,0.2)' : 'none',
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setForm({ ...form, pkg: p.id });
-                        
-                        // Scroll to contact fields so user fills in their details
-                        setTimeout(() => {
-                          const nameField = document.getElementById('nameFieldWrapper');
-                          if (nameField) {
-                            nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            const input = nameField.querySelector('input');
-                            if (input) input.focus();
-                          }
-                        }, 400);
-                      }}
-                    >
-                      {p.id === 'PKG-001' && 'Select This Bundle →'}
-                      {p.id === 'PKG-002' && 'Select This Bundle →'}
-                      {p.id === 'PKG-003' && 'Select This Bundle →'}
-                      {p.id === 'PKG-004' && 'Select This Bundle →'}
-                      {p.id === 'PKG-005' && 'Select This Bundle →'}
-                    </button>
-                  </div>
-                );
-              })}
-              
-              {/* Trust indicators */}
-              <div className="trust-indicators">
-                <span className="trust-indicator">
-                  <span className="trust-indicator-check">✓</span>
-                  Pay on Delivery
-                </span>
-                <span className="trust-indicator">
-                  <span className="trust-indicator-check">✓</span>
-                  Nationwide Shipping
-                </span>
-                <span className="trust-indicator">
-                  <span className="trust-indicator-check">✓</span>
-                  Support Active
-                </span>
-              </div>
-            </div>
-
-            {/* Contact Details — shown AFTER package selection */}
+            
             {form.pkg && (
               <div style={{
                 background: '#F0FDF4',
@@ -1613,8 +1249,31 @@ Total restoration. Maximum consistency. This is the pack for women who are ready
             </div>
             <p style={S.hint}>For hair growth information</p>
 
-            {/* Pay text */}
-            <p style={S.pay}>We accept both Pay on Delivery and Pay Before Delivery</p>
+            {/* Packages — choose your hair regrowth system */}
+            <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
+            <BundleDropdown
+              packages={bundlePackages}
+              value={form.pkg}
+              onChange={(pkgId) => {
+                setForm(f => ({ ...f, pkg: pkgId }));
+                setTimeout(() => {
+                  const nameField = document.getElementById('nameFieldWrapper');
+                  if (nameField) {
+                    nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const input = nameField.querySelector('input');
+                    if (input) input.focus();
+                  }
+                }, 400);
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 16, padding: '12px 8px', background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB' }}>
+              {[['💳','Pay on Delivery'],['🚚','Free Delivery on Paid Orders'],['🇳🇬','Nationwide Shipping'],['📞','Support Active']].map(([icon, text]) => (
+                <div key={text} style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 16 }}>{icon}</div>
+                  <div style={{ fontSize: 10, color: '#6B7280', fontWeight: 600, marginTop: 2, whiteSpace: 'nowrap' }}>{text}</div>
+                </div>
+              ))}
+            </div>
 
             {/* Step 2 preview hint */}
             <div style={{
@@ -1732,6 +1391,7 @@ Total restoration. Maximum consistency. This is the pack for women who are ready
             </p>
 
             {/* Alternative phone */}
+            
             <label style={S.label}>ALTERNATIVE PHONE NUMBER (WHATSAPP)</label>
             <input
               style={S.input}
