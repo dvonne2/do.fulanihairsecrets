@@ -45,7 +45,7 @@ export const TopStoryBanner = () => {
         {/* Bundle Image */}
         <div className="mt-6">
           <img
-            src={`${BASE_PATH}assets/66750-bundle.webp`}
+            src={`${BASE_PATH}assets/Gemini_Generated_Image_iupms8iupms8iupm.png`}
             alt="Product Bundle"
             className="w-full h-auto"
             loading="lazy"
