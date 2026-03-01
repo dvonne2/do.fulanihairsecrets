@@ -1709,17 +1709,6 @@ I did all that.
           </div>
         </div>
 
-        {/* Bundle System Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/Gemini_Generated_Image_4skp2j4skp2j4skp.png`}
-            alt="Bundle System"
-            className="w-auto h-auto"
-            style={{ maxWidth: '300px !important', width: '300px !important', height: 'auto !important' }}
-            loading="lazy"
-          />
-        </div>
-        
         {/* CTA Button before The Miracle */}
         <div className="mt-8 flex justify-center">
           <button 
