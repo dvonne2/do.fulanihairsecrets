@@ -1260,7 +1260,7 @@ This thing is not hype.
             marginBottom: '32px',
             textTransform: 'none'
           }}>
-            Real Results From Real Women
+            Real Results From Real Women And Men
           </h2>
           
           <div style={{
