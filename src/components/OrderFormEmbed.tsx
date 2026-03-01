@@ -436,24 +436,31 @@ function OrderFormEmbed() {
     
     const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
     
-    // Fire Meta AddToCart
-    fireAddToCart({
-      packageName,
-      amount: selectedPackage.price,
-      email: form.email,
-      phone: form.phone,
+    // Fire events asynchronously without blocking UI
+    Promise.resolve().then(async () => {
+      try {
+        // Fire Meta AddToCart
+        await fireAddToCart({
+          packageName,
+          amount: selectedPackage.price,
+          email: form.email,
+          phone: form.phone,
+        });
+        
+        // Fire TikTok AddToCart
+        await fireTikTokAddToCart({
+          content_name: packageName,
+          value: selectedPackage.price,
+          currency: 'NGN',
+        });
+        
+        console.log('[Events] AddToCart fired - first form interaction detected');
+      } catch (error) {
+        console.error('[Events] AddToCart failed:', error);
+      }
     });
     
-    // Fire TikTok AddToCart
-    fireTikTokAddToCart({
-      content_name: packageName,
-      value: selectedPackage.price,
-      currency: 'NGN',
-    });
-    
-    console.log('[Events] AddToCart fired - first form interaction detected');
-    
-  }, [step, hasTriggeredFormInteraction, form.pkg, selectedPackage]);
+  }, [step, hasTriggeredFormInteraction, form.pkg]); // Remove selectedPackage to prevent re-trigger
 
   // FormStart trigger - fire on first keystroke in any Step 1 field
   useEffect(() => {
@@ -490,23 +497,30 @@ function OrderFormEmbed() {
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
     
-    // Fire Meta LeadSync
-    fireLeadSync({
-      email: form.email,
-      phone: form.phone,
-      firstName,
-      lastName,
+    // Fire events asynchronously without blocking UI
+    Promise.resolve().then(async () => {
+      try {
+        // Fire Meta LeadSync
+        await fireLeadSync({
+          email: form.email,
+          phone: form.phone,
+          firstName,
+          lastName,
+        });
+        
+        // Fire TikTok CompleteRegistration (equivalent to LeadSync)
+        await fireTikTokCompleteRegistration({
+          email: form.email,
+          phone: form.phone,
+          firstName,
+          lastName,
+        });
+        
+        console.log('[Events] LeadSync/CompleteRegistration fired - email and phone captured');
+      } catch (error) {
+        console.error('[Events] LeadSync/CompleteRegistration failed:', error);
+      }
     });
-    
-    // Fire TikTok CompleteRegistration (equivalent to LeadSync)
-    fireTikTokCompleteRegistration({
-      email: form.email,
-      phone: form.phone,
-      firstName,
-      lastName,
-    });
-    
-    console.log('[Events] LeadSync/CompleteRegistration fired - email and phone captured');
     
   }, [step, form.email, form.phone, form.name]);
 
@@ -535,28 +549,35 @@ function OrderFormEmbed() {
     payload.packageName = packageName;
     payload.packagePrice = selectedPackage?.price || 0;
     
-    // Fire Meta InitiateCheckout
-    fireInitiateCheckout({
-      packageName,
-      amount: selectedPackage?.price || 0,
-      email: form.email,
-      phone: form.phone,
-      firstName: payload.firstName,
-      lastName: payload.lastName,
+    // Fire events asynchronously without blocking UI
+    Promise.resolve().then(async () => {
+      try {
+        // Fire Meta InitiateCheckout
+        await fireInitiateCheckout({
+          packageName,
+          amount: selectedPackage?.price || 0,
+          email: form.email,
+          phone: form.phone,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+        });
+        
+        // Fire TikTok InitiateCheckout
+        await fireTikTokInitiateCheckout({
+          content_name: packageName,
+          value: selectedPackage?.price || 0,
+          currency: 'NGN',
+          email: form.email,
+          phone: form.phone,
+        });
+        
+        console.log('[Events] InitiateCheckout fired for both Meta and TikTok');
+      } catch (error) {
+        console.error('[Events] InitiateCheckout failed:', error);
+      }
     });
     
-    // Fire TikTok InitiateCheckout
-    fireTikTokInitiateCheckout({
-      content_name: packageName,
-      value: selectedPackage?.price || 0,
-      currency: 'NGN',
-      email: form.email,
-      phone: form.phone,
-    });
-    
-    console.log('[Events] InitiateCheckout fired for both Meta and TikTok');
-    
-  }, [step, form.email, form.phone, form.name, form.pkg, selectedPackage]);
+  }, [step, form.email, form.phone, form.name, form.pkg]); // Remove selectedPackage to prevent re-trigger
 
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {
