@@ -1864,7 +1864,7 @@ function OrderFormEmbed() {
                       <div style={{ marginTop: 10, fontSize: 13, fontWeight: 900, color: '#1a1a1a' }}>📦 You will receive:</div>
                       <div style={{ marginTop: 6, display: 'grid', gap: 4, paddingLeft: 8 }}>
                         {items.map(line => (
-                          <div key={line} style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>• {line}</div>
+                          <div key={line} style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>{line.replace(/^(\d+)\s/, '$1 x ')}</div>
                         ))}
                       </div>
 
