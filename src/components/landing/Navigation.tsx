@@ -43,13 +43,14 @@ export const Navigation = ({ viewerCount }: NavigationProps) => {
         </span>
         <span style={{
           color: '#fff',
-          fontSize: '12px',
-          fontWeight: '600',
-          fontFamily: 'Montserrat, sans-serif',
+          fontSize: 'clamp(12px, 2.5vw, 16px)',
+          fontWeight: '700',
+          fontFamily: 'Arvo, serif',
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
-          whiteSpace: 'nowrap',
+          whiteSpace: 'normal',
+          flexWrap: 'wrap',
         }}>
           🛡 Money-Back Guarantee
         </span>

@@ -1316,7 +1316,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/fhg%201.webp`}
+                  src={`${BASE_PATH}assets/fhg1.webp`}
                   alt="Before and After Results 1"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1366,7 +1366,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/fhg%204.webp`}
+                  src={`${BASE_PATH}assets/fhg4.webp`}
                   alt="Before and After Results 2"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1416,7 +1416,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/fhg%205.webp`}
+                  src={`${BASE_PATH}assets/fhg5.webp`}
                   alt="Before and After Results 3"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1466,7 +1466,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/images%20(20).jpeg`}
+                  src={`${BASE_PATH}assets/images20.jpeg`}
                   alt="Before and After Results 4"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1516,7 +1516,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_24_56%20AM.png`}
+                  src={`${BASE_PATH}assets/result1.png`}
                   alt="Before and After Results 5"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1566,7 +1566,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_32_20%20AM.png`}
+                  src={`${BASE_PATH}assets/result2.png`}
                   alt="Before and After Results 6"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1616,7 +1616,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_38_14%20AM.png`}
+                  src={`${BASE_PATH}assets/result3.png`}
                   alt="Before and After Results 7"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1666,7 +1666,7 @@ I did all that.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_47_44%20AM.png`}
+                  src={`${BASE_PATH}assets/result4.png`}
                   alt="Before and After Results 8"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
