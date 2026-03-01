@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
+import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
 import { BundleDropdown, BundlePackage } from "./BundleDropdown";
@@ -253,7 +254,7 @@ function OrderFormEmbed() {
     deliveryDate: '',
     deliveryTimeWindow: '',
     addressType: 'home' as 'home' | 'office' | 'other',
-    paymentMethod: 'pay_on_delivery' as 'pay_on_delivery' | 'pay_before_delivery',
+    paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery',
     agreeToTerms: false,
     agreeToMarketing: false,
     orderId: ''
@@ -274,16 +275,25 @@ function OrderFormEmbed() {
   // Ref to track FormStart trigger (first keystroke in any field)
   const hasTriggeredFormStart = useRef(false);
   
-  // Ref to track AddToCart trigger (email + phone valid on Step 1)
+  // Ref to track AddToCart trigger (first form interaction/focus on Step 1)
   const hasTriggeredAddToCart = useRef(false);
+  
+  // Ref to track first form interaction
+  const hasTriggeredFormInteraction = useRef(false);
   
   // Input refs for keyboard scroll handling
   const nameInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle input focus to scroll into view on mobile
+  // Handle input focus to scroll into view on mobile and track first interaction
   const handleInputFocus = (ref: React.RefObject<HTMLInputElement>) => {
+    // Track first form interaction for AddToCart trigger
+    if (!hasTriggeredFormInteraction.current) {
+      hasTriggeredFormInteraction.current = true;
+      console.log('[Events] First form interaction detected');
+    }
+    
     if (window.innerWidth < 768 && ref.current) {
       setTimeout(() => {
         ref.current?.scrollIntoView({ 
@@ -407,35 +417,43 @@ function OrderFormEmbed() {
     return currentPackages.find(p => p.id === form.pkg) || null;
   }, [form.pkg, currentPackages]);
 
-  // STRICT AddToCart trigger - fire ONLY on Step 1 when email + phone are valid
+  // AddToCart trigger - fires when user clicks into the Step 1 form (first interaction/focus)
   useEffect(() => {
-    // STRICT: Only fire on Step 1
+    // Only fire on Step 1
     if (step !== 1) return;
     
-    // STRICT: Only fire once
+    // Only fire once
     if (hasTriggeredAddToCart.current) return;
-
-    // Validate email + phone
-    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
-    const isPhoneValid = (form.phone?.replace(/\D/g, '') || '').length >= 7;
-
-    // STRICT: Both must be valid
-    if (!isEmailValid || !isPhoneValid) return;
-
-    // STRICT: Package must be selected before firing
+    
+    // Fire when user shows any form interaction (focus on any field)
+    if (!hasTriggeredFormInteraction.current) return;
+    
+    // Package must be selected
     if (!form.pkg || !selectedPackage) return;
-
-    // All conditions met — fire AddToCart and lock
+    
+    // Fire AddToCart and lock
     hasTriggeredAddToCart.current = true;
-
+    
+    const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+    
+    // Fire Meta AddToCart
     fireAddToCart({
-      packageName: packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro',
+      packageName,
       amount: selectedPackage.price,
       email: form.email,
       phone: form.phone,
     });
-
-    }, [step, form.email, form.phone, form.pkg, selectedPackage]); // Note: step is in dependencies to enforce Rule 1
+    
+    // Fire TikTok AddToCart
+    fireTikTokAddToCart({
+      content_name: packageName,
+      value: selectedPackage.price,
+      currency: 'NGN',
+    });
+    
+    console.log('[Events] AddToCart fired - first form interaction detected');
+    
+  }, [step, hasTriggeredFormInteraction, form.pkg, selectedPackage]);
 
   // FormStart trigger - fire on first keystroke in any Step 1 field
   useEffect(() => {
@@ -456,29 +474,45 @@ function OrderFormEmbed() {
     }
   }, [form.name, form.phone, form.email]);
 
-  // LeadSync trigger - fire on valid email or phone input
+  // LeadSync / CompleteRegistration trigger - fires after email AND phone number are captured in Step 1's form
   useEffect(() => {
-    // Check if email or phone has valid data
-    const hasValidEmail = form.email && form.email.includes('@') && form.email.length > 5;
-    const hasValidPhone = form.phone && form.phone.replace(/\D/g, '').length >= 10;
+    // Only fire on Step 1
+    if (step !== 1) return;
     
-    if (hasValidEmail || hasValidPhone) {
-      const nameParts = form.name.trim().split(' ');
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-      
-      fireLeadSync({
-        email: hasValidEmail ? form.email : undefined,
-        phone: hasValidPhone ? form.phone : undefined,
-        firstName,
-        lastName,
-      });
-    }
-  }, [form.email, form.phone, form.name]);
+    // Validate both email AND phone
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
+    const isPhoneValid = (form.phone?.replace(/\D/g, '') || '').length >= 10;
+    
+    // Only fire when BOTH email AND phone are valid
+    if (!isEmailValid || !isPhoneValid) return;
+    
+    const nameParts = form.name.trim().split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+    
+    // Fire Meta LeadSync
+    fireLeadSync({
+      email: form.email,
+      phone: form.phone,
+      firstName,
+      lastName,
+    });
+    
+    // Fire TikTok CompleteRegistration (equivalent to LeadSync)
+    fireTikTokCompleteRegistration({
+      email: form.email,
+      phone: form.phone,
+      firstName,
+      lastName,
+    });
+    
+    console.log('[Events] LeadSync/CompleteRegistration fired - email and phone captured');
+    
+  }, [step, form.email, form.phone, form.name]);
 
   // 🎯 Aggressive Identity Capturing - Real-time email/phone capture
 
-  // InitiateCheckout trigger - fire when user advances to Step 2
+  // InitiateCheckout trigger - fires when Step 2 is reached
   useEffect(() => {
     // Prevent multiple fires
     if (hasTriggeredInitiateCheckout.current) return;
@@ -486,47 +520,43 @@ function OrderFormEmbed() {
 
     hasTriggeredInitiateCheckout.current = true;
     
-    console.log('[InitiateCheckout] User advanced to Step 2 - firing InitiateCheckout event');
+    console.log('[Events] User advanced to Step 2 - firing InitiateCheckout events');
     
     // Build payload with all available data from Step 1
     const payload: any = {
-      fullName: form.name || '',
-      email: form.email ? form.email.trim().toLowerCase() : '',
-      phone: form.phone ? form.phone.replace(/\D/g, '') : '',
-      state: form.state || '',
-      lga: form.lga || '',
-      address: form.address || '',
-      
-      // NEW: Enhanced tracking data
-      paymentMethod: form.paymentMethod || 'Pay on Delivery',
-      heardAboutUs: form.heardAboutUs || '',
-      deliveryDate: form.deliveryDate || '',
-      deliveryTimeWindow: form.deliveryTimeWindow || '',
-      deliveryFee: form.deliveryFee || 0
+      email: form.email,
+      phone: form.phone,
+      firstName: form.name.trim().split(' ')[0] || '',
+      lastName: form.name.trim().split(' ').slice(1).join(' ') || '',
     };
-
-    // Add package info if selected
-    if (form.pkg && selectedPackage) {
-      const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
-      payload.packageName = packageName;
-      payload.packagePrice = selectedPackage.price;
-      
-      // Fire InitiateCheckout event
-      const nameParts = form.name.trim().split(' ');
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-      
-      fireInitiateCheckout({
-        packageName,
-        amount: selectedPackage.price,
-        email: form.email,
-        phone: form.phone,
-        firstName,
-        lastName,
-      });
-    }
-
-    }, [step, form.name, form.email, form.phone, form.state, form.lga, form.address, form.paymentMethod, form.heardAboutUs, form.deliveryDate, form.deliveryTimeWindow, form.deliveryFee, form.pkg, selectedPackage]);
+    
+    // Package info
+    const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
+    payload.packageName = packageName;
+    payload.packagePrice = selectedPackage?.price || 0;
+    
+    // Fire Meta InitiateCheckout
+    fireInitiateCheckout({
+      packageName,
+      amount: selectedPackage?.price || 0,
+      email: form.email,
+      phone: form.phone,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+    });
+    
+    // Fire TikTok InitiateCheckout
+    fireTikTokInitiateCheckout({
+      content_name: packageName,
+      value: selectedPackage?.price || 0,
+      currency: 'NGN',
+      email: form.email,
+      phone: form.phone,
+    });
+    
+    console.log('[Events] InitiateCheckout fired for both Meta and TikTok');
+    
+  }, [step, form.email, form.phone, form.name, form.pkg, selectedPackage]);
 
   // Memoize phone validation function
   const validatePhone = useCallback((phone: string) => {

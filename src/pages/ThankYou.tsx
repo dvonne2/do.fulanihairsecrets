@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { fireThankYouEvents, resetTracking } from '@/utils/metaTracking';
+import { fireTikTokPurchase } from '@/utils/tiktokTracking';
 import { WHATSAPP_ORDER_HELP_LINK, WHATSAPP_LINK, PHONE_DISPLAY, PHONE_TEL } from '@/config/api';
 
 import result1 from '@/assets-optimized/results/result-1.webp';
@@ -157,9 +158,22 @@ const ThankYou = () => {
         lga: 'Eti-Osa',
         numItems: 3,
       });
+      
+      // Fire TikTok test events
+      fireTikTokPurchase({
+        content_name: 'SELF LOVE PLUS',
+        value: 71750,
+        currency: 'NGN',
+        email: 'test@fulanihairsecrets.com',
+        phone: '08012345678',
+        orderId: 'TEST_ORDER_123',
+      });
+      
+      console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
       return;
     }
     if (orderData) {
+      // Fire Meta events
       fireThankYouEvents({
         orderId: orderData.orderId || orderNumber,
         email: orderData.email,
@@ -173,6 +187,18 @@ const ThankYou = () => {
         lga: orderData.lga,
         numItems: orderData.numItems || 1,
       });
+      
+      // Fire TikTok Purchase event
+      fireTikTokPurchase({
+        content_name: orderData.packageName || 'Fulani Hair Gro',
+        value: orderData.totalAmount,
+        currency: 'NGN',
+        email: orderData.email,
+        phone: orderData.phone,
+        orderId: orderData.orderId || orderNumber,
+      });
+      
+      console.log('[Events] Purchase fired for both Meta and TikTok');
     }
   }, [orderData, orderNumber]);
 
