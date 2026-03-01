@@ -9,6 +9,13 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 // import { FloatingHearts } from "@/components/FloatingHearts";
 import Index from "./pages/Index";
 
+declare global {
+  interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 const ThankYou = React.lazy(() => import("./pages/ThankYou"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 
@@ -19,6 +26,22 @@ const App = () => {
   const [TooltipProviderComp, setTooltipProviderComp] = useState<React.ComponentType<{ children: React.ReactNode }> | null>(null);
   const [ToasterComp, setToasterComp] = useState<React.ComponentType | null>(null);
   const [SonnerComp, setSonnerComp] = useState<React.ComponentType | null>(null);
+
+  // Load GA4 script dynamically to avoid unsafe redirect errors
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03';
+    script.async = true;
+    script.onerror = () => {
+      console.log('GA4 script failed to load');
+    };
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-KC7KTLQW03');
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setUiReady(true), 1500);
