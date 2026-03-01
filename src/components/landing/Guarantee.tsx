@@ -1,10 +1,7 @@
 export const Guarantee = () => {
   return (
-    <section className="py-16 md:py-20 bg-white">
-      <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <div className="rounded-2xl p-8 md:p-12 text-center bg-gray-50 border border-gray-200 shadow-sm">
-        </div>
-      </div>
-    </section>
+    <div className="w-full max-w-3xl mx-auto px-4 my-8">
+      <img src="/guarantee-banner.png" alt="30 Day Money Back Guarantee — 100% Risk Free" className="w-full h-auto rounded-xl shadow-md" />
+    </div>
   );
 };

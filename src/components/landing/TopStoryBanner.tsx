@@ -77,6 +77,20 @@ export const TopStoryBanner = () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
           </a>
         </div>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 px-2">
+          <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Pay On Delivery Available
+          </span>
+          <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            1–3 Day Nationwide Delivery
+          </span>
+          <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            30-Day Money-Back Guarantee
+          </span>
+        </div>
 
         {/* Is This You? Section */}
         <div className="mt-12 text-center">
