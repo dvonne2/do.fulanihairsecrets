@@ -471,6 +471,8 @@ function OrderFormEmbed() {
           content_name: packageName,
           value: selectedPackage.price,
           currency: 'NGN',
+          email: form.email,
+          phone: form.phone,
         });
         
         console.log('[Events] AddToCart fired - first form interaction detected');

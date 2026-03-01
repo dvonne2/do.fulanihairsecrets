@@ -10,8 +10,40 @@ declare global {
   }
 }
 
-// Helper function to generate unique event IDs
-function generateEventId(): string {
+// ============================================
+// DETERMINISTIC EVENT IDs - Same as Meta
+// ============================================
+// Uses SHA-256 of (eventName + identity) so TikTok events
+// can be deduplicated consistently across sessions
+let _tiktokSessionSeed: string | null = null;
+function getTikTokSessionSeed(): string {
+  if (_tiktokSessionSeed) return _tiktokSessionSeed;
+  try {
+    const stored = localStorage.getItem('fhg_tiktok_session_seed');
+    if (stored) { _tiktokSessionSeed = stored; return stored; }
+  } catch {}
+  _tiktokSessionSeed = Math.random().toString(36).slice(2);
+  try { localStorage.setItem('fhg_tiktok_session_seed', _tiktokSessionSeed); } catch {}
+  return _tiktokSessionSeed;
+}
+
+async function makeTikTokEventId(eventName: string, identity?: string): Promise<string> {
+  const seed = identity || getTikTokSessionSeed();
+  const raw = `${eventName}_${seed}`;
+  const hash = await sha256raw(raw);
+  return hash.slice(0, 16); // 16-char hex = plenty unique
+}
+
+async function sha256raw(value: string): Promise<string> {
+  const data = new TextEncoder().encode(value.trim().toLowerCase());
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+// Helper function to generate random event ID (fallback only)
+function generateRandomEventId(): string {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
@@ -45,7 +77,7 @@ function waitForTikTok(): Promise<boolean> {
 }
 
 // Generic TikTok event firing function
-async function fireTikTokEvent(event: string, parameters?: Record<string, any>): Promise<void> {
+async function fireTikTokEvent(event: string, parameters?: Record<string, any>, identity?: string): Promise<void> {
   const tikTokReady = await waitForTikTok();
   
   if (!tikTokReady) {
@@ -54,7 +86,7 @@ async function fireTikTokEvent(event: string, parameters?: Record<string, any>):
   }
 
   try {
-    const eventId = generateEventId();
+    const eventId = await makeTikTokEventId(event, identity);
     const eventParams = {
       ...parameters,
       event_id: eventId,
@@ -79,14 +111,17 @@ export async function fireTikTokAddToCart(data?: {
   content_id?: string;
   value?: number;
   currency?: string;
+  email?: string;
+  phone?: string;
 }): Promise<void> {
+  const identity = data?.phone || data?.email || '';
   await fireTikTokEvent('AddToCart', {
     content_type: 'product',
     content_name: data?.content_name || 'Fulani Hair Gro',
     content_id: data?.content_id || 'PKG-001', // Required for VSA
     value: data?.value || 0,
     currency: data?.currency || 'NGN',
-  });
+  }, identity);
 }
 
 /**
@@ -98,10 +133,11 @@ export async function fireTikTokLeadSync(data?: {
   firstName?: string;
   lastName?: string;
 }): Promise<void> {
+  const identity = data?.phone || data?.email || '';
   await fireTikTokEvent('LeadSync', {
     content_category: 'identity_capture',
     value: 0,
-  });
+  }, identity);
 }
 
 /**
@@ -113,10 +149,11 @@ export async function fireTikTokCompleteRegistration(data?: {
   firstName?: string;
   lastName?: string;
 }): Promise<void> {
+  const identity = data?.phone || data?.email || '';
   await fireTikTokEvent('CompleteRegistration', {
     content_category: 'identity_capture',
     value: 0,
-  });
+  }, identity);
 }
 
 /**
@@ -130,13 +167,14 @@ export async function fireTikTokInitiateCheckout(data: {
   email?: string;
   phone?: string;
 }): Promise<void> {
+  const identity = data.phone || data.email || '';
   await fireTikTokEvent('InitiateCheckout', {
     content_type: 'product',
     content_name: data.content_name,
     content_id: data.content_id || 'PKG-001', // Required for VSA
     value: data.value,
     currency: data.currency || 'NGN',
-  });
+  }, identity);
 }
 
 /**
@@ -151,6 +189,7 @@ export async function fireTikTokPurchase(data: {
   phone?: string;
   orderId?: string;
 }): Promise<void> {
+  const identity = data.orderId || data.phone || data.email || '';
   await fireTikTokEvent('Purchase', {
     content_type: 'product',
     content_name: data.content_name,
@@ -158,7 +197,7 @@ export async function fireTikTokPurchase(data: {
     value: data.value,
     currency: data.currency || 'NGN',
     order_id: data.orderId,
-  });
+  }, identity);
 }
 
 // ==============================
