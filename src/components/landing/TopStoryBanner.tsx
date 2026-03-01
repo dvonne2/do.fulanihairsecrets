@@ -92,6 +92,11 @@ export const TopStoryBanner = () => {
           </span>
         </div>
 
+        {/* Guarantee Banner */}
+        <div className="w-full max-w-3xl mx-auto px-4 my-8">
+          <img src="/assets/guarantee-banner.png" alt="30 Day Money Back Guarantee — 100% Risk Free" className="w-full h-auto rounded-xl shadow-md" />
+        </div>
+
         {/* Is This You? Section */}
         <div className="mt-12 text-center">
           <strong 
