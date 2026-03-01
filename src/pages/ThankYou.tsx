@@ -62,6 +62,7 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
 
 const ThankYou = () => {
   // const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel(); // Tracking removed
+  const purchaseFired = useRef(false); // Prevent duplicate TikTok Purchase events
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -160,14 +161,17 @@ const ThankYou = () => {
       });
       
       // Fire TikTok test events
-      fireTikTokPurchase({
-        content_name: 'SELF LOVE PLUS',
-        value: 71750,
-        currency: 'NGN',
-        email: 'test@fulanihairsecrets.com',
-        phone: '08012345678',
-        orderId: 'TEST_ORDER_123',
-      });
+      if (!purchaseFired.current) {
+        purchaseFired.current = true;
+        fireTikTokPurchase({
+          content_name: 'SELF LOVE PLUS',
+          value: 71750,
+          currency: 'NGN',
+          email: 'test@fulanihairsecrets.com',
+          phone: '08012345678',
+          orderId: 'TEST_ORDER_123',
+        });
+      }
       
       console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
       return;
@@ -189,14 +193,17 @@ const ThankYou = () => {
       });
       
       // Fire TikTok Purchase event
-      fireTikTokPurchase({
-        content_name: orderData.packageName || 'Fulani Hair Gro',
-        value: orderData.totalAmount,
-        currency: 'NGN',
-        email: orderData.email,
-        phone: orderData.phone,
-        orderId: orderData.orderId || orderNumber,
-      });
+      if (!purchaseFired.current) {
+        purchaseFired.current = true;
+        fireTikTokPurchase({
+          content_name: orderData.packageName || 'Fulani Hair Gro',
+          value: orderData.totalAmount,
+          currency: 'NGN',
+          email: orderData.email,
+          phone: orderData.phone,
+          orderId: orderData.orderId || orderNumber,
+        });
+      }
       
       console.log('[Events] Purchase fired for both Meta and TikTok');
     }
