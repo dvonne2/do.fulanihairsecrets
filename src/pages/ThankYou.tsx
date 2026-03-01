@@ -866,11 +866,11 @@ const ThankYou = () => {
             @keyframes bling-pulse-footer {
               0%, 100% {
                 transform: scale(1);
-                box-shadow: 0 0 15px rgba(218, 165, 32, 0.4);
+                opacity: 1;
               }
               50% {
                 transform: scale(1.03);
-                box-shadow: 0 0 25px rgba(218, 165, 32, 0.8);
+                opacity: 0.9;
               }
             }
           `}</style>

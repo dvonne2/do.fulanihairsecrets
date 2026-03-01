@@ -104,11 +104,11 @@ export const Footer = () => {
           @keyframes bling-pulse {
             0%, 100% {
               transform: scale(1);
-              box-shadow: 0 0 20px rgba(184, 15, 102, 0.5), 0 0 40px rgba(184, 15, 102, 0.3);
+              opacity: 1;
             }
             50% {
               transform: scale(1.02);
-              box-shadow: 0 0 30px rgba(184, 15, 102, 0.8), 0 0 60px rgba(184, 15, 102, 0.4);
+              opacity: 0.9;
             }
           }
         `}</style>

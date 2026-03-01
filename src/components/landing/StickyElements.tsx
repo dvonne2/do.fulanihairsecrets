@@ -182,21 +182,21 @@ export const StickyElements = ({
             @keyframes bling-pulse-buy {
               0%, 100% {
                 transform: scale(1);
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.3);
+                opacity: 1;
               }
               50% {
                 transform: scale(1.05);
-                box-shadow: 0 0 30px rgba(0, 0, 0, 1), 0 0 60px rgba(255, 255, 255, 0.6);
+                opacity: 0.9;
               }
             }
             @keyframes bling-pulse-buy-mobile {
               0%, 100% {
                 transform: scale(1);
-                box-shadow: 0 0 15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.3);
+                opacity: 1;
               }
               50% {
                 transform: scale(1.03);
-                box-shadow: 0 0 20px rgba(0, 0, 0, 1), 0 0 40px rgba(255, 255, 255, 0.6);
+                opacity: 0.9;
               }
             }
             

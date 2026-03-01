@@ -1,6 +1,8 @@
 import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
@@ -48,9 +50,10 @@ export const TopStoryBanner = () => {
             src={`${BASE_PATH}assets/Gemini_Generated_Image_iupms8iupms8iupm.webp`}
             alt="Product Bundle"
             className="w-full h-auto"
-            loading="lazy"
-            width="600"
-            height="400"
+            loading="eager"
+            fetchpriority="high"
+            width="665"
+            height="665"
           />
         </div>
 
@@ -551,14 +554,19 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
           />
         </div>
         
-        {/* Fulani GIF */}
+        {/* Fulani Video */}
         <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/fulani_gif_480x480.gif`}
-            alt="Fulani GIF"
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            width="480"
+            height="480"
             className="w-full h-auto"
-            loading="lazy"
-          />
+          >
+            <source src="/assets/fulani_gif_480x480.mp4" type="video/mp4" />
+          </video>
         </div>
         
         <p 
@@ -1106,23 +1114,9 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/myJDa7s6O5w?si=Ji6uQgEZo2CbWflm"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '8px'
-                  }}
+                <LiteYouTubeEmbed
+                  id="myJDa7s6O5w"
+                  title="Fulani Hair Gro Results Video"
                 />
               </div>
               <h3 style={{
@@ -1162,23 +1156,9 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/xJ4vGH2i48g?si=0yJtHDM5TFhSR6xc"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '8px'
-                  }}
+                <LiteYouTubeEmbed
+                  id="xJ4vGH2i48g"
+                  title="Fulani Hair Gro Customer Testimonial"
                 />
               </div>
               <h3 style={{
@@ -1218,23 +1198,9 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/LNkhqS3-Kxo?si=Lji748md9VrLgMRA"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '8px'
-                  }}
+                <LiteYouTubeEmbed
+                  id="LNkhqS3-Kxo"
+                  title="Fulani Hair Gro Before and After"
                 />
               </div>
               <h3 style={{
@@ -1306,6 +1272,8 @@ This thing is not hype.
                   alt="Before and After Results 1"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1356,6 +1324,8 @@ This thing is not hype.
                   alt="Before and After Results 2"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1406,6 +1376,8 @@ This thing is not hype.
                   alt="Before and After Results 3"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1456,6 +1428,8 @@ This thing is not hype.
                   alt="Before and After Results 4"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1506,6 +1480,8 @@ This thing is not hype.
                   alt="Before and After Results 5"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1556,6 +1532,8 @@ This thing is not hype.
                   alt="Before and After Results 6"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1606,6 +1584,8 @@ This thing is not hype.
                   alt="Before and After Results 7"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1656,6 +1636,8 @@ This thing is not hype.
                   alt="Before and After Results 8"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  width="600"
+                  height="400"
                 />
                 <div style={{
                   position: 'absolute',
@@ -1729,6 +1711,8 @@ This thing is not hype.
                   alt="WhatsApp testimonial from Hajia Maryam about her edges and confidence"
                   className="w-full h-auto object-contain"
                   loading="lazy"
+                  width="600"
+                  height="800"
                 />
               </div>
               <div className="rounded-xl overflow-hidden p-3 bg-white border border-gray-200 shadow-sm">
