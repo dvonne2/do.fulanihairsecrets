@@ -96,9 +96,9 @@ const resolvePkgId = (v: any): string => {
 
 const PACKAGE_CONTENTS: Record<string, string[]> = {
   'SELF LOVE PLUS': ['1 500ml Net Shampoo', '1 150ml Net Pomade', '1 500ml Net Conditioner'],
-  'SELF LOVE RETURN': ['3 150ml Net Pomade'],
-  'SELF LOVE B2GOF': ['3 500ml Net Shampoo', '3 150ml Net Pomade'],
-  'SELF LOVE PLUS B2GOF': ['3 500ml Net Shampoo', '3 150ml Net Pomade', '3 500ml Net Conditioner'],
+  'SELF LOVE RETURN': ['3 x 150ml Net Pomade'],
+  'SELF LOVE B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade'],
+  'SELF LOVE PLUS B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade', '3 500ml Net Conditioner'],
   'FAMILY SAVES': ['10 500ml Net Shampoo', '10 150ml Net Pomade', '10 500ml Net Conditioner']
 };
 
