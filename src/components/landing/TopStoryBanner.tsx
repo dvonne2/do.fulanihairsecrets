@@ -2090,6 +2090,7 @@ This thing is not hype.
 
         <section className="mt-10 bg-[#B80F66] text-center text-white px-4 py-10 fhg-helvetica">
           <div className="max-w-4xl mx-auto space-y-6">
+            undefined
             <p className="font-semibold text-3xl md:text-4xl leading-snug">
               No more scarves, wigs, or mascara just to hide your hairline
             </p>
