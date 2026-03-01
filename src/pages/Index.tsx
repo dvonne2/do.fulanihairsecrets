@@ -450,8 +450,13 @@ const Index = () => {
       
       <main>
         <TopStoryBanner />
-
         
+        {mounted && loadNonCritical && (
+          <Suspense fallback={null}>
+            <Guarantee />
+          </Suspense>
+        )}
+
         <DisqualificationWarning stockCount={stockCount} />
 
         <LazySection minHeightClassName="min-h-[200px]">
