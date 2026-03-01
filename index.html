@@ -75,18 +75,14 @@
       'https://connect.facebook.net/en_US/fbevents.js');
     </script>
     
-    <!-- GA4: defer load like FB Pixel to avoid blocking render -->
-    <script>
-      window.dataLayer=window.dataLayer||[];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js',new Date());
-      gtag('config','G-KC7KTLQW03');
-      (function(){function load(){var s=document.createElement('script');s.async=!0;
-      s.src='https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03';
-      document.head.appendChild(s)}
-      if('requestIdleCallback' in window){requestIdleCallback(load)}
-      else{setTimeout(load,2000)}})();
-    </script>
+    <!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KC7KTLQW03');
+</script>
 
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#DAA520" />

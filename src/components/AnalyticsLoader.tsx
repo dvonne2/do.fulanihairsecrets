@@ -43,7 +43,11 @@ export function AnalyticsLoader({ delayMs = defaultDelay }: Props) {
 
   // Fire PageView CAPI immediately — don't wait for GA4 delay
   useEffect(() => {
-    firePageViewCAPI();
+    try {
+      firePageViewCAPI();
+    } catch (e) {
+      /* swallow CORS/analytics errors to prevent component remounts */
+    }
   }, []);
 
   useEffect(() => {
