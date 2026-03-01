@@ -619,8 +619,8 @@ function OrderFormEmbed() {
     const digits = phone.replace(/\D/g, '');
     
     if (digits.length === 0) return '';  // No error, empty field
-    if (digits.length < 11) return `Enter ${11 - digits.length} more digits`;
-    if (digits.length > 11) return 'Phone number cannot exceed 11 digits';
+    if (digits.length < 11) return 'Please enter a valid 11-digit phone number';
+    if (digits.length > 11) return 'Please enter a valid 11-digit phone number';
     if (!digits.startsWith('0')) return 'Must start with 0';
     
     const validPrefixes = ['070', '071', '080', '081', '090', '091'];
