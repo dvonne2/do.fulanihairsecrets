@@ -708,6 +708,32 @@ This thing is not hype.
           These group of herbs are plucked from the bushes in Maiduguri and has been a heirloom amongst the women in my Fulani family for centuries. People think Fulani women have naturally long hair and that is partly the truth but any woman can have naturally long hair if she uses the right herbs in her hair.
         </p>
         
+        <p 
+          className="mt-6"
+          style={{
+            color: '#0A0A0A',
+            fontFamily: 'Arvo, serif',
+            fontSize: '16px',
+            fontWeight: '300',
+            textAlign: 'left',
+            lineHeight: '1.6',
+            textDecoration: 'none',
+            textTransform: 'none'
+          }}
+        >
+          Fast forward after my second baby… ah.
+
+My hair disgraced me.
+
+My edges vanished. Both sides smooth like I polished it. Proper Iya eko situation. My scalp was itching like crazy. The dandruff was not small flakes o. The type that if you scratch, blood will almost come out. My hair became thin. Flat. No volume.
+
+I panicked.
+
+I bought premium shampoos. I did treatments. I went to my trichologist friend (yes, the same one that is now my co-founder). She checked everything and said it was hormones. She said stop wigs. Stop combing too much. Eat vegetables.
+
+I did all that.
+        </p>
+
         {/* Mung Bean and Red Clover Image */}
         <div className="mt-6 flex justify-center">
           <img
