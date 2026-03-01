@@ -277,11 +277,15 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
     return () => document.removeEventListener("keydown", h);
   }, []);
 
-  // Scroll selected card into view when panel opens
+  // Scroll to bottom (most expensive package) when panel opens
   useEffect(() => {
-    if (open && value && panelRef.current) {
-      const el = panelRef.current.querySelector(`[data-id="${value}"]`);
-      if (el) (el as HTMLElement).scrollIntoView({ block: "nearest" });
+    if (open && panelRef.current) {
+      // Scroll to the very bottom to show the most expensive package first
+      requestAnimationFrame(() => {
+        if (panelRef.current) {
+          panelRef.current.scrollTop = panelRef.current.scrollHeight;
+        }
+      });
     }
   }, [open]);
 
