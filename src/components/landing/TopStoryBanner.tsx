@@ -528,32 +528,6 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
           />
         </div>
         
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          Fast forward after my second baby… ah.
-
-My hair disgraced me.
-
-My edges vanished. Both sides smooth like I polished it. Proper Iya eko situation. My scalp was itching like crazy. The dandruff was not small flakes o. The type that if you scratch, blood will almost come out. My hair became thin. Flat. No volume.
-
-I panicked.
-
-I bought premium shampoos. I did treatments. I went to my trichologist friend (yes, the same one that is now my co-founder). She checked everything and said it was hormones. She said stop wigs. Stop combing too much. Eat vegetables.
-
-I did all that.
-        </p>
-
         {/* Fulani GIF */}
         <div className="mt-6">
           <img
