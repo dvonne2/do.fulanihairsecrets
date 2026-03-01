@@ -255,7 +255,6 @@ function OrderFormEmbed() {
     deliveryTimeWindow: '',
     addressType: 'home' as 'home' | 'office' | 'other',
     paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery',
-    agreeToTerms: false,
     agreeToMarketing: false,
     orderId: ''
   });
@@ -1823,24 +1822,7 @@ function OrderFormEmbed() {
               onChange={e => setForm({ ...form, comment: e.target.value })}
             />
 
-            {/* Before you submit - only show for Pay on Delivery */}
-            {form.paymentMethod === 'Pay on Delivery' && (
-              <>
-                <label style={S.label}>BEFORE YOU SUBMIT <span style={S.req}>*</span></label>
-                <div style={{ marginTop: 10 }}>
-                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#333' }}>
-                    <input
-                      type="checkbox"
-                      checked={form.agreeToTerms}
-                      onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
-                      style={{ cursor: 'pointer', marginTop: 2 }}
-                    />
-                    <span></span>
-                  </label>
-                </div>
-              </>
-            )}
-
+            
             {/* Summary */}
             <div style={S.sum}>
               <div style={{ fontSize: 14, fontWeight: 900, letterSpacing: 0.6, textAlign: 'center', marginBottom: 10, color: '#1a1a1a' }}>📋 ORDER SUMMARY</div>
@@ -1924,15 +1906,14 @@ function OrderFormEmbed() {
                   const stateOk = !!form.state;
                   const dateOk = !!form.deliveryDate && !deliveryDateError;
                   // Removed delivery time validation - no longer required
-                  const termsOk = form.paymentMethod === 'Pay on Delivery' ? !!form.agreeToTerms : true;
+                  // Removed terms agreement validation - checkbox deleted
 
-                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !dateOk || !termsOk) {
+                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !dateOk) {
                     const missing = [];
                     if (!addressOk) missing.push('Address');
                     if (!stateOk) missing.push('State');
                     if (!dateOk) missing.push('Delivery date');
-                    // Removed 'Delivery time' from missing fields
-                    if (!termsOk) missing.push('Terms agreement');
+                    // Removed 'Delivery time' and 'Terms agreement' from missing fields
                     if (!phoneOk) missing.push('Phone number');
                     if (!emailOk) missing.push('Email');
                     toast.error(`Please complete: ${missing.join(', ')}`);
