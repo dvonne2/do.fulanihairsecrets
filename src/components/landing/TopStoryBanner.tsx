@@ -1007,17 +1007,6 @@ I did all that.
           #LOVEFULANIHAIRGRO
         </strong>
 
-        {/* 1ezgif-4-7ec1374048a8 (2) GIF */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/1ezgif-4-7ec1374048a8%20(2).gif`}
-            alt="1ezgif"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
-        
         {/* Our Happy Customers Section */}
         <div className="mt-12 mb-8">
           {/* Hero Image */}
@@ -2113,6 +2102,17 @@ I did all that.
           </div>
           </div>
         </section>
+
+        {/* 1ezgif-4-7ec1374048a8 (2) GIF */}
+        <div className="mt-10 flex justify-center">
+          <img
+            src={`${BASE_PATH}assets/1ezgif-4-7ec1374048a8%20(2).gif`}
+            alt="1ezgif"
+            className="w-auto h-auto"
+            style={{ maxWidth: '900px !important', width: '900px !important' }}
+            loading="lazy"
+          />
+        </div>
 
         <section className="mt-10 bg-[#B80F66] text-center text-white px-4 py-10 fhg-helvetica">
           <div className="max-w-4xl mx-auto space-y-6">
