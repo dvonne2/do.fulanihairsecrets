@@ -278,8 +278,8 @@ function OrderFormEmbed() {
   // Ref to track AddToCart trigger (first form interaction/focus on Step 1)
   const hasTriggeredAddToCart = useRef(false);
   
-  // Ref to track first form interaction
-  const hasTriggeredFormInteraction = useRef(false);
+  // State to track first form interaction (instead of ref to trigger useEffect)
+  const [hasTriggeredFormInteraction, setHasTriggeredFormInteraction] = useState(false);
   
   // Input refs for keyboard scroll handling
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -289,8 +289,8 @@ function OrderFormEmbed() {
   // Handle input focus to scroll into view on mobile and track first interaction
   const handleInputFocus = (ref: React.RefObject<HTMLInputElement>) => {
     // Track first form interaction for AddToCart trigger
-    if (!hasTriggeredFormInteraction.current) {
-      hasTriggeredFormInteraction.current = true;
+    if (!hasTriggeredFormInteraction) {
+      setHasTriggeredFormInteraction(true);
       console.log('[Events] First form interaction detected - hasTriggeredFormInteraction set to true');
     }
     
@@ -421,7 +421,7 @@ function OrderFormEmbed() {
   useEffect(() => {
     console.log('[Events] AddToCart useEffect triggered:', {
       step,
-      hasTriggeredFormInteraction: hasTriggeredFormInteraction.current,
+      hasTriggeredFormInteraction,
       hasTriggeredAddToCart: hasTriggeredAddToCart.current,
       formPkg: form.pkg,
       selectedPackage: selectedPackage?.id
@@ -440,7 +440,7 @@ function OrderFormEmbed() {
     }
     
     // Fire when user shows any form interaction (focus on any field)
-    if (!hasTriggeredFormInteraction.current) {
+    if (!hasTriggeredFormInteraction) {
       console.log('[Events] AddToCart: No form interaction yet, skipping');
       return;
     }
@@ -480,7 +480,7 @@ function OrderFormEmbed() {
       }
     });
     
-  }, [step, hasTriggeredFormInteraction, form.pkg]); // Remove selectedPackage to prevent re-trigger
+  }, [step, hasTriggeredFormInteraction, form.pkg]); // Now hasTriggeredFormInteraction will trigger re-render
 
   // FormStart trigger - fire on first keystroke in any Step 1 field
   useEffect(() => {
@@ -517,15 +517,15 @@ function OrderFormEmbed() {
       return;
     }
     
-    // Validate both email AND phone
+    // Validate either email OR phone
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
     const isPhoneValid = (form.phone?.replace(/\D/g, '') || '').length >= 10;
     
     console.log('[Events] LeadSync validation:', { isEmailValid, isPhoneValid, email: form.email, phone: form.phone });
     
-    // Only fire when BOTH email AND phone are valid
-    if (!isEmailValid || !isPhoneValid) {
-      console.log('[Events] LeadSync: Email or phone not valid, skipping', { isEmailValid, isPhoneValid });
+    // Fire when EITHER email OR phone is valid
+    if (!isEmailValid && !isPhoneValid) {
+      console.log('[Events] LeadSync: Neither email nor phone valid, skipping', { isEmailValid, isPhoneValid });
       return;
     }
     
@@ -1835,7 +1835,7 @@ function OrderFormEmbed() {
                       onChange={e => setForm({ ...form, agreeToTerms: e.target.checked })}
                       style={{ cursor: 'pointer', marginTop: 2 }}
                     />
-                    <span>I understand that this is a Pay-on-Delivery order and I will be available to receive my package.</span>
+                    <span></span>
                   </label>
                 </div>
               </>
