@@ -76,12 +76,14 @@ async function fireTikTokEvent(event: string, parameters?: Record<string, any>):
  */
 export async function fireTikTokAddToCart(data?: {
   content_name?: string;
+  content_id?: string;
   value?: number;
   currency?: string;
 }): Promise<void> {
   await fireTikTokEvent('AddToCart', {
     content_type: 'product',
     content_name: data?.content_name || 'Fulani Hair Gro',
+    content_id: data?.content_id || 'PKG-001', // Required for VSA
     value: data?.value || 0,
     currency: data?.currency || 'NGN',
   });
@@ -122,6 +124,7 @@ export async function fireTikTokCompleteRegistration(data?: {
  */
 export async function fireTikTokInitiateCheckout(data: {
   content_name: string;
+  content_id?: string;
   value: number;
   currency?: string;
   email?: string;
@@ -130,6 +133,7 @@ export async function fireTikTokInitiateCheckout(data: {
   await fireTikTokEvent('InitiateCheckout', {
     content_type: 'product',
     content_name: data.content_name,
+    content_id: data.content_id || 'PKG-001', // Required for VSA
     value: data.value,
     currency: data.currency || 'NGN',
   });
@@ -140,6 +144,7 @@ export async function fireTikTokInitiateCheckout(data: {
  */
 export async function fireTikTokPurchase(data: {
   content_name: string;
+  content_id?: string;
   value: number;
   currency?: string;
   email?: string;
@@ -149,6 +154,7 @@ export async function fireTikTokPurchase(data: {
   await fireTikTokEvent('Purchase', {
     content_type: 'product',
     content_name: data.content_name,
+    content_id: data.content_id || 'PKG-001', // Required for VSA
     value: data.value,
     currency: data.currency || 'NGN',
     order_id: data.orderId,

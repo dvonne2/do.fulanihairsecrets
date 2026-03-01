@@ -291,7 +291,7 @@ function OrderFormEmbed() {
     // Track first form interaction for AddToCart trigger
     if (!hasTriggeredFormInteraction.current) {
       hasTriggeredFormInteraction.current = true;
-      console.log('[Events] First form interaction detected');
+      console.log('[Events] First form interaction detected - hasTriggeredFormInteraction set to true');
     }
     
     if (window.innerWidth < 768 && ref.current) {
@@ -419,17 +419,37 @@ function OrderFormEmbed() {
 
   // AddToCart trigger - fires when user clicks into the Step 1 form (first interaction/focus)
   useEffect(() => {
+    console.log('[Events] AddToCart useEffect triggered:', {
+      step,
+      hasTriggeredFormInteraction: hasTriggeredFormInteraction.current,
+      hasTriggeredAddToCart: hasTriggeredAddToCart.current,
+      formPkg: form.pkg,
+      selectedPackage: selectedPackage?.id
+    });
+    
     // Only fire on Step 1
-    if (step !== 1) return;
+    if (step !== 1) {
+      console.log('[Events] AddToCart: Not Step 1, skipping');
+      return;
+    }
     
     // Only fire once
-    if (hasTriggeredAddToCart.current) return;
+    if (hasTriggeredAddToCart.current) {
+      console.log('[Events] AddToCart: Already fired, skipping');
+      return;
+    }
     
     // Fire when user shows any form interaction (focus on any field)
-    if (!hasTriggeredFormInteraction.current) return;
+    if (!hasTriggeredFormInteraction.current) {
+      console.log('[Events] AddToCart: No form interaction yet, skipping');
+      return;
+    }
     
     // Package must be selected
-    if (!form.pkg || !selectedPackage) return;
+    if (!form.pkg || !selectedPackage) {
+      console.log('[Events] AddToCart: No package selected, skipping', { formPkg: form.pkg, selectedPackage: selectedPackage?.id });
+      return;
+    }
     
     // Fire AddToCart and lock
     hasTriggeredAddToCart.current = true;
@@ -483,15 +503,31 @@ function OrderFormEmbed() {
 
   // LeadSync / CompleteRegistration trigger - fires after email AND phone number are captured in Step 1's form
   useEffect(() => {
+    console.log('[Events] LeadSync useEffect triggered:', {
+      step,
+      formEmail: form.email,
+      formPhone: form.phone,
+      isEmailValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || ''),
+      isPhoneValid: (form.phone?.replace(/\D/g, '') || '').length >= 10
+    });
+    
     // Only fire on Step 1
-    if (step !== 1) return;
+    if (step !== 1) {
+      console.log('[Events] LeadSync: Not Step 1, skipping');
+      return;
+    }
     
     // Validate both email AND phone
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email?.trim() || '');
     const isPhoneValid = (form.phone?.replace(/\D/g, '') || '').length >= 10;
     
+    console.log('[Events] LeadSync validation:', { isEmailValid, isPhoneValid, email: form.email, phone: form.phone });
+    
     // Only fire when BOTH email AND phone are valid
-    if (!isEmailValid || !isPhoneValid) return;
+    if (!isEmailValid || !isPhoneValid) {
+      console.log('[Events] LeadSync: Email or phone not valid, skipping', { isEmailValid, isPhoneValid });
+      return;
+    }
     
     const nameParts = form.name.trim().split(' ');
     const firstName = nameParts[0] || '';

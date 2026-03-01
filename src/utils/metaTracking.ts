@@ -358,9 +358,20 @@ export async function fireLeadSync(info: {
   firstName?: string;
   lastName?: string;
 }): Promise<void> {
-  if (leadSyncFired) return;
-  if (!info.email && !info.phone) return;
+  console.log('[Meta] fireLeadSync called:', { info, leadSyncFired });
+  
+  if (leadSyncFired) {
+    console.log('[Meta] LeadSync already fired, skipping');
+    return;
+  }
+  if (!info.email && !info.phone) {
+    console.log('[Meta] LeadSync: No email or phone provided, skipping');
+    return;
+  }
+  
   leadSyncFired = true;
+  console.log('[Meta] LeadSync: Proceeding with event firing');
+  
   const userData = await buildUserData(info);
   const identity = info.phone || info.email || '';
   const eventId = await makeEventId('LeadSync', identity);
