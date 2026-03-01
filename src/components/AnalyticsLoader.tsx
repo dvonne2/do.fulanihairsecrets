@@ -27,7 +27,19 @@ export function AnalyticsLoader({ delayMs = defaultDelay }: Props) {
     hasLoadedRef.current = true;
 
     try {
+      // Load GA4 script dynamically to avoid unsafe redirect errors
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03';
+      script.async = true;
+      script.onerror = () => {
+        console.log('GA4 script failed to load');
+      };
+      document.head.appendChild(script);
+
       window.dataLayer = window.dataLayer || [];
+      window.gtag = function(){ window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', 'G-KC7KTLQW03');
 
       const initialPath = window.location.pathname + window.location.search;
       window.dataLayer.push({ event: 'page_view', page_path: initialPath });
