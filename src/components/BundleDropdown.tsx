@@ -277,13 +277,23 @@ export function BundleDropdown({ packages, value, onChange }: BundleDropdownProp
     return () => document.removeEventListener("keydown", h);
   }, []);
 
-  // Scroll to bottom (most expensive package) when panel opens
+  // Animated scroll to bottom when panel opens
   useEffect(() => {
     if (open && panelRef.current) {
-      // Scroll to the very bottom to show the most expensive package first
       requestAnimationFrame(() => {
+        // Step 1: Instantly jump to top (ensure we always animate from top)
         if (panelRef.current) {
-          panelRef.current.scrollTop = panelRef.current.scrollHeight;
+          panelRef.current.scrollTop = 0;
+
+          // Step 2: Smoothly scroll to the bottom so customer sees it scroll
+          setTimeout(() => {
+            if (panelRef.current) {
+              panelRef.current.scrollTo({
+                top: panelRef.current.scrollHeight,
+                behavior: 'smooth'
+              });
+            }
+          }, 100); // small delay so the dropdown is fully open first
         }
       });
     }
