@@ -60,9 +60,11 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
   },
 };
 
+// Global ref to prevent duplicate TikTok Purchase events across component re-renders
+const purchaseFired = { current: false };
+
 const ThankYou = () => {
   // const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel(); // Tracking removed
-  const purchaseFired = useRef(false); // Prevent duplicate TikTok Purchase events
   const [orderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       // Use entry_id from URL (WPForms Entry ID) as the single source of truth
@@ -143,6 +145,7 @@ const ThankYou = () => {
   }, []);
 
   useEffect(() => {
+    console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
     const isTestMode = window.location.search.includes('test=1');
     if (isTestMode) {
       resetTracking();
@@ -161,8 +164,10 @@ const ThankYou = () => {
       });
       
       // Fire TikTok test events
+      console.log('[TikTok] Test mode - purchaseFired.current:', purchaseFired.current);
       if (!purchaseFired.current) {
         purchaseFired.current = true;
+        console.log('[TikTok] Firing test Purchase event');
         fireTikTokPurchase({
           content_name: 'SELF LOVE PLUS',
           value: 71750,
@@ -171,6 +176,8 @@ const ThankYou = () => {
           phone: '08012345678',
           orderId: 'TEST_ORDER_123',
         });
+      } else {
+        console.log('[TikTok] Test mode - Purchase already fired, skipping');
       }
       
       console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
@@ -193,8 +200,10 @@ const ThankYou = () => {
       });
       
       // Fire TikTok Purchase event
+      console.log('[TikTok] Regular mode - purchaseFired.current:', purchaseFired.current);
       if (!purchaseFired.current) {
         purchaseFired.current = true;
+        console.log('[TikTok] Firing regular Purchase event');
         fireTikTokPurchase({
           content_name: orderData.packageName || 'Fulani Hair Gro',
           value: orderData.totalAmount,
@@ -203,6 +212,8 @@ const ThankYou = () => {
           phone: orderData.phone,
           orderId: orderData.orderId || orderNumber,
         });
+      } else {
+        console.log('[TikTok] Regular mode - Purchase already fired, skipping');
       }
       
       console.log('[Events] Purchase fired for both Meta and TikTok');
