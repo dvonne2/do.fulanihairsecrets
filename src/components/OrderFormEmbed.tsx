@@ -1836,15 +1836,15 @@ function OrderFormEmbed() {
                   const addressOk = !!form.address.trim();
                   const stateOk = !!form.state;
                   const dateOk = !!form.deliveryDate && !deliveryDateError;
-                  const timeOk = !!form.deliveryTimeWindow;
+                  // Removed delivery time validation - no longer required
                   const termsOk = form.paymentMethod === 'Pay on Delivery' ? !!form.agreeToTerms : true;
 
-                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !dateOk || !timeOk || !termsOk) {
+                  if (!phoneOk || !emailOk || !addressOk || !stateOk || !dateOk || !termsOk) {
                     const missing = [];
                     if (!addressOk) missing.push('Address');
                     if (!stateOk) missing.push('State');
                     if (!dateOk) missing.push('Delivery date');
-                    if (!timeOk) missing.push('Delivery time');
+                    // Removed 'Delivery time' from missing fields
                     if (!termsOk) missing.push('Terms agreement');
                     if (!phoneOk) missing.push('Phone number');
                     if (!emailOk) missing.push('Email');
@@ -1859,9 +1859,6 @@ function OrderFormEmbed() {
                       const el = document.querySelector('input[type="date"]') as HTMLElement;
                       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                       el?.focus();
-                    } else if (!timeOk) {
-                      const el = document.querySelector('[name="deliveryTimeWindow"]') as HTMLElement;
-                      el?.closest('div')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     } else if (!termsOk) {
                       const el = document.querySelector('input[type="checkbox"]') as HTMLElement;
                       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
