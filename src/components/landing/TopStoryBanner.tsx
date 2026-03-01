@@ -11,8 +11,8 @@ const hajiaMaryamTestimonial = `${BASE_PATH}assets/Hajia%20Maryam%20Testimonial.
 const hajiaMaryam2 = `${BASE_PATH}assets/Hajia-Maryam-2.webp`;
 const mamaTitiTestimonial1 = `${BASE_PATH}assets/Mama%20Titi%20Testimonial1.webp`;
 const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
-const heroFulani = `${BASE_PATH}assets/Real%20Eryka.png`;
-const heroMobile = `${BASE_PATH}assets/Real%20Eryka.png`;
+const heroFulani = `${BASE_PATH}assets/Real%20Eryka.webp`;
+const heroMobile = `${BASE_PATH}assets/Real%20Eryka.webp`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
@@ -45,20 +45,24 @@ export const TopStoryBanner = () => {
         {/* Bundle Image */}
         <div className="mt-6">
           <img
-            src={`${BASE_PATH}assets/Gemini_Generated_Image_iupms8iupms8iupm.png`}
+            src={`${BASE_PATH}assets/Gemini_Generated_Image_iupms8iupms8iupm.webp`}
             alt="Product Bundle"
             className="w-full h-auto"
             loading="lazy"
+            width="600"
+            height="400"
           />
         </div>
 
         {/* ChatGPT Image */}
         <div className="mt-6">
           <img
-            src={`${BASE_PATH}assets/ChatGPT%20Image%20Feb%2024,%202026,%2011_21_10%20PM.png`}
+            src={`${BASE_PATH}assets/ChatGPT%20Image%20Feb%2024,%202026,%2011_21_10%20PM.webp`}
             alt="ChatGPT Image"
             className="w-full h-auto"
             loading="lazy"
+            width="600"
+            height="400"
           />
         </div>
 
@@ -94,7 +98,7 @@ export const TopStoryBanner = () => {
 
         {/* Guarantee Banner */}
         <div className="w-full max-w-3xl mx-auto px-4 my-8">
-          <img src="/assets/guarantee-banner.png" alt="30 Day Money Back Guarantee — 100% Risk Free" className="w-full h-auto rounded-xl shadow-md" />
+          <img src="/assets/guarantee-banner.webp" alt="30 Day Money Back Guarantee — 100% Risk Free" className="w-full h-auto rounded-xl shadow-md" loading="lazy" width="800" height="200" />
         </div>
 
         {/* Is This You? Section */}
@@ -1448,7 +1452,7 @@ This thing is not hype.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/images20.jpeg`}
+                  src={`${BASE_PATH}assets/images20.webp`}
                   alt="Before and After Results 4"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1498,7 +1502,7 @@ This thing is not hype.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/result1.png`}
+                  src={`${BASE_PATH}assets/result1.webp`}
                   alt="Before and After Results 5"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1548,7 +1552,7 @@ This thing is not hype.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/result2.png`}
+                  src={`${BASE_PATH}assets/result2.webp`}
                   alt="Before and After Results 6"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1598,7 +1602,7 @@ This thing is not hype.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/result3.png`}
+                  src={`${BASE_PATH}assets/result3.webp`}
                   alt="Before and After Results 7"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
@@ -1648,7 +1652,7 @@ This thing is not hype.
             }}>
               <div style={{ position: 'relative' }}>
                 <img
-                  src={`${BASE_PATH}assets/result4.png`}
+                  src={`${BASE_PATH}assets/result4.webp`}
                   alt="Before and After Results 8"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
