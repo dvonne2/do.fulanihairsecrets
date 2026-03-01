@@ -1797,8 +1797,12 @@ function OrderFormEmbed() {
                 
                 setForm({ ...form, deliveryDate: e.target.value });
               }}
-              onClick={(e) => e.target.showPicker()}
-              onFocus={(e) => e.target.showPicker()}
+              onClick={(e) => {
+                const target = e.target as HTMLInputElement;
+                if (target.showPicker) {
+                  target.showPicker();
+                }
+              }}
               min={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
               max={(() => { const d = new Date(); d.setDate(d.getDate() + 2); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })()}
               required
