@@ -74,7 +74,7 @@ export const TopStoryBanner = () => {
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
             style={{ fontSize: '20px' }}
           >
-            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
           </a>
         </div>
 
@@ -138,7 +138,7 @@ export const TopStoryBanner = () => {
           <p style={{marginBottom: '24px'}}>👉🏽 Can you no longer confidently pack your natural hair without feeling exposed?</p>
         </div>
 
-        {/* WHAT TO EXPECT Section */}
+        {/* HOW IT WORKS Section */}
         <div className="mt-12 text-center">
           <strong 
             className="block"
@@ -159,30 +159,206 @@ export const TopStoryBanner = () => {
               margin: '0 auto'
             }}
           >
-            WHAT TO EXPECT
+            HOW IT WORKS
           </strong>
 
-          {/* After 1 Month of Use */}
-          <p 
-            className="mt-6 text-center"
+          {/* Your Journey Section */}
+          <div 
+            className="mt-8 p-8 rounded-2xl text-center"
             style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
+              backgroundColor: '#FFF5F0', // Light cream/blush color
+              border: '1px solid #F3E5D0',
+              borderRadius: '16px',
+              margin: '32px auto',
+              maxWidth: '800px'
             }}
           >
-            After 1 month of use - Your hair length and density will start to improve.<br/>
-            You will start to get more compliments from people.<br/>
-            Edges will start to grow.<br/>
-            Hair will be more hydrated.<br/>
-            Reduction of hair breakage will start to happen.
-          </p>
+            <h2 
+              className="mb-4"
+              style={{
+                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                fontSize: '28px',
+                fontWeight: '700',
+                textAlign: 'center',
+                lineHeight: '1.3'
+              }}
+            >
+              <span style={{ color: '#2C1810', fontWeight: '700' }}>Your Journey to</span>{' '}
+              <span style={{ 
+                color: '#DAA520', 
+                fontWeight: '700', 
+                fontStyle: 'italic' 
+              }}>
+                Fuller, Longer and Healthier Hair
+              </span>
+            </h2>
+            
+            <p 
+              className="mt-4"
+              style={{
+                color: '#4A4A4A',
+                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                fontSize: '16px',
+                fontWeight: '400',
+                textAlign: 'center',
+                lineHeight: '1.6',
+                maxWidth: '600px',
+                margin: '16px auto 0'
+              }}
+            >
+              Experience the Fulani Hair Gro™ difference throughout your hair journey. Watch as your hair transforms, growing thicker, longer, stronger, and healthier with each passing week.
+            </p>
+          </div>
 
-        {/* Download (5) Image */}
+          {/* Milestone Cards */}
+          <div className="mt-12" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '24px',
+              padding: '0 16px'
+            }}>
+              
+              {/* Card 1 - After 1 Month */}
+              <div 
+                style={{
+                  backgroundColor: '#F5E6D3', // Tan/sandy background
+                  border: '2px solid #D4A574',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
+                <div style={{ 
+                  color: '#DAA520', 
+                  fontSize: '18px', 
+                  fontWeight: '700',
+                  marginBottom: '8px',
+                  textTransform: 'uppercase'
+                }}>
+                  After 1 Month
+                </div>
+                <h3 style={{ 
+                  color: '#3E2723', // Dark brown
+                  fontSize: '20px', 
+                  fontWeight: '700',
+                  marginBottom: '16px',
+                  lineHeight: '1.3'
+                }}>
+                  Hair Begins to Transform
+                </h3>
+                <ul style={{ 
+                  color: '#4A4A4A',
+                  fontSize: '14px',
+                  lineHeight: '1.6',
+                  textAlign: 'left',
+                  margin: '0',
+                  paddingLeft: '20px'
+                }}>
+                  <li>Your hair length and density will start to improve</li>
+                  <li>You will start to get more compliments from people</li>
+                  <li>Edges will start to grow</li>
+                  <li>Hair will be more hydrated</li>
+                  <li>Reduction of hair breakage will start to happen</li>
+                </ul>
+              </div>
+
+              {/* Card 2 - After 3 Months */}
+              <div 
+                style={{
+                  backgroundColor: '#F5E6D3', // Tan/sandy background
+                  border: '2px solid #D4A574',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
+                <div style={{ 
+                  color: '#DAA520', 
+                  fontSize: '18px', 
+                  fontWeight: '700',
+                  marginBottom: '8px',
+                  textTransform: 'uppercase'
+                }}>
+                  After 3 Months
+                </div>
+                <h3 style={{ 
+                  color: '#3E2723', // Dark brown
+                  fontSize: '20px', 
+                  fontWeight: '700',
+                  marginBottom: '16px',
+                  lineHeight: '1.3'
+                }}>
+                  Visible Dramatic Results
+                </h3>
+                <ul style={{ 
+                  color: '#4A4A4A',
+                  fontSize: '14px',
+                  lineHeight: '1.6',
+                  textAlign: 'left',
+                  margin: '0',
+                  paddingLeft: '20px'
+                }}>
+                  <li>Increase in length, density and thickness</li>
+                  <li>You will notice you are more confident about your hair</li>
+                  <li>Dandruff is gone</li>
+                  <li>Alot of reduction in hair breakage</li>
+                  <li>Even fuller hair roots</li>
+                  <li>Hair grows 2-3x faster than normal</li>
+                </ul>
+              </div>
+
+              {/* Card 3 - In 12 Months */}
+              <div 
+                style={{
+                  backgroundColor: '#F5E6D3', // Tan/sandy background
+                  border: '2px solid #D4A574',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
+                <div style={{ 
+                  color: '#DAA520', 
+                  fontSize: '18px', 
+                  fontWeight: '700',
+                  marginBottom: '8px',
+                  textTransform: 'uppercase'
+                }}>
+                  In 12 Months
+                </div>
+                <h3 style={{ 
+                  color: '#3E2723', // Dark brown
+                  fontSize: '20px', 
+                  fontWeight: '700',
+                  marginBottom: '16px',
+                  lineHeight: '1.3'
+                }}>
+                  Your Hair, Transformed Forever
+                </h3>
+                <ul style={{ 
+                  color: '#4A4A4A',
+                  fontSize: '14px',
+                  lineHeight: '1.6',
+                  textAlign: 'left',
+                  margin: '0',
+                  paddingLeft: '20px'
+                }}>
+                  <li>You won't need to use haircare products as often</li>
+                  <li>You'll flaunt your natural long, thick, soft hair</li>
+                  <li>You'll feel younger and more confident</li>
+                  <li>No more itching of scalp</li>
+                  <li>Dandruff free guaranteed</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Download (5) Image */}
         <div className="mt-6 flex justify-center">
           <img
             src={`${BASE_PATH}assets/download%20(5).avif`}
@@ -193,104 +369,7 @@ export const TopStoryBanner = () => {
           />
         </div>
 
-          {/* Additional Benefits Bullet Points */}
-          <p 
-            className="mt-6 text-center"
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            After 3 months of use -
-          </p>
-          
-          <ul className="mt-6 list-none p-0">
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • You will get an increase in length, density, thickness in your hair
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • You will notice you are more confident about your hair
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • You will notice dandruff is gone
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • You will notice alot of reduction in hair breakage
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • You will notice even fuller hair roots
-            </li>
-            <li 
-              style={{
-                color: '#0A0A0A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '18px',
-                fontWeight: '600',
-                textTransform: 'none',
-                textDecoration: 'none',
-                textAlign: 'center'
-              }}
-            >
-              • Hair has grown 2-3 times faster than the normal growing speed
-            </li>
-          </ul>
-
-        {/* Download (6) Image */}
+          {/* Download (6) Image */}
         <div className="mt-6 flex justify-center">
           <img
             src={`${BASE_PATH}assets/download%20(6).avif`}
@@ -300,90 +379,6 @@ export const TopStoryBanner = () => {
             loading="lazy"
           />
         </div>
-
-        {/* 12 Months Benefits */}
-        <p 
-          className="mt-6 text-center"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-            fontSize: '18px',
-            fontWeight: '600',
-            textTransform: 'none',
-            textDecoration: 'none',
-            textAlign: 'center'
-          }}
-        >
-          In 12 months time
-        </p>
-        
-        <ul className="mt-6 list-none p-0">
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You won't need to use haircare products as often
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You'll flaunt your natural long, thick, soft hair
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • You'll feel younger and more confident
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • No More itching of scalp
-          </li>
-          <li 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              textTransform: 'none',
-              textDecoration: 'none',
-              textAlign: 'center'
-            }}
-          >
-            • Dandruff free guaranteed
-          </li>
-        </ul>
 
         {/* Download (9) Image */}
         <div className="mt-6 flex justify-center">
@@ -681,38 +676,14 @@ This thing is not hype.
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
-            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
           </a>
         </div>
         
         
-        {/* Download (10) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(10).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-lg"
-            style={{ maxWidth: '600px' }}
-            loading="lazy"
-          />
-        </div>
-        
+                
         {/* Product Information */}
-        <p 
-          className="mt-6 text-center"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-            fontSize: '16px',
-            fontWeight: '400',
-            textTransform: 'none',
-            textDecoration: 'none',
-            textAlign: 'center'
-          }}
-        >
-          Net Shampoo Content: 500ml
-        </p>
-
+        
         
                 
         <strong 
@@ -727,7 +698,7 @@ This thing is not hype.
             textDecoration: 'none'
           }}
         >
-          WHY DOES IT WORK?
+          Why Women Are Switching to Fulani Hair Gro
         </strong>
         
         <strong 
@@ -760,7 +731,7 @@ This thing is not hype.
             textTransform: 'none'
           }}
         >
-          This group of herbs are plucked from the bushes in Maiduguri and has been a heirloom amongst the women in my Fulani family for centuries. People think Fulani women have naturally long hair and that is partly the truth but any woman can have naturally long hair if she uses the right herbs in her hair.
+          These group of herbs are plucked from the bushes in Maiduguri and has been a heirloom amongst the women in my Fulani family for centuries. People think Fulani women have naturally long hair and that is partly the truth but any woman can have naturally long hair if she uses the right herbs in her hair.
         </p>
         
         <p 
@@ -1310,82 +1281,441 @@ I did all that.
             className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
-            <span style={{ color: 'white' }}>🛒</span> ORDER NOW
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
           </a>
         </div>
 
-        <strong 
-          className="mt-6 block"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '24px',
-            fontWeight: '300',
-            textAlign: 'center',
-            textTransform: 'none',
-            textDecoration: 'none'
-          }}
-        >
-          WHAT IS THE FULANI HAIR GRO?
-        </strong>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '18px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          If you want to achieve amazing hair length, thickness and shine then you have to give your hair that luxury hair care.
-        </p>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '18px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          The Fulani Hair GRO provides that for you!
-        </p>
-        
-        
                 
-        <p 
-          className="mt-6"
-          style={{
+        {/* Real Results Section */}
+        <div style={{ marginTop: '48px', marginBottom: '32px' }}>
+          <h2 style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'justify',
-            lineHeight: '1.6',
-            textDecoration: 'none',
+            fontSize: '32px',
+            fontWeight: '700',
+            textAlign: 'center',
+            marginBottom: '32px',
             textTransform: 'none'
-          }}
-        >
-          so I did as she instructed, I used her shampoo and conditioner every 2 weeks and used the pomade once a day and massaged it into my scalp
-        </p>
+          }}>
+            Real Results From Real Women
+          </h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '24px',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            {/* Card 1: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/fhg%201.webp`}
+                  alt="Before and After Results 1"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/fhg%204.webp`}
+                  alt="Before and After Results 2"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/fhg%205.webp`}
+                  alt="Before and After Results 3"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 4: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/images%20(20).jpeg`}
+                  alt="Before and After Results 4"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 5: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_24_56%20AM.png`}
+                  alt="Before and After Results 5"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 6: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_32_20%20AM.png`}
+                  alt="Before and After Results 6"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 7: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_38_14%20AM.png`}
+                  alt="Before and After Results 7"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 8: Split image with before/after labels */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ position: 'relative' }}>
+                <img
+                  src={`${BASE_PATH}assets/ChatGPT%20Image%20Mar%201,%202026,%2007_47_44%20AM.png`}
+                  alt="Before and After Results 8"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  loading="lazy"
+                />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  left: '0',
+                  right: '0',
+                  display: 'flex',
+                  height: '40px'
+                }}>
+                  <div style={{
+                    flex: '1',
+                    background: '#F5E6D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#3E2723'
+                  }}>
+                    BEFORE
+                  </div>
+                  <div style={{
+                    flex: '1',
+                    background: '#DAA520',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: '#ffffff'
+                  }}>
+                    AFTER
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Bundle System Image */}
         <div className="mt-6 flex justify-center">
           <img
-            src={`${BASE_PATH}assets/bundle-system.webp`}
+            src={`${BASE_PATH}assets/Gemini_Generated_Image_4skp2j4skp2j4skp.png`}
             alt="Bundle System"
             className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
+            style={{ maxWidth: '300px !important', width: '300px !important', height: 'auto !important' }}
             loading="lazy"
           />
         </div>
@@ -1478,13 +1808,34 @@ I did all that.
           }} />
           
           <div style={{ position: 'relative', maxWidth: '980px', margin: '0 auto' }}>
+            <h3 style={{
+              color: '#ffffff',
+              fontFamily: 'Georgia, serif',
+              fontSize: '18px',
+              fontWeight: '600',
+              fontStyle: 'italic',
+              textAlign: 'center',
+              marginBottom: '8px',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              lineHeight: '1.4'
+            }}>
+              You're One Step Away From Getting a Product That Will Make Your Hair{' '}
+              <span style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#FFD700'
+              }}>
+                Longer and Fuller
+              </span>.
+            </h3>
+            
             <h2 style={{
               color: '#fff',
               textAlign: 'center',
               fontWeight: '800',
               letterSpacing: '-0.5px',
-              fontSize: 'clamp(34px, 4.2vw, 62px)',
-              margin: '0 0 46px'
+              fontSize: '28px',
+              margin: '0 0 16px'
             }}>
               How To Place Your Order
             </h2>
@@ -1501,15 +1852,7 @@ I did all that.
                 textAlign: 'center',
                 margin: '0 auto 40px'
               }}>
-                <div style={{
-                  fontSize: '58px',
-                  lineHeight: '1',
-                  marginBottom: '18px',
-                  color: '#0B2C6B',
-                  filter: 'saturate(1.05)'
-                }}>
-                  🛒
-                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style={{ display: 'block', margin: '0 auto 18px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                 <h3 style={{
                   margin: '0 0 14px',
                   color: '#111111',

@@ -1726,29 +1726,6 @@ function OrderFormEmbed() {
               📅 Select your preferred delivery date (today, tomorrow, or the next day only)
             </p>
 
-            {/* Preferred delivery time window */}
-            <label style={S.label}>PREFERRED DELIVERY TIME WINDOW <span style={S.req}>*</span></label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
-              {[
-                'Morning (9am - 12pm)',
-                'Afternoon (12pm - 3pm)',
-                'Evening (3pm - 6pm)',
-                'Anytime on Preferred Day'
-              ].map(opt => (
-                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a' }}>
-                  <input
-                    type="radio"
-                    name="deliveryTimeWindow"
-                    value={opt}
-                    checked={form.deliveryTimeWindow === opt}
-                    onChange={e => setForm({ ...form, deliveryTimeWindow: e.target.value })}
-                  />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{opt}</span>
-                </label>
-              ))}
-            </div>
-            <p style={S.hint}>We will do our absolute best to deliver at your preferred time. If there's any delay or change, our customer service / dispatch rider will call you ahead so you're fully carried along.</p>
-
             {/* Comment */}
             <label style={S.label}>COMMENT OR MESSAGE</label>
             <textarea
