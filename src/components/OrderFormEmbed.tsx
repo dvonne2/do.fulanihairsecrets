@@ -232,7 +232,10 @@ function OrderFormEmbed() {
   const [isRecoveryLink, setIsRecoveryLink] = useState(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('orderId')?.trim().length > 0;
+      const orderId = urlParams.get('orderId');
+      // Only treat as recovery link if orderId is actually provided (not empty/null)
+      // and we're not on the homepage with just a hash
+      return orderId && orderId.trim().length > 0 && !window.location.pathname.includes('/thank-you');
     }
     return false;
   });
@@ -881,8 +884,29 @@ function OrderFormEmbed() {
           fireCartRecovery({ orderId, email: data.email, phone: data.phone, firstName: np[0] || '', lastName: np.slice(1).join(' ') || '' });
         }
       } catch (e) {
-        console.warn('localStorage restore failed:', e);
+        console.error('Failed to restore partial data:', e);
       }
+
+      // Only auto-scroll if we actually restored data (genuine recovery scenario)
+      if (restored) {
+        const timer = setTimeout(() => {
+          const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
+          if (formElement) {
+            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            console.log('📍 Scrolled to order form (recovery scenario with restored data)');
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('📍 Scrolled to top (form not found)');
+          }
+        }, 800);
+
+        return () => clearTimeout(timer);
+      } else {
+        console.log('📍 No auto-scroll - no data to restore (not a genuine recovery)');
+      }
+
+      // Mark sent to prevent re-firing partial webhook for recovered orders
+      setSent(true);
 
       // If localStorage didn't have data, try the backend API
       if (!restored) {
@@ -904,19 +928,19 @@ function OrderFormEmbed() {
             if (response.ok) {
               const result = await response.json();
               if (result.data && !didRestoreRef.current) {
-              didRestoreRef.current = true;
-              setForm(prev => {
-                // IMPORTANT: do not overwrite a user-selected pkg
-                if (prev.pkg) return prev;
-                return {
-                  ...prev,
-                  name: result.data.name || prev.name,
-                  phone: result.data.phone || prev.phone,
-                  email: result.data.email || prev.email,
-                  pkg: resolvePkgId(result.data.pkg || result.data.packageSelected) || prev.pkg,
-                  orderId: orderId
-                };
-              });
+                didRestoreRef.current = true;
+                setForm(prev => {
+                  // IMPORTANT: do not overwrite a user-selected pkg
+                  if (prev.pkg) return prev;
+                  return {
+                    ...prev,
+                    name: result.data.name || prev.name,
+                    phone: result.data.phone || prev.phone,
+                    email: result.data.email || prev.email,
+                    pkg: resolvePkgId(result.data.pkg || result.data.packageSelected) || prev.pkg,
+                    orderId: orderId
+                  };
+                });
                 console.log('✅ Restored partial data from backend:', result.data);
                 toast.success('Welcome back! We restored your details.');
                 const np = (result.data.name || '').trim().split(' ');
@@ -933,23 +957,6 @@ function OrderFormEmbed() {
           }
         })();
       }
-      
-      // Mark sent to prevent re-firing partial webhook for recovered orders
-      setSent(true);
-
-      // Auto-scroll to order form after a short delay
-      const timer = setTimeout(() => {
-        const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
-        if (formElement) {
-          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          console.log('📍 Scrolled to order form');
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          console.log('📍 Scrolled to top (form not found)');
-        }
-      }, 800);
-
-      return () => clearTimeout(timer);
     }
   }, [isRecoveryLink, orderId]);
 
