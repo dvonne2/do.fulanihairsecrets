@@ -132,6 +132,31 @@ const generateOrderId = (): string => {
   return `${yy}${mm}${dd}${hh}${min}`; // 2602091936
 };
 
+// Single source of truth for Order ID - generate once, persist everywhere
+const getOrCreateOrderId = (formOrderId?: string): string => {
+  // Priority 1: URL parameter (for recovery links)
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlOrderId = urlParams.get('orderId');
+    if (urlOrderId?.trim()) {
+      localStorage.setItem('fhg_persistent_order_id', urlOrderId.trim());
+      return urlOrderId.trim();
+    }
+  }
+
+  // Priority 2: Already in form state
+  if (formOrderId) return formOrderId;
+
+  // Priority 3: Already in localStorage
+  const stored = localStorage.getItem('fhg_persistent_order_id');
+  if (stored?.trim()) return stored.trim();
+
+  // Priority 4: Generate new, persist immediately
+  const newOrderId = generateOrderId();
+  localStorage.setItem('fhg_persistent_order_id', newOrderId);
+  return newOrderId;
+};
+
 // Get orderId from URL or generate new one
 const getOrderIdFromURL = (): string => {
   if (typeof window !== 'undefined') {
@@ -266,6 +291,12 @@ function OrderFormEmbed() {
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [deliveryDateError, setDeliveryDateError] = useState('');
+  
+  // Initialize orderId on component mount - single source of truth
+  useEffect(() => {
+    const orderId = getOrCreateOrderId();
+    setForm(prev => ({ ...prev, orderId }));
+  }, []);
   
   // Auto-advance ref to prevent multiple auto-advances
   const hasAutoAdvanced = useRef(false);
@@ -662,7 +693,7 @@ function OrderFormEmbed() {
 
   // Partial entry function
   const savePartialEntry = async (formData) => {
-    const orderId = formData.orderId || generateOrderId();
+    const orderId = formData.orderId; // must already exist from mount
     
     // Save to localStorage for abandoned cart recovery
     try {
@@ -798,10 +829,7 @@ function OrderFormEmbed() {
       // Prevent duplicate sends (fast typing / paste) before awaiting network.
       setSent(true);
 
-      const orderId = form.orderId || generateOrderId();
-      if (!form.orderId) {
-        setForm(prev => ({ ...prev, orderId }));
-      }
+      const orderId = form.orderId; // guaranteed to exist from mount
 
       const savePartial = async () => {
         const result = await savePartialEntry({
@@ -832,13 +860,6 @@ function OrderFormEmbed() {
       void nextPhoneError;
     }
   }, [debouncedPhone, validatePhone, sent, form.name, form.orderId, form.pkg]);
-
-  // Generate Order ID on first name entry
-  useEffect(() => {
-    if (form.name && !form.orderId) {
-      setForm(prev => ({ ...prev, orderId: generateOrderId() }));
-    }
-  }, [form.name, form.orderId]);
 
   // Auto-scroll to form and handle recovery link — restore saved partial data
   useEffect(() => {
@@ -971,7 +992,7 @@ function OrderFormEmbed() {
     setSubmitting(true);
     
     try {
-      const orderId = form.orderId || generateOrderId();
+      const orderId = form.orderId; // guaranteed to exist from mount
       const packageName = packageMapping[form.pkg] || form.pkg || 'Fulani Hair Gro';
       const packageAmount = selectedPackage?.price ?? 75000; // Default fallback price
       const calculatedDeliveryFee = deliveryFee; // Use memoized calculated value
@@ -1065,6 +1086,9 @@ function OrderFormEmbed() {
         mode: 'no-cors',
         keepalive: true
       }).catch(err => console.error('Webhook error:', err));
+
+      // Clear persistent orderId after successful completion
+      localStorage.removeItem('fhg_persistent_order_id');
 
       // Redirect instantly — order data already in sessionStorage
       window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
