@@ -70,7 +70,11 @@
       // Generate event_id for PageView dedup (browser pixel + server CAPI)
       window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
       fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
+
+      fbq('init', '2709676702727852');
+      fbq('track', 'PageView');
     </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2709676702727852&ev=PageView&noscript=1" /></noscript>
     
     
     <link rel="manifest" href="/manifest.json" />
