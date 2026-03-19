@@ -173,8 +173,15 @@ function fireBrowserEvent(
     return; // Don't markFired — pixel may load later and event should retry
   }
   markFired(key);
+  
+  // Fire on existing pixel (Media Buyer 1)
   window.fbq(type, eventName, data, { eventID: eventId });
+  
+  // Fire on second pixel (Media Buyer 2) — trackSingle keeps it isolated
+  window.fbq('trackSingle', '2709676702727852', eventName, data, { eventID: eventId });
+  
   console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
+  console.log(`[Meta] Second pixel fired: ${eventName}`, data, `eventID=${eventId}`);
 }
 
 async function fireCAPIEvent(
