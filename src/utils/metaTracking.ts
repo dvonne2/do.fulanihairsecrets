@@ -320,25 +320,34 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   const prefix = (order.paymentType || 'PBD').toUpperCase() === 'PBD' ? 'pbd' : 'pod';
   const valueEventName = `${prefix}${pkgAmount}`;
 
-  // 1. PURCHASE — Browser Pixel + CAPI (Deduplicated)
+  // 1. PURCHASE — Fire separately on each pixel to avoid duplication
   const purchaseEventId = await makeEventId('Purchase', order.orderId);
   const purchaseData = {
     value: amount,
     currency: 'NGN',
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
-    event_id: purchaseEventId
+    order_id: order.orderId
   };
   
-  // Fire Browser Pixel (Fast Signal)
-  fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
+  // Fire on original pixel (220381209723501) with CAPI
+  if (typeof window.fbq === 'function') {
+    window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });
+    console.log('[Meta] Original pixel Purchase fired:', purchaseData, `eventID=${purchaseEventId}`);
+  }
   
-  // Fire CAPI (Reliable Signal) - deduplication handled by matching event_id
+  // Fire CAPI for original pixel only
   await fireCAPIEvent('Purchase', purchaseEventId, userData, {
     value: amount,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
   });
+  
+  // Fire on second pixel (2709676702727852) without CAPI - clean browser-only event
+  if (typeof window.fbq === 'function') {
+    window.fbq('trackSingle', '2709676702727852', 'Purchase', purchaseData, { eventID: purchaseEventId });
+    console.log('[Meta] Second pixel Purchase fired:', purchaseData, `eventID=${purchaseEventId}`);
+  }
 
   // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
   console.log('[Meta] Value event handled by Apps Script CAPI');
@@ -346,15 +355,9 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   // 3. HIGH VALUE PURCHASE — fires ONLY from Apps Script CAPI
   console.log('[Meta] High Value Purchase handled by Apps Script CAPI');
 
-  // 4. COMPLETE REGISTRATION
-  const crId = await makeEventId('CompleteRegistration', order.orderId);
-  fireBrowserEvent('track', 'CompleteRegistration', {
-    value: amount,
-    currency: 'NGN',
-    content_name: order.packageName || 'Fulani Hair Gro',
-  }, crId);
+  // CompleteRegistration removed - belongs on signup/lead pages, not order confirmation
 
-  console.log('[Meta] All thank-you events complete');
+  console.log('[Meta] Thank-you events complete (Purchase only)');
 }
 
 let leadSyncFired = false;
