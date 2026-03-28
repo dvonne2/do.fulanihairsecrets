@@ -1536,15 +1536,17 @@ function OrderFormEmbed() {
             </select>
 
             {/* LGA */}
-            <label style={S.label}>LOCAL GOVERNMENT AREA (LGA) <span style={S.req}>*</span></label>
+            <label style={S.label}>
+              {form.state === 'FCT' ? 'AREA COUNCIL' : 'LOCAL GOVERNMENT AREA (LGA)'} <span style={S.req}>*</span>
+            </label>
             <select
               style={S.input}
               value={form.lga || ''}
               onChange={e => setForm({ ...form, lga: e.target.value })}
-              aria-label="Select local government area"
+              aria-label={form.state === 'FCT' ? "Select area council" : "Select local government area"}
               disabled={!form.state}
             >
-              <option value="">Select LGA...</option>
+              <option value="">{form.state === 'FCT' ? 'Select Area Council...' : 'Select LGA...'}</option>
               {form.state && nigeriaLGAs[form.state as keyof typeof nigeriaLGAs]?.map(lga => (
                 <option key={lga} value={lga}>{lga}</option>
               ))}
