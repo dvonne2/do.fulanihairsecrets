@@ -5,8 +5,6 @@ import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } f
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
 import { BundleDropdown, BundlePackage } from "./BundleDropdown";
-import { resolveAttribution } from '@/lib/mediaBuyer';
-import { initPixels, trackLead } from '@/lib/pixels';
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -293,24 +291,31 @@ function OrderFormEmbed() {
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [deliveryDateError, setDeliveryDateError] = useState('');
-  const [attribution, setAttribution] = useState({
-    mediaBuyer: "",
-    pixelId: "",
-    source: "",
-  });
-
-  // Initialize pixels and resolve attribution on component mount
-  useEffect(() => {
-    initPixels();
-    setAttribution(resolveAttribution());
-  }, []);
-
+  const [mediaBuyer, setMediaBuyer] = useState("");
+  const [source, setSource] = useState("");
+  
   // Initialize orderId on component mount - single source of truth
   useEffect(() => {
     const orderId = getOrCreateOrderId();
     setForm(prev => ({ ...prev, orderId }));
   }, []);
-  
+
+  // Capture media buyer and source from URL and persist to localStorage
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    let mb = (params.get("mb") || "").trim().toLowerCase();
+    let src = (params.get("src") || "").trim().toLowerCase();
+
+    if (mb) localStorage.setItem("mb", mb);
+    else mb = localStorage.getItem("mb") || "";
+
+    if (src) localStorage.setItem("src", src);
+    else src = localStorage.getItem("src") || "unknown";
+
+    setMediaBuyer(mb);
+    setSource(src);
+  }, []);
+
   // Auto-advance ref to prevent multiple auto-advances
   const hasAutoAdvanced = useRef(false);
   
@@ -1079,6 +1084,8 @@ function OrderFormEmbed() {
         heardAboutUs: formData.heardAboutUs || '',
         couponCode: form.couponApplied ? form.couponCode : '',
         deliveryFee: calculatedDeliveryFee,
+        mediaBuyer,
+        source,
         
         // Meta tracking identifiers — passed to Apps Script for true server-side CAPI
         fbp: (() => { try { const m = document.cookie.match(/(^| )_fbp=([^;]+)/); return m ? decodeURIComponent(m[2]) : ''; } catch { return ''; } })(),
@@ -1086,29 +1093,15 @@ function OrderFormEmbed() {
         fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         eventId: orderId,
         userAgent: navigator.userAgent,
-
-        // NEW — attribution fields for media buyer tracking
-        mediaBuyer: attribution.mediaBuyer,
-        pixelId: attribution.pixelId,
-        source: attribution.source,
       };
 
       console.log("🚀 Sending Complete Order:", completePayload);
-
-      // Fire the buyer-specific pixel BEFORE the fetch so the event
-      // definitely runs even if the user navigates away.
-      trackLead(attribution.pixelId, {
-        media_buyer: attribution.mediaBuyer,
-        package_name: formData.package,
-        value: Number(totalAmount) || 0,
-        currency: "NGN",
-      });
 
       // Fire webhook (keepalive ensures it completes even after navigation)
       // Do NOT await — redirect immediately for instant UX
       fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(completePayload),
         mode: 'no-cors',
         keepalive: true
@@ -1550,10 +1543,6 @@ function OrderFormEmbed() {
               onChange={e => setForm({ ...form, landmark: e.target.value })}
             />
             <p style={S.hint}>e.g my house is on the road beside Agip filling station</p>
-
-            {/* Hidden fields for media buyer attribution debugging */}
-            <input type="hidden" name="media_buyer" value={attribution.mediaBuyer} readOnly />
-            <input type="hidden" name="pixel_id" value={attribution.pixelId} readOnly />
 
             {/* State */}
             <label style={S.label}>STATE OF RESIDENCE <span style={S.req}>*</span></label>

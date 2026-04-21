@@ -56,7 +56,7 @@
     </style>
     
     <script>
-      // Meta Pixel base snippet - init calls handled by React initPixels()
+      // FB Pixel: queue commands immediately so fbq() calls work before script loads
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -65,7 +65,15 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
+      
+      fbq('init', '220381209723501');
+      fbq('init', '2709676702727852');
+      fbq('init', '964049967992063');
+      // Generate event_id for PageView dedup (browser pixel + server CAPI)
+      window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
+      fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
     </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2709676702727852&ev=PageView&noscript=1" /></noscript>
     
     
     <link rel="manifest" href="/manifest.json" />
