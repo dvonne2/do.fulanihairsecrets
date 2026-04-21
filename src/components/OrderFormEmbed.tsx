@@ -5,6 +5,8 @@ import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } f
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
 import { BundleDropdown, BundlePackage } from "./BundleDropdown";
+import { resolveAttribution } from '@/lib/mediaBuyer';
+import { initPixels, trackLead } from '@/lib/pixels';
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -291,7 +293,18 @@ function OrderFormEmbed() {
   const [sent, setSent] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [deliveryDateError, setDeliveryDateError] = useState('');
-  
+  const [attribution, setAttribution] = useState({
+    mediaBuyer: "",
+    pixelId: "",
+    source: "",
+  });
+
+  // Initialize pixels and resolve attribution on component mount
+  useEffect(() => {
+    initPixels();
+    setAttribution(resolveAttribution());
+  }, []);
+
   // Initialize orderId on component mount - single source of truth
   useEffect(() => {
     const orderId = getOrCreateOrderId();
@@ -1073,15 +1086,29 @@ function OrderFormEmbed() {
         fbclid: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
         eventId: orderId,
         userAgent: navigator.userAgent,
+
+        // NEW — attribution fields for media buyer tracking
+        mediaBuyer: attribution.mediaBuyer,
+        pixelId: attribution.pixelId,
+        source: attribution.source,
       };
 
       console.log("🚀 Sending Complete Order:", completePayload);
+
+      // Fire the buyer-specific pixel BEFORE the fetch so the event
+      // definitely runs even if the user navigates away.
+      trackLead(attribution.pixelId, {
+        media_buyer: attribution.mediaBuyer,
+        package_name: formData.package,
+        value: Number(totalAmount) || 0,
+        currency: "NGN",
+      });
 
       // Fire webhook (keepalive ensures it completes even after navigation)
       // Do NOT await — redirect immediately for instant UX
       fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(completePayload),
         mode: 'no-cors',
         keepalive: true
@@ -1523,6 +1550,10 @@ function OrderFormEmbed() {
               onChange={e => setForm({ ...form, landmark: e.target.value })}
             />
             <p style={S.hint}>e.g my house is on the road beside Agip filling station</p>
+
+            {/* Hidden fields for media buyer attribution debugging */}
+            <input type="hidden" name="media_buyer" value={attribution.mediaBuyer} readOnly />
+            <input type="hidden" name="pixel_id" value={attribution.pixelId} readOnly />
 
             {/* State */}
             <label style={S.label}>STATE OF RESIDENCE <span style={S.req}>*</span></label>
