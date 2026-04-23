@@ -323,13 +323,13 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   // 1. PURCHASE — Fire separately on each pixel to avoid duplication
   const purchaseEventId = await makeEventId('Purchase', order.orderId);
   const purchaseData = {
-    value: amount,
-    currency: 'NGN',
+    value: amount > 0 ? amount : undefined,  // Only include value if positive
+    currency: amount > 0 ? 'NGN' : undefined,  // Only include currency if value is valid
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
     order_id: order.orderId
   };
-  
+
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063)
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });

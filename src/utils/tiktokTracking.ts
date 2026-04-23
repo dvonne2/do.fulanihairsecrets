@@ -197,6 +197,8 @@ export async function fireTikTokPurchase(data: {
     value: data.value,
     currency: data.currency || 'NGN',
     order_id: data.orderId,
+    email: data.email,
+    phone: data.phone,
   }, identity);
 }
 
