@@ -330,24 +330,18 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     order_id: order.orderId
   };
   
-  // Fire on original pixel (220381209723501) with CAPI
+  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063)
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });
-    console.log('[Meta] Original pixel Purchase fired:', purchaseData, `eventID=${purchaseEventId}`);
+    console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
   }
-  
+
   // Fire CAPI for original pixel only
   await fireCAPIEvent('Purchase', purchaseEventId, userData, {
     value: amount,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
   });
-  
-  // Fire on second pixel (2709676702727852) without CAPI - clean browser-only event
-  if (typeof window.fbq === 'function') {
-    window.fbq('trackSingle', '2709676702727852', 'Purchase', purchaseData, { eventID: purchaseEventId });
-    console.log('[Meta] Second pixel Purchase fired:', purchaseData, `eventID=${purchaseEventId}`);
-  }
 
   // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
   console.log('[Meta] Value event handled by Apps Script CAPI');
