@@ -173,15 +173,11 @@ function fireBrowserEvent(
     return; // Don't markFired — pixel may load later and event should retry
   }
   markFired(key);
-  
-  // Fire on existing pixel (Media Buyer 1)
+
+  // Fire on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740, 942920981804774)
   window.fbq(type, eventName, data, { eventID: eventId });
-  
-  // Fire on second pixel (Media Buyer 2) — trackSingle keeps it isolated
-  window.fbq('trackSingle', '2709676702727852', eventName, data, { eventID: eventId });
-  
+
   console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
-  console.log(`[Meta] Second pixel fired: ${eventName}`, data, `eventID=${eventId}`);
 }
 
 async function fireCAPIEvent(
@@ -330,7 +326,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     order_id: order.orderId
   };
 
-  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063)
+  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740, 942920981804774)
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
