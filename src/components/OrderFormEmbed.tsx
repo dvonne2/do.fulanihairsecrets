@@ -1700,6 +1700,7 @@ function OrderFormEmbed() {
                   </label>
                 </div>
                 <p style={S.hint}>Sometimes we upgrade your delivery speed at no extra cost to you.</p>
+                <p style={{ fontSize: '12px', color: '#777', lineHeight: '1.4', marginTop: '12px' }}>We used to offer free delivery, but due to rising fuel costs, we now ask customers to cover a small part while we handle the rest.</p>
               </>
             )}
 
