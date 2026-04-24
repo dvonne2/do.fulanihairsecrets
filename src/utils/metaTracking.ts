@@ -299,6 +299,11 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     sessionStorage.setItem(thankYouKey, '1');
   } catch {}
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
+
+  // Get attribution data from localStorage
+  const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
+  const source = typeof localStorage !== 'undefined' ? localStorage.getItem('src') || '' : '';
+
   const nameParts = (order.fullName || '').trim().split(' ');
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
@@ -323,7 +328,9 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     currency: amount > 0 ? 'NGN' : undefined,  // Only include currency if value is valid
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
-    order_id: order.orderId
+    order_id: order.orderId,
+    media_buyer: mediaBuyer,
+    source: source,
   };
 
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740, 942920981804774)
@@ -337,6 +344,8 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     value: amount,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
+    media_buyer: mediaBuyer,
+    source: source,
   });
 
   // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
@@ -359,7 +368,7 @@ export async function fireLeadSync(info: {
   lastName?: string;
 }): Promise<void> {
   console.log('[Meta] fireLeadSync called:', { info, leadSyncFired });
-  
+
   if (leadSyncFired) {
     console.log('[Meta] LeadSync already fired, skipping');
     return;
@@ -368,19 +377,27 @@ export async function fireLeadSync(info: {
     console.log('[Meta] LeadSync: No email or phone provided, skipping');
     return;
   }
-  
+
   leadSyncFired = true;
   console.log('[Meta] LeadSync: Proceeding with event firing');
-  
+
+  // Get attribution data from localStorage
+  const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
+  const source = typeof localStorage !== 'undefined' ? localStorage.getItem('src') || '' : '';
+
   const userData = await buildUserData(info);
   const identity = info.phone || info.email || '';
   const eventId = await makeEventId('LeadSync', identity);
   fireBrowserEvent('trackCustom', 'LeadSync', {
     content_category: 'identity_capture',
+    media_buyer: mediaBuyer,
+    source: source,
   }, eventId);
   await fireCAPIEvent('LeadSync', eventId, userData, {
     value: 0,
     content_category: 'identity_capture',
+    media_buyer: mediaBuyer,
+    source: source,
   });
   try {
     localStorage.setItem(
@@ -482,6 +499,10 @@ export async function fireInitiateCheckout(data: {
   firstName?: string;
   lastName?: string;
 }): Promise<void> {
+  // Get attribution data from localStorage
+  const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
+  const source = typeof localStorage !== 'undefined' ? localStorage.getItem('src') || '' : '';
+
   const identity = data.phone || data.email || '';
   const eventId = await makeEventId('InitiateCheckout', identity);
   fireBrowserEvent('track', 'InitiateCheckout', {
@@ -489,6 +510,8 @@ export async function fireInitiateCheckout(data: {
     currency: 'NGN',
     content_type: 'product',
     content_name: data.packageName,
+    media_buyer: mediaBuyer,
+    source: source,
   }, eventId);
   const userData = await buildUserData({
     email: data.email,
@@ -499,6 +522,8 @@ export async function fireInitiateCheckout(data: {
   await fireCAPIEvent('InitiateCheckout', eventId, userData, {
     value: Number(data.amount) || 0,
     content_name: data.packageName,
+    media_buyer: mediaBuyer,
+    source: source,
   });
 }
 
