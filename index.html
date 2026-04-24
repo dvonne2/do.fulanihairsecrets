@@ -66,11 +66,11 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
+      fbq('init', '1481974843635740');
       fbq('init', '220381209723501');
       fbq('init', '2709676702727852');
-      fbq('init', '964049967992063');
-      fbq('init', '1481974843635740');
       fbq('init', '942920981804774');
+      fbq('init', '964049967992063');
       // Generate event_id for PageView dedup (browser pixel + server CAPI)
       window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
       fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
