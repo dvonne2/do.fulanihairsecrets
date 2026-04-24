@@ -1552,7 +1552,7 @@ function OrderFormEmbed() {
               onChange={e => setForm({ ...form, state: e.target.value, lga: '' })}
               aria-label="Select state of residence"
             >
-              {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'Abuja FCT' : s}</option>)}
+              {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'Abuja, FCT' : s}</option>)}
             </select>
 
             {/* LGA */}
