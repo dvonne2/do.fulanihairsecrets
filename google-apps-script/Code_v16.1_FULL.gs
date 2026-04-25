@@ -220,12 +220,16 @@ function fireMetaCAPI(eventName, eventId, userData, customData) {
     if (userData.lastName) metaUserData.ln = [hashForMeta(userData.lastName)];
     if (userData.state) metaUserData.st = [hashForMeta(userData.state)];
     if (userData.city) metaUserData.ct = [hashForMeta(userData.city)];
+    if (userData.zip) metaUserData.zp = [hashForMeta(userData.zip)];
     metaUserData.country = [hashForMeta('ng')];
     if (userData.externalId) metaUserData.external_id = [hashForMeta(userData.externalId)];
     if (userData.fbp) metaUserData.fbp = userData.fbp;
     if (userData.fbc) metaUserData.fbc = userData.fbc;
+    if (userData.fbclid) metaUserData.fbclid = userData.fbclid;
     if (userData.clientIp) metaUserData.client_ip_address = userData.clientIp;
     if (userData.userAgent) metaUserData.client_user_agent = userData.userAgent;
+    if (userData.subscriptionId) metaUserData.subscription_id = [hashForMeta(userData.subscriptionId)];
+    if (userData.leadId) metaUserData.lead_id = [hashForMeta(userData.leadId)];
 
     var eventData = {
       event_name: eventName,
@@ -335,6 +339,12 @@ function doPost(e) {
 
     var data = raw ? JSON.parse(raw) : {};
     if (data.secret !== CONFIG.WEBHOOK_SECRET) throw new Error('Unauthorized');
+
+    // Guard: skip test orders to prevent leaking to production
+    if (String(data.orderId || '').indexOf('TEST_') === 0) {
+      Logger.log('Test order, skipping CAPI: ' + data.orderId);
+      return ContentService.createTextOutput(JSON.stringify({ok:true, skipped:'test'}));
+    }
 
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var queueSheet = ss.getSheetByName(CONFIG.WEBHOOK_QUEUE) || ss.insertSheet(CONFIG.WEBHOOK_QUEUE);

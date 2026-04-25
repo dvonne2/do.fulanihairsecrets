@@ -144,7 +144,14 @@ const ThankYou = () => {
     setLoading(false);
   }, []);
 
+  const metaEventsFired = useRef(false);
+
   useEffect(() => {
+    if (metaEventsFired.current) {
+      console.log('[Meta] Events already fired, skipping');
+      return;
+    }
+
     console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
     const isTestMode = window.location.search.includes('test=1');
     if (isTestMode) {
@@ -162,7 +169,7 @@ const ThankYou = () => {
         lga: 'Eti-Osa',
         numItems: 3,
       });
-      
+
       // Fire TikTok test events
       console.log('[TikTok] Test mode - purchaseFired.current:', purchaseFired.current);
       if (!purchaseFired.current) {
@@ -179,8 +186,9 @@ const ThankYou = () => {
       } else {
         console.log('[TikTok] Test mode - Purchase already fired, skipping');
       }
-      
+
       console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
+      metaEventsFired.current = true;
       return;
     }
     if (orderData) {
@@ -198,7 +206,7 @@ const ThankYou = () => {
         lga: orderData.lga,
         numItems: orderData.numItems || 1,
       });
-      
+
       // Fire TikTok Purchase event
       console.log('[TikTok] Regular mode - purchaseFired.current:', purchaseFired.current);
       if (!purchaseFired.current) {
@@ -215,8 +223,9 @@ const ThankYou = () => {
       } else {
         console.log('[TikTok] Regular mode - Purchase already fired, skipping');
       }
-      
+
       console.log('[Events] Purchase fired for both Meta and TikTok');
+      metaEventsFired.current = true;
     }
   }, [orderData, orderNumber]);
 

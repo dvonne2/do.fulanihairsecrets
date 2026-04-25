@@ -135,6 +135,7 @@ function getFbc(): string | null {
 
 function captureFbclid(): void {
   try {
+    // Capture fbclid from URL and create _fbc cookie
     const params = new URLSearchParams(window.location.search);
     const fbclid = params.get('fbclid');
     if (fbclid) {
@@ -149,11 +150,86 @@ function captureFbclid(): void {
         })
       );
     }
+
+    // Capture and persist _fbp cookie for click attribution
+    const fbp = getFbp();
+    if (fbp) {
+      localStorage.setItem(
+        'meta_fbp_persist',
+        JSON.stringify({
+          fbp,
+          timestamp: Date.now(),
+          expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000, // 90 days
+        })
+      );
+    }
   } catch {}
 }
 
 if (typeof window !== 'undefined') {
   captureFbclid();
+}
+
+export function getPersistedFbc(): string | null {
+  try {
+    const raw = localStorage.getItem('meta_fbc_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Date.now() < data.expiresAt) return data.fbc;
+    }
+  } catch {}
+  return null;
+}
+
+export function getPersistedFbp(): string | null {
+  try {
+    const raw = localStorage.getItem('meta_fbp_persist');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Date.now() < data.expiresAt) return data.fbp;
+    }
+  } catch {}
+  return null;
+}
+
+/**
+ * Re-initialize Meta pixel with Advanced Matching data after email/phone capture.
+ * This improves Event Match Quality by providing Meta with user identifiers.
+ */
+export async function reinitPixelWithUserData(data: {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  state?: string;
+  city?: string;
+}): Promise<void> {
+  if (typeof window.fbq !== 'function') {
+    console.warn('[Meta] fbq not loaded, cannot re-init with user data');
+    return;
+  }
+
+  const pixelIds = ['220381209723501', '2709676702727852', '964049967992063', '1481974843635740', '942920981804774'];
+  const userData: Record<string, any> = {};
+
+  if (data.email) userData.em = await sha256(data.email);
+  if (data.phone) userData.ph = await sha256(normalizePhone(data.phone));
+  if (data.firstName) userData.fn = await sha256(data.firstName);
+  if (data.lastName) userData.ln = await sha256(data.lastName);
+  if (data.state) userData.st = await sha256(data.state);
+  if (data.city) userData.ct = await sha256(data.city);
+  userData.country = await sha256('ng');
+
+  // Re-init all pixels with user data
+  pixelIds.forEach((pixelId) => {
+    try {
+      window.fbq('init', pixelId, userData);
+    } catch (err) {
+      console.error(`[Meta] Failed to re-init pixel ${pixelId}:`, err);
+    }
+  });
+
+  console.log('[Meta] Pixel re-initialized with Advanced Matching data:', Object.keys(userData));
 }
 
 function fireBrowserEvent(
@@ -184,7 +260,8 @@ async function fireCAPIEvent(
   eventName: string,
   eventId: string,
   userData: Record<string, any>,
-  customData: Record<string, any>
+  customData: Record<string, any>,
+  testEventCode?: string
 ): Promise<void> {
   // Use eventId in dedup key so different orders can fire but same order can't double-fire
   const key = `capi_${eventName}_${eventId}`;
@@ -197,20 +274,25 @@ async function fireCAPIEvent(
   if (fbp) userData.fbp = fbp;
   if (fbc) userData.fbc = fbc;
   try {
+    const payload: Record<string, any> = {
+      event_name: eventName,
+      event_id: eventId,
+      event_time: Math.floor(Date.now() / 1000),
+      event_source_url: window.location.origin + window.location.pathname,
+      user_data: userData,
+      custom_data: {
+        ...customData,
+        currency: 'NGN',
+      },
+    };
+    // Add test_event_code for test mode routing
+    if (testEventCode) {
+      payload.test_event_code = testEventCode;
+    }
     const res = await fetch(CAPI_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event_name: eventName,
-        event_id: eventId,
-        event_time: Math.floor(Date.now() / 1000),
-        event_source_url: window.location.origin + window.location.pathname,
-        user_data: userData,
-        custom_data: {
-          ...customData,
-          currency: 'NGN',
-        },
-      }),
+      body: JSON.stringify(payload),
     });
     if (!res.ok) {
       throw new Error(`CAPI request failed: HTTP ${res.status}`);
@@ -289,6 +371,12 @@ export interface OrderData {
 }
 
 export async function fireThankYouEvents(order: OrderData): Promise<void> {
+  // Guard: skip test orders to prevent leaking to production
+  if (order.orderId?.startsWith('TEST_') || order.orderId === 'TEST_ORDER_123') {
+    console.log('[META] Test order detected, skipping all Pixel/CAPI events', order.orderId);
+    return;
+  }
+
   // Guard: only fire once per order, even across page refreshes
   const thankYouKey = `fhg_ty_fired_${order.orderId}`;
   try {
@@ -299,6 +387,10 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     sessionStorage.setItem(thankYouKey, '1');
   } catch {}
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
+
+  // Detect test mode from URL
+  const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
+  const testEventCode = isTestMode ? 'TEST12345' : undefined;
 
   // Get attribution data from localStorage
   const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
@@ -323,11 +415,23 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
 
   // 1. PURCHASE — Fire separately on each pixel to avoid duplication
   const purchaseEventId = await makeEventId('Purchase', order.orderId);
+
+  // Derive package SKU from package name (simple mapping)
+  const packageSku = order.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
+  const contentIds = [packageSku];
+
   const purchaseData = {
-    value: amount > 0 ? amount : undefined,  // Only include value if positive
+    value: amount > 0 ? amount : undefined,  // Product price ONLY (no delivery fee) - standardized
     currency: amount > 0 ? 'NGN' : undefined,  // Only include currency if value is valid
+    content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
+    contents: [{
+      id: packageSku,
+      quantity: order.numItems || 1,
+      item_price: pkgAmount,
+    }],
+    num_items: order.numItems || 1,
     order_id: order.orderId,
     media_buyer: mediaBuyer,
     source: source,
@@ -339,14 +443,21 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
   }
 
-  // Fire CAPI for original pixel only
+  // Fire CAPI for original pixel only with same payload structure
   await fireCAPIEvent('Purchase', purchaseEventId, userData, {
-    value: amount,
+    value: amount,  // Product price ONLY (no delivery fee) - standardized
+    content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
+    contents: [{
+      id: packageSku,
+      quantity: order.numItems || 1,
+      item_price: pkgAmount,
+    }],
+    num_items: order.numItems || 1,
     media_buyer: mediaBuyer,
     source: source,
-  });
+  }, testEventCode);
 
   // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
   console.log('[Meta] Value event handled by Apps Script CAPI');
