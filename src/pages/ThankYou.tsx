@@ -18,7 +18,7 @@ import blessing from '@/assets-optimized/testimonials/blessing.webp';
 
 // Dynamic package mapping based on actual package names from OrderFormEmbed
 const packageProducts: Record<string, { title: string; items: { name: string; qty: number; image: string }[] }> = {
-  "SELF LOVE PLUS": {
+  "Self Love Plus": {
     title: "YOUR 1-MONTH TRIAL SUPPLY",
     items: [
       { name: "Heritage Shampoo (500ml)", qty: 1, image: shampoo },
@@ -26,20 +26,20 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
       { name: "Voluminous Conditioner (500ml)", qty: 1, image: conditioner },
     ]
   },
-  "SELF LOVE RETURN": {
+  "Self Love Return": {
     title: "YOUR 3-MONTH MAINTENANCE SUPPLY",
     items: [
       { name: "Growth Pomade (150g)", qty: 3, image: pomade },
     ]
   },
-  "SELF LOVE B2GOF": {
+  "Self Love B2GOF": {
     title: "YOUR 3-MONTH SCALP RESET SUPPLY",
     items: [
       { name: "Heritage Shampoo (500ml)", qty: 2, image: shampoo },
       { name: "Growth Pomade (150g)", qty: 2, image: pomade },
     ]
   },
-  "SELF LOVE PLUS B2GOF": {
+  "Self Love Plus B2GOF": {
     title: "YOUR 3-MONTH RECOVERY SYSTEM SUPPLY",
     items: [
       { name: "Heritage Shampoo (500ml)", qty: 2, image: shampoo },
@@ -47,7 +47,7 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
       { name: "Voluminous Conditioner (500ml)", qty: 2, image: conditioner },
     ]
   },
-  "FAMILY SAVES": {
+  "Family Saves": {
     title: "YOUR 12-MONTH GOLD STANDARD SUPPLY",
     items: [
       { name: "Heritage Shampoo (500ml)", qty: 6, image: shampoo },
@@ -164,7 +164,7 @@ const ThankYou = () => {
         totalAmount: 71750,
         packageAmount: 66750,
         paymentType: 'PBD',
-        packageName: 'SELF LOVE PLUS',
+        packageName: 'Self Love Plus',
         state: 'Lagos',
         lga: 'Eti-Osa',
         numItems: 3,
@@ -176,7 +176,7 @@ const ThankYou = () => {
         purchaseFired.current = true;
         console.log('[TikTok] Firing test Purchase event');
         fireTikTokPurchase({
-          content_name: 'SELF LOVE PLUS',
+          content_name: 'Self Love Plus',
           value: 71750,
           currency: 'NGN',
           email: 'test@fulanihairsecrets.com',
@@ -306,6 +306,7 @@ const ThankYou = () => {
 
   // No sessionStorage data — show a reassuring confirmation with orderId from URL
   if (!orderData && !window.location.search.includes('test=1')) {
+    const isKlumpPayment = sessionStorage.getItem('fhg_order_data') ? JSON.parse(sessionStorage.getItem('fhg_order_data') || '{}').paymentMethod === 'KLUMP' : false;
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
         <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center mb-6">
@@ -316,10 +317,10 @@ const ThankYou = () => {
           <p className="text-[#DAA520] font-semibold text-lg mb-4">Order #{orderNumber}</p>
         )}
         <p className="text-gray-300 mb-2 max-w-md">
-          Your order has been received and is being processed.
+          {isKlumpPayment ? 'Your order has been received. Your Klump payment request has been submitted successfully.' : 'Your order has been received and is being processed.'}
         </p>
         <p className="text-gray-400 mb-8 max-w-md text-sm">
-          You'll receive a WhatsApp confirmation shortly with your delivery details. If you refreshed this page, don't worry — your order is safe!
+          {isKlumpPayment ? 'We will process your order once Klump confirms your payment.' : 'You\'ll receive a WhatsApp confirmation shortly with your delivery details. If you refreshed this page, don\'t worry — your order is safe!'}
         </p>
         <a
           href={WHATSAPP_ORDER_HELP_LINK}
@@ -528,13 +529,13 @@ const ThankYou = () => {
           <div className="bg-[#111] border border-gold/30 rounded-2xl p-6 mb-6">
             <h3 className="text-lg font-bold text-gold mb-4">
               {(() => {
-                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['SELF LOVE PLUS'];
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Self Love Plus'];
                 return currentPackage.title;
               })()}:
             </h3>
             <div className="space-y-4">
               {(() => {
-                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['SELF LOVE PLUS'];
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Self Love Plus'];
                 return currentPackage.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />

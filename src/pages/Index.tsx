@@ -395,14 +395,9 @@ const Index = () => {
           12,847 Verified Review
         </div>
         
-        <a
-          href="#order-form"
-          data-form-cta="true"
-          className="cta-button-right cta-with-arrow"
-        >
-          Click Here To Buy Now
-          <span className="arrow-indicator"></span>
-        </a>
+        <a href="#order-form" className="klump-top-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)', color: '#fff', padding: '12px 20px', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', marginTop: '16px' }}>
+            💳 Pay Small Small - From ₦16,687/month
+          </a>
       </div>
 
       {/* Review Stars with Social Proof */}

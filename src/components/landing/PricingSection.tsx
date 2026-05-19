@@ -56,7 +56,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       popular: true
     },
     {
-      name: "FAMILY SAVES",
+      name: "Family Saves",
       price: "₦199,000",
       promo: "35% OFF",
       savings: "",
@@ -105,7 +105,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
       popular: true
     },
     {
-      name: "FAMILY SAVES",
+      name: "Family Saves",
       price: "₦215,000",
       promo: "",
       savings: "",

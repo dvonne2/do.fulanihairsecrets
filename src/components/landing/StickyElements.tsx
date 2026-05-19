@@ -74,97 +74,155 @@ export const StickyElements = ({
       >
         <div
           style={{
-            background: '#5ec239',
-            padding: isMobile ? '8px 12px' : '10px 16px',
+            background: 'linear-gradient(135deg, #6F22F2 0%, #4B16C9 100%)',
+            padding: isMobile ? '8px 12px' : '14px 24px',
             paddingBottom: isMobile 
               ? 'max(8px, env(safe-area-inset-bottom))' 
-              : 'max(10px, env(safe-area-inset-bottom))',
+              : 'max(14px, env(safe-area-inset-bottom))',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: isMobile ? '8px' : '10px',
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.25)',
-            minHeight: isMobile ? '60px' : '70px',
+            gap: isMobile ? '10px' : '28px',
+            boxShadow: '0 -6px 24px rgba(76, 29, 149, 0.35)',
+            minHeight: isMobile ? '64px' : '92px',
+            borderTopLeftRadius: isMobile ? 0 : '18px',
+            borderTopRightRadius: isMobile ? 0 : '18px',
           }}
         >
-          {/* Left: Title + subtitle */}
-          <div style={{ 
-            flex: '1', 
-            minWidth: 0,
-            paddingRight: isMobile ? '8px' : '0'
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#FFFFFF',
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '800',
+            fontSize: isMobile ? '11px' : '14px',
+            lineHeight: '1',
+            flex: '0 0 auto'
           }}>
             <div style={{
-              fontSize: isMobile ? '16px' : '20px',
-              fontWeight: '700',
+              fontSize: isMobile ? '30px' : '44px',
+              fontWeight: '900',
+              lineHeight: '0.8',
+              letterSpacing: '-4px'
+            }}>K</div>
+            <div>klump</div>
+          </div>
+
+          <div style={{
+            width: '1px',
+            alignSelf: 'stretch',
+            background: 'rgba(255,255,255,0.28)'
+          }} />
+
+          <div style={{ 
+            flex: '1.2', 
+            minWidth: 0
+          }}>
+            <div style={{
+              fontSize: isMobile ? '12px' : '18px',
+              fontWeight: '800',
               color: '#FFFFFF',
               fontFamily: 'Montserrat, sans-serif',
               lineHeight: '1.2',
-              letterSpacing: '0.3px',
-              textTransform: 'uppercase',
-              marginBottom: isMobile ? '2px' : '0'
+              letterSpacing: '0.2px',
+              textTransform: 'uppercase'
             }}>
               <div style={{
                 display: 'flex',
-                flexDirection: isMobile ? 'column' : 'row',
-                alignItems: isMobile ? 'flex-start' : 'center',
-                gap: isMobile ? '2px' : '4px'
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '2px'
               }}>
                 <span style={{
-                  fontSize: isMobile ? '14px' : 'inherit',
-                  fontWeight: isMobile ? '600' : 'inherit'
-                }}>Fulani</span>
+                  fontSize: isMobile ? '12px' : '14px',
+                  fontWeight: '800'
+                }}>FULANI HAIR GRO BUNDLE</span>
                 <span style={{
-                  fontSize: isMobile ? '12px' : '16px',
-                  fontWeight: '600'
-                }}>Hair Gro Bundle</span>
+                  fontSize: isMobile ? '13px' : '22px',
+                  fontWeight: '800',
+                  textTransform: 'none'
+                }}>Pay Small Small with <span style={{ color: '#FFD21F' }}>Klump</span></span>
               </div>
-            </div>
-            <div style={{
-              fontSize: isMobile ? '11px' : '17px',
-              fontWeight: '600',
-              color: '#FFFFFF',
-              fontFamily: 'Montserrat, sans-serif',
-              lineHeight: '1.2',
-              textTransform: 'none',
-              display: 'block'
-            }}>
-              Payment On Delivery
             </div>
           </div>
 
-          {/* Right: CTA Button */}
+          <div style={{
+            width: '1px',
+            alignSelf: 'stretch',
+            background: 'rgba(255,255,255,0.28)'
+          }} />
+
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '2px',
+            color: '#FFFFFF',
+            fontFamily: 'Montserrat, sans-serif',
+            flex: '0 0 auto'
+          }}>
+            <span style={{ fontSize: isMobile ? '10px' : '14px', fontWeight: '700' }}>From as low as</span>
+            <span style={{ fontSize: isMobile ? '18px' : '30px', fontWeight: '900', color: '#FFD21F', lineHeight: '1' }}>₦16,687<span style={{ fontSize: isMobile ? '11px' : '18px', color: '#FFD21F' }}>/mo</span></span>
+          </div>
+
+          {!isMobile && (
+            <>
+              <div style={{
+                width: '1px',
+                alignSelf: 'stretch',
+                background: 'rgba(255,255,255,0.28)'
+              }} />
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                color: '#FFFFFF',
+                fontFamily: 'Montserrat, sans-serif',
+                fontSize: '14px',
+                fontWeight: '700',
+                lineHeight: '1.2'
+              }}>
+                <span style={{ fontSize: '28px' }}>🛡</span>
+                <span>Interest-free<br />plans available</span>
+              </div>
+            </>
+          )}
+
           <button
             onClick={scrollToOrderForm}
             data-form-cta="true"
             className="relative overflow-hidden"
             style={{
               flex: isMobile ? '0 0 auto' : '0 0 auto',
-              background: '#000000',
-              color: '#FFFFFF',
+              background: '#FFD21F',
+              color: '#111111',
               border: 'none',
-              borderRadius: isMobile ? '16px' : '20px',
-              padding: isMobile ? '8px 14px' : '10px 18px',
-              fontSize: isMobile ? '14px' : '20px',
-              fontWeight: '700',
+              borderRadius: isMobile ? '18px' : '999px',
+              padding: isMobile ? '10px 14px' : '16px 28px',
+              fontSize: isMobile ? '13px' : '18px',
+              fontWeight: '800',
               fontFamily: 'Montserrat, sans-serif',
               cursor: 'pointer',
               lineHeight: '1.1',
               textAlign: 'center',
               whiteSpace: 'nowrap',
               minHeight: isMobile ? '36px' : '40px',
-              minWidth: isMobile ? '100px' : 'auto',
+              minWidth: isMobile ? '92px' : '140px',
               WebkitTapHighlightColor: 'transparent',
               transition: 'background 0.3s ease, color 0.3s ease',
               animation: isMobile ? 'bling-pulse-buy-mobile 2s ease-in-out infinite' : 'bling-pulse-buy 2s ease-in-out infinite',
-              boxShadow: '0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.3)'
+              boxShadow: '0 0 20px rgba(255, 210, 31, 0.35)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FFFFFF';
-              e.currentTarget.style.color = '#000000';
+              e.currentTarget.style.background = '#FFE766';
+              e.currentTarget.style.color = '#111111';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000000';
-              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.background = '#FFD21F';
+              e.currentTarget.style.color = '#111111';
             }}
           >
             {/* Clean text without sparkles */}
@@ -173,7 +231,7 @@ export const StickyElements = ({
               display: 'block',
               textAlign: 'center'
             }}>
-              {isMobile ? 'Buy Now' : 'Click Here To Buy Now'}
+              {isMobile ? 'Buy Now' : 'Buy Now ❯'}
             </span>
           </button>
           
