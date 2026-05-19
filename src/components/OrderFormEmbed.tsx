@@ -53,6 +53,39 @@ const submitToFulani = async (formData) => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body
     });
+
+    // Parallel POST to ERPNext (fire-and-forget, does not block)
+    const erpnextPayload = {
+      order_id: formData.orderId,
+      customer_name: formData.name || formData.customerName || formData.fullName,
+      customer_phone: formData.phone || formData.phoneNumber || formData.tel,
+      customer_email: formData.email || '',
+      package_name: formData.package || formData.packageName || formData.selectedPackage,
+      total: packages.find(p => p.name === (formData.package || formData.packageName || formData.selectedPackage))?.price || 0,
+      delivery_fee: formData.deliveryFee || formData.shipping || 3000,
+      state: formData.state || '',
+      lga: formData.lga || formData.city || formData.area || '',
+      address: formData.address || formData.fullAddress || formData.deliveryAddress || '',
+      landmark: formData.landmark || formData.nearestLandmark || '',
+      source: 'React-Web',
+      aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
+      utm_source: localStorage.getItem('src') || '',
+      payment_method: formData.paymentMethod || formData.payment || 'Pay on Delivery',
+    };
+
+    fetch(import.meta.env.VITE_ERPNEXT_INGEST_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Webhook-Secret': import.meta.env.VITE_ERPNEXT_WEBHOOK_SECRET,
+      },
+      body: JSON.stringify(erpnextPayload),
+    })
+      .then(r => r.json())
+      .then(r => console.log('[ERPNext sync]', r))
+      .catch(err => console.error('[ERPNext sync error]', err));
+
     return { success: true };
   } catch (error) {
     console.error('Fulani API error:', error);
@@ -78,11 +111,11 @@ const useDebounce = (value, delay) => {
 };
 
 const packageMapping: Record<string, string> = {
-  'PKG-001': 'SELF LOVE PLUS',
-  'PKG-002': 'SELF LOVE RETURN',
-  'PKG-003': 'SELF LOVE B2GOF',
-  'PKG-004': 'SELF LOVE PLUS B2GOF',
-  'PKG-005': 'FAMILY SAVES'
+  'PKG-001': 'Self Love Plus',
+  'PKG-002': 'Self Love Return',
+  'PKG-003': 'Self Love B2GOF',
+  'PKG-004': 'Self Love Plus B2GOF',
+  'PKG-005': 'Family Saves'
 };
 
 const packageNameToId: Record<string, string> = Object.fromEntries(Object.entries(packageMapping).map(([id, name]) => [String(name).trim().toUpperCase(), id]));
@@ -95,11 +128,11 @@ const resolvePkgId = (v: any): string => {
 };
 
 const PACKAGE_CONTENTS: Record<string, string[]> = {
-  'SELF LOVE PLUS': ['1 500ml Net Shampoo', '1 150ml Net Pomade', '1 500ml Net Conditioner'],
-  'SELF LOVE RETURN': ['3 x 150ml Net Pomade'],
-  'SELF LOVE B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade'],
-  'SELF LOVE PLUS B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade', '3 500ml Net Conditioner'],
-  'FAMILY SAVES': ['10 500ml Net Shampoo', '10 150ml Net Pomade', '10 500ml Net Conditioner']
+  'Self Love Plus': ['1 500ml Net Shampoo', '1 150ml Net Pomade', '1 500ml Net Conditioner'],
+  'Self Love Return': ['3 x 150ml Net Pomade'],
+  'Self Love B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade'],
+  'Self Love Plus B2GOF': ['3 500ml Net Shampoo', '3 x 150ml Net Pomade', '3 500ml Net Conditioner'],
+  'Family Saves': ['10 500ml Net Shampoo', '10 150ml Net Pomade', '10 500ml Net Conditioner']
 };
 
 const nigerianStates = ['Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'FCT', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'Gombe', 'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'];
@@ -114,11 +147,11 @@ const lgasByState: { [key: string]: string[] } = {
 };
 
 const packages = [
-  { id: 'PKG-001', name: 'THE TRIAL KIT (Self Love Plus)', webhookName: 'SELF LOVE PLUS', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
-  { id: 'PKG-002', name: 'SELF LOVE RETURN', webhookName: 'SELF LOVE RETURN', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade', supply: '3-Month Maintenance: <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
-  { id: 'PKG-003', name: 'SELF LOVE B2GOF', webhookName: 'SELF LOVE B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade', isPopular: false },
-  { id: 'PKG-004', name: 'SELF LOVE PLUS B2GOF', webhookName: 'SELF LOVE PLUS B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🔥 3-Month Hair Recovery System - If your hair is breaking, thinning, or refusing to grow, this set is your reset. In just 90 days, it will wake up dormant follicles, restore your scalp, and have you seeing the fuller, longer hair you\'ve been waiting for. Affordable. Effective. Built for serious results.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade + 1 500ml Conditioner', isPopular: true },
-  { id: 'PKG-005', name: 'FAMILY SAVES', webhookName: 'FAMILY SAVES', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ FREE: 4 500ml Shampoos + 4 150g Pomades + 4 500ml Conditioners', isPopular: true },
+  { id: 'PKG-001', name: 'Self Love Plus', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
+  { id: 'PKG-002', name: 'Self Love Return', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade', supply: '3-Month Maintenance: <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
+  { id: 'PKG-003', name: 'Self Love B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade', isPopular: false },
+  { id: 'PKG-004', name: 'Self Love Plus B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🔥 3-Month Hair Recovery System - If your hair is breaking, thinning, or refusing to grow, this set is your reset. In just 90 days, it will wake up dormant follicles, restore your scalp, and have you seeing the fuller, longer hair you\'ve been waiting for. Affordable. Effective. Built for serious results.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade + 1 500ml Conditioner', isPopular: true },
+  { id: 'PKG-005', name: 'Family Saves', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ FREE: 4 500ml Shampoos + 4 150g Pomades + 4 500ml Conditioners', isPopular: true },
 ];
 
 // Generate unique Order ID - YYMMDDHHmm format
@@ -282,7 +315,7 @@ function OrderFormEmbed() {
     deliveryDate: '',
     deliveryTimeWindow: '',
     addressType: 'home' as 'home' | 'office' | 'other',
-    paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery',
+    paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery' | 'KLUMP',
     agreeToMarketing: false,
     orderId: ''
   });
@@ -305,14 +338,22 @@ function OrderFormEmbed() {
     const params = new URLSearchParams(window.location.search);
     let mb = (params.get("mb") || "").trim().toLowerCase();
     let src = (params.get("src") || "").trim().toLowerCase();
+    let affId = (params.get("aff_id") || "").trim();
+    let ref = (params.get("ref") || "").trim().toLowerCase();
 
-    if (mb) localStorage.setItem("mb", mb);
-    else mb = localStorage.getItem("mb") || "";
+    // Priority order: aff_id → mb → ref
+    let finalMb = affId || mb || ref;
+    if (finalMb) {
+      localStorage.setItem("mb", finalMb.toLowerCase());
+      localStorage.setItem("vv_aff_id", finalMb);
+    } else {
+      finalMb = localStorage.getItem("mb") || localStorage.getItem("vv_aff_id") || "";
+    }
 
     if (src) localStorage.setItem("src", src);
     else src = localStorage.getItem("src") || "unknown";
 
-    setMediaBuyer(mb);
+    setMediaBuyer(finalMb.toLowerCase());
     setSource(src);
   }, []);
 
@@ -687,7 +728,7 @@ function OrderFormEmbed() {
 
   // Memoize delivery fee calculation
   const deliveryFee = useMemo(() => {
-    // Free shipping for Pay Before Delivery
+    // Free shipping for Pay Before Delivery only
     if (form.paymentMethod === 'Pay Before Delivery') {
       return 0;
     }
@@ -695,7 +736,7 @@ function OrderFormEmbed() {
     if (form.couponApplied) {
       return 0;
     }
-    // Use user's selected delivery fee for Pay on Delivery
+    // Use user's selected delivery fee for Pay on Delivery and Klump
     return form.deliveryFee || (form.state === 'Lagos' ? 3000 : 5000);
   }, [form.state, form.paymentMethod, form.deliveryFee, form.couponApplied]);
 
@@ -1047,7 +1088,7 @@ function OrderFormEmbed() {
             packageAmount,
             deliveryFee: calculatedDeliveryFee,
             totalAmount: packageAmount + calculatedDeliveryFee,
-            paymentType: form.paymentMethod === 'Pay Before Delivery' ? 'PBD' : 'POD',
+            paymentType: form.paymentMethod === 'Pay Before Delivery' ? 'PBD' : form.paymentMethod === 'KLUMP' ? 'KLUMP' : 'POD',
             state: form.state,
             lga: form.lga,
             address: form.address,
@@ -1106,6 +1147,74 @@ function OrderFormEmbed() {
         mode: 'no-cors',
         keepalive: true
       }).catch(err => console.error('Webhook error:', err));
+
+      // Handle Klump payment separately
+      if (form.paymentMethod === 'KLUMP') {
+        // Open Klump checkout after order is saved
+        const klumpPublicKey = (import.meta as any).env?.VITE_KLUMP_PUBLIC_KEY;
+        if (!klumpPublicKey) {
+          console.error('Klump public key not found');
+          toast.error('Klump payment is not configured. Please try another payment method.');
+          setSubmitting(false);
+          return;
+        }
+
+        // @ts-ignore - Klump is loaded from external script
+        if (typeof window.Klump !== 'function') {
+          console.error('Klump script not loaded');
+          toast.error('Klump payment is not available. Please try another payment method.');
+          setSubmitting(false);
+          return;
+        }
+
+        try {
+          // @ts-ignore
+          const KlumpCheckout = new window.Klump({
+            publicKey: klumpPublicKey,
+            amount: totalAmount,
+            currency: 'NGN',
+            reference: orderId,
+            customer: {
+              name: form.name,
+              email: form.email,
+              phone_number: form.phone,
+            },
+            metadata: {
+              orderId: orderId,
+              packageName: packageName,
+              packageAmount: packageAmount,
+              deliveryFee: calculatedDeliveryFee,
+              totalAmount: totalAmount,
+            },
+            onClose: () => {
+              console.log('Klump checkout closed');
+              toast.info('Your order was received, but Klump payment was not completed. Our team may contact you to complete your order.');
+              setSubmitting(false);
+              // Keep order as Pending, don't redirect
+              window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
+            },
+            onSuccess: (response: any) => {
+              console.log('Klump payment successful:', response);
+              toast.success('Klump payment successful! Your order will be processed.');
+              // Redirect to thank-you page
+              window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
+            },
+            onError: (error: any) => {
+              console.error('Klump payment error:', error);
+              toast.error('Klump payment failed. Your order is saved as Pending. Please try another payment method.');
+              setSubmitting(false);
+            },
+          });
+
+          // @ts-ignore
+          KlumpCheckout.open();
+        } catch (error) {
+          console.error('Klump checkout error:', error);
+          toast.error('Failed to open Klump checkout. Your order is saved as Pending. Please try another payment method.');
+          setSubmitting(false);
+        }
+        return;
+      }
 
       // Clear persistent orderId after successful completion
       localStorage.removeItem('fhg_persistent_order_id');
@@ -1574,19 +1683,156 @@ function OrderFormEmbed() {
 
             {/* Payment method */}
             <label style={S.label}>PAYMENT METHOD</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
-              {['Pay on Delivery', 'Pay Before Delivery'].map(opt => (
-                <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', color: '#1a1a1a', fontWeight: opt === 'Pay Before Delivery' ? '800' : '400' }}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={opt}
-                    checked={form.paymentMethod === opt}
-                    onChange={e => setForm({ ...form, paymentMethod: e.target.value })}
-                  />
-                  <span style={{ fontSize: opt === 'Pay Before Delivery' ? 15 : 13, fontWeight: opt === 'Pay Before Delivery' ? 800 : 700, color: '#1a1a1a' }}>{opt}</span>
-                </label>
-              ))}
+            <p style={{ fontSize: '13px', color: '#666', marginTop: '4px', marginBottom: '12px' }}>Choose your preferred payment option</p>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginTop: 10 }}>
+              {[
+                { 
+                  label: 'Pay on Delivery', 
+                  value: 'Pay on Delivery' as const,
+                  icon: '🚚',
+                  description: 'Pay when your order arrives',
+                  badge: 'Delivery fee applies',
+                  isPremium: false
+                },
+                { 
+                  label: 'Pay Before Delivery', 
+                  value: 'Pay Before Delivery' as const,
+                  icon: '🏦',
+                  description: 'Pay to our company account before delivery',
+                  badge: 'Free delivery',
+                  isPremium: false
+                },
+                { 
+                  label: 'Pay Small Small with Klump', 
+                  value: 'KLUMP' as const,
+                  icon: '💳',
+                  description: 'Get your complete hair growth routine now and pay small small',
+                  badge: 'From ₦16,687/month',
+                  isPremium: true
+                }
+              ].map(opt => {
+                const isSelected = form.paymentMethod === opt.value;
+                return (
+                  <label 
+                    key={opt.value} 
+                    onClick={() => setForm({ ...form, paymentMethod: opt.value })}
+                    style={{
+                      display: 'block',
+                      cursor: 'pointer',
+                      padding: '16px',
+                      borderRadius: '12px',
+                      border: `2px solid ${isSelected ? (opt.value === 'KLUMP' ? '#7C3AED' : '#DAA520') : opt.value === 'KLUMP' ? '#7C3AED' : opt.isPremium ? '#DAA520' : '#E5E7EB'}`,
+                      background: opt.value === 'KLUMP'
+                        ? isSelected
+                          ? 'linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%)'
+                          : 'linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%)'
+                        : opt.isPremium 
+                          ? isSelected 
+                            ? 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)'
+                            : 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
+                          : isSelected
+                            ? '#F0FDF4'
+                            : '#FFFFFF',
+                      boxShadow: isSelected 
+                        ? (opt.value === 'KLUMP' ? '0 4px 12px rgba(124, 58, 237, 0.3)' : '0 4px 12px rgba(218, 165, 32, 0.3)')
+                        : opt.value === 'KLUMP'
+                          ? '0 2px 8px rgba(124, 58, 237, 0.2)'
+                          : opt.isPremium 
+                            ? '0 2px 8px rgba(218, 165, 32, 0.2)'
+                            : '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.2s ease',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={opt.value}
+                      checked={isSelected}
+                      onChange={e => setForm({ ...form, paymentMethod: e.target.value as 'Pay on Delivery' | 'Pay Before Delivery' | 'KLUMP' })}
+                      style={{ display: 'none' }}
+                    />
+                    
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                      <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        background: opt.value === 'KLUMP'
+                          ? 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)'
+                          : opt.isPremium 
+                            ? 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)'
+                            : '#F3F4F6',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '20px',
+                        flexShrink: 0
+                      }}>
+                        {opt.icon}
+                      </div>
+                      
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                          <span style={{ 
+                            fontSize: '15px', 
+                            fontWeight: opt.isPremium ? 700 : 600, 
+                            color: '#1a1a1a',
+                            lineHeight: '1.3'
+                          }}>
+                            {opt.label}
+                          </span>
+                          {isSelected && (
+                            <div style={{
+                              width: '20px',
+                              height: '20px',
+                              borderRadius: '50%',
+                              background: opt.value === 'KLUMP' ? '#7C3AED' : opt.isPremium ? '#B8860B' : '#10B981',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}>
+                              <span style={{ color: 'white', fontSize: '12px' }}>✓</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <p style={{ 
+                          fontSize: '13px', 
+                          color: '#666', 
+                          marginBottom: 8,
+                          lineHeight: '1.4'
+                        }}>
+                          {opt.description}
+                        </p>
+                        
+                        <span style={{
+                          display: 'inline-block',
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          background: opt.value === 'KLUMP'
+                            ? 'rgba(124, 58, 237, 0.15)'
+                            : opt.isPremium 
+                              ? 'rgba(184, 134, 11, 0.15)'
+                              : 'rgba(0, 0, 0, 0.05)',
+                          color: opt.value === 'KLUMP'
+                            ? '#7C3AED'
+                            : opt.isPremium 
+                              ? '#B8860B'
+                              : '#666'
+                        }}>
+                          {opt.badge}
+                        </span>
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
             </div>
 
             {/* Bank details for Pay Before Delivery */}
