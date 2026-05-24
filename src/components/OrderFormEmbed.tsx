@@ -315,7 +315,7 @@ function OrderFormEmbed() {
     deliveryDate: '',
     deliveryTimeWindow: '',
     addressType: 'home' as 'home' | 'office' | 'other',
-    paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery' | 'KLUMP',
+    paymentMethod: 'Pay on Delivery' as 'Pay on Delivery' | 'Pay Before Delivery',
     agreeToMarketing: false,
     orderId: ''
   });
@@ -736,7 +736,6 @@ function OrderFormEmbed() {
     if (form.couponApplied) {
       return 0;
     }
-    // Use user's selected delivery fee for Pay on Delivery and Klump
     return form.deliveryFee || (form.state === 'Lagos' ? 3000 : 5000);
   }, [form.state, form.paymentMethod, form.deliveryFee, form.couponApplied]);
 
@@ -1088,7 +1087,7 @@ function OrderFormEmbed() {
             packageAmount,
             deliveryFee: calculatedDeliveryFee,
             totalAmount: packageAmount + calculatedDeliveryFee,
-            paymentType: form.paymentMethod === 'Pay Before Delivery' ? 'PBD' : form.paymentMethod === 'KLUMP' ? 'KLUMP' : 'POD',
+            paymentType: form.paymentMethod === 'Pay Before Delivery' ? 'PBD' : 'POD',
             state: form.state,
             lga: form.lga,
             address: form.address,
@@ -1147,74 +1146,6 @@ function OrderFormEmbed() {
         mode: 'no-cors',
         keepalive: true
       }).catch(err => console.error('Webhook error:', err));
-
-      // Handle Klump payment separately
-      if (form.paymentMethod === 'KLUMP') {
-        // Open Klump checkout after order is saved
-        const klumpPublicKey = (import.meta as any).env?.VITE_KLUMP_PUBLIC_KEY;
-        if (!klumpPublicKey) {
-          console.error('Klump public key not found');
-          toast.error('Klump payment is not configured. Please try another payment method.');
-          setSubmitting(false);
-          return;
-        }
-
-        // @ts-ignore - Klump is loaded from external script
-        if (typeof window.Klump !== 'function') {
-          console.error('Klump script not loaded');
-          toast.error('Klump payment is not available. Please try another payment method.');
-          setSubmitting(false);
-          return;
-        }
-
-        try {
-          // @ts-ignore
-          const KlumpCheckout = new window.Klump({
-            publicKey: klumpPublicKey,
-            amount: totalAmount,
-            currency: 'NGN',
-            reference: orderId,
-            customer: {
-              name: form.name,
-              email: form.email,
-              phone_number: form.phone,
-            },
-            metadata: {
-              orderId: orderId,
-              packageName: packageName,
-              packageAmount: packageAmount,
-              deliveryFee: calculatedDeliveryFee,
-              totalAmount: totalAmount,
-            },
-            onClose: () => {
-              console.log('Klump checkout closed');
-              toast.info('Your order was received, but Klump payment was not completed. Our team may contact you to complete your order.');
-              setSubmitting(false);
-              // Keep order as Pending, don't redirect
-              window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
-            },
-            onSuccess: (response: any) => {
-              console.log('Klump payment successful:', response);
-              toast.success('Klump payment successful! Your order will be processed.');
-              // Redirect to thank-you page
-              window.location.href = `/thank-you?orderId=${encodeURIComponent(orderId)}`;
-            },
-            onError: (error: any) => {
-              console.error('Klump payment error:', error);
-              toast.error('Klump payment failed. Your order is saved as Pending. Please try another payment method.');
-              setSubmitting(false);
-            },
-          });
-
-          // @ts-ignore
-          KlumpCheckout.open();
-        } catch (error) {
-          console.error('Klump checkout error:', error);
-          toast.error('Failed to open Klump checkout. Your order is saved as Pending. Please try another payment method.');
-          setSubmitting(false);
-        }
-        return;
-      }
 
       // Clear persistent orderId after successful completion
       localStorage.removeItem('fhg_persistent_order_id');
@@ -1702,14 +1633,6 @@ function OrderFormEmbed() {
                   description: 'Pay to our company account before delivery',
                   badge: 'Free delivery',
                   isPremium: false
-                },
-                { 
-                  label: 'Pay Small Small with Klump', 
-                  value: 'KLUMP' as const,
-                  icon: '💳',
-                  description: 'Get your complete hair growth routine now and pay small small',
-                  badge: 'From ₦16,687/month',
-                  isPremium: true
                 }
               ].map(opt => {
                 const isSelected = form.paymentMethod === opt.value;
@@ -1722,25 +1645,19 @@ function OrderFormEmbed() {
                       cursor: 'pointer',
                       padding: '16px',
                       borderRadius: '12px',
-                      border: `2px solid ${isSelected ? (opt.value === 'KLUMP' ? '#7C3AED' : '#DAA520') : opt.value === 'KLUMP' ? '#7C3AED' : opt.isPremium ? '#DAA520' : '#E5E7EB'}`,
-                      background: opt.value === 'KLUMP'
-                        ? isSelected
-                          ? 'linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%)'
-                          : 'linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%)'
-                        : opt.isPremium 
-                          ? isSelected 
-                            ? 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)'
-                            : 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
-                          : isSelected
-                            ? '#F0FDF4'
-                            : '#FFFFFF',
+                      border: `2px solid ${isSelected ? (opt.isPremium ? '#DAA520' : '#10B981') : opt.isPremium ? '#DAA520' : '#E5E7EB'}`,
+                      background: opt.isPremium 
+                        ? isSelected 
+                          ? 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)'
+                          : 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
+                        : isSelected
+                          ? '#F0FDF4'
+                          : '#FFFFFF',
                       boxShadow: isSelected 
-                        ? (opt.value === 'KLUMP' ? '0 4px 12px rgba(124, 58, 237, 0.3)' : '0 4px 12px rgba(218, 165, 32, 0.3)')
-                        : opt.value === 'KLUMP'
-                          ? '0 2px 8px rgba(124, 58, 237, 0.2)'
-                          : opt.isPremium 
-                            ? '0 2px 8px rgba(218, 165, 32, 0.2)'
-                            : '0 1px 3px rgba(0, 0, 0, 0.1)',
+                        ? (opt.isPremium ? '0 4px 12px rgba(218, 165, 32, 0.3)' : '0 4px 12px rgba(16, 185, 129, 0.3)')
+                        : opt.isPremium 
+                          ? '0 2px 8px rgba(218, 165, 32, 0.2)'
+                          : '0 1px 3px rgba(0, 0, 0, 0.1)',
                       transition: 'all 0.2s ease',
                       position: 'relative',
                       overflow: 'hidden'
@@ -1751,7 +1668,7 @@ function OrderFormEmbed() {
                       name="paymentMethod"
                       value={opt.value}
                       checked={isSelected}
-                      onChange={e => setForm({ ...form, paymentMethod: e.target.value as 'Pay on Delivery' | 'Pay Before Delivery' | 'KLUMP' })}
+                      onChange={e => setForm({ ...form, paymentMethod: e.target.value as 'Pay on Delivery' | 'Pay Before Delivery' })}
                       style={{ display: 'none' }}
                     />
                     
@@ -1760,11 +1677,9 @@ function OrderFormEmbed() {
                         width: '40px',
                         height: '40px',
                         borderRadius: '50%',
-                        background: opt.value === 'KLUMP'
-                          ? 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)'
-                          : opt.isPremium 
-                            ? 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)'
-                            : '#F3F4F6',
+                        background: opt.isPremium 
+                          ? 'linear-gradient(135deg, #DAA520 0%, #B8860B 100%)'
+                          : '#F3F4F6',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1789,7 +1704,7 @@ function OrderFormEmbed() {
                               width: '20px',
                               height: '20px',
                               borderRadius: '50%',
-                              background: opt.value === 'KLUMP' ? '#7C3AED' : opt.isPremium ? '#B8860B' : '#10B981',
+                              background: opt.isPremium ? '#B8860B' : '#10B981',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -1815,16 +1730,12 @@ function OrderFormEmbed() {
                           borderRadius: '4px',
                           fontSize: '11px',
                           fontWeight: 600,
-                          background: opt.value === 'KLUMP'
-                            ? 'rgba(124, 58, 237, 0.15)'
-                            : opt.isPremium 
-                              ? 'rgba(184, 134, 11, 0.15)'
-                              : 'rgba(0, 0, 0, 0.05)',
-                          color: opt.value === 'KLUMP'
-                            ? '#7C3AED'
-                            : opt.isPremium 
-                              ? '#B8860B'
-                              : '#666'
+                          background: opt.isPremium 
+                            ? 'rgba(184, 134, 11, 0.15)'
+                            : 'rgba(0, 0, 0, 0.05)',
+                          color: opt.isPremium 
+                            ? '#B8860B'
+                            : '#666'
                         }}>
                           {opt.badge}
                         </span>

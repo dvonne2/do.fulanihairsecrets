@@ -74,204 +74,68 @@ export const StickyElements = ({
       >
         <div
           style={{
-            background: 'linear-gradient(135deg, #6F22F2 0%, #4B16C9 100%)',
-            padding: isMobile ? '8px 12px' : '14px 24px',
+            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+            padding: isMobile ? '12px 16px' : '16px 24px',
             paddingBottom: isMobile 
-              ? 'max(8px, env(safe-area-inset-bottom))' 
-              : 'max(14px, env(safe-area-inset-bottom))',
+              ? 'max(12px, env(safe-area-inset-bottom))' 
+              : 'max(16px, env(safe-area-inset-bottom))',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: isMobile ? '10px' : '28px',
-            boxShadow: '0 -6px 24px rgba(76, 29, 149, 0.35)',
-            minHeight: isMobile ? '64px' : '92px',
-            borderTopLeftRadius: isMobile ? 0 : '18px',
-            borderTopRightRadius: isMobile ? 0 : '18px',
+            gap: isMobile ? '12px' : '24px',
+            boxShadow: '0 -4px 20px rgba(16, 185, 129, 0.3)',
           }}
         >
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            fontFamily: 'Montserrat, sans-serif',
-            fontWeight: '800',
-            fontSize: isMobile ? '11px' : '14px',
-            lineHeight: '1',
-            flex: '0 0 auto'
-          }}>
-            <div style={{
-              fontSize: isMobile ? '30px' : '44px',
-              fontWeight: '900',
-              lineHeight: '0.8',
-              letterSpacing: '-4px'
-            }}>K</div>
-            <div>klump</div>
-          </div>
-
-          <div style={{
-            width: '1px',
-            alignSelf: 'stretch',
-            background: 'rgba(255,255,255,0.28)'
-          }} />
-
           <div style={{ 
-            flex: '1.2', 
+            flex: 1, 
             minWidth: 0
           }}>
             <div style={{
-              fontSize: isMobile ? '12px' : '18px',
-              fontWeight: '800',
+              fontSize: isMobile ? '14px' : '18px',
+              fontWeight: '700',
               color: '#FFFFFF',
               fontFamily: 'Montserrat, sans-serif',
-              lineHeight: '1.2',
-              letterSpacing: '0.2px',
-              textTransform: 'uppercase'
+              lineHeight: '1.3',
+              marginBottom: isMobile ? '4px' : '6px'
             }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '2px'
-              }}>
-                <span style={{
-                  fontSize: isMobile ? '12px' : '14px',
-                  fontWeight: '800'
-                }}>FULANI HAIR GRO BUNDLE</span>
-                <span style={{
-                  fontSize: isMobile ? '13px' : '22px',
-                  fontWeight: '800',
-                  textTransform: 'none'
-                }}>Pay Small Small with <span style={{ color: '#FFD21F' }}>Klump</span></span>
-              </div>
+              Get Your Hair Growth Bundle Today
+            </div>
+            <div style={{
+              fontSize: isMobile ? '12px' : '14px',
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: '500'
+            }}>
+              Limited stock available • Free delivery on orders above ₦50,000
             </div>
           </div>
 
-          <div style={{
-            width: '1px',
-            alignSelf: 'stretch',
-            background: 'rgba(255,255,255,0.28)'
-          }} />
-
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '2px',
-            color: '#FFFFFF',
-            fontFamily: 'Montserrat, sans-serif',
-            flex: '0 0 auto'
-          }}>
-            <span style={{ fontSize: isMobile ? '10px' : '14px', fontWeight: '700' }}>From as low as</span>
-            <span style={{ fontSize: isMobile ? '18px' : '30px', fontWeight: '900', color: '#FFD21F', lineHeight: '1' }}>₦16,687<span style={{ fontSize: isMobile ? '11px' : '18px', color: '#FFD21F' }}>/mo</span></span>
-          </div>
-
-          {!isMobile && (
-            <>
-              <div style={{
-                width: '1px',
-                alignSelf: 'stretch',
-                background: 'rgba(255,255,255,0.28)'
-              }} />
-
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                color: '#FFFFFF',
-                fontFamily: 'Montserrat, sans-serif',
-                fontSize: '14px',
-                fontWeight: '700',
-                lineHeight: '1.2'
-              }}>
-                <span style={{ fontSize: '28px' }}>🛡</span>
-                <span>Interest-free<br />plans available</span>
-              </div>
-            </>
-          )}
-
-          <button
-            onClick={scrollToOrderForm}
-            data-form-cta="true"
-            className="relative overflow-hidden"
+          <a
+            href="#order-form"
             style={{
-              flex: isMobile ? '0 0 auto' : '0 0 auto',
               background: '#FFD21F',
-              color: '#111111',
-              border: 'none',
-              borderRadius: isMobile ? '18px' : '999px',
-              padding: isMobile ? '10px 14px' : '16px 28px',
-              fontSize: isMobile ? '13px' : '18px',
-              fontWeight: '800',
-              fontFamily: 'Montserrat, sans-serif',
-              cursor: 'pointer',
-              lineHeight: '1.1',
-              textAlign: 'center',
+              color: '#1a1a1a',
+              padding: isMobile ? '10px 20px' : '12px 28px',
+              borderRadius: '8px',
+              fontWeight: '700',
+              fontSize: isMobile ? '14px' : '16px',
+              textDecoration: 'none',
               whiteSpace: 'nowrap',
-              minHeight: isMobile ? '36px' : '40px',
-              minWidth: isMobile ? '92px' : '140px',
-              WebkitTapHighlightColor: 'transparent',
-              transition: 'background 0.3s ease, color 0.3s ease',
-              animation: isMobile ? 'bling-pulse-buy-mobile 2s ease-in-out infinite' : 'bling-pulse-buy 2s ease-in-out infinite',
-              boxShadow: '0 0 20px rgba(255, 210, 31, 0.35)'
+              fontFamily: 'Montserrat, sans-serif',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FFE766';
-              e.currentTarget.style.color = '#111111';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#FFD21F';
-              e.currentTarget.style.color = '#111111';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
             }}
           >
-            {/* Clean text without sparkles */}
-            <span className="relative z-10" style={{
-              fontSize: isMobile ? '12px' : 'inherit',
-              display: 'block',
-              textAlign: 'center'
-            }}>
-              {isMobile ? 'Buy Now' : 'Buy Now ❯'}
-            </span>
-          </button>
-          
-          {/* Add CSS animations */}
-          <style>{`
-            @keyframes bling-pulse-buy {
-              0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-              }
-              50% {
-                transform: scale(1.05);
-                opacity: 0.9;
-              }
-            }
-            @keyframes bling-pulse-buy-mobile {
-              0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-              }
-              50% {
-                transform: scale(1.03);
-                opacity: 0.9;
-              }
-            }
-            
-            /* Responsive adjustments */
-            @media (max-width: 767px) {
-              .sticky-footer-content {
-                padding: 8px 12px !important;
-              }
-            }
-            
-            @media (max-width: 480px) {
-              .sticky-footer-content {
-                padding: 6px 10px !important;
-                min-height: 56px !important;
-              }
-            }
-          `}</style>
+            Buy Now
+          </a>
         </div>
       </div>
     </>
