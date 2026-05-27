@@ -118,28 +118,36 @@ function ItemRow({ item }: { item: BundleItem }) {
 
 // ─── BundleCard ───────────────────────────────────────────────────────────────
 interface BundleCardProps {
-  pkg: BundlePackage;
-  isSelected: boolean;
-  isHov: boolean;
-  onClick: () => void;
-  onEnter: () => void;
-  onLeave: () => void;
+  bundle: BundlePackage;        // bundle data
+  isSelected: boolean;          // controlled selection state from parent
+  onSelect: (id: string) => void;  // click handler from parent
+  showCTA?: boolean;            // default true; pass false for inline usage
+  variant?: 'main' | 'secondary'; // default 'main'; pass 'secondary' for de-emphasized styling
+  // Legacy props for dropdown compatibility
+  isHov?: boolean;
+  onEnter?: () => void;
+  onLeave?: () => void;
 }
 
-function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: BundleCardProps) {
-  const discount = Math.round((1 - pkg.price / pkg.originalPrice) * 100);
-  const c = CARD_COLORS[pkg.id] ?? DEFAULT_COLOR;
+function BundleCard({ bundle, isSelected, onSelect, showCTA = true, variant = 'main', isHov, onEnter, onLeave }: BundleCardProps) {
+  const discount = Math.round((1 - bundle.price / bundle.originalPrice) * 100);
+  const c = CARD_COLORS[bundle.id] ?? DEFAULT_COLOR;
   const borderColor = isSelected ? c.sel : isHov ? c.hover : c.idle;
   const bg = isSelected ? c.selBg : isHov ? c.selBg : "#fff";
+  
+  const isSecondary = variant === 'secondary';
+  const cardPadding = isSecondary ? "12px 16px 10px" : "16px 16px 14px";
+  const cardOpacity = isSecondary ? 0.85 : 1;
+  const borderWidth = isSecondary ? "1px" : "2px";
 
   return (
     <div
-      onClick={onClick}
+      onClick={() => onSelect(bundle.id)}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       style={{
-        position: "relative", borderRadius: 12, padding: "16px 16px 14px",
-        border: `2px solid ${borderColor}`, background: bg,
+        position: "relative", borderRadius: 12, padding: cardPadding,
+        border: `${borderWidth} solid ${borderColor}`, background: bg,
         cursor: "pointer", transition: "background 0.15s, border-color 0.15s", marginBottom: 2,
         outline: isSelected ? `1px solid ${c.idle}` : "none",
         animation: isHov && !isSelected ? "cardGlow 0.7s ease-out" : "none",
@@ -147,24 +155,25 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
           ? "0 0 20px rgba(34,197,94,0.35), 0 4px 20px rgba(0,0,0,0.08)"
           : "0 1px 4px rgba(0,0,0,0.05)",
         filter: isHov && !isSelected ? "brightness(1.02)" : "brightness(1)",
+        opacity: cardOpacity,
       }}
     >
-      <CornerBadge badge={pkg.badge} />
+      <CornerBadge badge={bundle.badge} />
 
       {/* Name + price */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", paddingRight: pkg.badge ? 100 : 0 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", paddingRight: bundle.badge ? 100 : 0 }}>
         <div>
-          <div style={{ fontWeight: 800, fontSize: 15, color: "#111" }}>{pkg.name}</div>
-          {pkg.subtitle && (
-            <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{pkg.subtitle}</div>
+          <div style={{ fontWeight: 800, fontSize: 15, color: "#111" }}>{bundle.name}</div>
+          {bundle.subtitle && (
+            <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{bundle.subtitle}</div>
           )}
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
           <div style={{ fontSize: 13, color: "#9CA3AF", textDecoration: "line-through" }}>
-            {fmt(pkg.originalPrice)}
+            {fmt(bundle.originalPrice)}
           </div>
           <div style={{ fontSize: 22, fontWeight: 900, color: "#166534", lineHeight: 1.1 }}>
-            {fmt(pkg.price)}
+            {fmt(bundle.price)}
           </div>
           <div style={{
             display: "inline-block", marginTop: 3,
@@ -178,13 +187,13 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
 
       {/* Items */}
       <div style={{ marginTop: 12 }}>
-        {pkg.items.map((item, i) => <ItemRow key={i} item={item} />)}
+        {bundle.items.map((item, i) => <ItemRow key={i} item={item} />)}
       </div>
 
       {/* Description */}
-      {pkg.description && (
+      {bundle.description && (
         <div style={{ fontSize: 12, color: "#4B5563", textAlign: "center", marginTop: 8, lineHeight: 1.5 }}>
-          {pkg.description}
+          {bundle.description}
         </div>
       )}
 
@@ -192,25 +201,26 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
       <div style={{ textAlign: "center", marginTop: 10 }}>
         <span style={{
           fontSize: 12, fontWeight: 700, padding: "4px 14px", borderRadius: 20,
-          background: pkg.bestForBg, color: pkg.bestForColor,
+          background: bundle.bestForBg, color: bundle.bestForColor,
         }}>
-          Best for: {pkg.bestFor}
+          Best for: {bundle.bestFor}
         </span>
       </div>
 
       {/* Social proof */}
-      {pkg.socialProof && (
+      {bundle.socialProof && (
         <div style={{
           marginTop: 10, padding: "8px 12px", borderRadius: 8,
           background: "#ECFDF5", color: "#065F46",
           fontSize: 13, fontWeight: 700, textAlign: "center",
         }}>
-          {pkg.socialProof}
+          {bundle.socialProof}
         </div>
       )}
 
       {/* CTA */}
-      <div style={{ marginTop: 12 }}>
+      {showCTA && (
+        <div style={{ marginTop: 12 }}>
         {isSelected ? (
           <div style={{
             width: "100%", padding: "12px 0", borderRadius: 10, boxSizing: "border-box",
@@ -248,197 +258,10 @@ function BundleCard({ pkg, isSelected, isHov, onClick, onEnter, onLeave }: Bundl
             ) : "Click Here To Buy This Bundle"}
           </div>
         )}
-      </div>
-    </div>
-  );
-}
-
-// ─── BundleDropdown (main export) ─────────────────────────────────────────────
-export function BundleDropdown({ packages, value, onChange }: BundleDropdownProps) {
-  const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const selected = packages.find((p) => p.id === value) ?? null;
-
-  // Close on outside click
-  useEffect(() => {
-    const h = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, []);
-
-  // Close on Escape
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    document.addEventListener("keydown", h);
-    return () => document.removeEventListener("keydown", h);
-  }, []);
-
-  // Animated scroll to bottom when panel opens
-  useEffect(() => {
-    if (open && panelRef.current) {
-      requestAnimationFrame(() => {
-        // Step 1: Instantly jump to top (ensure we always animate from top)
-        if (panelRef.current) {
-          panelRef.current.scrollTop = 0;
-
-          // Step 2: Smoothly scroll to the bottom so customer sees it scroll
-          setTimeout(() => {
-            if (panelRef.current) {
-              panelRef.current.scrollTo({
-                top: panelRef.current.scrollHeight,
-                behavior: 'smooth'
-              });
-            }
-          }, 100); // small delay so the dropdown is fully open first
-        }
-      });
-    }
-  }, [open]);
-
-  // Position fixed panel relative to trigger button
-  useEffect(() => {
-    if (!open) return;
-
-    const updatePosition = () => {
-      if (panelRef.current && containerRef.current) {
-        const trigger = containerRef.current.querySelector('button');
-        if (trigger) {
-          const rect = trigger.getBoundingClientRect();
-          const panel = panelRef.current;
-          
-          // Position panel below the trigger, centered in viewport
-          panel.style.top = `${rect.bottom + 4}px`;
-          panel.style.left = '50%';
-          panel.style.transform = 'translateX(-50%)';
-          panel.style.width = 'min(90vw, 600px)';
-          
-          // Ensure panel doesn't go off screen on the right
-          const panelRect = panel.getBoundingClientRect();
-          if (panelRect.right > window.innerWidth) {
-            panel.style.left = `${window.innerWidth - panelRect.width / 2 - 10}px`;
-            panel.style.transform = 'translateX(-50%)';
-          }
-          // Ensure panel doesn't go off screen on the left
-          if (panelRect.left < 10) {
-            panel.style.left = `${panelRect.width / 2 + 10}px`;
-            panel.style.transform = 'translateX(-50%)';
-          }
-        }
-      }
-    };
-
-    // Initial position
-    updatePosition();
-
-    // Add event listeners for scroll and resize
-    window.addEventListener('scroll', updatePosition, true);
-    window.addEventListener('resize', updatePosition);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true);
-      window.removeEventListener('resize', updatePosition);
-    };
-  }, [open]);
-
-  const discount = selected ? Math.round((1 - selected.price / selected.originalPrice) * 100) : null;
-
-  return (
-    <div
-      ref={containerRef}
-      style={{ position: "relative", width: "100%", fontFamily: "'Segoe UI', system-ui, sans-serif", marginTop: "30px" }}
-    >
-      {/* ── Trigger ── */}
-      <button
-        type="button"
-        id="bundleSelect"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        style={{
-          width: "100%", display: "flex", alignItems: "center",
-          justifyContent: "space-between", padding: "14px 16px",
-          background: "#fff", cursor: "pointer",
-          border: `2px solid ${open ? "#D4A017" : "#D4A017"}`,
-          borderRadius: "8px",
-          transition: "border-color 0.15s", outline: "none",
-          boxSizing: "border-box",
-        }}
-      >
-        {selected ? (
-          <span style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }}>
-            <span style={{ fontWeight: 700, fontSize: 15, color: "#111" }}>{selected.name}</span>
-            <span style={{ fontSize: 15, fontWeight: 900, color: "#166534" }}>{fmt(selected.price)}</span>
-            <span style={{ fontSize: 12, color: "#9CA3AF", textDecoration: "line-through" }}>{fmt(selected.originalPrice)}</span>
-            {discount !== null && (
-              <span style={{ fontSize: 11, fontWeight: 800, background: "#FEE2E2", color: "#DC2626", padding: "1px 6px", borderRadius: 6 }}>
-                {discount}% OFF
-              </span>
-            )}
-          </span>
-        ) : (
-          <span style={{ color: "#9CA3AF", fontSize: 15 }}>Choose your bundle…</span>
-        )}
-        <svg
-          width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="#6B7280" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s", flexShrink: 0, marginLeft: 8 }}
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
-
-      {/* ── Dark backdrop overlay ── */}
-      {open && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 99998,
-            backdropFilter: "blur(2px)"
-          }}
-          onClick={() => setOpen(false)}
-        />
-      )}
-
-      {/* ── Card panel ── */}
-      {open && (
-        <div
-          ref={panelRef}
-          role="listbox"
-          aria-label="Select a bundle"
-          style={{
-            position: "fixed", zIndex: 99999,
-            background: "#F9FAFB", border: "2px solid #2D5016", borderTop: "none",
-            borderRadius: "0 0 16px 16px",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
-            padding: "10px 10px 14px",
-            maxHeight: 900, overflowY: "auto",
-            display: "flex", flexDirection: "column", gap: 8,
-          }}
-        >
-          {packages.map((pkg) => (
-            <div key={pkg.id} data-id={pkg.id}>
-              <BundleCard
-                pkg={pkg}
-                isSelected={pkg.id === value}
-                isHov={pkg.id === hovered}
-                onClick={() => { onChange(pkg); setOpen(false); }}
-                onEnter={() => setHovered(pkg.id)}
-                onLeave={() => setHovered(null)}
-              />
-            </div>
-          ))}
         </div>
       )}
     </div>
   );
 }
+
+export { BundleCard };

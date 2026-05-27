@@ -4,7 +4,7 @@ import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireC
 import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
-import { BundleDropdown, BundlePackage } from "./BundleDropdown";
+import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -303,7 +303,7 @@ function OrderFormEmbed() {
   const [form, setForm] = useState({ 
     name: '', 
     phone: '', 
-    pkg: '', // No pre-selection
+    pkg: 'PKG-004', // Preselect Self Love Plus B2GOF
     email: '', 
     whatsapp: '',
     state: '', 
@@ -1292,23 +1292,133 @@ function OrderFormEmbed() {
               </div>
             </div>
 
-            {/* Bundle Dropdown */}
+            {/* Bundle Selection - Inline Cards */}
             <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
-            <BundleDropdown
-              packages={bundlePackages}
-              value={form.pkg}
-              onChange={(pkg) => {
-                setForm(f => ({ ...f, pkg: pkg.id }));
-                setTimeout(() => {
-                  const nameField = document.getElementById('nameFieldWrapper');
-                  if (nameField) {
-                    nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    const input = nameField.querySelector('input');
-                    if (input) input.focus();
-                  }
-                }, 400);
+            
+            {/* Main Bundle Stack (4 cards) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+              {bundlePackages
+                .filter(pkg => pkg.id !== 'PKG-002') // Exclude Self Love Return
+                .map(pkg => (
+                  <BundleCard
+                    key={pkg.id}
+                    bundle={pkg}
+                    isSelected={form.pkg === pkg.id}
+                    onSelect={(id) => setForm(f => ({ ...f, pkg: id }))}
+                    showCTA={false}
+                    variant="main"
+                  />
+                ))}
+            </div>
+
+            {/* Returning Customer Section */}
+            <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #E5E7EB' }}>
+              <p style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '12px', textAlign: 'center' }}>
+                Already a customer?
+              </p>
+              {bundlePackages
+                .filter(pkg => pkg.id === 'PKG-002') // Only Self Love Return
+                .map(pkg => (
+                  <BundleCard
+                    key={pkg.id}
+                    bundle={pkg}
+                    isSelected={form.pkg === pkg.id}
+                    onSelect={(id) => setForm(f => ({ ...f, pkg: id }))}
+                    showCTA={false}
+                    variant="secondary"
+                  />
+                ))}
+            </div>
+
+            {/* Single Dynamic CTA Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const nameField = document.getElementById('nameFieldWrapper');
+                if (nameField) {
+                  nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  const input = nameField.querySelector('input');
+                  if (input) input.focus();
+                }
               }}
-            />
+              style={{
+                width: '100%',
+                marginTop: '20px',
+                padding: '16px 24px',
+                background: '#5ec239',
+                color: '#fff',
+                fontSize: '18px',
+                fontWeight: '700',
+                borderRadius: '12px',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(94, 194, 57, 0.4)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(94, 194, 57, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(94, 194, 57, 0.4)';
+              }}
+            >
+              {(() => {
+                const selectedPkg = bundlePackages.find(p => p.id === form.pkg);
+                if (!selectedPkg) return 'Select a Bundle';
+                const savings = selectedPkg.originalPrice - selectedPkg.price;
+                return `Order ${selectedPkg.name} — Save ₦${savings.toLocaleString('en-NG')}`;
+              })()}
+            </button>
+
+            {/* Selection Confirmation Strip */}
+            <div 
+              id="bundleSelectionConfirmation"
+              style={{
+                marginTop: '20px',
+                padding: '12px 16px',
+                background: '#F0FDF4',
+                border: '1px solid #BBF7D0',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px'
+              }}
+            >
+              <span style={{ fontSize: '14px', color: '#166534', fontWeight: '500' }}>
+                ✓ You selected: {(() => {
+                  const selectedPkg = bundlePackages.find(p => p.id === form.pkg);
+                  if (!selectedPkg) return 'Select a bundle';
+                  return `${selectedPkg.name} — ₦${selectedPkg.price.toLocaleString('en-NG')}`;
+                })()}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const bundleSection = document.getElementById('bundleSelect');
+                  if (bundleSection) {
+                    bundleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#059669',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  padding: '4px 8px'
+                }}
+              >
+                Change
+              </button>
+            </div>
 
             {/* Name */}
             <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
