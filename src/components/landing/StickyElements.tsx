@@ -106,7 +106,7 @@ export const StickyElements = ({
               fontFamily: 'Montserrat, sans-serif',
               fontWeight: '500'
             }}>
-              Limited stock available • Free delivery on orders above ₦50,000
+              Limited stock available • Free delivery on orders paid before delivery
             </div>
           </div>
 
