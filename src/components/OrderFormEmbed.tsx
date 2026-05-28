@@ -1147,6 +1147,52 @@ function OrderFormEmbed() {
         keepalive: true
       }).catch(err => console.error('Webhook error:', err));
 
+      // ─── D3: Parallel POST to ERPNext orders.ingest ───────────────────────
+      // Fires independently of Apps Script — if Apps Script fails, ERPNext still
+      // gets the order, and vice versa. Fire-and-forget with keepalive.
+      const erpnextIngestUrl = (import.meta as any).env?.VITE_ERPNEXT_INGEST_URL as string | undefined;
+      const erpnextSecret = (import.meta as any).env?.VITE_ERPNEXT_WEBHOOK_SECRET as string | undefined;
+      if (erpnextIngestUrl) {
+        const erpnextPayload = {
+          order_id: orderId,
+          customer_name: formData.name || 'Customer Name Not Provided',
+          customer_phone: formData.phone,
+          customer_email: formData.email || '',
+          package_name: selectedPackage?.webhookName || formData.package,
+          total: packageAmount,
+          delivery_fee: calculatedDeliveryFee,
+          state: formData.state,
+          lga: formData.lga,
+          address: formData.address,
+          landmark: formData.landmark || '',
+          payment_method: formData.paymentMethod || 'Pay on Delivery',
+          source: 'React-Web',
+          // Attribution chain — must survive the parallel path
+          aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
+          utm_source: localStorage.getItem('src') || '',
+          utm_campaign: (() => { try { return new URLSearchParams(window.location.search).get('utm_campaign') || ''; } catch { return ''; } })(),
+          utm_content: (() => { try { return new URLSearchParams(window.location.search).get('utm_content') || ''; } catch { return ''; } })(),
+          click_id: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
+          landing_page_url: window.location.href,
+        };
+        fetch(erpnextIngestUrl, {
+          method: 'POST',
+          mode: 'cors',
+          keepalive: true,
+          headers: {
+            'Content-Type': 'application/json',
+            ...(erpnextSecret ? { 'X-Webhook-Secret': erpnextSecret } : {}),
+          },
+          body: JSON.stringify(erpnextPayload),
+        })
+          .then(r => r.json())
+          .then(r => console.log('[D3 ERPNext sync ✓]', r))
+          .catch(err => console.error('[D3 ERPNext sync error]', err));
+      } else {
+        console.warn('[D3] VITE_ERPNEXT_INGEST_URL not set — ERPNext sync skipped');
+      }
+      // ─────────────────────────────────────────────────────────────────────
+
       // Clear persistent orderId after successful completion
       localStorage.removeItem('fhg_persistent_order_id');
 
