@@ -10,7 +10,6 @@ const BASE_PATH = import.meta.env.BASE_URL || '/';
 const fulaniDaysImage = `${BASE_PATH}assets/Gemini_Generated_Image_1knotm1knotm1kno-700.webp`;
 const fulaniExpertImage = `${BASE_PATH}assets/Gemini_Generated_Image_xt4o0ixt4o0ixt4o.webp`;
 const hajiaMaryamTestimonial = `${BASE_PATH}assets/Hajia%20Maryam%20Testimonial.webp`;
-const hajiaMaryam2 = `${BASE_PATH}assets/Hajia-Maryam-2.webp`;
 const mamaTitiTestimonial1 = `${BASE_PATH}assets/Mama%20Titi%20Testimonial1.webp`;
 const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
 const heroFulani = `${BASE_PATH}assets/Real%20Eryka.webp`;
@@ -22,6 +21,7 @@ const OrderForm = lazy(() => import('../OrderFormEmbed'));
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const afterHero = useAfterHeroLoad();
+  const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
 
   useEffect(() => {
     if (!afterHero) return;
@@ -105,7 +105,7 @@ export const TopStoryBanner = () => {
         </div>
 
         {/* Is This You? Section */}
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center">
           <strong 
             className="block"
             style={{
@@ -137,7 +137,7 @@ export const TopStoryBanner = () => {
         </div>
 
         {/* Pain Points Section */}
-        <div className="mt-12 text-center" style={{
+        <div className="mt-8 text-center" style={{
           color: '#0A0A0A', 
           fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif', 
           fontSize: '21px', 
@@ -165,7 +165,7 @@ export const TopStoryBanner = () => {
         </div>
 
         {/* HOW IT WORKS Section */}
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center">
           <strong 
             className="block"
             style={{
@@ -237,7 +237,7 @@ export const TopStoryBanner = () => {
           </div>
 
           {/* Milestone Cards */}
-          <div className="mt-12" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
@@ -384,41 +384,8 @@ export const TopStoryBanner = () => {
             </div>
           </div>
 
-          {/* Download (5) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(5).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-
-          {/* Download (6) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(6).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-md"
-            style={{ maxWidth: '400px' }}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Download (9) Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/download%20(9).avif`}
-            alt="Download"
-            className="w-auto h-auto max-w-lg"
-            style={{ maxWidth: '600px' }}
-            loading="lazy"
-          />
-        </div>
-
         {/* HOW TO USE Section */}
-        <div className="mt-12 text-center">
+        <div className="mt-8 text-center">
           <strong 
             className="block"
             style={{
@@ -490,7 +457,7 @@ export const TopStoryBanner = () => {
             WHY CHOOSE FULANI HAIR GRO?
           </strong>
           
-          <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10 mt-6 mb-6">
+          <div className="border border-[#E6E6E6] px-6 md:px-14 py-8 md:py-10 mt-4 mb-4">
             <blockquote className="text-center">
               <p className="leading-tight text-[#B80F66] uppercase font-bold relative" style={{ fontSize: '14px' }}>
                 <span className="absolute -left-4 -top-2 text-4xl text-[#B80F66] opacity-30">"</span>
@@ -765,201 +732,210 @@ This thing is not hype.
           These group of herbs are plucked from the bushes in Maiduguri and has been a heirloom amongst the women in my Fulani family for centuries. People think Fulani women have naturally long hair and that is partly the truth but any woman can have naturally long hair if she uses the right herbs in her hair.
         </p>
         
-        {/* Mung Bean and Red Clover Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/MungBeanandRedClover_2_75x.webp`}
-            alt="Mung Bean and Red Clover"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
-        
-        <strong 
-          className="mt-6 block"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '700',
-            textAlign: 'center',
-            textTransform: 'none',
-            textDecoration: 'none'
-          }}
-        >
-          MUNG BEAN & RED CLOVER
-        </strong>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          In clinical studies, shown to help inhibit the production of hair damaging DHT and and inflammatory cytokines while fortifying the cell matrix of the derma papilla*
-        </p>
-
-        {/* Turmeric Image */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/Turmeric_1_75x.webp`}
-            alt="Turmeric"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
-        </div>
-        
-        <strong 
-          className="mt-6 block"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '700',
-            textAlign: 'center',
-            textTransform: 'none',
-            textDecoration: 'none'
-          }}
-        >
-          CURCUMIN
-        </strong>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          In clinical studies, highly concentrated proteins secreted from the stem cells of the turmeric root have been shown to increase the delivery of 1GF-1 & miRNA-31 to the derma papilla which helps lengthen the hair's growth (anagen) phase.*
-        </p>
-
-        {/* Tobacco Image */}
-        <div className="mt-6 flex justify-center overflow-visible">
-          <img
-            src={`${BASE_PATH}assets/Tobacco_1_75x.webp`}
-            alt="Tobacco"
-            className="w-auto h-auto"
-            style={{ 
-              maxWidth: '2500px !important', 
-              width: '2500px !important',
-              minWidth: '2000px !important',
-              height: 'auto !important',
-              display: 'block !important',
-              transform: 'scale(1.5) !important'
+        {/* Accordion Item 1: Mung Bean & Red Clover */}
+        <div className="mt-4">
+          <button
+            onClick={() => setExpandedIngredient(expandedIngredient === 'mung' ? null : 'mung')}
+            style={{
+              width: '100%',
+              background: '#F5F5F5',
+              border: '2px solid #DAA520',
+              borderRadius: '8px',
+              padding: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              textAlign: 'left'
             }}
-            loading="lazy"
-          />
+          >
+            <strong style={{
+              color: '#0A0A0A',
+              fontFamily: 'Arvo, serif',
+              fontSize: '16px',
+              fontWeight: '700',
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}>
+              MUNG BEAN & RED CLOVER
+            </strong>
+            <span style={{
+              fontSize: '20px',
+              color: '#DAA520',
+              fontWeight: '700'
+            }}>
+              {expandedIngredient === 'mung' ? '▲' : '▼'}
+            </span>
+          </button>
+          {expandedIngredient === 'mung' && (
+            <div style={{ marginTop: '16px' }}>
+              <div className="flex justify-center">
+                <img
+                  src={`${BASE_PATH}assets/MungBeanandRedClover_2_75x.webp`}
+                  alt="Mung Bean and Red Clover"
+                  className="w-auto h-auto"
+                  style={{ maxWidth: '900px !important', width: '900px !important' }}
+                  loading="lazy"
+                />
+              </div>
+              <p 
+                className="mt-6"
+                style={{
+                  color: '#0A0A0A',
+                  fontFamily: 'Arvo, serif',
+                  fontSize: '16px',
+                  fontWeight: '300',
+                  textAlign: 'center',
+                  lineHeight: '1.6',
+                  textDecoration: 'none',
+                  textTransform: 'none'
+                }}
+              >
+                In clinical studies, shown to help inhibit the production of hair damaging DHT and and inflammatory cytokines while fortifying the cell matrix of the derma papilla*
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Accordion Item 2: Curcumin */}
+        <div className="mt-4">
+          <button
+            onClick={() => setExpandedIngredient(expandedIngredient === 'curcumin' ? null : 'curcumin')}
+            style={{
+              width: '100%',
+              background: '#F5F5F5',
+              border: '2px solid #DAA520',
+              borderRadius: '8px',
+              padding: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              textAlign: 'left'
+            }}
+          >
+            <strong style={{
+              color: '#0A0A0A',
+              fontFamily: 'Arvo, serif',
+              fontSize: '16px',
+              fontWeight: '700',
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}>
+              CURCUMIN
+            </strong>
+            <span style={{
+              fontSize: '20px',
+              color: '#DAA520',
+              fontWeight: '700'
+            }}>
+              {expandedIngredient === 'curcumin' ? '▲' : '▼'}
+            </span>
+          </button>
+          {expandedIngredient === 'curcumin' && (
+            <div style={{ marginTop: '16px' }}>
+              <div className="flex justify-center">
+                <img
+                  src={`${BASE_PATH}assets/Turmeric_1_75x.webp`}
+                  alt="Turmeric"
+                  className="w-auto h-auto"
+                  style={{ maxWidth: '900px !important', width: '900px !important' }}
+                  loading="lazy"
+                />
+              </div>
+              <p 
+                className="mt-6"
+                style={{
+                  color: '#0A0A0A',
+                  fontFamily: 'Arvo, serif',
+                  fontSize: '16px',
+                  fontWeight: '300',
+                  textAlign: 'center',
+                  lineHeight: '1.6',
+                  textDecoration: 'none',
+                  textTransform: 'none'
+                }}
+              >
+                In clinical studies, highly concentrated proteins secreted from the stem cells of the turmeric root have been shown to increase the delivery of 1GF-1 & miRNA-31 to the derma papilla which helps lengthen the hair's growth (anagen) phase.*
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Accordion Item 3: Nicotiana Benthamiana */}
+        <div className="mt-4">
+          <button
+            onClick={() => setExpandedIngredient(expandedIngredient === 'nicotiana' ? null : 'nicotiana')}
+            style={{
+              width: '100%',
+              background: '#F5F5F5',
+              border: '2px solid #DAA520',
+              borderRadius: '8px',
+              padding: '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              textAlign: 'left'
+            }}
+          >
+            <strong style={{
+              color: '#0A0A0A',
+              fontFamily: 'Arvo, serif',
+              fontSize: '16px',
+              fontWeight: '700',
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}>
+              NICOTIANA BENTHAMIANA
+            </strong>
+            <span style={{
+              fontSize: '20px',
+              color: '#DAA520',
+              fontWeight: '700'
+            }}>
+              {expandedIngredient === 'nicotiana' ? '▲' : '▼'}
+            </span>
+          </button>
+          {expandedIngredient === 'nicotiana' && (
+            <div style={{ marginTop: '16px' }}>
+              <div className="flex justify-center overflow-visible">
+                <img
+                  src={`${BASE_PATH}assets/Tobacco_1_75x.webp`}
+                  alt="Tobacco"
+                  className="w-auto h-auto"
+                  style={{ 
+                    maxWidth: '2500px !important', 
+                    width: '2500px !important',
+                    minWidth: '2000px !important',
+                    height: 'auto !important',
+                    display: 'block !important',
+                    transform: 'scale(1.5) !important'
+                  }}
+                  loading="lazy"
+                />
+              </div>
+              <p 
+                className="mt-6"
+                style={{
+                  color: '#0A0A0A',
+                  fontFamily: 'Arvo, serif',
+                  fontSize: '16px',
+                  fontWeight: '300',
+                  textAlign: 'center',
+                  lineHeight: '1.6',
+                  textDecoration: 'none',
+                  textTransform: 'none'
+                }}
+              >
+                plant-based proteins cultivated and harvested from northern Nigeria have been shown to significantly increase the density of hair roots (by up to 50%)*.
+              </p>
+            </div>
+          )}
         </div>
         
         <strong 
-          className="mt-6 block"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '700',
-            textAlign: 'center',
-            textTransform: 'none',
-            textDecoration: 'none'
-          }}
-        >
-          NICOTIANA BENTHAMIANA
-        </strong>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-          plant-based proteins cultivated and harvested from northern Nigeria have been shown to significantly increase the density of hair roots (by up to 50%)*.
-        </p>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-                  </p>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-                  </p>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-                  </p>
-        
-        <p 
-          className="mt-6"
-          style={{
-            color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
-            fontSize: '16px',
-            fontWeight: '300',
-            textAlign: 'center',
-            lineHeight: '1.6',
-            textDecoration: 'none',
-            textTransform: 'none'
-          }}
-        >
-                  </p>
-        
-        <strong 
-          className="mt-6 block"
+          className="mt-4 block"
           style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
@@ -974,7 +950,7 @@ This thing is not hype.
         </strong>
         
         <p 
-          className="mt-6"
+          className="mt-4"
           style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
@@ -990,7 +966,7 @@ This thing is not hype.
         </p>
         
         <p 
-          className="mt-6"
+          className="mt-4"
           style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
@@ -1006,7 +982,7 @@ This thing is not hype.
         </p>
         
         <p 
-          className="mt-6"
+          className="mt-4"
           style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
@@ -1039,7 +1015,7 @@ This thing is not hype.
         </strong>
 
         {/* Our Happy Customers Section */}
-        <div className="mt-12 mb-8">
+        <div className="mt-8 mb-5">
           {/* Hero Image */}
           <div className="mb-6">
             <picture>
@@ -1096,7 +1072,7 @@ This thing is not hype.
           </p>
 
           {/* 3 Customer Boxes */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
             {/* Customer Box 1 - Video */}
             <div style={{
               background: '#fff',
@@ -1239,7 +1215,7 @@ This thing is not hype.
 
                 
         {/* Real Results Section */}
-        <div style={{ marginTop: '48px', marginBottom: '32px' }}>
+        <div style={{ marginTop: '31px', marginBottom: '21px' }}>
           <h2 style={{
             color: '#0A0A0A',
             fontFamily: 'Arvo, serif',
@@ -1699,12 +1675,12 @@ This thing is not hype.
         
         
         {/* WhatsApp Testimonials */}
-        <div className="mt-10 max-w-5xl mx-auto">
+        <div className="mt-6 max-w-5xl mx-auto">
           <div className="border-2 border-red-500 border-dotted rounded-2xl py-6 px-3 md:px-6">
             <p className="font-sans text-sm md:text-base font-semibold text-black mb-5 text-center">
               Reviews From Our Happy Nigerian Women
             </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-3 gap-4">
               <div className="rounded-xl overflow-hidden p-3 bg-white border border-gray-200 shadow-sm">
                 <img
                   src={hajiaMaryamTestimonial}
@@ -1713,17 +1689,6 @@ This thing is not hype.
                   loading="lazy"
                   width="600"
                   height="800"
-                />
-              </div>
-              <div className="rounded-xl overflow-hidden p-3 bg-white border border-gray-200 shadow-sm">
-                <img
-                  src={hajiaMaryam2}
-                  alt="Second WhatsApp testimonial from Hajia Maryam showing product and regrowth update"
-                  className="w-full h-auto object-contain"
-                  width={391}
-                  height={710}
-                  loading="lazy"
-                  decoding="async"
                 />
               </div>
               <div className="rounded-xl overflow-hidden p-3 bg-white border border-gray-200 shadow-sm">
@@ -1754,7 +1719,7 @@ This thing is not hype.
 
         {/* How To Place Your Order Section */}
         <section className="relative overflow-hidden" style={{
-          padding: '80px 18px 90px',
+          padding: '52px 18px 59px',
           background: 'linear-gradient(180deg, #B88900 0%, #D4AF37 45%, #8A6400 100%)',
           position: 'relative'
         }}>
@@ -1828,7 +1793,7 @@ This thing is not hype.
                   fontSize: 'clamp(16px, 1.5vw, 20px)',
                   lineHeight: '1.55'
                 }}>
-                  Click the <b><u><a href="#order-form" onClick={(e) => { e.preventDefault(); document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} style={{ color: '#14532d', cursor: 'pointer', textDecoration: 'underline' }}>Buy Now</a></u></b> button to order from us via our website form or our WhatsApp or call
+                  Click the <b><u><a href="#order-form" onClick={(e) => { e.preventDefault(); document.getElementById('bundle-plus-b2gof')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} style={{ color: '#14532d', cursor: 'pointer', textDecoration: 'underline' }}>Buy Now</a></u></b> button to order from us via our website form or our WhatsApp or call
                 </p>
               </div>
 
@@ -1951,7 +1916,7 @@ This thing is not hype.
             </div>
 
           {/* ORDER FORM — placed right after RECEIVE & PAY step */}
-          <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto mt-10">
+          <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto mt-6">
             <section className="bg-white px-4 md:px-9 py-9 text-center border-y-4 border-[#B80F66] relative overflow-hidden">
               <div className="max-w-[550px] mx-auto mb-6">
                 {/* Bold Pricing Section */}
@@ -2111,7 +2076,7 @@ This thing is not hype.
         </section>
 
         {/* 1ezgif-4-7ec1374048a8 (2) GIF */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <img
             src={`${BASE_PATH}assets/1ezgif-4-7ec1374048a8%20(2).gif`}
             alt="1ezgif"
@@ -2121,7 +2086,7 @@ This thing is not hype.
           />
         </div>
 
-        <section className="mt-10 bg-[#B80F66] text-center text-white px-4 py-10 fhg-helvetica">
+        <section className="mt-6 bg-[#B80F66] text-center text-white px-4 py-7 fhg-helvetica">
           <div className="max-w-4xl mx-auto space-y-6">
             <p className="font-semibold text-3xl md:text-4xl leading-snug">
               No more scarves, wigs, or mascara just to hide your hairline
@@ -2129,20 +2094,14 @@ This thing is not hype.
 
             <div className="text-xl md:text-2xl leading-relaxed font-normal space-y-4">
               <p>
-                What if you could stop covering up and start showing off your edges?
-              </p>
-              <p>
-                Without wasting money on treatments that don't work. Without changing your lifestyle. Without extra supplements or complicated routines.
-              </p>
-              <p>
-                This 400-year-old Fulani family secret helped me restore my edges in just 14 days—and it can do the same for you.
+                Without complicated routines or expensive treatments. This 400-year-old Fulani family secret restored my edges in 14 days — it can do the same for you.
               </p>
             </div>
           </div>
         </section>
 
         
-        <section className="mt-10 text-center">
+        <section className="mt-6 text-center">
           {/* Expert Image */}
           <div className="mt-6 flex justify-center">
             <img

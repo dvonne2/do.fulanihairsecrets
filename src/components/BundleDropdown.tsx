@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Gift, Package } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 // Extend your existing Package type with these fields, or merge below into it.
@@ -36,11 +37,7 @@ const fmt = (n: number) => "₦" + n.toLocaleString("en-NG");
 
 // ─── Per-bundle identity colours ──────────────────────────────────────────────
 const CARD_COLORS: Record<string, { idle: string; hover: string; sel: string; selBg: string; btn: string }> = {
-  self_love_plus:       { idle: "#A5B4FC", hover: "#6366F1", sel: "#4338CA", selBg: "#EEF2FF", btn: "#4338CA" },
-  self_love_return:     { idle: "#FCA5A5", hover: "#F97316", sel: "#C2410C", selBg: "#FFF7ED", btn: "#C2410C" },
-  self_love_b2gof:      { idle: "#6EE7B7", hover: "#10B981", sel: "#047857", selBg: "#ECFDF5", btn: "#047857" },
-  self_love_plus_b2gof: { idle: "#FCA5A5", hover: "#EF4444", sel: "#DC2626", selBg: "#FEF2F2", btn: "#DC2626" },
-  family_saves:         { idle: "#FCD34D", hover: "#D97706", sel: "#92400E", selBg: "#FFFBEB", btn: "#92400E" },
+  "PKG-004": { idle: "#22C55E", hover: "#16A34A", sel: "#16A34A", selBg: "#FFFDF5", btn: "#16A34A" },
 };
 const DEFAULT_COLOR = { idle: "#D1D5DB", hover: "#6B7280", sel: "#111827", selBg: "#F9FAFB", btn: "#111827" };
 
@@ -63,6 +60,12 @@ if (typeof document !== "undefined" && !document.getElementById("bundle-shake-st
       50%  { box-shadow: 0 0 22px rgba(34,197,94,0.45); }
       100% { box-shadow: 0 0 0px rgba(34,197,94,0); }
     }
+    @keyframes badgePulse {
+      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      25% { opacity: 0.4; transform: scale(1.2) rotate(25deg); }
+      50% { opacity: 0.3; transform: scale(1.25) rotate(-25deg); }
+      75% { opacity: 0.4; transform: scale(1.2) rotate(15deg); }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -71,7 +74,7 @@ if (typeof document !== "undefined" && !document.getElementById("bundle-shake-st
 function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
   if (!badge) return null;
   const cfg = badge === "popular"
-    ? { label: "🔥 MOST POPULAR", bg: "#DC2626", color: "#fff" }
+    ? { label: "🔥 BEST DEAL", bg: "#DC2626", color: "#fff" }
     : { label: "🏆 BEST VALUE",   bg: "#B45309", color: "#fff" };
   return (
     <div style={{
@@ -80,6 +83,7 @@ function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
       fontSize: 11, fontWeight: 800, padding: "5px 12px",
       borderRadius: "0 10px 0 10px", letterSpacing: "0.04em",
       zIndex: 2,
+      animation: "badgePulse 0.5s ease-in-out infinite",
     }}>
       {cfg.label}
     </div>
@@ -87,7 +91,12 @@ function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
 }
 
 // ─── ItemRow ──────────────────────────────────────────────────────────────────
-function ItemRow({ item }: { item: BundleItem }) {
+function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
+  // STYLE 1: Red Ribbon for PKG-004 (Self Love Plus B2GOF / ₦66,750)
+  // STYLE 2: Solid Green Pill for PKG-003 (Self Love B2GOF / ₦52,750) and PKG-005 (Family Saves / ₦215,000)
+  const isPremiumBundle = bundleId === 'PKG-004';
+  const isGreenPillBundle = bundleId === 'PKG-003' || bundleId === 'PKG-005';
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
       <div style={{
@@ -102,16 +111,208 @@ function ItemRow({ item }: { item: BundleItem }) {
       {item.freeQty > 0 && (
         <>
           <span style={{ fontSize: 13, color: "#9CA3AF" }}>+</span>
-          <div style={{
-            border: "1.5px dashed #D97706",
-            borderRadius: 8, padding: "3px 10px",
-            fontSize: 12, fontWeight: 700, color: "#D97706",
-            background: "#FFFBEB",
-          }}>
-            FREE {item.freeQty} {item.freeName}
-          </div>
+          {isPremiumBundle ? (
+            // STYLE 1: Red Ribbon (two-part pill)
+            <div style={{
+              display: "inline-flex",
+              alignItems: "stretch",
+              borderRadius: 8,
+              overflow: "hidden",
+              fontSize: 13,
+              boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+            }}>
+              <div style={{
+                background: "#D63232",
+                color: "#FFFFFF",
+                padding: "7px 10px",
+                letterSpacing: "0.04em",
+                fontWeight: 600,
+              }}>
+                FREE
+              </div>
+              <div style={{
+                background: "#FFFFFF",
+                color: "#D63232",
+                border: "1.5px solid #D63232",
+                borderLeft: "none",
+                padding: "7px 12px",
+                fontWeight: 600,
+              }}>
+                {item.freeQty} {item.freeName}
+              </div>
+            </div>
+          ) : isGreenPillBundle ? (
+            // STYLE 2: Solid Green Pill with gift icon
+            <div style={{
+              background: "#2D7A2F",
+              color: "#FFFFFF",
+              padding: "7px 14px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}>
+              <Gift size={14} color="#FFFFFF" />
+              FREE {item.freeQty} {item.freeName}
+            </div>
+          ) : (
+            // Default style for other bundles (original styling)
+            <div style={{
+              border: "1.5px dashed #D97706",
+              borderRadius: 8, padding: "3px 10px",
+              fontSize: 12, fontWeight: 700, color: "#D97706",
+              background: "#FFFBEB",
+            }}>
+              FREE {item.freeQty} {item.freeName}
+            </div>
+          )}
         </>
       )}
+    </div>
+  );
+}
+
+// ─── EquationRow (for PKG-004 only) ───────────────────────────────────────────────
+function EquationRow({ itemName }: { itemName: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+      {/* "Pay for X [Item]" pill */}
+      <div style={{
+        background: "#2D3E1F",
+        color: "#FFFFFF",
+        padding: "6px 12px",
+        borderRadius: 6,
+        fontWeight: 600,
+        fontSize: 13,
+        whiteSpace: "nowrap",
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+      }}>
+        Pay for <span style={{ background: "rgba(255,255,255,0.2)", padding: "1px 7px", borderRadius: 4, fontSize: 13 }}>2</span> {itemName}
+      </div>
+
+      {/* "+" connector */}
+      <span style={{ fontSize: 16, fontWeight: 600, color: "#2D3E1F", margin: "0 2px" }}>+</span>
+
+      {/* "Get X FREE" pill */}
+      <div style={{
+        background: "#FFFFFF",
+        color: "#D63232",
+        border: "1.5px solid #D63232",
+        padding: "6px 12px",
+        borderRadius: 6,
+        fontWeight: 600,
+        fontSize: 13,
+        whiteSpace: "nowrap",
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+      }}>
+        Get <span style={{ background: "#D63232", color: "#FFFFFF", padding: "1px 7px", borderRadius: 4, fontSize: 13 }}>1</span> FREE
+      </div>
+
+      {/* "=" symbol */}
+      <span style={{ fontSize: 18, fontWeight: 700, color: "#2D7A2F", margin: "0 4px" }}>=</span>
+
+      {/* "X [Item]" total pill */}
+      <div style={{
+        background: "#2D7A2F",
+        color: "#FFFFFF",
+        padding: "6px 14px",
+        borderRadius: 6,
+        fontWeight: 700,
+        fontSize: 14,
+        whiteSpace: "nowrap",
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+      }}>
+        <span style={{ background: "#FFFFFF", color: "#2D7A2F", padding: "1px 8px", borderRadius: 4, fontSize: 13, fontWeight: 700 }}>3</span> {itemName}
+      </div>
+    </div>
+  );
+}
+
+// ─── YoullReceiveBlock (for PKG-004 only) ───────────────────────────────────────────
+function YoullReceiveBlock() {
+  return (
+    <div style={{
+      background: "#2D7A2F",
+      color: "#FFFFFF",
+      borderRadius: 10,
+      padding: "14px 18px",
+      marginTop: 14,
+    }}>
+      {/* Header */}
+      <div style={{
+        fontSize: 11,
+        letterSpacing: "0.1em",
+        fontWeight: 600,
+        opacity: 0.9,
+        textTransform: "uppercase",
+        marginBottom: 8,
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+      }}>
+        <Package size={14} color="#FFFFFF" />
+        You'll Receive — All in One Package
+      </div>
+
+      {/* Item lines */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, fontSize: 15, fontWeight: 600 }}>
+        <div style={{
+          width: 28, height: 28,
+          background: "#FFFFFF",
+          color: "#2D7A2F",
+          borderRadius: "50%",
+          fontWeight: 700,
+          fontSize: 13,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          3
+        </div>
+        <span>Shampoos <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.85 }}>(500ml each)</span></span>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, fontSize: 15, fontWeight: 600 }}>
+        <div style={{
+          width: 28, height: 28,
+          background: "#FFFFFF",
+          color: "#2D7A2F",
+          borderRadius: "50%",
+          fontWeight: 700,
+          fontSize: 13,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          3
+        </div>
+        <span>Conditioners <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.85 }}>(500ml each)</span></span>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 15, fontWeight: 600 }}>
+        <div style={{
+          width: 28, height: 28,
+          background: "#FFFFFF",
+          color: "#2D7A2F",
+          borderRadius: "50%",
+          fontWeight: 700,
+          fontSize: 13,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          3
+        </div>
+        <span>Pomades <span style={{ fontSize: 12, fontWeight: 400, opacity: 0.85 }}>(150ml each)</span></span>
+      </div>
     </div>
   );
 }
@@ -132,29 +333,43 @@ interface BundleCardProps {
 function BundleCard({ bundle, isSelected, onSelect, showCTA = true, variant = 'main', isHov, onEnter, onLeave }: BundleCardProps) {
   const discount = Math.round((1 - bundle.price / bundle.originalPrice) * 100);
   const c = CARD_COLORS[bundle.id] ?? DEFAULT_COLOR;
-  const borderColor = isSelected ? c.sel : isHov ? c.hover : c.idle;
-  const bg = isSelected ? c.selBg : isHov ? c.selBg : "#fff";
+  
+  // Local hover state for CTA button when used inline (no parent hover management)
+  const [ctaHov, setCtaHov] = React.useState(false);
+  
+  // Local card hover state for inline usage
+  const [cardHov, setCardHov] = React.useState(false);
+  
+  // Use parent hover if provided, otherwise use local state
+  const effectiveHov = isHov !== undefined ? isHov : cardHov;
+  
+  const borderColor = isSelected ? c.sel : effectiveHov ? c.hover : c.idle;
+  const bg = isSelected ? c.selBg : effectiveHov ? c.selBg : "#fff";
   
   const isSecondary = variant === 'secondary';
   const cardPadding = isSecondary ? "12px 16px 10px" : "16px 16px 14px";
   const cardOpacity = isSecondary ? 0.85 : 1;
-  const borderWidth = isSecondary ? "1px" : "2px";
+  const borderWidth = bundle.id === 'PKG-004' ? "4px" : (isSecondary ? "2px" : "3px");
 
   return (
     <div
+      id={bundle.id === 'PKG-004' ? 'bundle-plus-b2gof' : undefined}
       onClick={() => onSelect(bundle.id)}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
+      onMouseEnter={() => {
+        setCardHov(true);
+        if (onEnter) onEnter();
+      }}
+      onMouseLeave={() => {
+        setCardHov(false);
+        if (onLeave) onLeave();
+      }}
       style={{
         position: "relative", borderRadius: 12, padding: cardPadding,
         border: `${borderWidth} solid ${borderColor}`, background: bg,
-        cursor: "pointer", transition: "background 0.15s, border-color 0.15s", marginBottom: 2,
+        cursor: "pointer", transition: "background 0.15s, border-color 0.15s, box-shadow 0.15s, filter 0.15s", marginBottom: 2,
         outline: isSelected ? `1px solid ${c.idle}` : "none",
-        animation: isHov && !isSelected ? "cardGlow 0.7s ease-out" : "none",
-        boxShadow: isHov && !isSelected
-          ? "0 0 20px rgba(34,197,94,0.35), 0 4px 20px rgba(0,0,0,0.08)"
-          : "0 1px 4px rgba(0,0,0,0.05)",
-        filter: isHov && !isSelected ? "brightness(1.02)" : "brightness(1)",
+        boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+        filter: cardHov && !isSelected ? "brightness(1.05)" : "brightness(1)",
         opacity: cardOpacity,
       }}
     >
@@ -187,7 +402,18 @@ function BundleCard({ bundle, isSelected, onSelect, showCTA = true, variant = 'm
 
       {/* Items */}
       <div style={{ marginTop: 12 }}>
-        {bundle.items.map((item, i) => <ItemRow key={i} item={item} />)}
+        {bundle.id === 'PKG-004' ? (
+          // Special equation rows for SELF LOVE PLUS B2GOF
+          <>
+            <EquationRow itemName="Shampoo" />
+            <EquationRow itemName="Conditioner" />
+            <EquationRow itemName="Pomade" />
+            <YoullReceiveBlock />
+          </>
+        ) : (
+          // Standard item rows for all other bundles
+          bundle.items.map((item, i) => <ItemRow key={i} item={item} bundleId={bundle.id} />)
+        )}
       </div>
 
       {/* Description */}
@@ -235,18 +461,22 @@ function BundleCard({ bundle, isSelected, onSelect, showCTA = true, variant = 'm
             ✓ Bundle Selected
           </div>
         ) : (
-          <div style={{
-            width: "100%", padding: "12px 0", borderRadius: 10, boxSizing: "border-box",
-            background: isHov ? c.btn : "#F3F4F6",
-            border: isHov ? `2px solid ${c.sel}` : "1.5px solid #D1D5DB",
-            color: isHov ? "#fff" : "#374151",
-            fontSize: 14, fontWeight: 800,
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-            transition: "background 0.18s, border-color 0.18s, color 0.18s",
-            animation: isHov ? "bundleShake 0.55s ease-out" : "none",
-            boxShadow: isHov ? `0 4px 14px ${c.sel}66` : "none",
-            letterSpacing: "0.01em",
-          }}>
+          <div
+            onMouseEnter={() => setCtaHov(true)}
+            onMouseLeave={() => setCtaHov(false)}
+            style={{
+              width: "100%", padding: "12px 0", borderRadius: 10, boxSizing: "border-box",
+              background: ctaHov ? "#22C55E" : "#F3F4F6",
+              border: ctaHov ? `2px solid #16A34A` : "1.5px solid #D1D5DB",
+              color: ctaHov ? "#fff" : "#374151",
+              fontSize: 14, fontWeight: 800,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              transition: "background 0.18s, border-color 0.18s, color 0.18s",
+              animation: ctaHov ? "bundleShake 0.55s ease-out" : "none",
+              boxShadow: ctaHov ? `0 4px 14px rgba(34,197,94,0.5)` : "none",
+              letterSpacing: "0.01em",
+            }}
+          >
             {isHov ? (
               <>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
