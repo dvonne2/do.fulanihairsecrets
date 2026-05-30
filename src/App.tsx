@@ -9,6 +9,16 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 // import { FloatingHearts } from "@/components/FloatingHearts";
 import Index from "./pages/Index";
 
+// Affiliate Portal Pages
+import Login from "./pages/Login";
+import MagicLinkLanding from "./pages/MagicLinkLanding";
+import Dashboard from "./pages/Dashboard";
+import Orders from "./pages/Orders";
+import Earnings from "./pages/Earnings";
+import Payouts from "./pages/Payouts";
+import Links from "./pages/Links";
+import RequireAuth from "./components/RequireAuth";
+
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
@@ -90,6 +100,17 @@ const App = () => {
                 }
               />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Affiliate Portal Public Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/media-buyer" element={<MagicLinkLanding />} />
+
+              {/* Affiliate Portal Protected Routes */}
+              <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+              <Route path="/orders" element={<RequireAuth><Orders /></RequireAuth>} />
+              <Route path="/earnings" element={<RequireAuth><Earnings /></RequireAuth>} />
+              <Route path="/payouts" element={<RequireAuth><Payouts /></RequireAuth>} />
+              <Route path="/links" element={<RequireAuth><Links /></RequireAuth>} />
+
               <Route
                 path="*"
                 element={
