@@ -482,16 +482,6 @@ export const TopStoryBanner = () => {
             Fulani women are known for long hair, right? It's not by luck. It's not by "good genes" only. These women take their hair seriously. Herbs. Oils. Routine. Discipline. It's tradition.
           </p>
           
-          {/* Download Image */}
-          <div className="mt-6">
-            <img
-              src={`${BASE_PATH}assets/download.avif`}
-              alt="Download"
-              className="w-full h-auto"
-              loading="lazy"
-            />
-          </div>
-                
         {/* Hajara Personal Story */}
         <p 
           className="mt-6"
@@ -511,16 +501,6 @@ export const TopStoryBanner = () => {
 I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tribe bordering Nigeria and Chad. As a little girl, I watched the women in my family use organic and traditional beauty secrets to care for their hair and skin. But me being a tomboy, I never bothered to learn those secrets (I regret it… lol).
         </p>
 
-        {/* Download (1) Image */}
-        <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/download%20(1).avif`}
-            alt="Download"
-            className="w-full h-auto"
-            loading="lazy"
-          />
-        </div>
-        
         {/* Fulani Video */}
         <div className="mt-6">
           <video 
@@ -607,16 +587,6 @@ And we have now refined with proper scientific knowledge.
 
 This thing is not hype.
         </p>
-
-        {/* Download (2) Image */}
-        <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/download%20(2).avif`}
-            alt="Download"
-            className="w-full h-auto"
-            loading="lazy"
-          />
-        </div>
 
         <p 
           className="mt-6"
