@@ -689,6 +689,37 @@
   color: hsl(0 0% 0%);
 }
 
+/* ═══ PORTAL LAYOUT — Override Valentine pink back to proper gold ═══ */
+.portal-layout .text-gold,
+.portal-layout .text-\[\#d4af37\] {
+  color: #d4af37 !important;
+}
+.portal-layout .border-gold {
+  border-color: #d4af37 !important;
+}
+.portal-layout .bg-gold {
+  background-color: #d4af37 !important;
+}
+.portal-layout .from-gold {
+  --tw-gradient-from: #d4af37 !important;
+}
+.portal-layout .to-gold {
+  --tw-gradient-to: #d4af37 !important;
+}
+.portal-layout .text-black {
+  color: #000000 !important;
+}
+/* Progress bar animation for magic link landing */
+@keyframes progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+/* Portal select dropdown fix */
+.portal-layout select option {
+  background: #111;
+  color: #fff;
+}
+
 @layer base {
   * {
     @apply border-border;

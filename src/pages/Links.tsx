@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { apiCall } from '@/lib/api';
-import { Loader2, Link2, Copy, CheckCircle2, Megaphone, Share2 } from 'lucide-react';
+import { Loader2, Link2, Copy, CheckCircle2, Megaphone, Share2, ExternalLink } from 'lucide-react';
+import PortalLayout from '@/components/PortalLayout';
 
 interface LinkData {
   base_url: string;
   affiliate_id: string;
-  default_link: string;
-  campaigns: { name: string; url: string }[];
+  full_link: string;
+  bundles: { name: string; contents: string; price: string; commission: string }[];
 }
 
 export default function Links() {
   const [data, setData] = useState<LinkData | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +23,7 @@ export default function Links() {
         { httpMethod: 'GET' }
       );
       if (result.ok && result.data) setData(result.data);
+      setLoading(false);
     })();
   }, []);
 
@@ -30,86 +33,121 @@ export default function Links() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  if (!data) {
+  if (loading || !data) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center text-gold">
-        <Loader2 className="w-12 h-12 animate-spin mb-4" />
-        <p className="font-cinzel tracking-widest uppercase text-sm">Generating Links...</p>
-      </div>
+      <PortalLayout>
+        <div className="min-h-[80vh] flex flex-col items-center justify-center">
+          <div className="relative w-16 h-16 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-[#d4af37]/20" />
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#d4af37] animate-spin" />
+          </div>
+          <p className="font-cinzel tracking-[0.2em] uppercase text-[11px] text-white/40">Generating Links</p>
+        </div>
+      </PortalLayout>
     );
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700 text-white">
-      
-      <div className="mb-8 border-b border-white/10 pb-6">
-        <h1 className="text-3xl md:text-4xl font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark font-bold tracking-wider mb-2 flex items-center gap-4">
-          <Share2 className="w-8 h-8 text-gold" />
-          Marketing Links
-        </h1>
-        <p className="text-gray-400 font-sans text-sm max-w-2xl">
-          Use these links in your ad campaigns and social media. The affiliate ID guarantees you receive full credit for every order.
-        </p>
-      </div>
+    <PortalLayout>
+      <div className="p-5 md:p-8 lg:p-10 max-w-5xl mx-auto space-y-8">
 
-      {/* Default Link Section */}
-      <div className="bg-black/40 backdrop-blur-xl border border-gold/30 rounded-3xl p-8 relative overflow-hidden shadow-[0_0_40px_rgba(212,175,55,0.05)]">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        
-        <h2 className="font-cinzel text-2xl text-white mb-6 flex items-center gap-3">
-          <Link2 className="text-gold w-6 h-6" />
-          Master Link
-        </h2>
-        <p className="text-gray-400 font-sans text-sm mb-6 max-w-2xl">
-          This is your primary link. It routes customers to the main store homepage and tracks their entire session.
-        </p>
-
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          <div className="flex-1 bg-black/80 border border-white/10 rounded-2xl p-5 font-mono text-gold-light break-all flex items-center shadow-inner w-full">
-            {data.default_link}
+        {/* Header */}
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-lg bg-[#d4af37]/10 flex items-center justify-center">
+              <Share2 className="w-4.5 h-4.5 text-[#d4af37]" />
+            </div>
+            <h1 className="text-2xl md:text-3xl font-cinzel text-white font-bold tracking-wider">
+              Marketing Links
+            </h1>
           </div>
-          <button 
-            onClick={() => copy(data.default_link, 'default')} 
-            className="w-full md:w-auto bg-gradient-to-r from-gold-dark via-gold to-gold-light text-black px-8 py-5 rounded-2xl font-bold font-sans uppercase tracking-widest hover:animate-glow-pulse transition-all duration-300 flex items-center justify-center gap-2 group"
-          >
-            {copied === 'default' ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5 group-hover:scale-110 transition-transform" />}
-            {copied === 'default' ? 'Copied!' : 'Copy Link'}
-          </button>
-        </div>
-      </div>
-
-      {/* Campaign Links Section */}
-      {data.campaigns && data.campaigns.length > 0 && (
-        <div className="mt-12">
-          <h2 className="font-cinzel text-2xl text-white mb-6 flex items-center gap-3">
-            <Megaphone className="text-gold w-6 h-6" />
-            Active Campaigns
-          </h2>
-          <p className="text-gray-400 font-sans text-sm mb-6">
-            Direct your traffic to specific high-converting landing pages for active promotions.
+          <p className="text-white/30 font-sans text-sm ml-12">
+            Your affiliate ID guarantees full credit for every order.
           </p>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.campaigns.map((c) => (
-              <div key={c.name} className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 hover:border-gold/30 transition-all duration-300 group flex flex-col justify-between">
-                <div className="mb-6">
-                  <div className="font-cinzel text-xl text-white mb-3 group-hover:text-gold-light transition-colors">{c.name}</div>
-                  <div className="bg-black/60 border border-white/5 rounded-xl p-4 font-mono text-sm text-gray-400 break-all">
-                    {c.url}
-                  </div>
-                </div>
-                <button 
-                  onClick={() => copy(c.url, c.name)} 
-                  className="w-full bg-white/5 hover:bg-gold/10 text-gold border border-white/10 hover:border-gold/30 px-6 py-4 rounded-xl font-bold font-sans uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  {copied === c.name ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copied === c.name ? 'Copied!' : 'Copy'}
-                </button>
+        {/* ═══ Master Link ═══ */}
+        <div className="relative rounded-2xl bg-white/[0.02] border border-[#d4af37]/15 p-6 md:p-8 overflow-hidden group">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle,rgba(212,175,55,0.04)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d4af37]/15 to-transparent" />
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-2">
+              <Link2 className="w-5 h-5 text-[#d4af37]" />
+              <h2 className="font-cinzel text-lg text-white">Master Link</h2>
+            </div>
+            <p className="text-white/25 font-sans text-xs mb-5 ml-8">
+              Primary link — routes to homepage and tracks the full session.
+            </p>
+
+            <div className="flex flex-col md:flex-row items-stretch gap-3">
+              <div className="flex-1 bg-black/40 border border-white/[0.06] rounded-xl px-4 py-3.5 font-mono text-[#d4af37]/70 text-sm break-all flex items-center gap-2">
+                <span className="flex-1">{data.full_link}</span>
+                <a href={data.full_link} target="_blank" rel="noopener noreferrer" className="text-white/15 hover:text-white/40 transition-colors flex-shrink-0">
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
-            ))}
+              <button
+                onClick={() => copy(data.full_link, 'default')}
+                className="relative overflow-hidden bg-gradient-to-r from-[#b8860b] via-[#d4af37] to-[#f0d060] text-black px-7 py-3.5 rounded-xl font-bold font-sans text-xs uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2 group/btn md:w-auto w-full"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                <span className="relative flex items-center gap-2">
+                  {copied === 'default' ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {copied === 'default' ? 'Copied!' : 'Copy Link'}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* ═══ Direct Bundles ═══ */}
+        {data.bundles && data.bundles.length > 0 && (
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-[#d4af37]/10 flex items-center justify-center">
+                <Megaphone className="w-4 h-4 text-[#d4af37]" />
+              </div>
+              <div>
+                <h2 className="font-cinzel text-lg text-white">Direct Bundles</h2>
+                <p className="text-white/20 font-sans text-[11px]">Direct traffic to specific packages (appending bundle to your link)</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.bundles.map((b) => {
+                // Generate a custom URL for the bundle
+                const bundleUrl = `${data.base_url}?aff_id=${data.affiliate_id}&bundle=${encodeURIComponent(b.name)}`;
+                return (
+                  <div key={b.name} className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-5 hover:border-white/[0.1] transition-all duration-300 group flex flex-col justify-between">
+                    <div className="mb-5">
+                      <div className="font-cinzel text-base text-white mb-1 group-hover:text-[#d4af37]/80 transition-colors duration-300">
+                        {b.name}
+                      </div>
+                      <div className="text-white/30 text-xs mb-3 font-sans">
+                        {b.price} • {b.commission} Commission
+                      </div>
+                      <div className="bg-black/40 border border-white/[0.04] rounded-lg p-3 font-mono text-xs text-white/30 break-all flex items-center gap-2">
+                        <span className="flex-1">{bundleUrl}</span>
+                        <a href={bundleUrl} target="_blank" rel="noopener noreferrer" className="text-white/10 hover:text-white/30 transition-colors flex-shrink-0">
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => copy(bundleUrl, b.name)}
+                      className="w-full bg-white/[0.03] hover:bg-[#d4af37]/8 text-white/40 hover:text-[#d4af37] border border-white/[0.06] hover:border-[#d4af37]/20 px-5 py-3 rounded-xl font-bold font-sans text-[10px] uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      {copied === b.name ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied === b.name ? 'Copied!' : 'Copy Link'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </PortalLayout>
   );
 }

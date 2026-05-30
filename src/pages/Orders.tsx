@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiCall } from '@/lib/api';
-import { Loader2, Send, Clock, Search, Filter } from 'lucide-react';
+import { Loader2, Send, Clock, Filter, Package, CheckCircle2 } from 'lucide-react';
+import PortalLayout from '@/components/PortalLayout';
 
 interface MbOrder {
   name: string;
@@ -24,6 +25,7 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<'w' | 'm' | 'all'>('all');
   const [nudging, setNudging] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -52,120 +54,149 @@ export default function Orders() {
     );
 
     if (result.ok && result.data?.success) {
-      alert(result.data.message || 'Team notified.');
+      setToast({ msg: result.data.message || 'Team notified successfully!', type: 'ok' });
     } else {
-      alert(result.error || result.data?.error || 'Could not nudge team');
+      setToast({ msg: result.error || result.data?.error || 'Could not nudge team', type: 'err' });
     }
     setNudging(null);
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const statusConfig: Record<string, { bg: string; text: string; dot: string }> = {
+    'Paid': { bg: 'bg-emerald-500/8 border-emerald-500/15', text: 'text-emerald-400', dot: 'bg-emerald-400' },
+    'Delivered': { bg: 'bg-blue-500/8 border-blue-500/15', text: 'text-blue-400', dot: 'bg-blue-400' },
+    'Confirmed': { bg: 'bg-amber-500/8 border-amber-500/15', text: 'text-amber-400', dot: 'bg-amber-400' },
+    'default': { bg: 'bg-white/5 border-white/10', text: 'text-white/50', dot: 'bg-white/40' },
   };
 
   if (loading) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center text-gold">
-        <Loader2 className="w-12 h-12 animate-spin mb-4" />
-        <p className="font-cinzel tracking-widest uppercase text-sm">Fetching Data...</p>
-      </div>
+      <PortalLayout>
+        <div className="min-h-[80vh] flex flex-col items-center justify-center">
+          <div className="relative w-16 h-16 mb-4">
+            <div className="absolute inset-0 rounded-full border-2 border-[#d4af37]/20" />
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#d4af37] animate-spin" />
+          </div>
+          <p className="font-cinzel tracking-[0.2em] uppercase text-[11px] text-white/40">Loading Orders</p>
+        </div>
+      </PortalLayout>
     );
   }
 
   if (!data) return null;
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700 text-white">
-      
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark font-bold tracking-wider mb-2">
-            Attributed Orders
-          </h1>
-          <p className="text-gray-400 font-sans text-sm">
-            {data.total_count} order{data.total_count !== 1 ? 's' : ''} captured in {data.period_label}
-          </p>
-        </div>
+    <PortalLayout>
+      <div className="p-5 md:p-8 lg:p-10 max-w-5xl mx-auto space-y-6">
 
-        <div className="relative">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-            <Filter className="w-4 h-4 text-gold" />
+        {/* Toast notification */}
+        {toast && (
+          <div className={`fixed top-20 right-5 z-50 px-5 py-3.5 rounded-xl border backdrop-blur-xl font-sans text-sm flex items-center gap-2.5 animate-slideIn shadow-2xl ${
+            toast.type === 'ok'
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+              : 'bg-red-500/10 border-red-500/20 text-red-300'
+          }`}>
+            {toast.type === 'ok' ? <CheckCircle2 className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
+            {toast.msg}
           </div>
-          <select
-            value={period}
-            onChange={(e) => setPeriod(e.target.value as any)}
-            className="pl-10 pr-8 py-3 bg-black/60 border border-gold/30 rounded-xl text-white font-sans focus:outline-none focus:border-gold appearance-none cursor-pointer backdrop-blur-md"
-          >
-            <option value="w">This Week</option>
-            <option value="m">This Month</option>
-            <option value="all">All Time</option>
-          </select>
-        </div>
-      </div>
+        )}
 
-      {data.orders.length === 0 ? (
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-16 text-center">
-          <Clock className="w-16 h-16 text-gold/30 mx-auto mb-6" />
-          <h3 className="font-cinzel text-2xl text-white mb-2">No Orders Yet</h3>
-          <p className="text-gray-400 font-sans max-w-md mx-auto">
-            When customers purchase using your master link, their orders will appear here in real-time.
-          </p>
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-cinzel text-white font-bold tracking-wider mb-1.5">
+              Attributed Orders
+            </h1>
+            <p className="text-white/30 font-sans text-sm">
+              {data.total_count} order{data.total_count !== 1 ? 's' : ''} in <span className="text-white/50">{data.period_label}</span>
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <Filter className="w-3.5 h-3.5 text-[#d4af37]/50" />
+            </div>
+            <select
+              value={period}
+              onChange={(e) => setPeriod(e.target.value as any)}
+              className="pl-9 pr-6 py-2.5 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm font-sans focus:outline-none focus:border-[#d4af37]/30 appearance-none cursor-pointer"
+            >
+              <option value="w">This Week</option>
+              <option value="m">This Month</option>
+              <option value="all">All Time</option>
+            </select>
+          </div>
         </div>
-      ) : (
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-sans">
-              <thead className="bg-white/5 border-b border-white/10 uppercase tracking-widest text-xs text-gray-400">
-                <tr>
-                  <th className="px-6 py-4 font-semibold">Order ID</th>
-                  <th className="px-6 py-4 font-semibold">Customer</th>
-                  <th className="px-6 py-4 font-semibold">Status</th>
-                  <th className="px-6 py-4 font-semibold text-right">Commission</th>
-                  <th className="px-6 py-4 font-semibold text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {data.orders.map((order) => (
-                  <tr key={order.name} className="hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-4 font-mono text-gold-light">{order.name}</td>
-                    <td className="px-6 py-4">
-                      <div className="text-white">{order.customer_name}</div>
-                      <div className="text-xs text-gray-500">{order.package_name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase inline-flex items-center gap-2 ${
-                        order.status === 'Paid' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
-                        order.status === 'Delivered' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                        'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
-                      }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${order.status === 'Paid' ? 'bg-green-400' : order.status === 'Delivered' ? 'bg-blue-400' : 'bg-yellow-400'}`} />
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right font-semibold text-white">
-                      ₦{order.estimated_commission.toLocaleString()}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {!['Delivered', 'Paid', 'Cancelled', 'Refunded'].includes(order.status) ? (
-                        <button
-                          onClick={() => handleNudge(order.name)}
-                          disabled={nudging === order.name}
-                          className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-gold/20 text-gold border border-gold/30 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50 w-full"
-                        >
-                          {nudging === order.name ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            <Send className="w-3 h-3" />
-                          )}
-                          {nudging === order.name ? 'Sending...' : 'Nudge Team'}
-                        </button>
-                      ) : (
-                        <span className="text-xs text-gray-600 uppercase tracking-widest">Locked</span>
-                      )}
-                    </td>
+
+        {data.orders.length === 0 ? (
+          <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-16 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/[0.03] flex items-center justify-center mx-auto mb-5">
+              <Package className="w-8 h-8 text-white/10" />
+            </div>
+            <h3 className="font-cinzel text-xl text-white mb-2">No Orders Yet</h3>
+            <p className="text-white/30 font-sans text-sm max-w-sm mx-auto">
+              When customers purchase using your master link, their orders will appear here in real-time.
+            </p>
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left font-sans">
+                <thead>
+                  <tr className="border-b border-white/[0.06]">
+                    <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">Order ID</th>
+                    <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">Customer</th>
+                    <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25">Status</th>
+                    <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25 text-right">Commission</th>
+                    <th className="px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/25 text-center">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.orders.map((order) => {
+                    const cfg = statusConfig[order.status] || statusConfig['default'];
+                    return (
+                      <tr key={order.name} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors duration-300">
+                        <td className="px-5 py-4 font-mono text-xs text-[#d4af37]/60">{order.name}</td>
+                        <td className="px-5 py-4">
+                          <div className="text-white text-sm">{order.customer_name}</div>
+                          <div className="text-[11px] text-white/20 mt-0.5">{order.package_name}</div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-[0.1em] uppercase border ${cfg.bg} ${cfg.text}`}>
+                            <div className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-right text-sm font-semibold text-white">
+                          ₦{order.estimated_commission.toLocaleString()}
+                        </td>
+                        <td className="px-5 py-4 text-center">
+                          {!['Delivered', 'Paid', 'Cancelled', 'Refunded'].includes(order.status) ? (
+                            <button
+                              onClick={() => handleNudge(order.name)}
+                              disabled={nudging === order.name}
+                              className="inline-flex items-center justify-center gap-1.5 bg-white/[0.03] hover:bg-[#d4af37]/10 text-white/40 hover:text-[#d4af37] border border-white/[0.06] hover:border-[#d4af37]/20 px-3.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-300 disabled:opacity-30"
+                            >
+                              {nudging === order.name ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Send className="w-3 h-3" />
+                              )}
+                              {nudging === order.name ? 'Sending' : 'Nudge'}
+                            </button>
+                          ) : (
+                            <span className="text-[10px] text-white/15 uppercase tracking-[0.15em]">Locked</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </PortalLayout>
   );
 }

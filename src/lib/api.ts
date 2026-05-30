@@ -12,7 +12,7 @@
  */
 
 // Base URL — points to the ERPNext backend
-const API_BASE = import.meta.env.VITE_ERPNEXT_BASE_URL || 'https://vitalvida.systemforce.ng';
+const API_BASE = import.meta.env.VITE_ERPNEXT_BASE_URL || (import.meta.env.DEV ? '' : 'https://vitalvida.systemforce.ng');
 
 const DEFAULT_TIMEOUT_MS = 15000;  // 15 seconds
 
