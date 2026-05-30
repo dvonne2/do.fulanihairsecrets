@@ -42,6 +42,17 @@ const copyCriticalFiles = () => ({
 
 export default defineConfig({
   base: '/',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        headers: {
+          'Host': 'vitalvida.systemforce.ng'
+        }
+      }
+    }
+  },
   plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles()],
   resolve: {
     alias: {

@@ -1175,19 +1175,22 @@ function OrderFormEmbed() {
           click_id: (() => { try { const d = localStorage.getItem('meta_fbc_data'); return d ? JSON.parse(d).fbclid || '' : ''; } catch { return ''; } })(),
           landing_page_url: window.location.href,
         };
-        fetch(erpnextIngestUrl, {
-          method: 'POST',
-          mode: 'cors',
-          keepalive: true,
-          headers: {
-            'Content-Type': 'application/json',
-            ...(erpnextSecret ? { 'X-Webhook-Secret': erpnextSecret } : {}),
-          },
-          body: JSON.stringify(erpnextPayload),
-        })
-          .then(r => r.json())
-          .then(r => console.log('[D3 ERPNext sync ✓]', r))
-          .catch(err => console.error('[D3 ERPNext sync error]', err));
+        try {
+          const r = await fetch(erpnextIngestUrl, {
+            method: 'POST',
+            mode: 'cors',
+            keepalive: true,
+            headers: {
+              'Content-Type': 'application/json',
+              ...(erpnextSecret ? { 'X-Webhook-Secret': erpnextSecret } : {}),
+            },
+            body: JSON.stringify(erpnextPayload),
+          });
+          const json = await r.json();
+          console.log('[D3 ERPNext sync ✓]', json);
+        } catch (err) {
+          console.error('[D3 ERPNext sync error]', err);
+        }
       } else {
         console.warn('[D3] VITE_ERPNEXT_INGEST_URL not set — ERPNext sync skipped');
       }
