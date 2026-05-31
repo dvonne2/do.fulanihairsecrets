@@ -45,8 +45,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://vitalvida.systemforce.ng',
+        target: 'https://94.72.104.4',  // staging — use https to avoid 301 redirect
         changeOrigin: true,
+        headers: {
+          'Host': 'vitalvida.systemforce.ng'
+        },
         secure: false,
       }
     }
