@@ -4,7 +4,7 @@ import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireC
 import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
 import { toast } from 'sonner';
-import { BundleDropdown, BundlePackage } from "./BundleDropdown";
+import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
@@ -303,7 +303,7 @@ function OrderFormEmbed() {
   const [form, setForm] = useState({ 
     name: '', 
     phone: '', 
-    pkg: '', // No pre-selection
+    pkg: 'PKG-004', // Preselect Self Love Plus B2GOF
     email: '', 
     whatsapp: '',
     state: '', 
@@ -969,13 +969,19 @@ function OrderFormEmbed() {
       // Only auto-scroll if we actually restored data (genuine recovery scenario)
       if (restored) {
         const timer = setTimeout(() => {
-          const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
-          if (formElement) {
-            formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            console.log('📍 Scrolled to order form (recovery scenario with restored data)');
+          const bundleCard = document.getElementById('bundle-plus-b2gof');
+          if (bundleCard) {
+            bundleCard.scrollIntoView({ behavior: 'auto', block: 'start' });
+            console.log('📍 Scrolled to PKG-004 card (recovery scenario with restored data)');
           } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            console.log('📍 Scrolled to top (form not found)');
+            const formElement = document.getElementById('order-form') || document.querySelector('[role="main"]') || document.querySelector('main');
+            if (formElement) {
+              formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              console.log('📍 Scrolled to order form (PKG-004 card not found)');
+            } else {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              console.log('📍 Scrolled to top (form not found)');
+            }
           }
         }, 800);
 
@@ -1044,6 +1050,20 @@ function OrderFormEmbed() {
       setForm(prev => ({ ...prev, state: 'Abia' }));
     }
   }, [step, form.state]);
+
+  // Handle initial page load with #order-form hash - scroll to PKG-004 card
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#order-form') {
+      const timer = setTimeout(() => {
+        const bundleCard = document.getElementById('bundle-plus-b2gof');
+        if (bundleCard) {
+          bundleCard.scrollIntoView({ behavior: 'auto', block: 'start' });
+          console.log('📍 Scrolled to PKG-004 card (initial load with #order-form hash)');
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   
   const submit = async () => {
@@ -1254,7 +1274,7 @@ function OrderFormEmbed() {
       id: "PKG-004", name: "Self Love Plus B2GOF", subtitle: "🔥 3-Month Hair Recovery System",
       price: 66750, originalPrice: 165000, badge: "popular",
       description: "🔥 If your hair is breaking, thinning, or refusing to grow — this is your reset. In 90 days it will wake up dormant follicles, restore your scalp, and give you the fuller, longer hair you've been waiting for.",
-      bestFor: "First-timers (recommended)", bestForColor: "#DC2626", bestForBg: "#FEF2F2",
+      bestFor: "First-timers (recommended)", bestForColor: "#2D7A2F", bestForBg: "#E8F5E8",
       socialProof: "👥 Chosen by 8 out of 10 customers",
       items: [
         { name: "500ml Net Shampoo",     qty: 2, freeQty: 1, freeName: "500ml Net Shampoo"      },
@@ -1264,7 +1284,7 @@ function OrderFormEmbed() {
     },
     {
       id: "PKG-005", name: "Family Saves", subtitle: "12 Month Supply",
-      price: 215000, originalPrice: 550000, badge: "best_value",
+      price: 215000, originalPrice: 550000, badge: null,
       description: "👆 The Gold Standard. Maximum consistency. Share with friends through Group Buying and unlock a massive 61% discount — plus ₦20,500 in exclusive VIP Gifts.",
       bestFor: "Families & group buying", bestForColor: "#92400E", bestForBg: "#FFFBEB",
       socialProof: null,
@@ -1341,23 +1361,85 @@ function OrderFormEmbed() {
               </div>
             </div>
 
-            {/* Bundle Dropdown */}
+            {/* Bundle Selection - Inline Cards */}
             <label style={S.label}>CHOOSE YOUR HAIR REGROWTH SYSTEM <span style={S.req}>*</span></label>
-            <BundleDropdown
-              packages={bundlePackages}
-              value={form.pkg}
-              onChange={(pkg) => {
-                setForm(f => ({ ...f, pkg: pkg.id }));
-                setTimeout(() => {
-                  const nameField = document.getElementById('nameFieldWrapper');
-                  if (nameField) {
-                    nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    const input = nameField.querySelector('input');
-                    if (input) input.focus();
-                  }
-                }, 400);
+            
+            {/* All Bundle Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+              {bundlePackages.map(pkg => (
+                <BundleCard
+                  key={pkg.id}
+                  bundle={pkg}
+                  isSelected={form.pkg === pkg.id}
+                  onSelect={(id) => {
+                    setForm(f => ({ ...f, pkg: id }));
+                    setTimeout(() => {
+                      const nameField = document.getElementById('nameFieldWrapper');
+                      if (nameField) {
+                        nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const input = nameField.querySelector('input');
+                        if (input) input.focus();
+                      }
+                    }, 400);
+                  }}
+                  showCTA={true}
+                  variant="main"
+                />
+              ))}
+            </div>
+
+            {/* Selection Confirmation Strip */}
+            <div 
+              id="bundleSelectionConfirmation"
+              style={{
+                marginTop: '20px',
+                padding: '12px 16px',
+                background: '#F0FDF4',
+                border: '1px solid #BBF7D0',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px'
               }}
-            />
+            >
+              <span style={{ fontSize: '14px', color: '#166534', fontWeight: '500' }}>
+                ✓ You selected: {(() => {
+                  const selectedPkg = bundlePackages.find(p => p.id === form.pkg);
+                  if (!selectedPkg) return 'Select a bundle';
+                  return `${selectedPkg.name} — ₦${selectedPkg.price.toLocaleString('en-NG')}`;
+                })()}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const bundleCard = document.getElementById('bundle-plus-b2gof');
+                  if (bundleCard) {
+                    bundleCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    const bundleSection = document.getElementById('bundleSelect');
+                    if (bundleSection) {
+                      bundleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#059669',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  padding: '4px 8px'
+                }}
+              >
+                Change
+              </button>
+            </div>
 
             {/* Name */}
             <label style={S.label}>CUSTOMER FULL NAME <span style={S.req}>*</span></label>
@@ -1368,7 +1450,7 @@ function OrderFormEmbed() {
                 name="name"
                 placeholder="Your full name"
                 value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
+                onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
                 ref={nameInputRef}
                 onFocus={() => {
                   handleInputFocus(nameInputRef);
@@ -1448,7 +1530,7 @@ function OrderFormEmbed() {
                 name="email"
                 placeholder="Email address"
                 value={form.email}
-                onChange={e => setForm({ ...form, email: e.target.value })}
+                onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
                 ref={emailInputRef}
                 onFocus={() => {
                   handleInputFocus(emailInputRef);
@@ -1609,7 +1691,7 @@ function OrderFormEmbed() {
               placeholder="WhatsApp number (optional)"
               aria-label="Alternative phone number (WhatsApp)"
               value={form.whatsapp}
-              onChange={e => setForm({ ...form, whatsapp: e.target.value })}
+              onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
             />
 
             {/* Full address */}
@@ -1619,7 +1701,7 @@ function OrderFormEmbed() {
               placeholder="Full address"
               aria-label="Full address"
               value={form.address}
-              onChange={e => setForm({ ...form, address: e.target.value })}
+              onChange={e => setForm(prev => ({ ...prev, address: e.target.value }))}
             />
 
             {/* Landmark */}
@@ -1629,7 +1711,7 @@ function OrderFormEmbed() {
               placeholder="Any landmark (optional)"
               aria-label="Any landmark"
               value={form.landmark}
-              onChange={e => setForm({ ...form, landmark: e.target.value })}
+              onChange={e => setForm(prev => ({ ...prev, landmark: e.target.value }))}
             />
             <p style={S.hint}>e.g my house is on the road beside Agip filling station</p>
 
@@ -1638,7 +1720,7 @@ function OrderFormEmbed() {
             <select
               style={S.input}
               value={form.state || 'Abia'}
-              onChange={e => setForm({ ...form, state: e.target.value, lga: '' })}
+              onChange={e => setForm(prev => ({ ...prev, state: e.target.value, lga: '' }))}
               aria-label="Select state of residence"
             >
               {nigerianStates.map(s => <option key={s} value={s}>{s === 'FCT' ? 'Abuja, FCT' : s}</option>)}
@@ -1651,7 +1733,7 @@ function OrderFormEmbed() {
             <select
               style={S.input}
               value={form.lga || ''}
-              onChange={e => setForm({ ...form, lga: e.target.value })}
+              onChange={e => setForm(prev => ({ ...prev, lga: e.target.value }))}
               aria-label={form.state === 'FCT' ? "Select area council" : "Select local government area"}
               disabled={!form.state}
             >
@@ -1688,7 +1770,7 @@ function OrderFormEmbed() {
                 return (
                   <label 
                     key={opt.value} 
-                    onClick={() => setForm({ ...form, paymentMethod: opt.value })}
+                    onClick={() => setForm(prev => ({ ...prev, paymentMethod: opt.value }))}
                     style={{
                       display: 'block',
                       cursor: 'pointer',
@@ -1717,7 +1799,7 @@ function OrderFormEmbed() {
                       name="paymentMethod"
                       value={opt.value}
                       checked={isSelected}
-                      onChange={e => setForm({ ...form, paymentMethod: e.target.value as 'Pay on Delivery' | 'Pay Before Delivery' })}
+                      onChange={e => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'Pay on Delivery' | 'Pay Before Delivery' }))}
                       style={{ display: 'none' }}
                     />
                     
@@ -1891,7 +1973,7 @@ function OrderFormEmbed() {
                       type="radio"
                       name="deliveryFee"
                       checked={form.deliveryFee === 3000}
-                      onChange={() => setForm({ ...form, deliveryFee: 3000 })}
+                      onChange={() => setForm(prev => ({ ...prev, deliveryFee: 3000 }))}
                     />
                     <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>1 - 3 Days Nationwide Delivery ₦3000</span>
                   </label>
@@ -1900,7 +1982,7 @@ function OrderFormEmbed() {
                       type="radio"
                       name="deliveryFee"
                       checked={form.deliveryFee === 5000}
-                      onChange={() => setForm({ ...form, deliveryFee: 5000 })}
+                      onChange={() => setForm(prev => ({ ...prev, deliveryFee: 5000 }))}
                     />
                     <span style={{ fontSize: 14, fontWeight: 800, color: '#1a1a1a' }}>24 Hours Nationwide Delivery ₦5000</span>
                   </label>
@@ -1917,7 +1999,7 @@ function OrderFormEmbed() {
                 type="text"
                 placeholder="Enter coupon code"
                 value={form.couponCode}
-                onChange={e => setForm({ ...form, couponCode: e.target.value.toUpperCase(), couponApplied: false })}
+                onChange={e => setForm(prev => ({ ...prev, couponCode: e.target.value.toUpperCase(), couponApplied: false }))}
                 disabled={form.couponApplied}
                 style={{
                   ...S.input,
@@ -2009,7 +2091,7 @@ function OrderFormEmbed() {
                     type="radio"
                     name="heardAboutUs"
                     checked={form.heardAboutUs === opt}
-                    onChange={() => setForm({ ...form, heardAboutUs: opt })}
+                    onChange={() => setForm(prev => ({ ...prev, heardAboutUs: opt }))}
                   />
                   <span
                     style={{
@@ -2047,17 +2129,17 @@ function OrderFormEmbed() {
                 
                 if (selectedDate < today) {
                   setDeliveryDateError('Delivery date cannot be in the past.');
-                  setForm({ ...form, deliveryDate: '' });
+                  setForm(prev => ({ ...prev, deliveryDate: '' }));
                   return;
                 }
                 
                 if (selectedDate > maxDate) {
                   setDeliveryDateError('Please select today, tomorrow, or the next day.');
-                  setForm({ ...form, deliveryDate: '' });
+                  setForm(prev => ({ ...prev, deliveryDate: '' }));
                   return;
                 }
                 
-                setForm({ ...form, deliveryDate: e.target.value });
+                setForm(prev => ({ ...prev, deliveryDate: e.target.value }));
               }}
               onClick={(e) => {
                 const target = e.target as HTMLInputElement;
@@ -2085,7 +2167,7 @@ function OrderFormEmbed() {
               placeholder="Comment or message (optional)"
               aria-label="Comment or message"
               value={form.comment}
-              onChange={e => setForm({ ...form, comment: e.target.value })}
+              onChange={e => setForm(prev => ({ ...prev, comment: e.target.value }))}
             />
 
             
