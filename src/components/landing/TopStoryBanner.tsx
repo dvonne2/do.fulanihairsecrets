@@ -3,6 +3,16 @@ import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { ReviewForm } from '@/components/reviews/ReviewForm';
+import { ReviewsList } from '@/components/reviews/ReviewsList';
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
@@ -12,16 +22,26 @@ const fulaniExpertImage = `${BASE_PATH}assets/Gemini_Generated_Image_xt4o0ixt4o0
 const hajiaMaryamTestimonial = `${BASE_PATH}assets/Hajia%20Maryam%20Testimonial.webp`;
 const mamaTitiTestimonial1 = `${BASE_PATH}assets/Mama%20Titi%20Testimonial1.webp`;
 const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
-const heroFulani = `${BASE_PATH}assets/Real%20Eryka.webp`;
-const heroMobile = `${BASE_PATH}assets/Real%20Eryka.webp`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
+
+const PROMO_DURATION_MINUTES = 58;
+
+const formatTime = (totalSeconds: number) => {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
 
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const afterHero = useAfterHeroLoad();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState(PROMO_DURATION_MINUTES * 60);
+  const [showBanner, setShowBanner] = useState(true);
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const customerReviewImagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!afterHero) return;
@@ -32,13 +52,62 @@ export const TopStoryBanner = () => {
     }
   }, [afterHero]);
 
-  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setShowBanner(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section
       id="hero"
       className="bg-white px-4 pt-2 pb-4 mt-0 md:pt-3 md:pb-6 md:mt-0"
       {...thankYouPrefetch}
     >
+      {showBanner && (
+        <div className="sticky top-0 z-50 w-full bg-[#FF0000] py-2 px-4 overflow-hidden">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
+            <span className="text-white font-bold text-[25px] text-center md:text-left leading-tight">
+              90-DAY GROWTH DEAL: Buy 2 Complete Systems & Get the 3rd Entirely FREE!
+            </span>
+
+            <div className="flex items-center gap-2">
+              {[
+                { value: Math.floor(timeLeft / 86400), label: 'Days' },
+                { value: Math.floor((timeLeft % 86400) / 3600), label: 'Hours' },
+                { value: Math.floor((timeLeft % 3600) / 60), label: 'Minutes' },
+                { value: timeLeft % 60, label: 'Seconds' },
+              ].map((item, i) => (
+                <div key={i} className="text-center">
+                  <div className="bg-gray-100 rounded-lg px-2 py-1 md:px-3 md:py-2 min-w-[44px] md:min-w-[56px]">
+                    <span className="text-black font-bold text-lg md:text-2xl">
+                      {String(item.value).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <span className="text-white text-[9px] md:text-[10px] uppercase">{item.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <a
+              href="#order-form"
+              data-form-cta="true"
+              className="inline-flex items-center justify-center bg-white text-[#FF0000] font-bold px-5 py-2 rounded-lg text-sm md:text-base hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
+            >
+              Get Promo Now
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto text-center">
         <p className="jandes-eyebrow text-black mb-6">
           GROW FuLLER, LONGER, THICKER HAIR WITH FULANI HAIR GRO
@@ -47,7 +116,7 @@ export const TopStoryBanner = () => {
         {/* Bundle Image */}
         <div className="mt-6">
           <img
-            src={`${BASE_PATH}assets/Gemini_Generated_Image_iupms8iupms8iupm.webp`}
+            src={`${BASE_PATH}assets/hero2.webp`}
             alt="Product Bundle"
             className="w-full h-auto"
             loading="eager"
@@ -57,24 +126,42 @@ export const TopStoryBanner = () => {
           />
         </div>
 
-        {/* ChatGPT Image */}
-        <div className="mt-6">
-          <img
-            src={`${BASE_PATH}assets/ChatGPT%20Image%20Feb%2024,%202026,%2011_21_10%20PM.webp`}
-            alt="ChatGPT Image"
-            className="w-full h-auto"
-            loading="lazy"
-            width="600"
-            height="400"
-          />
+        <div className="mt-6 max-w-3xl mx-auto text-center space-y-4">
+          <h2 className="font-black text-2xl md:text-4xl text-black uppercase tracking-tight leading-tight">
+            THE COMPLETE GROWTH SYSTEM THAT WORKS WITH YOUR HAIR
+          </h2>
+          <p className="text-base md:text-lg text-black leading-relaxed">
+            Made from my grandmother's special blend of traditional herbs from Maiduguri, Northern Nigeria. For years, thousands of women and men across Nigeria have trusted Fulani Hair Gro to help keep their <strong>scalp clean</strong>, <strong>fight dandruff</strong>, <strong>reduce hair breakage</strong>, and <strong>enjoy fuller, longer, healthier hair</strong>. That's because every product in the Fulani Hair Gro System has a unique purpose. <strong>Together,</strong> they work in harmony to <strong>deliver better results</strong> than using a single product alone.
+          </p>
         </div>
 
-        <p className="mt-6 jandes-quote text-lg md:text-xl text-black max-w-3xl mx-auto leading-relaxed">
-          Cheaper Than A Hair Transplant In Turkey
-        </p>
+        {/* 3-Step System Preview */}
+        <div className="w-full max-w-5xl mx-auto mt-10 px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
+            {[
+              { img: `${BASE_PATH}assets/circle-shampoo.webp`, label: 'Fulani Hair Gro™ Shampoo' },
+              { img: `${BASE_PATH}assets/circle-conditioner.webp`, label: 'Fulani Hair Gro™ Conditioner' },
+              { img: `${BASE_PATH}assets/circle-pomade.webp`, label: 'Fulani Hair Gro™ Hair Pomade' },
+            ].map((item, i) => (
+              <div key={i} className="text-center space-y-3">
+                <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
+                  <img
+                    src={item.img}
+                    alt={item.label}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    width="208"
+                    height="208"
+                  />
+                </div>
+                <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Hero CTA — moved here */}
-        <div className="mt-6 text-center">
+        <div className="mt-10 text-center">
           <a
             href="#order-form"
             data-form-cta="true"
@@ -85,6 +172,10 @@ export const TopStoryBanner = () => {
           </a>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 px-2">
+          <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            100% Genuine Product — Not Sold In Stores
+          </span>
           <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             Pay On Delivery Available
@@ -99,69 +190,59 @@ export const TopStoryBanner = () => {
           </span>
         </div>
 
-        {/* Guarantee Banner */}
-        <div className="w-full max-w-3xl mx-auto px-4 my-8">
-          <img src="/assets/guarantee-banner.webp" alt="30 Day Money Back Guarantee — 100% Risk Free" className="w-full h-auto rounded-xl shadow-md" loading="lazy" width="800" height="200" />
-        </div>
+        {/* Hair Concerns Cards */}
+        <div className="mt-20 max-w-4xl mx-auto px-4 text-center">
+          <h2 className="font-black text-2xl md:text-3xl text-black uppercase tracking-tight mb-3">
+            Is This You?
+          </h2>
+          <p className="text-lg md:text-xl text-gray-700 mb-6">
+            If you're struggling with any of these hair concerns, you're in the right place
+          </p>
 
-        {/* Is This You? Section */}
-        <div className="mt-8 text-center">
-          <strong 
-            className="block"
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
-              fontSize: '31px',
-              fontWeight: '700',
-              fontStyle: 'normal',
-              fontVariant: 'normal',
-              fontKerning: 'auto',
-              fontOpticalSizing: 'auto',
-              fontStretch: '100%',
-              fontVariationSettings: 'normal',
-              fontFeatureSettings: 'normal',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              textAlign: 'center',
-              textIndent: '0px',
-              backgroundColor: '#FFF8DC',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              display: 'inline-block',
-              width: 'auto',
-              margin: '0 auto'
-            }}
-          >
-            💔 Is This You?
-          </strong>
-        </div>
-
-        {/* Pain Points Section */}
-        <div className="mt-8 text-center" style={{
-          color: '#0A0A0A', 
-          fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif', 
-          fontSize: '21px', 
-          lineHeight: '1.6',
-          fontWeight: '400',
-          fontStyle: 'normal',
-          fontVariant: 'normal',
-          fontKerning: 'auto',
-          fontOpticalSizing: 'auto',
-          fontStretch: '100%',
-          fontVariationSettings: 'normal',
-          fontFeatureSettings: 'normal',
-          textTransform: 'none',
-          textDecoration: 'none',
-          textAlign: 'start',
-          textIndent: '0px'
-        }}>
-          <p style={{marginBottom: '12px'}}>👉🏽 During intimate moments, are you constantly worried your wig might shift… and he'll finally see your real hairline?</p>
-          <p style={{marginBottom: '12px'}}>👉🏽 Are your edges disappearing, and you're secretly scared they may never grow back — especially after childbirth or as you've entered menopause?</p>
-          <p style={{marginBottom: '12px'}}>👉🏽 After becoming a mum or noticing hormonal changes, did your hair start thinning and never fully recover?</p>
-          <p style={{marginBottom: '12px'}}>👉🏽 Have you spent thousands on products that promised growth… yet your hairline is still slowly moving backwards and your hair keeps breaking?</p>
-          <p style={{marginBottom: '12px'}}>👉🏽 After braids, did your edges never fully come back?</p>
-          <p style={{marginBottom: '12px'}}>👉🏽 Can't you do the hairstyles you really want because they won't properly cover your temple area?</p>
-          <p style={{marginBottom: '24px'}}>👉🏽 Can you no longer confidently pack your natural hair without feeling exposed?</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            {[
+              {
+                title: 'Thinning edges',
+                benefit: 'Regrow edges with daily use',
+              },
+              {
+                title: 'Bald patches',
+                benefit: 'Stimulates dormant hair follicles',
+              },
+              {
+                title: 'Postpartum hair loss',
+                benefit: 'Gentle formula safe for hormonal recovery',
+              },
+              {
+                title: 'Slow hair growth',
+                benefit: 'See visible results in 8–12 weeks',
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-4 bg-white rounded-2xl p-5 shadow-lg text-left"
+              >
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#FCE8E8] flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C62828" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div className="space-y-1">
+                  <p className="font-bold text-gray-900 text-base md:text-lg">{item.title}</p>
+                  <p className="flex items-center gap-1 text-[#B80F66] text-sm md:text-base font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B80F66" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3v18"/>
+                      <path d="M5 10l7-7 7 7"/>
+                      <path d="M5 14l7 7 7-7"/>
+                    </svg>
+                    {item.benefit}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* HOW IT WORKS Section */}
@@ -433,6 +514,239 @@ export const TopStoryBanner = () => {
         </div>
 
                   </div>
+
+        {/* Customer Reviews Summary */}
+        <div className="mt-12 max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-light text-gray-800 mb-8">Customer Reviews</h2>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+            {/* Rating Score */}
+            <div className="flex flex-col items-center md:items-start">
+              <div className="flex items-center gap-3">
+                <span className="text-6xl md:text-7xl font-light text-black">4.8</span>
+                <div className="flex text-black">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-500 text-sm mt-1">Based on 264 reviews</p>
+            </div>
+
+            {/* Rating Breakdown */}
+            <div className="w-full max-w-xs space-y-2">
+              {[
+                { stars: 5, count: 223 },
+                { stars: 4, count: 36 },
+                { stars: 3, count: 5 },
+                { stars: 2, count: 0 },
+                { stars: 1, count: 0 },
+              ].map((item) => (
+                <div key={item.stars} className="flex items-center gap-2 text-sm">
+                  <span className="flex items-center gap-1 w-8">
+                    {item.stars} <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-black"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </span>
+                  <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-black rounded-full"
+                      style={{ width: `${(item.count / 264) * 100}%` }}
+                    />
+                  </div>
+                  <span className="w-8 text-right text-gray-600">{item.count}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Write A Review Button */}
+            <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
+              <DialogTrigger asChild>
+                <button
+                  data-review-trigger
+                  className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Write A Review
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-light text-left">Share your thoughts</DialogTitle>
+                  <DialogDescription className="text-left">* required fields</DialogDescription>
+                </DialogHeader>
+
+                <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
+              </DialogContent>
+            </Dialog>
+
+            {/* Approved Reviews from Supabase */}
+            <ReviewsList />
+          </div>
+        </div>
+
+        {/* ORDER FORM */}
+        <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto mt-6">
+            <section className="bg-white px-4 md:px-9 py-9 text-center border-y border-gray-200 relative overflow-hidden">
+              <div className="max-w-[550px] mx-auto mb-6">
+                {/* Customers say summary */}
+                <div className="mb-6 text-left border-b border-gray-200 pb-6">
+                  <h3
+                    style={{
+                      color: '#A1A1AA',
+                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontSize: '26px',
+                      fontWeight: '300',
+                      textAlign: 'left',
+                      textTransform: 'none',
+                      marginBottom: '10px'
+                    }}
+                  >
+                    Customers say
+                  </h3>
+                  <p
+                    style={{
+                      color: '#A1A1AA',
+                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontSize: '12px',
+                      fontWeight: '400',
+                      textAlign: 'left',
+                      marginBottom: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                      gap: '5px'
+                    }}
+                  >
+                    <span style={{ fontSize: '14px' }}>✨</span> Generated from customer reviews.
+                  </p>
+                  <p
+                    style={{
+                      color: '#A1A1AA',
+                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontSize: '14px',
+                      fontWeight: '400',
+                      textAlign: 'left',
+                      lineHeight: '1.6',
+                      marginBottom: '20px'
+                    }}
+                  >
+                    Customers consistently praise Fulani Hair Gro™ for helping them achieve fuller, longer, healthier-looking hair. Many report thicker-looking hair, less breakage, improved length retention, and fuller edges after using the complete system consistently. Reviewers also mention feeling more confident as friends and family begin noticing the difference.
+                  </p>
+                  <button
+                    style={{
+                      border: '1px solid #A1A1AA',
+                      borderRadius: '9999px',
+                      padding: '8px 16px',
+                      color: '#6B7280',
+                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontSize: '13px',
+                      fontWeight: '400',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    Read summary by topics
+                  </button>
+
+                  {/* Customer review images — add JPGs to public/asset */}
+                  <div className="mt-6">
+                    <p className="text-sm font-medium text-gray-500 mb-3">
+                      Reviews with media
+                    </p>
+                    <div className="relative group">
+                      <button
+                        type="button"
+                        aria-label="Scroll left"
+                        onClick={() =>
+                          customerReviewImagesRef.current?.scrollBy({
+                            left: -150,
+                            behavior: 'smooth'
+                          })
+                        }
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white/90 border border-gray-200 rounded-full shadow-sm hover:bg-white transition-colors opacity-80 group-hover:opacity-100"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                      </button>
+
+                      <div
+                        ref={customerReviewImagesRef}
+                        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-10"
+                      >
+                        {[
+                          '/asset/review-1.jpg',
+                          '/asset/review-2.jpg',
+                          '/asset/review-3.jpg',
+                          '/asset/review-4.jpg',
+                          '/asset/review-5.jpg'
+                        ].map((src, index) => (
+                          <img
+                            key={src}
+                            src={src}
+                            alt={`Customer review ${index + 1}`}
+                            className="w-32 h-32 object-cover rounded-lg flex-shrink-0 bg-gray-100"
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        aria-label="Scroll right"
+                        onClick={() =>
+                          customerReviewImagesRef.current?.scrollBy({
+                            left: 150,
+                            behavior: 'smooth'
+                          })
+                        }
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white/90 border border-gray-200 rounded-full shadow-sm hover:bg-white transition-colors opacity-80 group-hover:opacity-100"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2">
+                </div>
+              </div>
+
+              <div id="order-form">
+                {afterHero ? (
+                  <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
+                    <OrderForm />
+                  </Suspense>
+                ) : (
+                  <div className="min-h-[400px]" />
+                )}
+              </div>
+            </section>
+          </div>
 
         <div className="mt-8 text-center">
           <strong 
@@ -986,29 +1300,6 @@ This thing is not hype.
 
         {/* Our Happy Customers Section */}
         <div className="mt-8 mb-5">
-          {/* Hero Image */}
-          <div className="mb-6">
-            <picture>
-              <source
-                media="(max-width: 767px)"
-                srcSet={heroMobile}
-                type="image/png"
-              />
-              <source
-                srcSet={heroFulani}
-                type="image/png"
-              />
-              <img
-                src={heroFulani}
-                alt="Fulani Hair Gro hero"
-                width={864}
-                height={864}
-                className="w-full h-auto"
-                {...({ fetchpriority: 'high' } as any)}
-              />
-            </picture>
-          </div>
-
           <h2 
             className="text-center mb-4"
             style={{
@@ -1685,375 +1976,6 @@ This thing is not hype.
               </div>
             </div>
           </div>
-        </div>
-
-        {/* How To Place Your Order Section */}
-        <section className="relative overflow-hidden" style={{
-          padding: '52px 18px 59px',
-          background: 'linear-gradient(180deg, #B88900 0%, #D4AF37 45%, #8A6400 100%)',
-          position: 'relative'
-        }}>
-          {/* Subtle depth/vignette */}
-          <div style={{
-            position: 'absolute',
-            inset: '-40px',
-            background: 'radial-gradient(circle at 50% 20%, rgba(255,255,255,0.12), rgba(0,0,0,0.22) 70%)',
-            pointerEvents: 'none'
-          }} />
-          
-          <div style={{ position: 'relative', maxWidth: '980px', margin: '0 auto' }}>
-            <h3 style={{
-              color: '#ffffff',
-              fontFamily: 'Georgia, serif',
-              fontSize: '18px',
-              fontWeight: '600',
-              fontStyle: 'italic',
-              textAlign: 'center',
-              marginBottom: '8px',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-              lineHeight: '1.4'
-            }}>
-              You're One Step Away From Getting a Product That Will Make Your Hair{' '}
-              <span style={{
-                fontSize: '20px',
-                fontWeight: '700',
-                color: '#FFD700'
-              }}>
-                Longer and Fuller
-              </span>.
-            </h3>
-            
-            <h2 style={{
-              color: '#fff',
-              textAlign: 'center',
-              fontWeight: '800',
-              letterSpacing: '-0.5px',
-              fontSize: '28px',
-              margin: '0 0 16px'
-            }}>
-              How To Place Your Order
-            </h2>
-
-            {/* Step Cards */}
-            <div style={{ maxWidth: '920px', margin: '0 auto' }}>
-              {/* Step 1 */}
-              <div style={{
-                background: '#ffffff',
-                border: '4px solid #F2A6A1',
-                borderRadius: '28px',
-                boxShadow: '0 18px 40px rgba(0,0,0,0.18)',
-                padding: '44px 28px',
-                textAlign: 'center',
-                margin: '0 auto 40px'
-              }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', margin: '0 auto 18px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <h3 style={{
-                  margin: '0 0 14px',
-                  color: '#111111',
-                  fontWeight: '900',
-                  letterSpacing: '0.3px',
-                  fontSize: 'clamp(20px, 2.2vw, 34px)',
-                  textTransform: 'uppercase'
-                }}>
-                  ORDER RIGHT NOW TO GET YOURS
-                </h3>
-                <p style={{
-                  margin: '0',
-                  color: '#4b4b4b',
-                  fontSize: 'clamp(16px, 1.5vw, 20px)',
-                  lineHeight: '1.55'
-                }}>
-                  Click the <b><u><a href="#order-form" onClick={(e) => { e.preventDefault(); document.getElementById('bundle-plus-b2gof')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} style={{ color: '#14532d', cursor: 'pointer', textDecoration: 'underline' }}>Buy Now</a></u></b> button to order from us via our website form or our WhatsApp or call
-                </p>
-              </div>
-
-              {/* Step 2 */}
-              <div style={{
-                background: '#ffffff',
-                border: '4px solid #F2A6A1',
-                borderRadius: '28px',
-                boxShadow: '0 18px 40px rgba(0,0,0,0.18)',
-                padding: '44px 28px',
-                textAlign: 'center',
-                margin: '0 auto 40px'
-              }}>
-                <div style={{
-                  fontSize: '58px',
-                  lineHeight: '1',
-                  marginBottom: '18px',
-                  color: '#0B2C6B',
-                  filter: 'saturate(1.05)'
-                }}>
-                  📞
-                </div>
-                <h3 style={{
-                  margin: '0 0 14px',
-                  color: '#111111',
-                  fontWeight: '900',
-                  letterSpacing: '0.3px',
-                  fontSize: 'clamp(20px, 2.2vw, 34px)',
-                  textTransform: 'uppercase'
-                }}>
-                  WE'LL CONFIRM YOUR ORDER
-                </h3>
-                <p style={{
-                  margin: '0',
-                  color: '#4b4b4b',
-                  fontSize: 'clamp(16px, 1.5vw, 20px)',
-                  lineHeight: '1.55'
-                }}>
-                  We'll call to confirm your order and start processing your order very immediately.
-                </p>
-              </div>
-
-              {/* Step 3 */}
-              <div style={{
-                background: '#ffffff',
-                border: '4px solid #F2A6A1',
-                borderRadius: '28px',
-                boxShadow: '0 18px 40px rgba(0,0,0,0.18)',
-                padding: '44px 28px',
-                textAlign: 'center',
-                margin: '0 auto 40px'
-              }}>
-                <div style={{
-                  fontSize: '58px',
-                  lineHeight: '1',
-                  marginBottom: '18px',
-                  color: '#0B2C6B',
-                  filter: 'saturate(1.05)'
-                }}>
-                  🚚
-                </div>
-                <h3 style={{
-                  margin: '0 0 14px',
-                  color: '#111111',
-                  fontWeight: '900',
-                  letterSpacing: '0.3px',
-                  fontSize: 'clamp(20px, 2.2vw, 34px)',
-                  textTransform: 'uppercase'
-                }}>
-                  WE'LL SEND YOUR PRODUCT
-                </h3>
-                <p style={{
-                  margin: '0',
-                  color: '#4b4b4b',
-                  fontSize: 'clamp(16px, 1.5vw, 20px)',
-                  lineHeight: '1.55'
-                }}>
-                  We'll send the product to you with the fastest delivery service in your state.
-                </p>
-              </div>
-
-              {/* Step 4 */}
-              <div style={{
-                background: '#ffffff',
-                border: '4px solid #F2A6A1',
-                borderRadius: '28px',
-                boxShadow: '0 18px 40px rgba(0,0,0,0.18)',
-                padding: '44px 28px',
-                textAlign: 'center',
-                margin: '0 auto 0'
-              }}>
-                <div style={{
-                  fontSize: '58px',
-                  lineHeight: '1',
-                  marginBottom: '18px',
-                  color: '#0B2C6B',
-                  filter: 'saturate(1.05)'
-                }}>
-                  😊
-                </div>
-                <h3 style={{
-                  margin: '0 0 14px',
-                  color: '#111111',
-                  fontWeight: '900',
-                  letterSpacing: '0.3px',
-                  fontSize: 'clamp(20px, 2.2vw, 34px)',
-                  textTransform: 'uppercase'
-                }}>
-                  RECEIVE & PAY (1-3 DAYS)
-                </h3>
-                <p style={{
-                  margin: '0',
-                  color: '#4b4b4b',
-                  fontSize: 'clamp(16px, 1.5vw, 20px)',
-                  lineHeight: '1.55'
-                }}>
-                  We'll send your product to your doorstep. We offer payment on delivery (cash/transfer).
-                </p>
-              </div>
-            </div>
-
-          {/* ORDER FORM — placed right after RECEIVE & PAY step */}
-          <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto mt-6">
-            <section className="bg-white px-4 md:px-9 py-9 text-center border-y-4 border-[#B80F66] relative overflow-hidden">
-              <div className="max-w-[550px] mx-auto mb-6">
-                {/* Bold Pricing Section */}
-                <section className="relative overflow-hidden mb-8" style={{
-                  padding: '60px 18px',
-                  background: '#FFFFFF',
-                  position: 'relative',
-                  margin: '-40px -20px 40px -20px',
-                  borderRadius: '12px'
-                }}>
-                  {/* Subtle depth/vignette */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: '-20px',
-                    background: 'radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.15) 100%)',
-                    pointerEvents: 'none'
-                  }} />
-                  
-                  <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-                    {/* Main Headline */}
-                    <h2 style={{
-                      color: '#333333',
-                      textAlign: 'center',
-                      fontWeight: '900',
-                      letterSpacing: '1px',
-                      fontSize: 'clamp(20px, 3vw, 32px)',
-                      marginBottom: '12px',
-                      textTransform: 'uppercase',
-                      textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-                    }}>
-                      HOW MUCH IS THE FULANI HAIR GRO SET?
-                    </h2>
-
-                    {/* Sub-headline */}
-                    <p style={{
-                      color: '#333333',
-                      textAlign: 'center',
-                      fontWeight: '700',
-                      fontSize: 'clamp(14px, 2vw, 18px)',
-                      marginBottom: '30px',
-                      textShadow: '0 1px 2px rgba(0,0,0,0.2)'
-                    }}>
-                      Exclusive Launch Sales Promo – Limited Slots Only
-                    </p>
-
-                    {/* Price Layout */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                      {/* Old Price */}
-                      <div style={{ position: 'relative', display: 'inline-block' }}>
-                        <span style={{
-                          fontSize: 'clamp(24px, 3vw, 36px)',
-                          fontWeight: '700',
-                          color: '#2C1810',
-                          fontFamily: 'Georgia, serif',
-                          position: 'relative',
-                          display: 'inline-block'
-                        }}>
-                          WAS ₦55,000
-                        </span>
-                        {/* Strike-through line */}
-                        <div style={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '-8px',
-                          right: '-8px',
-                          height: '3px',
-                          background: '#DC2626',
-                          transform: 'rotate(-5deg)',
-                          transformOrigin: 'center',
-                          animation: 'strikeThrough 2s ease-in-out infinite'
-                        }} />
-                      </div>
-
-                      {/* New Price */}
-                      <div style={{
-                        position: 'relative',
-                        display: 'inline-block',
-                        padding: '16px 32px',
-                        borderRadius: '50%',
-                        background: 'transparent',
-                        border: '3px solid #D4AF37',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.1)'
-                      }}>
-                        <span style={{
-                          fontSize: 'clamp(36px, 4.5vw, 56px)',
-                          fontWeight: '900',
-                          color: '#0B5E20',
-                          textShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                          display: 'block',
-                          animation: 'priceBounce 0.6s ease-out'
-                        }}>
-                          NOW ₦32,750
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Add global styles for animation */}
-                <style>{`
-                  @keyframes priceBounce {
-                    0% { transform: scale(0.8); opacity: 0; }
-                    50% { transform: scale(1.1); }
-                    100% { transform: scale(1); opacity: 1; }
-                  }
-                  @keyframes strikeThrough {
-                    0% { 
-                      transform: scaleX(0) rotate(-5deg);
-                      opacity: 0;
-                    }
-                    25% {
-                      transform: scaleX(1.1) rotate(-5deg);
-                      opacity: 1;
-                    }
-                    50% { 
-                      transform: scaleX(1) rotate(-5deg);
-                      opacity: 1;
-                    }
-                    75% {
-                      transform: scaleX(1) rotate(-5deg);
-                      opacity: 1;
-                    }
-                    100% { 
-                      transform: scaleX(0) rotate(-5deg);
-                      opacity: 0;
-                    }
-                  }
-                `}</style>
-
-                {/* Download (12) Image */}
-                <div className="mb-6 flex justify-center">
-                  <img
-                    src={`${BASE_PATH}assets/download%20(12).avif`}
-                    alt="Download"
-                    className="w-auto h-auto"
-                    style={{ maxWidth: '900px !important', width: '900px !important' }}
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 gap-2">
-                </div>
-              </div>
-
-              <div id="order-form">
-                {afterHero ? (
-                  <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
-                    <OrderForm />
-                  </Suspense>
-                ) : (
-                  <div className="min-h-[400px]" />
-                )}
-              </div>
-            </section>
-          </div>
-          </div>
-        </section>
-
-        {/* 1ezgif-4-7ec1374048a8 (2) GIF */}
-        <div className="mt-6 flex justify-center">
-          <img
-            src={`${BASE_PATH}assets/1ezgif-4-7ec1374048a8%20(2).gif`}
-            alt="1ezgif"
-            className="w-auto h-auto"
-            style={{ maxWidth: '900px !important', width: '900px !important' }}
-            loading="lazy"
-          />
         </div>
 
         <section className="mt-6 bg-[#B80F66] text-center text-white px-4 py-7 fhg-helvetica">

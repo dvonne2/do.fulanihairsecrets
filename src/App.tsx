@@ -18,6 +18,7 @@ import Earnings from "./pages/Earnings";
 import Payouts from "./pages/Payouts";
 import Links from "./pages/Links";
 import RequireAuth from "./components/RequireAuth";
+import ReviewsAdmin from "./pages/ReviewsAdmin";
 
 declare global {
   interface Window {
@@ -110,6 +111,7 @@ const App = () => {
               <Route path="/earnings" element={<RequireAuth><Earnings /></RequireAuth>} />
               <Route path="/payouts" element={<RequireAuth><Payouts /></RequireAuth>} />
               <Route path="/links" element={<RequireAuth><Links /></RequireAuth>} />
+              <Route path="/reviews-admin" element={<ReviewsAdmin />} />
 
               <Route
                 path="*"
