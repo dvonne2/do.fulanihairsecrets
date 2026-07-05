@@ -9,6 +9,7 @@ export interface BundleItem {
   qty: number;
   freeQty: number;
   freeName: string;
+  image?: string;
 }
 
 export interface BundlePackage {
@@ -99,14 +100,25 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-      <div style={{
-        width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-        background: "#2D5016", color: "#fff",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 12, fontWeight: 800,
-      }}>
-        {item.qty}×
-      </div>
+      {item.image ? (
+        <img
+          src={item.image}
+          alt={item.name}
+          style={{
+            width: 40, height: 40, borderRadius: 8, flexShrink: 0,
+            objectFit: "cover", background: "#F3F4F6",
+          }}
+        />
+      ) : (
+        <div style={{
+          width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+          background: "#2D5016", color: "#fff",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 12, fontWeight: 800,
+        }}>
+          {item.qty}×
+        </div>
+      )}
       <span style={{ fontSize: 14, fontWeight: 500, color: "#111" }}>{item.name}</span>
       {item.freeQty > 0 && (
         <>

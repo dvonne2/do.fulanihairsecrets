@@ -6,6 +6,8 @@ import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/co
 import { toast } from 'sonner';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
+const BASE_PATH = import.meta.env.BASE_URL || '/';
+
 // Send webhook with no-cors for Google Apps Script compatibility
 async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
   try {
@@ -1244,9 +1246,9 @@ function OrderFormEmbed() {
       bestFor: "Testing the system", bestForColor: "#4338CA", bestForBg: "#EEF2FF",
       socialProof: null,
       items: [
-        { name: "500ml Net Shampoo",     qty: 1, freeQty: 0, freeName: "" },
-        { name: "150ml Net Pomade",       qty: 1, freeQty: 0, freeName: "" },
-        { name: "500ml Net Conditioner", qty: 1, freeQty: 0, freeName: "" },
+        { name: "500ml Net Shampoo",     qty: 1, freeQty: 0, freeName: "", image: `${BASE_PATH}assets/shampoo.webp` },
+        { name: "150ml Net Pomade",       qty: 1, freeQty: 0, freeName: "", image: `${BASE_PATH}assets/pomade.webp` },
+        { name: "500ml Net Conditioner", qty: 1, freeQty: 0, freeName: "", image: `${BASE_PATH}assets/conditioner.webp` },
       ],
     },
     {
@@ -1256,7 +1258,7 @@ function OrderFormEmbed() {
       bestFor: "Returning customers", bestForColor: "#C2410C", bestForBg: "#FFF7ED",
       socialProof: null,
       items: [
-        { name: "150ml Net Pomade", qty: 3, freeQty: 0, freeName: "" },
+        { name: "150ml Net Pomade", qty: 3, freeQty: 0, freeName: "", image: `${BASE_PATH}assets/pomade.webp` },
       ],
     },
     {
@@ -1266,8 +1268,8 @@ function OrderFormEmbed() {
       bestFor: "Scalp Reset & Dandruff Clearing", bestForColor: "#047857", bestForBg: "#ECFDF5",
       socialProof: null,
       items: [
-        { name: "500ml Net Shampoo", qty: 2, freeQty: 1, freeName: "500ml Net Shampoo" },
-        { name: "150ml Net Pomade",   qty: 2, freeQty: 1, freeName: "150ml Net Pomade"   },
+        { name: "500ml Net Shampoo", qty: 2, freeQty: 1, freeName: "500ml Net Shampoo", image: `${BASE_PATH}assets/shampoo.webp` },
+        { name: "150ml Net Pomade",   qty: 2, freeQty: 1, freeName: "150ml Net Pomade", image: `${BASE_PATH}assets/pomade.webp`   },
       ],
     },
     {
@@ -1277,9 +1279,9 @@ function OrderFormEmbed() {
       bestFor: "First-timers (recommended)", bestForColor: "#2D7A2F", bestForBg: "#E8F5E8",
       socialProof: "👥 Chosen by 8 out of 10 customers",
       items: [
-        { name: "500ml Net Shampoo",     qty: 2, freeQty: 1, freeName: "500ml Net Shampoo"      },
-        { name: "150ml Net Pomade",       qty: 2, freeQty: 1, freeName: "150ml Net Pomade"        },
-        { name: "500ml Net Conditioner", qty: 2, freeQty: 1, freeName: "500ml Net Conditioner" },
+        { name: "500ml Net Shampoo",     qty: 2, freeQty: 1, freeName: "500ml Net Shampoo", image: `${BASE_PATH}assets/shampoo.webp`      },
+        { name: "150ml Net Pomade",       qty: 2, freeQty: 1, freeName: "150ml Net Pomade", image: `${BASE_PATH}assets/pomade.webp`        },
+        { name: "500ml Net Conditioner", qty: 2, freeQty: 1, freeName: "500ml Net Conditioner", image: `${BASE_PATH}assets/conditioner.webp` },
       ],
     },
     {
@@ -1289,9 +1291,9 @@ function OrderFormEmbed() {
       bestFor: "Families & group buying", bestForColor: "#92400E", bestForBg: "#FFFBEB",
       socialProof: null,
       items: [
-        { name: "500ml Net Shampoo",     qty: 6, freeQty: 4, freeName: "500ml Net Shampoos"      },
-        { name: "150ml Net Pomade",       qty: 6, freeQty: 4, freeName: "150ml Net Pomades"        },
-        { name: "500ml Net Conditioner", qty: 6, freeQty: 4, freeName: "500ml Net Conditioners" },
+        { name: "500ml Net Shampoo",     qty: 6, freeQty: 4, freeName: "500ml Net Shampoos", image: `${BASE_PATH}assets/shampoo.webp`      },
+        { name: "150ml Net Pomade",       qty: 6, freeQty: 4, freeName: "150ml Net Pomades", image: `${BASE_PATH}assets/pomade.webp`        },
+        { name: "500ml Net Conditioner", qty: 6, freeQty: 4, freeName: "500ml Net Conditioners", image: `${BASE_PATH}assets/conditioner.webp` },
       ],
     },
   ];
