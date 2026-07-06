@@ -101,14 +101,20 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
       {item.image ? (
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{
-            width: 40, height: 40, borderRadius: 8, flexShrink: 0,
-            objectFit: "cover", background: "#F3F4F6",
-          }}
-        />
+        // Show repeated images when qty > 1, single image otherwise
+        <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+          {Array.from({ length: item.qty }).map((_, i) => (
+            <img
+              key={i}
+              src={item.image}
+              alt={item.name}
+              style={{
+                width: 36, height: 36, borderRadius: 8,
+                objectFit: "cover", background: "#F3F4F6",
+              }}
+            />
+          ))}
+        </div>
       ) : (
         <div style={{
           width: 32, height: 32, borderRadius: 8, flexShrink: 0,
