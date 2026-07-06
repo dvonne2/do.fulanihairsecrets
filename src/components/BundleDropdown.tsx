@@ -129,6 +129,19 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
       {item.freeQty > 0 && (
         <>
           <span style={{ fontSize: 13, color: "#9CA3AF" }}>+</span>
+          {/* Free product image(s) */}
+          {item.image && (
+            <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+              {Array.from({ length: item.freeQty }).map((_, i) => (
+                <img
+                  key={i}
+                  src={item.image}
+                  alt={item.freeName}
+                  style={{ width: 32, height: 32, borderRadius: 6, objectFit: "cover", background: "#F3F4F6" }}
+                />
+              ))}
+            </div>
+          )}
           {isPremiumBundle ? (
             // STYLE 1: Red Ribbon (two-part pill)
             <div style={{
