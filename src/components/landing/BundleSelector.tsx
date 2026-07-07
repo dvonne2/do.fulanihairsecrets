@@ -1,0 +1,224 @@
+import React from 'react';
+
+export const BundleSelector = () => {
+  return (
+    <div className="bundle-selector">
+      <style>{`
+        :root{
+          --ivory:#FBF6EC;
+          --card:#FFFFFF;
+          --espresso:#2B1D0E;
+          --cocoa:#6B5638;
+          --gold:#C9971C;
+          --gold-deep:#A87A10;
+          --gold-soft:#F3E3BC;
+          --gold-wash:#FFF8E7;
+          --rose:#8E2F3C;
+          --rose-soft:#F9E7EA;
+          --radius:18px;
+        }
+        .bundle-selector *{margin:0;padding:0;box-sizing:border-box}
+        .bundle-selector body{
+          font-family:'Figtree',system-ui,sans-serif;
+          background:var(--ivory);
+          color:var(--espresso);
+          padding:64px 20px 88px;
+          -webkit-font-smoothing:antialiased;
+        }
+        .bundle-selector .intro{max-width:640px;margin:0 auto 52px;text-align:center}
+        .bundle-selector .intro .kicker{
+          display:inline-block;font-size:12px;font-weight:700;letter-spacing:.22em;
+          text-transform:uppercase;color:var(--gold-deep);
+          border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft);
+          padding:8px 18px;margin-bottom:18px;
+        }
+        .bundle-selector .intro h1{
+          font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.5vw,44px);
+          line-height:1.12;letter-spacing:-0.01em;
+        }
+        .bundle-selector .intro p{margin-top:14px;color:var(--cocoa);font-size:16px;line-height:1.6}
+
+        .bundle-selector .grid{
+          max-width:1240px;margin:0 auto;display:grid;gap:22px;
+          grid-template-columns:repeat(auto-fit,minmax(228px,1fr));
+          align-items:stretch;
+        }
+        .bundle-selector .card{
+          position:relative;background:var(--card);
+          border:1px solid #EADFC8;border-radius:var(--radius);
+          padding:34px 26px 28px;display:flex;flex-direction:column;
+          box-shadow:0 1px 2px rgba(43,29,14,.04);
+          transition:transform .18s ease, box-shadow .18s ease;
+        }
+        .bundle-selector .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(43,29,14,.10)}
+        .bundle-selector .card.popular{
+          background:linear-gradient(180deg,var(--gold-wash) 0%,#FFFFFF 62%);
+          border:1.5px solid var(--gold);
+          box-shadow:0 16px 36px rgba(169,122,16,.18);
+        }
+        .bundle-selector .badge{
+          position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+          background:linear-gradient(135deg,#B8860B,#D4AF37,#EAC85E);
+          color:#231703;font-size:11px;font-weight:700;letter-spacing:.14em;
+          text-transform:uppercase;padding:7px 16px;border-radius:999px;white-space:nowrap;
+          box-shadow:0 4px 10px rgba(169,122,16,.35);
+        }
+        .bundle-selector .tier{
+          font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+          color:var(--cocoa);text-align:center;margin-bottom:10px;
+        }
+        .bundle-selector .pkg{
+          font-family:'Fraunces',serif;font-weight:600;font-size:22px;
+          text-align:center;line-height:1.2;min-height:2.4em;
+          display:flex;align-items:center;justify-content:center;
+        }
+        .bundle-selector .was{
+          text-align:center;margin-top:12px;color:#A99878;font-size:15px;
+          text-decoration:line-through;
+        }
+        .bundle-selector .price{
+          font-family:'Figtree',system-ui,sans-serif;font-weight:800;
+          font-size:clamp(30px,3vw,38px);text-align:center;color:var(--gold-deep);
+          margin-top:2px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;
+        }
+        .bundle-selector .price .naira{font-size:.62em;vertical-align:baseline;margin-right:1px}
+        .bundle-selector .save{
+          display:block;width:max-content;margin:10px auto 0;
+          background:var(--rose-soft);color:var(--rose);
+          font-size:12.5px;font-weight:700;letter-spacing:.04em;
+          padding:5px 12px;border-radius:999px;
+        }
+        .bundle-selector ul{list-style:none;margin:24px 0 26px;flex:1}
+        .bundle-selector li{
+          display:flex;gap:10px;align-items:flex-start;
+          padding:9px 0;font-size:14.5px;line-height:1.45;color:#4A3A24;
+          border-bottom:1px solid #F2EAD8;
+        }
+        .bundle-selector li:last-child{border-bottom:none}
+        .bundle-selector li::before{
+          content:"✦";color:var(--gold);font-size:12px;line-height:1.6;flex:0 0 auto;
+        }
+        .bundle-selector li strong{color:var(--espresso);font-weight:600}
+        .bundle-selector .cta{
+          display:block;text-align:center;text-decoration:none;
+          font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+          padding:15px 12px;border-radius:12px;
+          color:var(--gold-deep);border:1.5px solid var(--gold);
+          transition:background .15s ease,color .15s ease,box-shadow .15s ease;
+        }
+        .bundle-selector .cta:hover{background:var(--gold-wash)}
+        .bundle-selector .cta:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+        .bundle-selector .card.popular .cta{
+          background:linear-gradient(135deg,#B8860B,#D4AF37,#EAC85E);
+          color:#231703;border-color:transparent;
+          box-shadow:0 8px 18px rgba(169,122,16,.32);
+        }
+        .bundle-selector .card.popular .cta:hover{filter:brightness(1.05)}
+        .bundle-selector .footnote{
+          max-width:640px;margin:40px auto 0;text-align:center;
+          color:var(--cocoa);font-size:13.5px;line-height:1.6;
+        }
+        @media (prefers-reduced-motion:reduce){
+          .bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}
+        }
+      `}</style>
+      
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      
+      <header className="intro">
+        <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
+        <h1>Choose the bundle that fits your hair journey</h1>
+        <p>Every bundle ships nationwide with payment on delivery. The more you commit, the more you save.</p>
+      </header>
+
+      <main className="grid">
+        <section className="card">
+          <p className="tier">Good Start</p>
+          <h2 className="pkg">Self Love Plus</h2>
+          <p className="was">₦65,500</p>
+          <p className="price"><span className="naira">₦</span>32,750</p>
+          <span className="save">Save ₦32,750</span>
+          <ul>
+            <li><strong>1 Shampoo + 1 Pomade + 1 Conditioner</strong></li>
+            <li>The complete routine, one of each</li>
+            <li><strong>90-day money-back guarantee</strong></li>
+            <li>Nationwide delivery</li>
+            <li>Pay on delivery</li>
+          </ul>
+          <a className="cta" href="#order-form?package=self_love_plus">Order Now</a>
+        </section>
+
+        <section className="card">
+          <p className="tier">Pomade Lovers</p>
+          <h2 className="pkg">Self Love Return</h2>
+          <p className="was">₦85,500</p>
+          <p className="price"><span className="naira">₦</span>42,750</p>
+          <span className="save">Save ₦42,750</span>
+          <ul>
+            <li><strong>3 Pomades</strong></li>
+            <li>Triple up on the customer favourite</li>
+            <li><strong>90-day money-back guarantee</strong></li>
+            <li>Nationwide delivery</li>
+            <li>Pay on delivery</li>
+          </ul>
+          <a className="cta" href="#order-form?package=self_love_return">Order Now</a>
+        </section>
+
+        <section className="card">
+          <p className="tier">Buy 2, Get 1 Free</p>
+          <h2 className="pkg">Self Love B2GOF</h2>
+          <p className="was">₦105,500</p>
+          <p className="price"><span className="naira">₦</span>52,750</p>
+          <span className="save">Save ₦52,750</span>
+          <ul>
+            <li><strong>3 Shampoos + 3 Pomades</strong></li>
+            <li>Buy 2 shampoos + 2 pomades, get 1 of each <strong>free</strong></li>
+            <li><strong>90-day money-back guarantee</strong></li>
+            <li>Nationwide delivery</li>
+            <li>Pay on delivery</li>
+          </ul>
+          <a className="cta" href="#order-form?package=self_love_b2gof">Order Now</a>
+        </section>
+
+        <section className="card popular">
+          <span className="badge">★ Most Popular</span>
+          <p className="tier">Best Value</p>
+          <h2 className="pkg">Self Love Plus B2GOF</h2>
+          <p className="was">₦133,500</p>
+          <p className="price"><span className="naira">₦</span>66,750</p>
+          <span className="save">Save ₦66,750 🔥</span>
+          <ul>
+            <li><strong>3 Shampoos + 3 Pomades + 3 Conditioners</strong></li>
+            <li>Buy 2 of each, get 1 of each <strong>free</strong></li>
+            <li>Full routine, three months strong</li>
+            <li><strong>90-day money-back guarantee</strong></li>
+            <li>Nationwide delivery</li>
+            <li>Pay on delivery</li>
+          </ul>
+          <a className="cta" href="#order-form?package=self_love_plus_b2gof">Order Now — Best Deal</a>
+        </section>
+
+        <section className="card">
+          <p className="tier">Family Pack</p>
+          <h2 className="pkg">Family Saves</h2>
+          <p className="was">₦431,500</p>
+          <p className="price"><span className="naira">₦</span>215,750</p>
+          <span className="save">Save ₦215,750 💥</span>
+          <ul>
+            <li><strong>10 Shampoos + 10 Pomades + 10 Conditioners</strong></li>
+            <li>Buy 6 of each, get 4 of each <strong>free</strong></li>
+            <li>Share the routine with the whole family</li>
+            <li><strong>90-day money-back guarantee</strong></li>
+            <li>Nationwide delivery</li>
+            <li>Pay on delivery</li>
+          </ul>
+          <a className="cta" href="#order-form?package=family_saves">Order Now</a>
+        </section>
+      </main>
+
+      <p className="footnote">All prices in Nigerian Naira. 50% launch discount applied to every bundle. Every bundle is covered by our 90-day money-back guarantee. We deliver nationwide — you pay when your order arrives.</p>
+    </div>
+  );
+};
