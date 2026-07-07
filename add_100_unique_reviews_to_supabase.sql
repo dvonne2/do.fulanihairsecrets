@@ -16,7 +16,7 @@ INSERT INTO reviews (
 ) VALUES
 -- Reviews 1-10
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Maryam M.',
   'Abuja, FCT',
   5,
@@ -28,7 +28,7 @@ INSERT INTO reviews (
   '2025-02-08 10:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Hauwa A.',
   'Ilorin, Kwara',
   5,
@@ -40,7 +40,7 @@ INSERT INTO reviews (
   '2025-02-20 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Maryam E.',
   'Ilorin, Kwara',
   5,
@@ -52,7 +52,7 @@ INSERT INTO reviews (
   '2025-04-16 09:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Fatima A.',
   'Kano, Kano',
   5,
@@ -64,7 +64,7 @@ INSERT INTO reviews (
   '2026-04-22 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Amaka N.',
   'Enugu, Enugu',
   5,
@@ -76,7 +76,7 @@ INSERT INTO reviews (
   '2025-10-22 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing N.',
   'Jos, Plateau',
   5,
@@ -88,7 +88,7 @@ INSERT INTO reviews (
   '2025-12-15 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Tosin J.',
   'Kano, Kano',
   5,
@@ -100,7 +100,7 @@ INSERT INTO reviews (
   '2025-10-19 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sandra A.',
   'Port Harcourt, Rivers',
   5,
@@ -112,7 +112,7 @@ INSERT INTO reviews (
   '2025-09-11 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sandra M.',
   'Owerri, Imo',
   5,
@@ -124,7 +124,7 @@ INSERT INTO reviews (
   '2025-08-25 10:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ifeoma A.',
   'Lagos, Lagos',
   5,
@@ -138,7 +138,7 @@ INSERT INTO reviews (
 
 -- Reviews 11-20
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Maryam S.',
   'Abuja, FCT',
   5,
@@ -150,7 +150,7 @@ INSERT INTO reviews (
   '2026-05-09 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chioma J.',
   'Port Harcourt, Rivers',
   5,
@@ -162,7 +162,7 @@ INSERT INTO reviews (
   '2025-04-14 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ogechi U.',
   'Abeokuta, Ogun',
   5,
@@ -174,7 +174,7 @@ INSERT INTO reviews (
   '2025-04-29 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chidinma B.',
   'Ibadan, Oyo',
   5,
@@ -186,7 +186,7 @@ INSERT INTO reviews (
   '2025-07-30 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Bilkisu A.',
   'Lagos, Lagos',
   5,
@@ -198,7 +198,7 @@ INSERT INTO reviews (
   '2025-12-31 10:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Deborah L.',
   'Enugu, Enugu',
   5,
@@ -210,7 +210,7 @@ INSERT INTO reviews (
   '2025-12-31 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ruth O.',
   'Benin City, Edo',
   5,
@@ -222,7 +222,7 @@ INSERT INTO reviews (
   '2025-08-14 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chioma A.',
   'Lagos, Lagos',
   5,
@@ -234,7 +234,7 @@ INSERT INTO reviews (
   '2025-07-02 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Tosin M.',
   'Akure, Ondo',
   5,
@@ -246,7 +246,7 @@ INSERT INTO reviews (
   '2026-04-22 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila A.',
   'Uyo, Akwa Ibom',
   5,
@@ -260,7 +260,7 @@ INSERT INTO reviews (
 
 -- Reviews 21-30
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ogechi U.',
   'Benin City, Edo',
   5,
@@ -272,7 +272,7 @@ INSERT INTO reviews (
   '2025-09-23 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Esther A.',
   'Akure, Ondo',
   5,
@@ -284,7 +284,7 @@ INSERT INTO reviews (
   '2026-06-21 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila A.',
   'Ibadan, Oyo',
   5,
@@ -296,7 +296,7 @@ INSERT INTO reviews (
   '2025-11-30 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Tosin M.',
   'Abuja, FCT',
   5,
@@ -308,7 +308,7 @@ INSERT INTO reviews (
   '2025-01-29 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila S.',
   'Benin City, Edo',
   5,
@@ -320,7 +320,7 @@ INSERT INTO reviews (
   '2026-06-20 10:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ibrahim J.',
   'Ibadan, Oyo',
   5,
@@ -332,7 +332,7 @@ INSERT INTO reviews (
   '2026-03-15 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Fatima A.',
   'Uyo, Akwa Ibom',
   5,
@@ -344,7 +344,7 @@ INSERT INTO reviews (
   '2026-05-14 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Hadiza U.',
   'Abeokuta, Ogun',
   5,
@@ -356,7 +356,7 @@ INSERT INTO reviews (
   '2025-01-20 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Aisha M.',
   'Jos, Plateau',
   5,
@@ -368,7 +368,7 @@ INSERT INTO reviews (
   '2025-04-18 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Mariam N.',
   'Owerri, Imo',
   5,
@@ -382,7 +382,7 @@ INSERT INTO reviews (
 
 -- Reviews 31-40
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Hadiza U.',
   'Kano, Kano',
   5,
@@ -394,7 +394,7 @@ INSERT INTO reviews (
   '2025-03-10 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Kemi A.',
   'Ilorin, Kwara',
   5,
@@ -406,7 +406,7 @@ INSERT INTO reviews (
   '2025-06-15 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chidinma E.',
   'Benin City, Edo',
   5,
@@ -418,7 +418,7 @@ INSERT INTO reviews (
   '2025-09-14 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Halima U.',
   'Aba, Abia',
   5,
@@ -430,7 +430,7 @@ INSERT INTO reviews (
   '2026-06-03 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'David U.',
   'Ibadan, Oyo',
   5,
@@ -442,7 +442,7 @@ INSERT INTO reviews (
   '2026-03-18 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Yetunde S.',
   'Warri, Delta',
   5,
@@ -454,7 +454,7 @@ INSERT INTO reviews (
   '2025-10-03 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Kemi A.',
   'Jos, Plateau',
   5,
@@ -466,7 +466,7 @@ INSERT INTO reviews (
   '2025-12-10 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ngozi U.',
   'Enugu, Enugu',
   5,
@@ -478,7 +478,7 @@ INSERT INTO reviews (
   '2025-02-12 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Amaka B.',
   'Ibadan, Oyo',
   5,
@@ -490,7 +490,7 @@ INSERT INTO reviews (
   '2025-05-29 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Esther S.',
   'Ibadan, Oyo',
   5,
@@ -504,7 +504,7 @@ INSERT INTO reviews (
 
 -- Reviews 41-50
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chinedu J.',
   'Abuja, FCT',
   5,
@@ -516,7 +516,7 @@ INSERT INTO reviews (
   '2026-04-13 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Emeka S.',
   'Kano, Kano',
   5,
@@ -528,7 +528,7 @@ INSERT INTO reviews (
   '2025-08-25 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Yetunde B.',
   'Aba, Abia',
   5,
@@ -540,7 +540,7 @@ INSERT INTO reviews (
   '2025-12-06 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Safiya A.',
   'Lagos, Lagos',
   5,
@@ -552,7 +552,7 @@ INSERT INTO reviews (
   '2025-10-25 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sandra M.',
   'Benin City, Edo',
   5,
@@ -564,7 +564,7 @@ INSERT INTO reviews (
   '2026-06-03 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chinedu U.',
   'Benin City, Edo',
   5,
@@ -576,7 +576,7 @@ INSERT INTO reviews (
   '2025-05-16 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Vivian M.',
   'Uyo, Akwa Ibom',
   5,
@@ -588,7 +588,7 @@ INSERT INTO reviews (
   '2026-05-19 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Maryam U.',
   'Uyo, Akwa Ibom',
   5,
@@ -600,7 +600,7 @@ INSERT INTO reviews (
   '2026-02-12 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Vivian E.',
   'Owerri, Imo',
   5,
@@ -612,7 +612,7 @@ INSERT INTO reviews (
   '2025-10-09 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sade E.',
   'Ibadan, Oyo',
   5,
@@ -626,7 +626,7 @@ INSERT INTO reviews (
 
 -- Reviews 51-60
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Vivian A.',
   'Benin City, Edo',
   5,
@@ -638,7 +638,7 @@ INSERT INTO reviews (
   '2025-10-21 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ruth U.',
   'Jos, Plateau',
   5,
@@ -650,7 +650,7 @@ INSERT INTO reviews (
   '2026-05-10 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ngozi N.',
   'Kano, Kano',
   5,
@@ -662,7 +662,7 @@ INSERT INTO reviews (
   '2026-04-06 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Hauwa N.',
   'Jos, Plateau',
   5,
@@ -674,7 +674,7 @@ INSERT INTO reviews (
   '2025-01-21 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Esther S.',
   'Benin City, Edo',
   5,
@@ -686,7 +686,7 @@ INSERT INTO reviews (
   '2025-05-09 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ogechi U.',
   'Kano, Kano',
   5,
@@ -698,7 +698,7 @@ INSERT INTO reviews (
   '2025-01-23 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Vivian A.',
   'Aba, Abia',
   5,
@@ -710,7 +710,7 @@ INSERT INTO reviews (
   '2025-04-22 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ifeoma M.',
   'Akure, Ondo',
   5,
@@ -722,7 +722,7 @@ INSERT INTO reviews (
   '2025-11-08 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ngozi U.',
   'Kaduna, Kaduna',
   5,
@@ -734,7 +734,7 @@ INSERT INTO reviews (
   '2025-08-17 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Chidinma J.',
   'Owerri, Imo',
   5,
@@ -748,7 +748,7 @@ INSERT INTO reviews (
 
 -- Reviews 61-70
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Zainab A.',
   'Benin City, Edo',
   5,
@@ -760,7 +760,7 @@ INSERT INTO reviews (
   '2025-08-21 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing A.',
   'Abeokuta, Ogun',
   5,
@@ -772,7 +772,7 @@ INSERT INTO reviews (
   '2025-07-25 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Amaka O.',
   'Warri, Delta',
   5,
@@ -784,7 +784,7 @@ INSERT INTO reviews (
   '2026-03-04 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Yusuf M.',
   'Abuja, FCT',
   5,
@@ -796,7 +796,7 @@ INSERT INTO reviews (
   '2026-02-07 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Hauwa N.',
   'Jos, Plateau',
   5,
@@ -808,7 +808,7 @@ INSERT INTO reviews (
   '2026-01-18 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Aisha B.',
   'Owerri, Imo',
   5,
@@ -820,7 +820,7 @@ INSERT INTO reviews (
   '2026-01-01 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing B.',
   'Abuja, FCT',
   5,
@@ -832,7 +832,7 @@ INSERT INTO reviews (
   '2025-11-28 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing A.',
   'Abeokuta, Ogun',
   5,
@@ -844,7 +844,7 @@ INSERT INTO reviews (
   '2025-07-19 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Adaobi L.',
   'Abuja, FCT',
   5,
@@ -856,7 +856,7 @@ INSERT INTO reviews (
   '2025-01-25 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sandra M.',
   'Owerri, Imo',
   5,
@@ -870,7 +870,7 @@ INSERT INTO reviews (
 
 -- Reviews 71-80
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Kunle A.',
   'Kano, Kano',
   5,
@@ -882,7 +882,7 @@ INSERT INTO reviews (
   '2025-02-04 11:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing M.',
   'Kano, Kano',
   5,
@@ -894,7 +894,7 @@ INSERT INTO reviews (
   '2026-04-03 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila A.',
   'Kaduna, Kaduna',
   5,
@@ -906,7 +906,7 @@ INSERT INTO reviews (
   '2025-09-24 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Amaka A.',
   'Warri, Delta',
   5,
@@ -918,7 +918,7 @@ INSERT INTO reviews (
   '2026-06-04 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Ngozi J.',
   'Abuja, FCT',
   5,
@@ -930,7 +930,7 @@ INSERT INTO reviews (
   '2025-10-28 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sade B.',
   'Benin City, Edo',
   5,
@@ -942,7 +942,7 @@ INSERT INTO reviews (
   '2025-01-07 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Funke U.',
   'Abuja, FCT',
   5,
@@ -954,7 +954,7 @@ INSERT INTO reviews (
   '2025-07-28 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Funke N.',
   'Warri, Delta',
   5,
@@ -966,7 +966,7 @@ INSERT INTO reviews (
   '2026-02-22 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Maryam A.',
   'Kano, Kano',
   4,
@@ -978,7 +978,7 @@ INSERT INTO reviews (
   '2026-03-04 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Vivian A.',
   'Ilorin, Kwara',
   4,
@@ -992,7 +992,7 @@ INSERT INTO reviews (
 
 -- Reviews 81-90
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sade B.',
   'Abeokuta, Ogun',
   4,
@@ -1004,7 +1004,7 @@ INSERT INTO reviews (
   '2025-05-26 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila A.',
   'Port Harcourt, Rivers',
   4,
@@ -1016,7 +1016,7 @@ INSERT INTO reviews (
   '2025-04-22 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Sade O.',
   'Aba, Abia',
   4,
@@ -1028,7 +1028,7 @@ INSERT INTO reviews (
   '2025-07-20 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Zainab M.',
   'Port Harcourt, Rivers',
   4,
@@ -1040,7 +1040,7 @@ INSERT INTO reviews (
   '2025-02-09 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Jamila J.',
   'Warri, Delta',
   4,
@@ -1052,7 +1052,7 @@ INSERT INTO reviews (
   '2026-01-12 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Aisha Y.',
   'Aba, Abia',
   4,
@@ -1064,7 +1064,7 @@ INSERT INTO reviews (
   '2026-02-14 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Funke B.',
   'Akure, Ondo',
   4,
@@ -1076,7 +1076,7 @@ INSERT INTO reviews (
   '2026-06-08 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Yusuf A.',
   'Kano, Kano',
   4,
@@ -1088,7 +1088,7 @@ INSERT INTO reviews (
   '2025-08-15 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Adaobi N.',
   'Jos, Plateau',
   4,
@@ -1100,7 +1100,7 @@ INSERT INTO reviews (
   '2025-08-02 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Kemi A.',
   'Abuja, FCT',
   4,
@@ -1114,7 +1114,7 @@ INSERT INTO reviews (
 
 -- Reviews 91-100
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Deborah O.',
   'Uyo, Akwa Ibom',
   4,
@@ -1126,7 +1126,7 @@ INSERT INTO reviews (
   '2026-01-16 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Funke L.',
   'Kano, Kano',
   4,
@@ -1138,7 +1138,7 @@ INSERT INTO reviews (
   '2025-11-14 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'David A.',
   'Abuja, FCT',
   4,
@@ -1150,7 +1150,7 @@ INSERT INTO reviews (
   '2025-02-18 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Zainab A.',
   'Abuja, FCT',
   3,
@@ -1162,7 +1162,7 @@ INSERT INTO reviews (
   '2025-11-08 12:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Blessing B.',
   'Warri, Delta',
   3,
@@ -1174,7 +1174,7 @@ INSERT INTO reviews (
   '2025-07-29 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Aisha A.',
   'Ibadan, Oyo',
   3,
@@ -1186,7 +1186,7 @@ INSERT INTO reviews (
   '2025-03-07 13:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Yetunde O.',
   'Lagos, Lagos',
   3,
@@ -1198,7 +1198,7 @@ INSERT INTO reviews (
   '2026-03-31 16:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Amaka N.',
   'Lagos, Lagos',
   2,
@@ -1210,7 +1210,7 @@ INSERT INTO reviews (
   '2025-01-26 14:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Peace M.',
   'Lagos, Lagos',
   2,
@@ -1222,7 +1222,7 @@ INSERT INTO reviews (
   '2025-05-26 15:30:00'
 ),
 (
-  gen_random_uuid()::text,
+  gen_random_uuid(),
   'Deborah U.',
   'Port Harcourt, Rivers',
   1,
