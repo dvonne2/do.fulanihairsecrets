@@ -582,6 +582,9 @@ export const TopStoryBanner = () => {
             </div>
         </div>
 
+        {/* Approved Reviews from Supabase */}
+        <ReviewsList />
+
         {/* ORDER FORM */}
         <div id="order-form-container" className="px-4 md:px-6 max-w-4xl mx-auto mt-6">
             <section className="bg-white px-4 md:px-9 py-9 text-center border-y border-gray-200 relative overflow-hidden">
@@ -728,8 +731,6 @@ export const TopStoryBanner = () => {
                       </button>
                     </div>
                 
-                {/* Approved Reviews from Supabase */}
-                <ReviewsList />
                 </div>
                 </div>
 
