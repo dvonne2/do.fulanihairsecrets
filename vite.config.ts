@@ -86,9 +86,14 @@ export default defineConfig({
           'router': ['react-router-dom'],
           'query': ['@tanstack/react-query'],
           'icons': ['lucide-react'],
-          'radix-dialog': ['@radix-ui/react-dialog'],
-          'radix-forms': ['@radix-ui/react-label', '@radix-ui/react-select'],
-          'radix-ui': ['@radix-ui/react-accordion', '@radix-ui/react-toast', '@radix-ui/react-slot'],
+          'radix-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-label',
+            '@radix-ui/react-select',
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-slot'
+          ],
           'utils': ['date-fns', 'clsx', 'tailwind-merge'],
         },
         assetFileNames: (assetInfo) => {
