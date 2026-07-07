@@ -579,9 +579,7 @@ export const TopStoryBanner = () => {
               </DialogContent>
             </Dialog>
 
-            {/* Approved Reviews from Supabase */}
-            <ReviewsList />
-          </div>
+            </div>
         </div>
 
         {/* ORDER FORM */}
@@ -729,6 +727,11 @@ export const TopStoryBanner = () => {
                         </svg>
                       </button>
                     </div>
+                  </div>
+
+                  {/* Approved Reviews from Supabase */}
+                  <div className="mt-6">
+                    <ReviewsList />
                   </div>
                 </div>
 

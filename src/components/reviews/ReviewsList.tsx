@@ -125,7 +125,26 @@ export function ReviewsList() {
               key={review.id}
               className="bg-white border border-gray-200 rounded-lg p-4 text-left"
             >
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-start gap-3 mb-2">
+                {/* Reviewer Avatar */}
+                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                  {review.photo_url ? (
+                    <img
+                      src={review.photo_url}
+                      alt={`${review.name}'s avatar`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                      <span className="text-white font-semibold text-lg">
+                        {review.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
                 <div className="flex text-black">
                   {[...Array(5)].map((_, i) => (
                     <svg
@@ -150,20 +169,23 @@ export function ReviewsList() {
                 )}
               </div>
 
-              <h4 className="font-semibold text-gray-900 mb-1">{review.headline}</h4>
-              <p className="text-gray-700 text-sm mb-3">{review.review}</p>
+                  <h4 className="font-semibold text-gray-900 mb-1">{review.headline}</h4>
+                  <p className="text-gray-700 text-sm mb-3">{review.review}</p>
 
-              {review.photo_url && (
-                <img
-                  src={review.photo_url}
-                  alt="Review photo"
-                  className="w-full max-w-xs h-auto rounded-lg mb-3 object-cover"
-                />
-              )}
+                  {/* Review photo (separate from avatar) */}
+                  {review.photo_url && (
+                    <img
+                      src={review.photo_url}
+                      alt="Review photo"
+                      className="w-full max-w-xs h-auto rounded-lg mb-3 object-cover"
+                    />
+                  )}
 
-              <div className="text-xs text-gray-500">
-                <span className="font-medium text-gray-700">{review.name}</span>
-                {review.location && <span> — {review.location}</span>}
+                  <div className="text-xs text-gray-500">
+                    <span className="font-medium text-gray-700">{review.name}</span>
+                    {review.location && <span> — {review.location}</span>}
+                  </div>
+                </div>
               </div>
             </div>
           ))
