@@ -542,7 +542,7 @@ const ThankYou = () => {
                 const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Self Love Plus'];
                 return currentPackage.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" loading="lazy" />
+                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" loading="lazy" width="64" height="64" />
                     <span className="flex-1 text-gray-300">{item.name}</span>
                     <span className="text-gold">x{item.qty}</span>
                     <Check className="w-5 h-5 text-green-500" />
@@ -711,7 +711,7 @@ const ThankYou = () => {
                 <div className="text-amber-400 mb-4">★★★★★</div>
                 <p className="text-gray-300 text-sm mb-4 italic">"{t.quote}"</p>
                 <div className="flex items-center gap-3">
-                  <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover" loading="lazy" />
+                  <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover" loading="lazy" width="48" height="48" />
                   <div>
                     <p className="text-gold font-semibold">{t.name}</p>
                     <p className="text-gray-400 text-sm">{t.loc}</p>
@@ -725,7 +725,7 @@ const ThankYou = () => {
             <div className="flex-1 flex items-center gap-4">
               <div className="w-24 h-24 bg-gray-700 rounded-lg flex items-center justify-center text-gray-500">BEFORE</div>
               <span className="text-gold text-2xl">→</span>
-              <img src={result1} alt="After" className="w-24 h-24 rounded-lg object-cover" loading="lazy" />
+              <img src={result1} alt="After" className="w-24 h-24 rounded-lg object-cover" loading="lazy" width="96" height="96" />
             </div>
             <div className="text-center md:text-left">
               <p className="text-gold font-semibold">Amina O. — 8 weeks after ordering</p>
@@ -832,7 +832,7 @@ const ThankYou = () => {
       {/* SECTION 15: FINAL MOTIVATION */}
       <section className="py-24 px-4 relative">
         <div className="absolute inset-0 z-0">
-          <img src={result2} alt="Beautiful hair" className="w-full h-full object-cover" loading="lazy" />
+          <img src={result2} alt="Beautiful hair" className="w-full h-full object-cover" loading="lazy" width="1920" height="1080" />
           <div className="absolute inset-0 bg-black/70" />
         </div>
         
