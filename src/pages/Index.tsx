@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { useAfterHeroLoad, useIdleLoad } from '@/hooks/useIdleLoad';
 import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
-import { DisqualificationWarning } from '@/components/landing/DisqualificationWarning';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
 // Valentine promo ended
@@ -12,9 +11,6 @@ import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
 // Lazy load below-fold components
 const Footer = lazy(() =>
   import('@/components/landing/Footer').then((m) => ({ default: m.Footer }))
-);
-const BeforeAfterSection = lazy(() =>
-  import('@/components/landing/BeforeAfterSection').then((m) => ({ default: m.BeforeAfterSection }))
 );
 const Guarantee = lazy(() =>
   import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
@@ -306,12 +302,8 @@ const Index = () => {
       <main>
         <TopStoryBanner />
 
-        <DisqualificationWarning stockCount={stockCount} />
-
-        <LazySection minHeightClassName="min-h-[200px]">
-          <BeforeAfterSection />
-        </LazySection>
-
+        
+        
         
         {mounted && loadNonCritical && (
           <Suspense fallback={null}>

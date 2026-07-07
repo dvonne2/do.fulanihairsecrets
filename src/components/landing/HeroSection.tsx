@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
+const heroImageSmall = `${BASE_PATH}assets/hero-fulani-small.webp`;
 const heroImageMobile = `${BASE_PATH}assets/hero-mobile.webp`;
 const heroImage700 = `${BASE_PATH}assets/hero-fulani-700.webp`;
 const heroImageLarge = `${BASE_PATH}assets/hero-fulani.webp`;
@@ -163,8 +164,8 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                 <div className="relative w-full aspect-square">
                   {!canEnhance && (
                     <img
-                      src={heroImageMobile}
-                      srcSet={`${heroImageMobile} 400w, ${heroImage700} 700w, ${heroImageLarge} 1200w`}
+                      src={heroImageSmall}
+                      srcSet={`${heroImageSmall} 300w, ${heroImageMobile} 400w, ${heroImage700} 700w`}
                       sizes="(max-width: 1023px) 300px, 400px"
                       alt="Fulani Hair Gro Complete 3-Step System"
                       className="absolute inset-0 w-full h-full object-contain"
@@ -204,8 +205,8 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                 <div className="relative w-full h-full">
                   {!canEnhance && (
                     <img
-                      src={heroImageLarge}
-                      srcSet={`${heroImageMobile} 400w, ${heroImage700} 700w, ${heroImageLarge} 1200w`}
+                      src={heroImageSmall}
+                      srcSet={`${heroImageSmall} 300w, ${heroImage700} 700w, ${heroImageLarge} 1200w`}
                       sizes="(min-width: 1024px) 400px, 300px"
                       alt="Fulani Hair Gro Complete 3-Step System"
                       className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 hover:scale-105"

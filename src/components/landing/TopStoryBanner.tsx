@@ -25,6 +25,7 @@ const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
+import { BundleSelector } from './BundleSelector';
 
 const PROMO_DURATION_MINUTES = 58;
 
@@ -119,8 +120,7 @@ export const TopStoryBanner = () => {
             src={`${BASE_PATH}assets/hero2.webp`}
             alt="Product Bundle"
             className="w-full h-auto"
-            loading="eager"
-            fetchpriority="high"
+            loading="lazy"
             width="665"
             height="665"
           />
@@ -736,6 +736,8 @@ export const TopStoryBanner = () => {
                 </div>
               </div>
 
+              <BundleSelector />
+              
               <div id="order-form">
                 {afterHero ? (
                   <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
@@ -815,21 +817,7 @@ export const TopStoryBanner = () => {
 I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tribe bordering Nigeria and Chad. As a little girl, I watched the women in my family use organic and traditional beauty secrets to care for their hair and skin. But me being a tomboy, I never bothered to learn those secrets (I regret it… lol).
         </p>
 
-        {/* Fulani Video */}
-        <div className="mt-6">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            width="480"
-            height="480"
-            className="w-full h-auto"
-          >
-            <source src="/assets/fulani_gif_480x480.mp4" type="video/mp4" />
-          </video>
-        </div>
-        
+                
         <p 
           className="mt-6"
           style={{
@@ -1489,273 +1477,12 @@ This thing is not hype.
             Real Results From Real Women And Men
           </h2>
           
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '24px',
-            maxWidth: '1200px',
-            margin: '0 auto'
-          }}>
-            {/* Card 1: Split image with before/after labels */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src={`${BASE_PATH}assets/fhg1.webp`}
-                  alt="Before and After Results 1"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                  width="600"
-                  height="400"
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  left: '0',
-                  right: '0',
-                  display: 'flex',
-                  height: '40px'
-                }}>
-                  <div style={{
-                    flex: '1',
-                    background: '#F5E6D3',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#3E2723'
-                  }}>
-                    BEFORE
-                  </div>
-                  <div style={{
-                    flex: '1',
-                    background: '#DAA520',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#ffffff'
-                  }}>
-                    AFTER
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Split image with before/after labels */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src={`${BASE_PATH}assets/fhg4.webp`}
-                  alt="Before and After Results 2"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                  width="600"
-                  height="400"
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  left: '0',
-                  right: '0',
-                  display: 'flex',
-                  height: '40px'
-                }}>
-                  <div style={{
-                    flex: '1',
-                    background: '#F5E6D3',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#3E2723'
-                  }}>
-                    BEFORE
-                  </div>
-                  <div style={{
-                    flex: '1',
-                    background: '#DAA520',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#ffffff'
-                  }}>
-                    AFTER
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3: Split image with before/after labels */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src={`${BASE_PATH}assets/fhg5.webp`}
-                  alt="Before and After Results 3"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                  width="600"
-                  height="400"
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  left: '0',
-                  right: '0',
-                  display: 'flex',
-                  height: '40px'
-                }}>
-                  <div style={{
-                    flex: '1',
-                    background: '#F5E6D3',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#3E2723'
-                  }}>
-                    BEFORE
-                  </div>
-                  <div style={{
-                    flex: '1',
-                    background: '#DAA520',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#ffffff'
-                  }}>
-                    AFTER
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4: Split image with before/after labels */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src={`${BASE_PATH}assets/images20.webp`}
-                  alt="Before and After Results 4"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                  width="600"
-                  height="400"
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  left: '0',
-                  right: '0',
-                  display: 'flex',
-                  height: '40px'
-                }}>
-                  <div style={{
-                    flex: '1',
-                    background: '#F5E6D3',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#3E2723'
-                  }}>
-                    BEFORE
-                  </div>
-                  <div style={{
-                    flex: '1',
-                    background: '#DAA520',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#ffffff'
-                  }}>
-                    AFTER
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 5: Split image with before/after labels */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src={`${BASE_PATH}assets/result1.webp`}
-                  alt="Before and After Results 5"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                  width="600"
-                  height="400"
-                />
-                <div style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  left: '0',
-                  right: '0',
-                  display: 'flex',
-                  height: '40px'
-                }}>
-                  <div style={{
-                    flex: '1',
-                    background: '#F5E6D3',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#3E2723'
-                  }}>
-                    BEFORE
-                  </div>
-                  <div style={{
-                    flex: '1',
-                    background: '#DAA520',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    color: '#ffffff'
-                  }}>
-                    AFTER
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <div>
+            
+            
+            
+            
+            
             {/* Card 6: Split image with before/after labels */}
             <div style={{
               background: '#ffffff',
@@ -1978,20 +1705,7 @@ This thing is not hype.
           </div>
         </div>
 
-        <section className="mt-6 bg-[#B80F66] text-center text-white px-4 py-7 fhg-helvetica">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <p className="font-semibold text-3xl md:text-4xl leading-snug">
-              No more scarves, wigs, or mascara just to hide your hairline
-            </p>
-
-            <div className="text-xl md:text-2xl leading-relaxed font-normal space-y-4">
-              <p>
-                Without complicated routines or expensive treatments. This 400-year-old Fulani family secret restored my edges in 14 days — it can do the same for you.
-              </p>
-            </div>
-          </div>
-        </section>
-
+        
         
         <section className="mt-6 text-center">
           {/* Expert Image */}

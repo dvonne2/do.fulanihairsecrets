@@ -19,44 +19,10 @@ export const Footer = () => {
   return (
     <footer className="py-12 border-t border-gray-200 footer-green">
       <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
-        {/* Result Images Row */}
-        <div className="mb-8">
-          <p className="font-sans text-lg text-[#B80F66] italic mb-4">Your transformation starts today</p>
-          <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
-            {footerImages.map((img, i) => (
-              <div 
-                key={i} 
-                className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-gray-300 hover:border-[#B80F66] transition-colors duration-300"
-              >
-                <img 
-                  src={img} 
-                  alt={`Happy customer ${i + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
+        
         <div className="w-full h-px bg-gray-200 mb-6"></div>
         
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-[#B80F66] flex items-center justify-center">
-            <span className="font-sans text-white font-bold text-lg">F</span>
-          </div>
-          <div>
-            <div className="font-sans text-lg font-bold tracking-widest">
-              <span className="text-gray-900">FULANI</span>
-              <span className="text-[#B80F66]"> HAIR GRO™</span>
-            </div>
-          </div>
-        </div>
-        
-        <p className="font-sans text-xs text-[#B80F66] tracking-widest mb-4">Maiduguri, Nigeria</p>
-        <p className="font-sans text-gray-500 italic mb-4">400 years of African beauty wisdom.</p>
-        <p className="font-sans text-[#B80F66] italic mb-6">In honour of Hajia Aissata Cissé 👑❤️</p>
-        
+                
         <div className="text-center space-y-2 mb-6">
           <p className="font-sans text-xs text-gray-500 leading-relaxed">
             This Site Is Not A Part Of The Facebook Website Or Facebook Inc. Additionally, This Site Is Not Endorsed By Facebook In Any Way. FACEBOOK Is A Trademark Of FACEBOOK, Inc.
@@ -73,27 +39,15 @@ export const Footer = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group cta-with-arrow"
-            style={{
-              animation: 'bling-pulse 2s ease-in-out infinite',
-              background: 'linear-gradient(90deg, #5ec239 0%, #4cae4e 50%, #5ec239 100%)',
-              backgroundSize: '200% 100%',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundPosition = 'left center';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundPosition = 'right center';
-            }}
+            className="relative inline-flex items-center justify-center gap-2 text-white font-sans text-xs md:text-sm tracking-widest uppercase px-8 md:px-10 py-3 rounded-xl font-bold hover:scale-105 transition-all duration-300 overflow-hidden group cta-with-arrow footer-cta-button"
           >
             <span className="relative z-10">ORDER NOW PAY ON DELIVERY</span>
             <span className="arrow-indicator"></span>
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 group-hover:translate-x-full transition-transform duration-1000 ease-out"
-              style={{ transform: 'translateX(-100%)' }}
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 group-hover:translate-x-full transition-transform duration-1000 ease-out footer-shine-effect"
             ></span>
             
             {/* Text with glow */}
-            <span className="relative z-10 drop-shadow-lg" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.8)' }}>
+            <span className="relative z-10 drop-shadow-lg footer-glow-text">
               Go To Order Form
             </span>
           </a>
@@ -110,6 +64,26 @@ export const Footer = () => {
               transform: scale(1.02);
               opacity: 0.9;
             }
+          }
+          
+          .footer-cta-button {
+            animation: bling-pulse 2s ease-in-out infinite;
+            background: linear-gradient(90deg, #5ec239 0%, #4cae4e 50%, #5ec239 100%);
+            background-size: 200% 100%;
+            background-position: right center;
+            transition: background-position 0.3s ease;
+          }
+          
+          .footer-cta-button:hover {
+            background-position: left center;
+          }
+          
+          .footer-shine-effect {
+            transform: translateX(-100%);
+          }
+          
+          .footer-glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
           }
         `}</style>
         

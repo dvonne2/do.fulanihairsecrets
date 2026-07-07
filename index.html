@@ -25,8 +25,12 @@
     <link rel="preconnect" href="https://apis.fulanihairsecrets.com" crossorigin />
     <link rel="preconnect" href="https://apis.fulanihairsecrets.com" />
     
+    <!-- Preload critical hero images for faster FCP -->
+    <link rel="preload" href="/assets/hero-fulani-small.webp" as="image" type="image/webp" />
+    <link rel="preload" href="/assets/hero-mobile.webp" as="image" type="image/webp" />
     
     <link rel="icon" type="image/webp" href="/assets/favicon.webp" />
+    <link rel="apple-touch-icon" href="/assets/favicon.webp" />
 
     <!-- Critical above-the-fold CSS (urgency banner + hero) -->
     <style>
@@ -37,6 +41,11 @@
       body{margin:0;background:hsl(0 0% 100%);color:hsl(0 0% 10%)}
       *,*::before,*::after{box-sizing:border-box}
       .font-cinzel{font-family:'Cinzel',serif;font-weight:600}
+      /* Splash screen styles */
+      #splash{min-height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+      .splash-spinner{width:60px;height:60px;border:3px solid rgba(218,165,32,0.2);border-top-color:#DAA520;border-radius:50%;animation:sp .8s linear infinite;margin-bottom:24px}
+      .splash-title{font-family:Montserrat,sans-serif;color:#DAA520;font-size:18px;font-weight:600;letter-spacing:2px;margin:0}
+      .splash-subtitle{font-family:Montserrat,sans-serif;color:rgba(255,255,255,0.6);font-size:12px;margin:8px 0 0;font-weight:400}
       .font-sans{font-family:'Montserrat',sans-serif}
       .font-serif{font-family:Georgia,serif}
       .text-gold{color:#B80F66!important}
@@ -231,10 +240,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <body>
     <div id="root">
       <!-- Instant loading screen: renders before JS downloads. Removed by React hydration/mount. -->
-      <div id="splash" style="min-height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center">
-        <div style="width:60px;height:60px;border:3px solid rgba(218,165,32,0.2);border-top-color:#DAA520;border-radius:50%;animation:sp .8s linear infinite;margin-bottom:24px"></div>
-        <p style="font-family:Montserrat,sans-serif;color:#DAA520;font-size:18px;font-weight:600;letter-spacing:2px;margin:0">FULANI HAIR GRO</p>
-        <p style="font-family:Montserrat,sans-serif;color:rgba(255,255,255,0.6);font-size:12px;margin:8px 0 0;font-weight:400">Loading your experience...</p>
+      <div id="splash">
+        <div class="splash-spinner"></div>
+        <p class="splash-title">FULANI HAIR GRO</p>
+        <p class="splash-subtitle">Loading your experience...</p>
       </div>
       <style>#splash{opacity:1;transition:opacity .3s}@keyframes sp{to{transform:rotate(360deg)}}</style>
       <script>setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},8000)</script>
