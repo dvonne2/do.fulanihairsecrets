@@ -7,7 +7,6 @@ export function ReviewsList() {
   const { reviews, loading, error } = useApprovedReviews();
   const [searchQuery, setSearchQuery] = useState('');
   const [ratingFilter, setRatingFilter] = useState<string>('all');
-  const [withMediaOnly, setWithMediaOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
   const reviewsPerPage = 5;
@@ -22,8 +21,7 @@ export function ReviewsList() {
       review.name.toLowerCase().includes(query);
     const matchesRating =
       ratingFilter === 'all' || review.rating === parseInt(ratingFilter, 10);
-    const matchesMedia = !withMediaOnly || !!review.photo_url;
-    return matchesSearch && matchesRating && matchesMedia;
+    return matchesSearch && matchesRating;
   });
 
   const reviewsWithMedia = filteredReviews.filter((review) => review.photo_url);
@@ -31,7 +29,7 @@ export function ReviewsList() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, ratingFilter, withMediaOnly]);
+  }, [searchQuery, ratingFilter]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
@@ -148,16 +146,6 @@ export function ReviewsList() {
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </div>
-
-        <label className="inline-flex items-center gap-2 h-10 rounded-full border border-gray-300 px-4 text-sm text-gray-700 cursor-pointer hover:bg-gray-50">
-          <input
-            type="checkbox"
-            checked={withMediaOnly}
-            onChange={(e) => setWithMediaOnly(e.target.checked)}
-            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
-          />
-          With media
-        </label>
       </div>
 
       {/* Reviews list */}
