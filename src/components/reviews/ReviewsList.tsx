@@ -9,7 +9,9 @@ export function ReviewsList() {
   const [ratingFilter, setRatingFilter] = useState<string>('all');
   const [withMediaOnly, setWithMediaOnly] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageWindowStart, setPageWindowStart] = useState(1);
   const reviewsPerPage = 5;
+  const maxVisiblePages = 8;
 
   const filteredReviews = reviews.filter((review) => {
     const query = searchQuery.toLowerCase().trim();
@@ -35,6 +37,31 @@ export function ReviewsList() {
   const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
   const startIndex = (currentPage - 1) * reviewsPerPage;
   const paginatedReviews = filteredReviews.slice(startIndex, startIndex + reviewsPerPage);
+
+  // Calculate visible page window
+  const pageWindowEnd = Math.min(pageWindowStart + maxVisiblePages - 1, totalPages);
+  const visiblePages = Array.from(
+    { length: pageWindowEnd - pageWindowStart + 1 },
+    (_, i) => pageWindowStart + i
+  );
+
+  // Scroll page window functions
+  const scrollPageWindowLeft = () => {
+    setPageWindowStart(prev => Math.max(1, prev - maxVisiblePages));
+  };
+
+  const scrollPageWindowRight = () => {
+    setPageWindowStart(prev => Math.min(totalPages - maxVisiblePages + 1, prev + maxVisiblePages));
+  };
+
+  // Adjust page window when current page changes
+  useEffect(() => {
+    if (currentPage < pageWindowStart) {
+      setPageWindowStart(Math.max(1, currentPage - maxVisiblePages + 1));
+    } else if (currentPage > pageWindowEnd) {
+      setPageWindowStart(Math.min(totalPages - maxVisiblePages + 1, currentPage));
+    }
+  }, [currentPage, pageWindowStart, pageWindowEnd, totalPages]);
 
   if (loading) {
     return (
@@ -220,7 +247,15 @@ export function ReviewsList() {
           >
             Previous
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          {pageWindowStart > 1 && (
+            <button
+              onClick={scrollPageWindowLeft}
+              className="px-3 py-1 rounded border border-gray-300 text-sm hover:bg-gray-50"
+            >
+              &lt;
+            </button>
+          )}
+          {visiblePages.map((page) => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
@@ -233,6 +268,14 @@ export function ReviewsList() {
               {page}
             </button>
           ))}
+          {pageWindowEnd < totalPages && (
+            <button
+              onClick={scrollPageWindowRight}
+              className="px-3 py-1 rounded border border-gray-300 text-sm hover:bg-gray-50"
+            >
+              &gt;
+            </button>
+          )}
           <button
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages}
