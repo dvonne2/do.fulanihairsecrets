@@ -175,7 +175,7 @@ export function ReviewsList() {
                 )}
               </div>
 
-                  <h4 className="font-semibold text-gray-900 mb-1">{review.headline}</h4>
+                  <h4 className="font-semibold text-gray-900 mb-1">{review.headline.replace(/#\d+$/, '').trim()}</h4>
                   <p className="text-gray-700 text-sm mb-3">{review.review}</p>
 
                   {/* Review photo (separate from avatar) */}
