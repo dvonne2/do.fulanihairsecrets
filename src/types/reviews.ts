@@ -26,12 +26,20 @@ export interface ReviewUpdate {
   status: ReviewStatus;
 }
 
+export interface ReviewEditFields {
+  name: string;
+  location: string;
+  headline: string;
+  review: string;
+  rating: number;
+}
+
 export interface ReviewsBackend {
   submitReview(submission: ReviewSubmission): Promise<{ success: boolean; error?: string }>;
   getApprovedReviews(): Promise<Review[]>;
-  // Admin functions require an implementation-specific credential (e.g., password or auth token)
   getPendingReviews(credential: string): Promise<Review[]>;
   updateReviewStatus(id: string, status: ReviewStatus, credential: string): Promise<{ success: boolean; error?: string }>;
+  updateReviewContent(id: string, fields: ReviewEditFields, credential: string): Promise<{ success: boolean; error?: string }>;
   deleteReview(id: string, credential: string): Promise<{ success: boolean; error?: string }>;
   uploadPhoto(file: File): Promise<{ url: string | null; error?: string }>;
 }

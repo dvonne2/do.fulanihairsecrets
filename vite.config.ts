@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from 'fs';
 import { partytownVite } from '@qwik.dev/partytown/utils';
 
-// Custom plugin to copy critical files to dist root
 const copyCriticalFiles = () => ({
   name: 'copy-critical-files',
   writeBundle() {
@@ -17,15 +16,13 @@ const copyCriticalFiles = () => ({
       'proxy/facebook.php',
       'meta-capi.php'
     ];
-    
+
     criticalFiles.forEach(file => {
       let src, dest;
       if (file.startsWith('proxy/')) {
-        // Proxy files are in root directory
         src = path.resolve(__dirname, file);
         dest = path.resolve(__dirname, 'dist', file);
       } else {
-        // Other files are in public directory
         src = path.resolve(__dirname, 'public', file);
         dest = path.resolve(__dirname, 'dist', file);
       }
@@ -45,7 +42,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://94.72.104.4',  // staging — use https to avoid 301 redirect
+        target: 'https://94.72.104.4',
         changeOrigin: true,
         headers: {
           'Host': 'vitalvida.systemforce.ng'
@@ -54,7 +51,11 @@ export default defineConfig({
       }
     }
   },
-  plugins: [partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }), react(), copyCriticalFiles()],
+  plugins: [
+    partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }),
+    react(),
+    copyCriticalFiles()
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -63,14 +64,14 @@ export default defineConfig({
   build: {
     outDir: "dist",
     target: 'es2020',
-    minify: 'terser', // Better compression than esbuild
+    minify: 'terser',
     cssMinify: true,
     reportCompressedSize: true,
     chunkSizeWarningLimit: 300,
-    sourcemap: false, // Disable sourcemaps for production
+    sourcemap: false,
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console logs for production
+        drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info', 'console.debug']
       }
@@ -81,22 +82,15 @@ export default defineConfig({
       },
       output: {
         manualChunks: {
-          // Core React - critical, loads first
           'react-vendor': ['react', 'react-dom'],
-          // Router - critical for navigation
           'router': ['react-router-dom'],
-          // React Query - can load in parallel
           'query': ['@tanstack/react-query'],
-          // Icons - lazy load (non-critical)
           'icons': ['lucide-react'],
-          // Radix UI - split into smaller chunks (avoid circular deps)
           'radix-dialog': ['@radix-ui/react-dialog'],
           'radix-forms': ['@radix-ui/react-label', '@radix-ui/react-select'],
           'radix-ui': ['@radix-ui/react-accordion', '@radix-ui/react-toast', '@radix-ui/react-slot'],
-          // Utils - lazy load
           'utils': ['date-fns', 'clsx', 'tailwind-merge'],
         },
-        // Put ALL assets in /assets/ folder
         assetFileNames: (assetInfo) => {
           let extType = assetInfo.name?.split('.').pop() || '';
           if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(extType)) {
@@ -111,7 +105,6 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
       },
     },
-    // Copy publicDir for static assets (fonts, hero images)
     copyPublicDir: true,
   },
   publicDir: 'public',

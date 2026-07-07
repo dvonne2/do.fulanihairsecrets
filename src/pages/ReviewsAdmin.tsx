@@ -1,17 +1,26 @@
 import { useState } from 'react';
 import { useAdminReviews } from '@/hooks/useReviews';
-import type { ReviewStatus } from '@/types/reviews';
+import { reviewsSupabaseBackend } from '@/api/reviewsSupabase';
+import type { Review, ReviewStatus } from '@/types/reviews';
 
 const ADMIN_PASSWORD_KEY = 'reviews_admin_password';
 
+interface EditState {
+  id: string;
+  name: string;
+  location: string;
+  headline: string;
+  review: string;
+  rating: number;
+}
+
 export default function ReviewsAdmin() {
-  const [password, setPassword] = useState(() => {
-    return localStorage.getItem(ADMIN_PASSWORD_KEY) || '';
-  });
+  const [password, setPassword] = useState(() => localStorage.getItem(ADMIN_PASSWORD_KEY) || '');
   const [inputPassword, setInputPassword] = useState('');
-  const [authenticated, setAuthenticated] = useState(() => {
-    return !!localStorage.getItem(ADMIN_PASSWORD_KEY);
-  });
+  const [authenticated, setAuthenticated] = useState(() => !!localStorage.getItem(ADMIN_PASSWORD_KEY));
+  const [editState, setEditState] = useState<EditState | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   const { reviews, loading, error, refetch, updateStatus, deleteReview } = useAdminReviews(
     authenticated ? password : ''
@@ -41,6 +50,42 @@ export default function ReviewsAdmin() {
     }
   };
 
+  const handleEditOpen = (review: Review) => {
+    setEditState({
+      id: review.id,
+      name: review.name,
+      location: review.location || '',
+      headline: review.headline,
+      review: review.review,
+      rating: review.rating,
+    });
+    setSaveError('');
+  };
+
+  const handleEditSave = async () => {
+    if (!editState) return;
+    setSaving(true);
+    setSaveError('');
+    const result = await reviewsSupabaseBackend.updateReviewContent(
+      editState.id,
+      {
+        name: editState.name,
+        location: editState.location,
+        headline: editState.headline,
+        review: editState.review,
+        rating: editState.rating,
+      },
+      password
+    );
+    setSaving(false);
+    if (result.success) {
+      setEditState(null);
+      void refetch();
+    } else {
+      setSaveError(result.error || 'Failed to save changes');
+    }
+  };
+
   if (!authenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -52,13 +97,11 @@ export default function ReviewsAdmin() {
                 Admin Password
               </label>
               <input
-                id="admin-password"
                 type="password"
                 value={inputPassword}
                 onChange={(e) => setInputPassword(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
                 required
-                aria-label="Admin password"
               />
             </div>
             <button
@@ -101,12 +144,102 @@ export default function ReviewsAdmin() {
           <p className="text-gray-500">No pending reviews to moderate.</p>
         )}
 
+        {/* Edit Modal */}
+        {editState && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+            <div className="bg-white rounded-lg p-6 w-full max-w-lg space-y-4">
+              <h2 className="text-lg font-semibold">Edit Review</h2>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  type="text"
+                  value={editState.name}
+                  onChange={(e) => setEditState({ ...editState, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <input
+                  type="text"
+                  value={editState.location}
+                  onChange={(e) => setEditState({ ...editState, location: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setEditState({ ...editState, rating: star })}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill={star <= editState.rating ? 'currentColor' : 'none'}
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className={star <= editState.rating ? 'text-black' : 'text-gray-300'}
+                      >
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Headline</label>
+                <input
+                  type="text"
+                  value={editState.headline}
+                  onChange={(e) => setEditState({ ...editState, headline: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
+                <textarea
+                  rows={4}
+                  value={editState.review}
+                  onChange={(e) => setEditState({ ...editState, review: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                />
+              </div>
+
+              {saveError && <p className="text-red-600 text-sm">{saveError}</p>}
+
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setEditState(null)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditSave}
+                  disabled={saving}
+                  className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50"
+                >
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-4">
           {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white border border-gray-200 rounded-lg p-5"
-            >
+            <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -169,6 +302,12 @@ export default function ReviewsAdmin() {
                     className="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
                   >
                     Feature
+                  </button>
+                  <button
+                    onClick={() => handleEditOpen(review)}
+                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(review.id)}
