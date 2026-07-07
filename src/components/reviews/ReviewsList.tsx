@@ -39,7 +39,13 @@ export function ReviewsList() {
   }
 
   if (reviews.length === 0) {
-    return null;
+    return (
+      <div className="mt-8 text-left">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
+          <p className="text-gray-500 text-sm">No reviews yet. Be the first to share your experience!</p>
+        </div>
+      </div>
+    );
   }
 
   return (
