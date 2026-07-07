@@ -727,12 +727,10 @@ export const TopStoryBanner = () => {
                         </svg>
                       </button>
                     </div>
-                  </div>
-
+                  
                   {/* Approved Reviews from Supabase */}
-                  <div className="mt-6">
-                    <ReviewsList />
-                  </div>
+                  <ReviewsList />
+                </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-2">
