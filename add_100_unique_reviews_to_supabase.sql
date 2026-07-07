@@ -1234,11 +1234,19 @@ INSERT INTO reviews (
   '2025-03-07 12:30:00'
 );
 
--- Set some reviews as featured for special highlighting (top 10 reviews)
+-- Set specific reviews as featured (by headline suffix, since names repeat in this dataset)
 UPDATE reviews 
 SET status = 'featured' 
-WHERE name IN ('Maryam M.', 'Fatima A.', 'Tosin J.', 'Ifeoma A.', 'Bilkisu A.', 'Deborah L.', 'Ruth O.', 'Chioma A.', 'Tosin M.', 'Jamila A.')
-LIMIT 10;
+WHERE headline LIKE '%#1'
+   OR headline LIKE '%#4'
+   OR headline LIKE '%#7'
+   OR headline LIKE '%#10'
+   OR headline LIKE '%#15'
+   OR headline LIKE '%#16'
+   OR headline LIKE '%#17'
+   OR headline LIKE '%#18'
+   OR headline LIKE '%#19'
+   OR headline LIKE '%#20';
 
 -- Verify the data was inserted
 SELECT COUNT(*) as total_reviews, 
