@@ -43,6 +43,7 @@ export const IndustryTruth: React.FC = () => {
                 src={dhtDiagram}
                 alt="Simple illustration showing how DHT affects hair follicles"
                 className="w-full max-w-xs md:max-w-sm object-contain"
+                loading="lazy"
               />
             </div>
             <div className="bg-background/60 rounded-2xl border border-gold/20 p-3 md:p-4 flex items-center justify-center">
@@ -50,6 +51,7 @@ export const IndustryTruth: React.FC = () => {
                 src={follicleCloseup}
                 alt="Close-up illustration of a healthy hair follicle after DHT is controlled"
                 className="w-full max-w-xs md:max-w-sm object-contain"
+                loading="lazy"
               />
             </div>
           </div>

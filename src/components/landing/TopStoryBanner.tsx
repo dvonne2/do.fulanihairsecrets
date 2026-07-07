@@ -697,6 +697,7 @@ export const TopStoryBanner = () => {
                             src={src}
                             alt={`Customer review ${index + 1}`}
                             className="w-32 h-32 object-cover rounded-lg flex-shrink-0 bg-gray-100"
+                            loading="lazy"
                           />
                         ))}
                       </div>

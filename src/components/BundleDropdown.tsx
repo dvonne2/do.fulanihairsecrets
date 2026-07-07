@@ -108,6 +108,7 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
               key={i}
               src={item.image}
               alt={item.name}
+              loading="lazy"
               style={{
                 width: 36, height: 36, borderRadius: 8,
                 objectFit: "cover", background: "#F3F4F6",

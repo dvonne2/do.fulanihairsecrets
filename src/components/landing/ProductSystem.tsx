@@ -166,12 +166,14 @@ export const ProductSystem = () => {
                 src={pomadeImg} 
                 alt="Fulani Hair Gro Pomade"
                 className="absolute -bottom-2 -right-2 w-12 h-12 object-contain opacity-30"
+                loading="lazy"
               />
               <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-gold mb-3 shadow-lg">
                 <img 
                   src={item.image} 
                   alt={item.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
               <p className="font-cinzel text-base text-gold">{item.name}</p>

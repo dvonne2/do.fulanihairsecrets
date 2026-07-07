@@ -164,6 +164,7 @@ export const IngredientsSection: React.FC = () => {
                 src={follicleHealing}
                 alt="Gentle illustration of hair follicles becoming thicker and healthier over time"
                 className="w-full max-w-sm md:max-w-md object-contain rounded-xl border border-gold/30"
+                loading="lazy"
               />
             </div>
           </div>
