@@ -727,9 +727,9 @@ export const TopStoryBanner = () => {
                         </svg>
                       </button>
                     </div>
-                  
-                  {/* Approved Reviews from Supabase */}
-                  <ReviewsList />
+                
+                {/* Approved Reviews from Supabase */}
+                <ReviewsList />
                 </div>
                 </div>
 
