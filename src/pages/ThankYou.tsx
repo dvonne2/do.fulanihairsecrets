@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import confetti from 'canvas-confetti';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { fireThankYouEvents, resetTracking } from '@/utils/metaTracking';
@@ -93,41 +92,46 @@ const ThankYou = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Meta Browser Optimization: Reduce confetti for slower devices
-    const isMetaBrowser = /FB_IAB|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
-    const particleCount = isMetaBrowser ? 1 : 3;
-    
-    // Confetti explosion on load - delayed for Meta browser
-    const startDelay = isMetaBrowser ? 1000 : 0;
-    const duration = isMetaBrowser ? 1500 : 3000;
-    const end = Date.now() + startDelay + duration;
+    // Lazy load confetti
+    import('canvas-confetti').then((confettiModule) => {
+      const confetti = confettiModule.default;
+      
+      // Meta Browser Optimization: Reduce confetti for slower devices
+      const isMetaBrowser = /FB_IAB|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+      const particleCount = isMetaBrowser ? 1 : 3;
+      
+      // Confetti explosion on load - delayed for Meta browser
+      const startDelay = isMetaBrowser ? 1000 : 0;
+      const duration = isMetaBrowser ? 1500 : 3000;
+      const end = Date.now() + startDelay + duration;
 
-    const frame = () => {
-      confetti({
-        particleCount,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ['#DAA520', '#FFD700', '#ffffff']
-      });
-      confetti({
-        particleCount,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ['#DAA520', '#FFD700', '#ffffff']
-      });
+      const frame = () => {
+        confetti({
+          particleCount,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#DAA520', '#FFD700', '#ffffff']
+        });
+        confetti({
+          particleCount,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#DAA520', '#FFD700', '#ffffff']
+        });
 
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+      
+      if (startDelay > 0) {
+        setTimeout(frame, startDelay);
+      } else {
+        frame();
       }
-    };
-    
-    if (startDelay > 0) {
-      setTimeout(frame, startDelay);
-    } else {
-      frame();
-    }
+    });
 
       }, []);
 

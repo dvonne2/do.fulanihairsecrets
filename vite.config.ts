@@ -90,8 +90,6 @@ export default defineConfig({
             '@radix-ui/react-dialog',
             '@radix-ui/react-label',
             '@radix-ui/react-select',
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-toast',
             '@radix-ui/react-slot'
           ],
           'utils': ['date-fns', 'clsx', 'tailwind-merge'],
