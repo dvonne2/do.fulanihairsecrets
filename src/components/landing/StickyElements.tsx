@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
 interface StickyElementsProps {
   showStickyBar: boolean;
@@ -9,7 +9,7 @@ interface StickyElementsProps {
   scrollProgress: number;
 }
 
-export const StickyElements = ({ 
+export const StickyElements = memo(({ 
   scrollProgress 
 }: StickyElementsProps) => {
   const [visible, setVisible] = useState(true);
@@ -140,4 +140,4 @@ export const StickyElements = ({
       </div>
     </>
   );
-};
+});

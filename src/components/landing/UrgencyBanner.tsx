@@ -1,8 +1,10 @@
+import { memo } from 'react';
+
 interface UrgencyBannerProps {
   countdown: { hours: number; minutes: number; seconds: number };
 }
 
-export const UrgencyBanner = ({ countdown }: UrgencyBannerProps) => {
+export const UrgencyBanner = memo(({ countdown }: UrgencyBannerProps) => {
   return (
     <div className="relative md:fixed md:top-0 md:left-0 md:right-0 z-40 bg-black py-2.5 text-center">
       <div className="max-w-7xl mx-auto px-3">
@@ -16,4 +18,4 @@ export const UrgencyBanner = ({ countdown }: UrgencyBannerProps) => {
       </div>
     </div>
   );
-};
+});
