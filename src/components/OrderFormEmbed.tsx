@@ -47,6 +47,9 @@ const submitToFulani = async (formData) => {
     Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
   );
 
+  console.log('[OrderForm] Webhook URL:', WEBHOOK_URL);
+  console.log('[OrderForm] Payload:', payload);
+
   try {
     await fetch(WEBHOOK_URL, {
       method: 'POST',
@@ -54,6 +57,7 @@ const submitToFulani = async (formData) => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body
     });
+    console.log('[OrderForm] Webhook sent (no-cors - response opaque)');
 
     // Parallel POST to ERPNext (fire-and-forget, does not block)
     const erpnextPayload = {
