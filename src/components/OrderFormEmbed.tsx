@@ -275,8 +275,15 @@ function OrderFormEmbed() {
 
   const submit = async () => {
     // Validate required fields
+    console.log('[OrderForm] Form state before validation:', form);
     if (!form.name || !form.phone || !form.address || !form.state || !form.package) {
-      alert('Please fill in all required fields');
+      const missing = [];
+      if (!form.name) missing.push('name');
+      if (!form.phone) missing.push('phone');
+      if (!form.address) missing.push('address');
+      if (!form.state) missing.push('state');
+      if (!form.package) missing.push('package');
+      alert(`Please fill in all required fields. Missing: ${missing.join(', ')}`);
       return;
     }
 
@@ -286,28 +293,32 @@ function OrderFormEmbed() {
       const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       const packagePrice = packages.find(p => p.name === form.package)?.price || 0;
 
+      const payload = {
+        orderId,
+        name: form.name,
+        phone: form.phone,
+        email: form.email || '',
+        address: form.address,
+        state: form.state,
+        package: form.package,
+        amount: packagePrice,
+        deliveryDate: form.deliveryDate || '',
+        lga: form.lga || '',
+        landmark: form.landmark || '',
+        deliveryFee: 3000,
+        paymentMethod: 'Pay on Delivery',
+        aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
+        utm_source: localStorage.getItem('src') || '',
+        click_id: '',
+        landing_page_url: window.location.href,
+      };
+
+      console.log('[OrderForm] Sending payload to /api/order:', payload);
+
       const response = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId,
-          name: form.name,
-          phone: form.phone,
-          email: form.email || '',
-          address: form.address,
-          state: form.state,
-          package: form.package,
-          amount: packagePrice,
-          deliveryDate: form.deliveryDate || '',
-          lga: form.lga || '',
-          landmark: form.landmark || '',
-          deliveryFee: 3000,
-          paymentMethod: 'Pay on Delivery',
-          aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
-          utm_source: localStorage.getItem('src') || '',
-          click_id: '',
-          landing_page_url: window.location.href,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
