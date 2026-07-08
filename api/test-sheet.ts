@@ -20,12 +20,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Create JWT auth client
-    const auth = new google.auth.JWT(
-      serviceAccountEmail,
-      undefined,
-      privateKey,
-      ['https://www.googleapis.com/auth/spreadsheets']
-    );
+    const auth = new google.auth.JWT({
+      email: serviceAccountEmail,
+      key: privateKey,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
 
     // Initialize Sheets API
     const sheets = google.sheets({ version: 'v4', auth });

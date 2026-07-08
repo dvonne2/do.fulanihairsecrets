@@ -63,7 +63,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return { ok: false, error: 'Missing env vars' }; 
     }
     try {
-      const auth = new google.auth.JWT(email, undefined, key, ['https://www.googleapis.com/auth/spreadsheets']);
+      const auth = new google.auth.JWT({
+        email,
+        key,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets']
+      });
       const sheets = google.sheets({ version: 'v4', auth });
       await sheets.spreadsheets.values.append({
         spreadsheetId: sheetId, range: 'Orders!A:K', valueInputOption: 'USER_ENTERED',
