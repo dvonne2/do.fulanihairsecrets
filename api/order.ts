@@ -4,6 +4,14 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const cut = (v: any, n = 140) => (v == null ? "" : String(v)).slice(0, n);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('env present:', {
+    ingest: !!process.env.ERPNEXT_INGEST_URL,
+    secret: !!process.env.ERPNEXT_WEBHOOK_SECRET,
+    gsaEmail: !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    gKey: !!process.env.GOOGLE_PRIVATE_KEY,
+    sheetId: !!process.env.SHEET_ID
+  });
+
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const body = req.body;
@@ -21,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const erpnextWrite = (async () => {
     const url = process.env.ERPNEXT_INGEST_URL;
     const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
-    if (!url || !secret) { console.error('[ERPNext] Missing env vars'); return false; }
+    if (!url || !secret) { console.error('[ERPNext] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -36,17 +44,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           click_id: cut(body.click_id), landing_page_url: cut(body.landing_page_url),
         }),
       });
-      if (!response.ok) { console.error(`[ERPNext] ${response.status}`); return false; }
+      if (!response.ok) { 
+        const text = await response.text();
+        console.error(`[ERPNext] ${response.status}: ${text}`); 
+        return { ok: false, error: `${response.status}: ${text}` }; 
+      }
       console.log('[ERPNext] Success');
-      return true;
-    } catch (e: any) { console.error('[ERPNext]', e.message); return false; }
+      return { ok: true };
+    } catch (e: any) { console.error('[ERPNext]', e.message); return { ok: false, error: e.message }; }
   })();
 
   const sheetsWrite = (async () => {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
     const sheetId = process.env.SHEET_ID;
-    if (!email || !key || !sheetId) { console.error('[Sheets] Missing env vars'); return false; }
+    if (!email || !key || !sheetId) { console.error('[Sheets] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
     try {
       const auth = new google.auth.JWT(email, undefined, key, ['https://www.googleapis.com/auth/spreadsheets']);
       const sheets = google.sheets({ version: 'v4', auth });
@@ -60,17 +72,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ]] },
       });
       console.log('[Sheets] Success');
-      return true;
-    } catch (e: any) { console.error('[Sheets]', e.message); return false; }
+      return { ok: true };
+    } catch (e: any) { console.error('[Sheets]', e.message); return { ok: false, error: e.message }; }
   })();
 
   const results = await Promise.allSettled([erpnextWrite, sheetsWrite]);
-  const erpnextOk = results[0].status === 'fulfilled' && results[0].value === true;
-  const sheetOk = results[1].status === 'fulfilled' && results[1].value === true;
+  const erpnextResult = results[0];
+  const sheetResult = results[1];
+  const erpnextOk = erpnextResult.status === 'fulfilled' && erpnextResult.value.ok === true;
+  const sheetOk = sheetResult.status === 'fulfilled' && sheetResult.value.ok === true;
 
   if (erpnextOk || sheetOk) {
     return res.status(200).json({ ok: true, orderId: body.orderId, erpnext: erpnextOk, sheet: sheetOk });
   } else {
-    return res.status(502).json({ ok: false, error: 'Order could not be recorded', erpnext: false, sheet: false });
+    const erpnextError = erpnextResult.status === 'rejected' 
+      ? String(erpnextResult.reason) 
+      : (erpnextResult.value?.error || 'Unknown error');
+    const sheetError = sheetResult.status === 'rejected' 
+      ? String(sheetResult.reason) 
+      : (sheetResult.value?.error || 'Unknown error');
+    return res.status(502).json({ 
+      ok: false, 
+      error: 'Order could not be recorded', 
+      erpnext: false, 
+      sheet: false,
+      erpnextError,
+      sheetError
+    });
   }
 }
