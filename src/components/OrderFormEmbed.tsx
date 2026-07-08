@@ -3,7 +3,6 @@ import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
 import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
-import { toast } from 'sonner';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
@@ -359,11 +358,56 @@ function OrderFormEmbed() {
     };
   }, []);
   
-  const submit = () => {
-    console.log('Form submitted');
-  };
-
   const [submitting, setSubmitting] = useState(false);
+
+  const submit = async () => {
+    // Validate required fields
+    if (!form.name || !form.phone || !form.address || !form.state || !form.package) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const formData = {
+        ...form,
+        orderId: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      };
+
+      const result = await submitToFulani(formData);
+
+      if (result.success) {
+        alert('Order submitted successfully!');
+        
+        // Fire conversion events
+        fireInitiateCheckout({
+          content_name: form.package,
+          content_ids: [form.package],
+          value: packages.find(p => p.name === form.package)?.price || 0,
+          currency: 'NGN',
+        });
+
+        fireTikTokInitiateCheckout({
+          content_name: form.package,
+          value: packages.find(p => p.name === form.package)?.price || 0,
+          currency: 'NGN',
+        });
+
+        // Redirect to thank you page
+        setTimeout(() => {
+          window.location.href = '/thank-you';
+        }, 1500);
+      } else {
+        alert('Failed to submit order. Please try again.');
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
 
   return (
