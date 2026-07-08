@@ -121,6 +121,7 @@ export const TopStoryBanner = () => {
             alt="Product Bundle"
             className="w-full h-auto"
             loading="lazy"
+            decoding="async"
             width="665"
             height="665"
           />
@@ -150,6 +151,7 @@ export const TopStoryBanner = () => {
                     alt={item.label}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                     width="208"
                     height="208"
                   />
@@ -698,6 +700,9 @@ export const TopStoryBanner = () => {
                             alt={`Customer review ${index + 1}`}
                             className="w-32 h-32 object-cover rounded-lg flex-shrink-0 bg-gray-100"
                             loading="lazy"
+                            decoding="async"
+                            width="128"
+                            height="128"
                           />
                         ))}
                       </div>
@@ -1050,6 +1055,9 @@ This thing is not hype.
                   className="w-auto h-auto"
                   style={{ maxWidth: '900px !important', width: '900px !important' }}
                   loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="675"
                 />
               </div>
               <p 
@@ -1115,6 +1123,9 @@ This thing is not hype.
                   className="w-auto h-auto"
                   style={{ maxWidth: '900px !important', width: '900px !important' }}
                   loading="lazy"
+                  decoding="async"
+                  width="900"
+                  height="675"
                 />
               </div>
               <p 
@@ -1187,6 +1198,9 @@ This thing is not hype.
                     transform: 'scale(1.5) !important'
                   }}
                   loading="lazy"
+                  decoding="async"
+                  width="2500"
+                  height="1875"
                 />
               </div>
               <p 
@@ -1550,6 +1564,7 @@ This thing is not hype.
                   alt="Before and After Results 7"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  decoding="async"
                   width="600"
                   height="400"
                 />
@@ -1602,6 +1617,7 @@ This thing is not hype.
                   alt="Before and After Results 8"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  decoding="async"
                   width="600"
                   height="400"
                 />
@@ -1677,6 +1693,7 @@ This thing is not hype.
                   alt="WhatsApp testimonial from Hajia Maryam about her edges and confidence"
                   className="w-full h-auto object-contain"
                   loading="lazy"
+                  decoding="async"
                   width="600"
                   height="800"
                 />
@@ -1718,6 +1735,9 @@ This thing is not hype.
               className="w-auto h-auto"
               style={{ maxWidth: '900px !important', width: '900px !important' }}
               loading="lazy"
+              decoding="async"
+              width="900"
+              height="675"
             />
           </div>
 

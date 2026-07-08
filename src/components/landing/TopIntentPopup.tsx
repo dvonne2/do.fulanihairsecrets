@@ -84,7 +84,10 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                   src={bundleSystemImg}
                   alt="Fulani Hair Gro Self Love Plus bundle"
                   loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-contain"
+                  width="260"
+                  height="195"
                 />
               </div>
             </div>

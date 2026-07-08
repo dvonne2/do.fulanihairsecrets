@@ -36,9 +36,6 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [uiReady, setUiReady] = useState(false);
-  const [TooltipProviderComp, setTooltipProviderComp] = useState<React.ComponentType<{ children: React.ReactNode }> | null>(null);
-  const [ToasterComp, setToasterComp] = useState<React.ComponentType | null>(null);
-  const [SonnerComp, setSonnerComp] = useState<React.ComponentType | null>(null);
 
   // Load GA4 script dynamically to avoid unsafe redirect errors
   useEffect(() => {
@@ -61,34 +58,14 @@ const App = () => {
     return () => window.clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    if (!uiReady) return;
-    let cancelled = false;
-    void import('@/components/ui/tooltip').then((m) => {
-      if (!cancelled) setTooltipProviderComp(() => m.TooltipProvider);
-    });
-    void import('@/components/ui/toaster').then((m) => {
-      if (!cancelled) setToasterComp(() => m.Toaster);
-    });
-    void import('@/components/ui/sonner').then((m) => {
-      if (!cancelled) setSonnerComp(() => m.Toaster);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [uiReady]);
-
   const Providers = useMemo(() => {
-    if (!TooltipProviderComp) return ({ children }: { children: React.ReactNode }) => <>{children}</>;
-    return ({ children }: { children: React.ReactNode }) => <TooltipProviderComp>{children}</TooltipProviderComp>;
-  }, [TooltipProviderComp]);
+    return ({ children }: { children: React.ReactNode }) => <>{children}</>;
+  }, []);
 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <Providers>
-          {ToasterComp ? <ToasterComp /> : null}
-          {SonnerComp ? <SonnerComp /> : null}
           <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             {/* Valentine promo ended - components removed */}
             <AnalyticsLoader />

@@ -44,6 +44,9 @@ export const IndustryTruth: React.FC = () => {
                 alt="Simple illustration showing how DHT affects hair follicles"
                 className="w-full max-w-xs md:max-w-sm object-contain"
                 loading="lazy"
+                decoding="async"
+                width="400"
+                height="300"
               />
             </div>
             <div className="bg-background/60 rounded-2xl border border-gold/20 p-3 md:p-4 flex items-center justify-center">
@@ -52,6 +55,9 @@ export const IndustryTruth: React.FC = () => {
                 alt="Close-up illustration of a healthy hair follicle after DHT is controlled"
                 className="w-full max-w-xs md:max-w-sm object-contain"
                 loading="lazy"
+                decoding="async"
+                width="400"
+                height="300"
               />
             </div>
           </div>

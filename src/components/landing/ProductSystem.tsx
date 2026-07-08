@@ -74,12 +74,13 @@ export const ProductSystem = () => {
                 </div>
               )}
               <div className={`h-48 md:h-56 flex items-center justify-center mb-4 relative ${product.bestseller ? 'pomade-glow' : ''}`}>
-                <img 
-                  src={product.image} 
+                <img
+                  src={product.image}
                   alt={product.name}
                   width={336}
                   height={336}
                   loading="lazy"
+                  decoding="async"
                   className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-105"
                   style={{ filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.4))' }}
                 />
@@ -167,6 +168,9 @@ export const ProductSystem = () => {
                 alt="Fulani Hair Gro Pomade"
                 className="absolute -bottom-2 -right-2 w-12 h-12 object-contain opacity-30"
                 loading="lazy"
+                decoding="async"
+                width="48"
+                height="48"
               />
               <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-gold mb-3 shadow-lg">
                 <img 
@@ -174,6 +178,9 @@ export const ProductSystem = () => {
                   alt={item.name}
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width="80"
+                  height="80"
                 />
               </div>
               <p className="font-cinzel text-base text-gold">{item.name}</p>

@@ -165,6 +165,9 @@ export const IngredientsSection: React.FC = () => {
                 alt="Gentle illustration of hair follicles becoming thicker and healthier over time"
                 className="w-full max-w-sm md:max-w-md object-contain rounded-xl border border-gold/30"
                 loading="lazy"
+                decoding="async"
+                width="400"
+                height="300"
               />
             </div>
           </div>

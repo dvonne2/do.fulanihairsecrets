@@ -109,6 +109,9 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
               src={item.image}
               alt={item.name}
               loading="lazy"
+              decoding="async"
+              width="36"
+              height="36"
               style={{
                 width: 36, height: 36, borderRadius: 8,
                 objectFit: "cover", background: "#F3F4F6",
