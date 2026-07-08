@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const erpnextWrite = (async () => {
     const url = process.env.ERPNEXT_INGEST_URL;
-    const secret = process.env.ERPNEXT_WEBHOOK_SECRET?.replace(/\\n/g, '\n').replace(/\n/g, '');
+    const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
     if (!url || !secret) { console.error('[ERPNext] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
     try {
       const response = await fetch(url, {
