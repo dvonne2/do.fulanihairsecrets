@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const erpnextWrite = (async () => {
     const url = process.env.ERPNEXT_INGEST_URL;
-    const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
+    const secret = process.env.ERPNEXT_WEBHOOK_SECRET?.replace(/\\n/g, '\n').replace(/\n/g, '');
     if (!url || !secret) { console.error('[ERPNext] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
     try {
       const response = await fetch(url, {
@@ -58,7 +58,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
     const sheetId = process.env.SHEET_ID;
-    if (!email || !key || !sheetId) { console.error('[Sheets] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
+    if (!email || !key || !sheetId) { 
+      console.error('[Sheets] Missing env vars', { hasEmail: !!email, hasKey: !!key, hasSheetId: !!sheetId }); 
+      return { ok: false, error: 'Missing env vars' }; 
+    }
     try {
       const auth = new google.auth.JWT(email, undefined, key, ['https://www.googleapis.com/auth/spreadsheets']);
       const sheets = google.sheets({ version: 'v4', auth });
@@ -73,7 +76,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
       console.log('[Sheets] Success');
       return { ok: true };
-    } catch (e: any) { console.error('[Sheets]', e.message); return { ok: false, error: e.message }; }
+    } catch (e: any) { 
+      console.error('[Sheets]', e.message); 
+      console.error('[Sheets] Full error:', JSON.stringify(e, null, 2));
+      return { ok: false, error: e.message }; 
+    }
   })();
 
   const results = await Promise.allSettled([erpnextWrite, sheetsWrite]);
