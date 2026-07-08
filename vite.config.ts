@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from 'fs';
 import { partytownVite } from '@qwik.dev/partytown/utils';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const copyCriticalFiles = () => ({
   name: 'copy-critical-files',
@@ -54,7 +55,13 @@ export default defineConfig({
   plugins: [
     partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }),
     react(),
-    copyCriticalFiles()
+    copyCriticalFiles(),
+    visualizer({
+      filename: 'dist/stats.html',
+      open: false,
+      gzipSize: true,
+      brotliSize: true,
+    })
   ],
   resolve: {
     alias: {
