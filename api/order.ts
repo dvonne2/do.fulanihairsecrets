@@ -7,8 +7,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const body = req.body;
-  if (!body.name || !body.phone || !body.address || !body.state || !body.package || !body.amount) {
-    return res.status(400).json({ ok: false, error: 'Missing required fields' });
+  const missing = [];
+  if (!body.name) missing.push('name');
+  if (!body.phone) missing.push('phone');
+  if (!body.address) missing.push('address');
+  if (!body.state) missing.push('state');
+  if (!body.package) missing.push('package');
+  if (!body.amount) missing.push('amount');
+  if (missing.length > 0) {
+    return res.status(400).json({ ok: false, error: `Missing required fields: ${missing.join(', ')}` });
   }
 
   const erpnextWrite = (async () => {
