@@ -2,101 +2,10 @@ import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo 
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
 import { fireTikTokAddToCart, fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
-import { WEBHOOK_URL, WEBHOOK_SECRET, FULANI_API_URL, PHONE_DISPLAY } from '@/config/api';
+import { PHONE_DISPLAY } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
-
-// Send webhook with no-cors for Google Apps Script compatibility
-async function sendToWebhook(payload: Record<string, any>): Promise<boolean> {
-  try {
-    // CRITICAL: no-cors is mandatory for Google Apps Script
-    await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      mode: "no-cors" 
-    });
-    return true;
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return false;
-  }
-}
-
-const submitToFulani = async (formData) => {
-  const payload = {
-    secret: WEBHOOK_SECRET,
-    customerFullName: formData.name || formData.customerName || formData.fullName,
-    phoneNumber: formData.phone || formData.phoneNumber || formData.tel,
-    alternativePhone: formData.whatsapp || formData.altPhone || formData.phone,
-    email: formData.email || '',
-    packageSelected: formData.package || formData.packageName || formData.selectedPackage,
-    state: formData.state || '',
-    lga: formData.lga || formData.city || formData.area || '',
-    fullAddress: formData.address || formData.fullAddress || formData.deliveryAddress || '',
-    landmark: formData.landmark || formData.nearestLandmark || '',
-    deliveryFee: formData.deliveryFee || formData.shipping || 3000,
-    preferredDeliveryDate: formData.deliveryDate || formData.date || '',
-    preferredDeliveryTime: formData.deliveryTimeWindow || formData.deliveryTime || formData.time || '',
-    paymentMethod: formData.paymentMethod || formData.payment || 'Pay on Delivery',
-    comment: formData.comment || formData.notes || formData.message || ''
-  };
-
-  const body = new URLSearchParams(
-    Object.entries(payload).map(([k, v]) => [k, v == null ? '' : String(v)])
-  );
-
-  console.log('[OrderForm] Webhook URL:', WEBHOOK_URL);
-  console.log('[OrderForm] Payload:', payload);
-
-  try {
-    await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-      body
-    });
-    console.log('[OrderForm] Webhook sent (no-cors - response opaque)');
-
-    // Parallel POST to ERPNext (fire-and-forget, does not block)
-    const erpnextPayload = {
-      order_id: formData.orderId,
-      customer_name: formData.name || formData.customerName || formData.fullName,
-      customer_phone: formData.phone || formData.phoneNumber || formData.tel,
-      customer_email: formData.email || '',
-      package_name: formData.package || formData.packageName || formData.selectedPackage,
-      total: packages.find(p => p.name === (formData.package || formData.packageName || formData.selectedPackage))?.price || 0,
-      delivery_fee: formData.deliveryFee || formData.shipping || 3000,
-      state: formData.state || '',
-      lga: formData.lga || formData.city || formData.area || '',
-      address: formData.address || formData.fullAddress || formData.deliveryAddress || '',
-      landmark: formData.landmark || formData.nearestLandmark || '',
-      source: 'React-Web',
-      aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
-      utm_source: localStorage.getItem('src') || '',
-      payment_method: formData.paymentMethod || formData.payment || 'Pay on Delivery',
-    };
-
-    fetch(import.meta.env.VITE_ERPNEXT_INGEST_URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Secret': import.meta.env.VITE_ERPNEXT_WEBHOOK_SECRET,
-      },
-      body: JSON.stringify(erpnextPayload),
-    })
-      .then(r => r.json())
-      .then(r => console.log('[ERPNext sync]', r))
-      .catch(err => console.error('[ERPNext sync error]', err));
-
-    return { success: true };
-  } catch (error) {
-    console.error('Fulani API error:', error);
-    return { success: false, error };
-  }
-};
 
 // Debounce hook for performance optimization
 const useDebounce = (value, delay) => {
@@ -374,27 +283,49 @@ function OrderFormEmbed() {
     setSubmitting(true);
 
     try {
-      const formData = {
-        ...form,
-        orderId: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-      };
+      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      const packagePrice = packages.find(p => p.name === form.package)?.price || 0;
 
-      const result = await submitToFulani(formData);
+      const response = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          name: form.name,
+          phone: form.phone,
+          email: form.email || '',
+          address: form.address,
+          state: form.state,
+          package: form.package,
+          amount: packagePrice,
+          deliveryDate: form.deliveryDate || '',
+          lga: form.lga || '',
+          landmark: form.landmark || '',
+          deliveryFee: 3000,
+          paymentMethod: 'Pay on Delivery',
+          aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
+          utm_source: localStorage.getItem('src') || '',
+          click_id: '',
+          landing_page_url: window.location.href,
+        }),
+      });
 
-      if (result.success) {
+      const result = await response.json();
+
+      if (result.ok) {
         alert('Order submitted successfully!');
         
         // Fire conversion events
         fireInitiateCheckout({
           content_name: form.package,
           content_ids: [form.package],
-          value: packages.find(p => p.name === form.package)?.price || 0,
+          value: packagePrice,
           currency: 'NGN',
         });
 
         fireTikTokInitiateCheckout({
           content_name: form.package,
-          value: packages.find(p => p.name === form.package)?.price || 0,
+          value: packagePrice,
           currency: 'NGN',
         });
 
@@ -403,7 +334,7 @@ function OrderFormEmbed() {
           window.location.href = '/thank-you';
         }, 1500);
       } else {
-        alert('Failed to submit order. Please try again.');
+        alert(result.error || 'Failed to submit order. Please try again.');
       }
     } catch (error) {
       console.error('Submit error:', error);
