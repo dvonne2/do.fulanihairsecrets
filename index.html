@@ -11,22 +11,22 @@
     <meta property="og:title" content="Fulani Hair Gro | Real Results Guaranteed" />
     <meta property="og:description" content="Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/hero.webp" />
+    <meta property="og:image" content="https://fulanihairsecrets.com/assets/hero-fulani-small.webp" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Fulani Hair Gro | Real Results Guaranteed" />
     <meta name="twitter:description" content="Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO" />
-    <meta name="twitter:image" content="/hero.webp" />
+    <meta name="twitter:image" content="https://fulanihairsecrets.com/assets/hero-fulani-small.webp" />
     
-    <link rel="canonical" href="https://fulanihairgro.com" />
+    <link rel="canonical" href="https://fulanihairsecrets.com/" />
     
     <link rel="preconnect" href="https://apis.fulanihairsecrets.com" crossorigin />
     <link rel="preconnect" href="https://vitalvida.systemforce.ng" crossorigin />
     <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
 
     <!-- Preload critical hero images for faster LCP -->
-    <link rel="preload" href="/assets/hero-fulani-small.webp" as="image" type="image/webp" fetchpriority="high" />
-    <link rel="preload" href="/assets/hero-mobile.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="/assets/hero-mobile.webp" as="image" type="image/webp" fetchpriority="high" media="(max-width: 767px)" />
+    <link rel="preload" href="/assets/hero-fulani-small.webp" as="image" type="image/webp" fetchpriority="high" media="(min-width: 768px)" />
     
     <link rel="icon" type="image/webp" href="/assets/favicon.webp" />
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
@@ -41,11 +41,6 @@
       body{margin:0;background:hsl(0 0% 100%);color:hsl(0 0% 10%)}
       *,*::before,*::after{box-sizing:border-box}
       .font-cinzel{font-family:'Cinzel',serif;font-weight:600}
-      /* Splash screen styles */
-      #splash{min-height:100vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
-      .splash-spinner{width:60px;height:60px;border:3px solid rgba(218,165,32,0.2);border-top-color:#DAA520;border-radius:50%;animation:sp .8s linear infinite;margin-bottom:24px}
-      .splash-title{font-family:Montserrat,sans-serif;color:#DAA520;font-size:18px;font-weight:600;letter-spacing:2px;margin:0}
-      .splash-subtitle{font-family:Montserrat,sans-serif;color:rgba(255,255,255,0.6);font-size:12px;margin:8px 0 0;font-weight:400}
       .font-sans{font-family:'Montserrat',sans-serif}
       .font-serif{font-family:Georgia,serif}
       .text-gold{color:#B80F66!important}
@@ -76,9 +71,8 @@
     
     
     <link rel="preload" href="/fonts/montserrat-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cinzel-600-normal.woff2" as="font" type="font/woff2" crossorigin />
     
-    <link rel="preconnect" href="https://apis.fulanihairsecrets.com" crossorigin />
-    <link rel="dns-prefetch" href="https://apis.fulanihairsecrets.com" />
     
     <script>
       // Defer perf observer — debug only, must not block render
@@ -206,14 +200,46 @@
 
   <body>
     <div id="root">
-      <!-- Instant loading screen: renders before JS downloads. Removed by React hydration/mount. -->
-      <div id="splash">
-        <div class="splash-spinner"></div>
-        <p class="splash-title">FULANI HAIR GRO</p>
-        <p class="splash-subtitle">Loading your experience...</p>
-      </div>
-      <style>#splash{opacity:1;transition:opacity .3s}@keyframes sp{to{transform:rotate(360deg)}}</style>
-      <script>setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},8000)</script>
+      <!-- Pre-hydration static content matching HeroSection -->
+      <section class="pt-32 md:pt-44 pb-16 md:pb-32 relative overflow-hidden royal-blue-gradient valentine-pattern">
+        <div class="absolute inset-0 arabian-pattern"></div>
+        <div class="absolute inset-0 moroccan-tile opacity-30"></div>
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+          <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div class="text-center lg:text-left">
+              <p class="inline-block font-sans text-base md:text-lg mb-4 bg-[#B80F66] text-white px-3 py-1.5 rounded">
+                Tired of watching your edges disappear? 😔
+              </p>
+              <h1 class="font-cinzel text-3xl md:text-5xl lg:text-6xl font-semibold mb-6 leading-tight">
+                <span class="text-foreground">STOP HAIR LOSS IN</span>
+                <br />
+                <span class="animate-shimmer">7 DAYS OR LESS</span>
+              </h1>
+              <p class="font-serif text-xl md:text-2xl text-foreground/80 mb-4 italic">
+                Join 5,247 Nigerian women who restored their crowning glory...
+              </p>
+            </div>
+            <div class="block lg:hidden max-w-xs mx-auto">
+              <div class="rounded-3xl mega-glow pomade-glow p-5 bg-background/10">
+                <div class="relative w-full aspect-square">
+                  <img
+                    src="/assets/hero-fulani-small.webp"
+                    srcset="/assets/hero-fulani-small.webp 300w, /assets/hero-mobile.webp 400w, /assets/hero-fulani-700.webp 700w"
+                    sizes="(max-width: 1023px) 300px, 400px"
+                    alt="Fulani Hair Gro Complete 3-Step System"
+                    class="absolute inset-0 w-full h-full object-contain"
+                    width="300"
+                    height="300"
+                    loading="eager"
+                    decoding="async"
+                    fetchpriority="high"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
     <script type="module" src="/src/main.tsx"></script>
 
