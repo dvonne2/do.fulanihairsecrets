@@ -709,10 +709,10 @@ function OrderFormEmbed() {
           </div>
         </div>
 
-        {/* Delivery Type Selection */}
+        {/* Delivery Fee Selection */}
         <div style={{ marginBottom: '30px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Delivery Type
+            Delivery Fee
           </label>
           <div style={{ display: 'flex', gap: '12px' }}>
             <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'next_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'next_day' ? '#f0f4ff' : '#fff' }}>
