@@ -115,12 +115,13 @@ export const TopStoryBanner = () => {
         </p>
         
         {/* Bundle Image */}
-        <div className="mt-6">
+        <div className="mt-6 aspect-square">
           <img
             src={`${BASE_PATH}assets/hero2.webp`}
             alt="Product Bundle"
-            className="w-full h-auto"
-            loading="lazy"
+            className="w-full h-full object-contain"
+            loading="eager"
+            fetchpriority="high"
             decoding="async"
             width="665"
             height="665"
@@ -747,11 +748,11 @@ export const TopStoryBanner = () => {
               
               <div id="order-form">
                 {afterHero ? (
-                  <Suspense fallback={<div className="h-[700px] md:h-[600px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
+                  <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
                     <OrderForm />
                   </Suspense>
                 ) : (
-                  <div className="h-[700px] md:h-[600px]" />
+                  <div className="min-h-[400px]" />
                 )}
               </div>
             </section>
