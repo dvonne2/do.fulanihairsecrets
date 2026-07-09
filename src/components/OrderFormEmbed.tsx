@@ -1,3 +1,4 @@
+import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireAddToCart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
@@ -59,14 +60,6 @@ const lgasByState: { [key: string]: string[] } = {
   'Kano': ['Kano Municipal', 'Dala', 'Gwale', 'Fagge', 'Tarauni', 'Nassarawa', 'Kumbotso', 'Ungogo'],
   'Kaduna': ['Kaduna North', 'Kaduna South', 'Chikun', 'Igabi', 'Zaria', 'Sabon Gari'],
 };
-
-const packages = [
-  { id: 'PKG-001', slug: 'self_love_plus', name: 'Self Love Plus', price: 32750, originalPrice: 55000, discount: 40, items: '1× Shampoo | 1× Pomade | 1× Conditioner', supply: 'The 30-Day Test: Experience immediate scalp relief and test the formula before committing to a full recovery.', freeItems: 'Important: Hair recovery is a biological cycle. While the Trial Kit resets your scalp, permanent edge restoration and follicle wake-up typically require 60–90 days of consistent 3-step use.', isPopular: false },
-  { id: 'PKG-002', slug: 'self_love_return', name: 'Self Love Return', price: 42750, originalPrice: 75000, discount: 43, items: '3× Pomade', supply: '3-Month Maintenance: <strong>For returning fans only</strong> — first-timers need the Shampoo to purify your scalp for real results.', freeItems: '', isPopular: false },
-  { id: 'PKG-003', slug: 'self_love_b2gof', name: 'Self Love B2GOF', price: 52750, originalPrice: 110000, discount: 52, items: '2× Shampoo | 2× Pomade', supply: '3-Month Scalp Reset: Essential for new customers to purify the scalp and clear dandruff so the Pomade can trigger real growth.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade', isPopular: false },
-  { id: 'PKG-004', slug: 'self_love_plus_b2gof', name: 'Self Love Plus B2GOF', price: 66750, originalPrice: 165000, discount: 60, items: '2× Shampoo | 2× Pomade | 2× Conditioner', supply: '🔥 3-Month Hair Recovery System - If your hair is breaking, thinning, or refusing to grow, this set is your reset. In just 90 days, it will wake up dormant follicles, restore your scalp, and have you seeing the fuller, longer hair you\'ve been waiting for. Affordable. Effective. Built for serious results.', freeItems: '+ FREE: 1 500ml Shampoo + 1 150g Pomade + 1 500ml Conditioner', isPopular: true },
-  { id: 'PKG-005', slug: 'family_saves', name: 'Family Saves', price: 215000, originalPrice: 550000, discount: 61, items: '6× Shampoo | 6× Pomade | 6× Conditioner', supply: '12 Month Supply', freeItems: '+ FREE: 4 500ml Shampoos + 4 150g Pomades + 4 500ml Conditioners', isPopular: true },
-];
 
 // Generate unique Order ID - YYMMDDHHmm format
 const generateOrderId = (): string => {
@@ -293,7 +286,7 @@ function OrderFormEmbed() {
       const orderId = String(
         (Date.now() % 100000) * 100000 + Math.floor(Math.random() * 100000)
       ).padStart(10, "0");
-      const pkg = packages.find(p => p.slug === form.package);
+      const pkg = PACKAGES.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
 
       if (packagePrice === 0) {
