@@ -290,7 +290,9 @@ function OrderFormEmbed() {
     setSubmitting(true);
 
     try {
-      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+      const orderId = String(
+        (Date.now() % 100000) * 100000 + Math.floor(Math.random() * 100000)
+      ).padStart(10, "0");
       const pkg = packages.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
 
