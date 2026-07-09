@@ -57,7 +57,7 @@ export const BundleSelector = () => {
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
             <ul>
               <li><strong>{pkg.items}</strong></li>
-              <li>{pkg.freeItems}</li>
+              {pkg.freeItems && <li>{pkg.freeItems}</li>}
               <li><strong>90-day money-back guarantee</strong></li>
               <li>Nationwide delivery</li>
               <li>Pay on delivery</li>
