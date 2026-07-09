@@ -40,10 +40,6 @@ export const BundleSelector = () => {
         @media (prefers-reduced-motion:reduce){.bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}}
       `}</style>
       
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-      
       <header className="intro">
         <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
         <h1>Choose the bundle that fits your hair journey</h1>

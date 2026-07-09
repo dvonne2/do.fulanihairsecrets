@@ -26,18 +26,26 @@ export const StickyElements = memo(({
   }, []);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      // Hide when user is near the order form (so it doesn't overlap)
-      const form = document.getElementById('order-form');
-      if (form) {
-        const rect = form.getBoundingClientRect();
-        // Form is visible on screen — hide the bar
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setVisible(false);
-          return;
-        }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Hide when user is near the order form (so it doesn't overlap)
+          const form = document.getElementById('order-form');
+          if (form) {
+            const rect = form.getBoundingClientRect();
+            // Form is visible on screen — hide the bar
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              setVisible(false);
+              ticking = false;
+              return;
+            }
+          }
+          setVisible(true);
+          ticking = false;
+        });
+        ticking = true;
       }
-      setVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

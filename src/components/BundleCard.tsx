@@ -25,8 +25,6 @@ export default function BundleCard({ onSelect }: { onSelect?: (bundle: any) => v
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-
         .bc-card {
           background: #ffffff;
           border-radius: 24px;
