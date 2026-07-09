@@ -10,7 +10,7 @@ export function ReviewsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
   const reviewsPerPage = 5;
-  const maxVisiblePages = 8;
+  const maxVisiblePages = 5;
 
   const filteredReviews = reviews.filter((review) => {
     const query = searchQuery.toLowerCase().trim();
