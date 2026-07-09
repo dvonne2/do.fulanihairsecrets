@@ -1,6 +1,5 @@
 /* Fulani Hair Gro™ Design System - Nigerian Luxury Aesthetic */
 @import './fonts.core.css';
-@import './fonts.generated.css';
 
 @tailwind base;
 @tailwind components;
@@ -30,7 +29,7 @@
   color: #A3A3A3;
   font-size: 20px;
   font-weight: 400;
-  font-family: 'Lato', 'HelveticaNeue', 'Helvetica Neue', sans-serif;
+  font-family: 'Montserrat', 'HelveticaNeue', 'Helvetica Neue', sans-serif;
   text-transform: uppercase;
   text-decoration: none;
   text-align: center;

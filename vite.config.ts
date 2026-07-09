@@ -38,6 +38,22 @@ const copyCriticalFiles = () => ({
   }
 });
 
+const makeCssAsync = () => ({
+  name: 'make-css-async',
+  closeBundle() {
+    const indexPath = path.resolve(__dirname, 'dist', 'index.html');
+    if (fs.existsSync(indexPath)) {
+      let html = fs.readFileSync(indexPath, 'utf-8');
+      // Replace stylesheet links with async loading pattern
+      html = html.replace(
+        /<link rel="stylesheet" href="(\/assets\/main-[^"]+\.css)">/g,
+        '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
+      );
+      fs.writeFileSync(indexPath, html);
+    }
+  }
+});
+
 export default defineConfig({
   base: '/',
   server: {
@@ -56,6 +72,7 @@ export default defineConfig({
     partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }),
     react(),
     copyCriticalFiles(),
+    makeCssAsync(),
     visualizer({
       filename: 'dist/stats.html',
       open: false,
