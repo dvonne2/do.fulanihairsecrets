@@ -52,7 +52,7 @@ export const BundleSelector = () => {
             {pkg.isPopular && <span className="badge">★ Best Deal</span>}
             {pkg.isPopular && <p className="tier">Best Value</p>}
             <h2 className="pkg">{pkg.name}</h2>
-            <p className="was">{formatPrice(pkg.originalPrice)}</p>
+            <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
             <ul>

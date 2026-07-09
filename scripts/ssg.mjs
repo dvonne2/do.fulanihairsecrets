@@ -77,6 +77,15 @@ async function ssg() {
 
     writeFileSync(DIST_INDEX, html, 'utf-8');
     console.log(`[ssg] Wrote pre-rendered index.html (${(html.length / 1024).toFixed(1)} KB total)`);
+
+    // Re-apply async CSS pattern after SSG (SSG overwrites the plugin's changes)
+    html = readFileSync(DIST_INDEX, 'utf-8');
+    html = html.replace(
+      /<link rel="stylesheet" href="(\/assets\/main-[^"]+\.css)">/g,
+      '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
+    );
+    writeFileSync(DIST_INDEX, html, 'utf-8');
+    console.log('[ssg] Applied async CSS pattern to main stylesheet');
   } catch (err) {
     console.error('[ssg] FAILED:', err.message);
     if (err.stack) console.error(err.stack);
