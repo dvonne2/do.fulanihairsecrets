@@ -50,7 +50,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           <p className="font-sans text-gold mt-2">Verified purchases only</p>
         </div>
 
-        {/* Featured Review (no headshot image) */}
+        {/* Verified Purchase Review (no headshot image) */}
         <div className="luxury-card rounded-3xl p-8 md:p-12 mb-8 text-center mega-glow">
           <div className="flex justify-center gap-1 mb-4">
             {Array(5).fill(0).map((_, j) => <span key={j} className="text-gold text-2xl">★</span>)}
