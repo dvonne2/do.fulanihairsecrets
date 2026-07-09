@@ -197,7 +197,7 @@ export function ReviewsList() {
                 </div>
                 {review.status === 'featured' && (
                   <span className="text-xs font-medium bg-yellow-500 text-white px-2 py-0.5 rounded-full">
-                    Featured
+                    Verified Purchase
                   </span>
                 )}
               </div>
