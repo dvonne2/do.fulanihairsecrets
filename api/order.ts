@@ -4,17 +4,6 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const cut = (v: any, n = 140) => (v == null ? "" : String(v)).slice(0, n);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('env present:', {
-    ingest: !!process.env.ERPNEXT_INGEST_URL,
-    secret: !!process.env.ERPNEXT_WEBHOOK_SECRET,
-    gsaEmail: !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    gKey: !!process.env.GOOGLE_PRIVATE_KEY,
-    sheetId: !!process.env.SHEET_ID
-  });
-
-  const s = process.env.ERPNEXT_WEBHOOK_SECRET || "";
-  console.log("secret len:", s.length, "| preview:", s.slice(0,4) + "..." + s.slice(-4), "| hasWhitespace:", /\s/.test(s));
-
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const body = req.body;
@@ -99,19 +88,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (erpnextOk || sheetOk) {
     return res.status(200).json({ ok: true, orderId: body.orderId, erpnext: erpnextOk, sheet: sheetOk });
   } else {
-    const erpnextError = erpnextResult.status === 'rejected' 
-      ? String(erpnextResult.reason) 
-      : (erpnextResult.value?.error || 'Unknown error');
-    const sheetError = sheetResult.status === 'rejected' 
-      ? String(sheetResult.reason) 
-      : (sheetResult.value?.error || 'Unknown error');
     return res.status(502).json({ 
       ok: false, 
       error: 'Order could not be recorded', 
       erpnext: false, 
-      sheet: false,
-      erpnextError,
-      sheetError
+      sheet: false
     });
   }
 }
