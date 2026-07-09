@@ -20,20 +20,20 @@ interface TestimonialsProps {
 }
 
 const testimonials = [
-  { name: "Hajia Fatima Al-Maktoum", location: "Banana Island, Lagos", text: "Wallahi, I've spent millions on products from Dubai, London, everywhere. This is the ONLY thing that actually works. My stylist at the Four Seasons couldn't believe my edges.", image: result1 },
-  { name: "Chief (Mrs.) Adaeze Okonkwo", location: "Maitama, Abuja", text: "When I say this product is worth more than its weight in gold, I mean it. Finally, a Nigerian brand that matches my standards.", image: result2 },
-  { name: "Alhaja Maryam Ibrahim", location: "Ikoyi, Lagos", text: "I was about to fly to Turkey for a transplant. ₦15 million! My daughter said try this first. SubhanAllah, look at my hair now.", image: result3 },
-  { name: "Dr. (Mrs.) Oluwaseun Adeleke", location: "Lekki Phase 1", text: "As a consultant dermatologist, I'm very particular. This formula is scientifically sound AND it works. I recommend it to my VIP patients.", image: result4 },
-  { name: "Princess Zainab Sanusi", location: "Kano / Dubai", text: "I split my time between Nigeria and UAE. Trust me, nothing in Dubai Mall compares. My edges are FULL again.", image: result5 },
-  { name: "Otunba (Mrs.) Nike Adeyemi", location: "Victoria Island", text: "At my age, I thought my hair glory days were over. This pomade proved me wrong. My grandchildren say I look 20 years younger!", image: result6 },
-  { name: "Mama Titi Johnson", location: "Ikoyi, Lagos", text: "My gray hair has never looked this healthy and full. I'm 62 and getting more compliments than I did at 40!", image: result8 },
-  { name: "Yetunde Martins", location: "Ogun", text: "Perfect for protective styling. My locs are growing faster and my scalp is so healthy now.", image: result11 },
-  { name: "Funke Akindele", location: "V.I. Lagos", text: "My edges are laid and my hairline is back! I can finally do sleek buns without worrying.", image: result12 },
-  { name: "Chiamaka Dike", location: "Warri", text: "My afro is so full now that people ask if it's real. Yes it is, thanks to Fulani Hair Gro!", image: result14 },
-  { name: "Mrs. Folake T.", location: "Victoria Island, Lagos", text: "The elegance and class this product brings! I feel like royalty every time I style my hair.", image: result16 },
-  { name: "Zainab O.", location: "Abuja", text: "My hair has never looked this luxurious. The compliments I get at every event are endless!", image: result17 },
-  { name: "Nkechi Iweala", location: "Onitsha", text: "I love holding these products! You can feel the quality. My natural hair is thriving!", image: result19 },
-  { name: "Ifeoma Chukwu", location: "Enugu", text: "Best investment I've made for my hair. The complete system works wonders!", image: result20 },
+  { name: "Hajia Fatima Al-Maktoum", location: "Banana Island, Lagos", headline: "Finally something that works", text: "Wallahi, I've spent millions on products from Dubai, London, everywhere. This is the ONLY thing that actually works. My stylist at the Four Seasons couldn't believe my edges.", image: result1 },
+  { name: "Chief (Mrs.) Adaeze Okonkwo", location: "Maitama, Abuja", headline: "Worth more than gold", text: "When I say this product is worth more than its weight in gold, I mean it. Finally, a Nigerian brand that matches my standards.", image: result2 },
+  { name: "Alhaja Maryam Ibrahim", location: "Ikoyi, Lagos", headline: "Saved ₦15 million on transplant", text: "I was about to fly to Turkey for a transplant. ₦15 million! My daughter said try this first. SubhanAllah, look at my hair now.", image: result3 },
+  { name: "Dr. (Mrs.) Oluwaseun Adeleke", location: "Lekki Phase 1", headline: "Scientifically sound formula", text: "As a consultant dermatologist, I'm very particular. This formula is scientifically sound AND it works. I recommend it to my VIP patients.", image: result4 },
+  { name: "Princess Zainab Sanusi", location: "Kano / Dubai", headline: "Better than Dubai Mall", text: "I split my time between Nigeria and UAE. Trust me, nothing in Dubai Mall compares. My edges are FULL again.", image: result5 },
+  { name: "Otunba (Mrs.) Nike Adeyemi", location: "Victoria Island", headline: "20 years younger", text: "At my age, I thought my hair glory days were over. This pomade proved me wrong. My grandchildren say I look 20 years younger!", image: result6 },
+  { name: "Mama Titi Johnson", location: "Ikoyi, Lagos", headline: "Healthier than at 40", text: "My gray hair has never looked this healthy and full. I'm 62 and getting more compliments than I did at 40!", image: result8 },
+  { name: "Yetunde Martins", location: "Ogun", headline: "Perfect for protective styling", text: "Perfect for protective styling. My locs are growing faster and my scalp is so healthy now.", image: result11 },
+  { name: "Funke Akindele", location: "V.I. Lagos", headline: "Hairline is back", text: "My edges are laid and my hairline is back! I can finally do sleek buns without worrying.", image: result12 },
+  { name: "Chiamaka Dike", location: "Warri", headline: "People ask if it's real", text: "My afro is so full now that people ask if it's real. Yes it is, thanks to Fulani Hair Gro!", image: result14 },
+  { name: "Mrs. Folake T.", location: "Victoria Island, Lagos", headline: "Feel like royalty", text: "The elegance and class this product brings! I feel like royalty every time I style my hair.", image: result16 },
+  { name: "Zainab O.", location: "Abuja", headline: "Endless compliments", text: "My hair has never looked this luxurious. The compliments I get at every event are endless!", image: result17 },
+  { name: "Nkechi Iweala", location: "Onitsha", headline: "Natural hair thriving", text: "I love holding these products! You can feel the quality. My natural hair is thriving!", image: result19 },
+  { name: "Ifeoma Chukwu", location: "Enugu", headline: "Best investment for my hair", text: "Best investment I've made for my hair. The complete system works wonders!", image: result20 },
 ];
 
 export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) => {
@@ -54,6 +54,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
           <div className="flex justify-center gap-1 mb-4">
             {Array(5).fill(0).map((_, j) => <span key={j} className="text-gold text-2xl">★</span>)}
           </div>
+          <p className="font-cinzel text-lg text-gold mb-3">{testimonials[activeIndex].headline}</p>
           <p className="font-serif text-xl md:text-2xl italic text-white mb-6 max-w-3xl mx-auto">
             "{testimonials[activeIndex].text}"
           </p>
@@ -89,6 +90,7 @@ export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) =>
                 </div>
               </div>
               <div className="flex gap-1 mb-3">{Array(5).fill(0).map((_, j) => <span key={j} className="text-gold">★</span>)}</div>
+              <p className="font-cinzel text-sm text-gold mb-2">{review.headline}</p>
               <p className="font-sans text-sm text-white mb-4">"{review.text}"</p>
               <div className="ornate-divider mb-3"></div>
               <span className="text-xs text-[#FF1493]">✓ Verified Purchase</span>
