@@ -189,15 +189,16 @@ const postOrderToFulani = (bodyString: string) => {
 };
 
 function OrderFormEmbed() {
-  const [form, setForm] = useState({ 
-    name: '', 
+  const [form, setForm] = useState({
+    name: '',
     phone: '',
     whatsapp: '',
     email: '',
     address: '',
     state: '',
     package: '',
-    deliveryDate: ''
+    deliveryDate: '',
+    deliveryType: 'next_day'
   });
 
   // Auto-select package from URL parameter
@@ -307,7 +308,7 @@ function OrderFormEmbed() {
         deliveryDate: form.deliveryDate || '',
         lga: form.lga || '',
         landmark: form.landmark || '',
-        deliveryFee: 3000,
+        deliveryFee: form.deliveryType === 'same_day' ? 5000 : 3000,
         paymentMethod: 'Pay on Delivery',
         aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
         utm_source: localStorage.getItem('src') || '',
@@ -704,6 +705,25 @@ function OrderFormEmbed() {
                 style={{ cursor: 'pointer' }}
               />
               <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Family Saves - ₦215,000 (6 shampoo, 6 pomade, 6 conditioner + 4 free each)</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Delivery Type Selection */}
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+            Delivery Type
+          </label>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'next_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'next_day' ? '#f0f4ff' : '#fff' }}>
+              <input type="radio" name="deliveryType" value="next_day" checked={form.deliveryType === 'next_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
+              <span style={{ fontWeight: '600', color: '#333' }}>Next Day</span>
+              <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦3,000</span>
+            </label>
+            <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'same_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'same_day' ? '#f0f4ff' : '#fff' }}>
+              <input type="radio" name="deliveryType" value="same_day" checked={form.deliveryType === 'same_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
+              <span style={{ fontWeight: '600', color: '#333' }}>Same Day</span>
+              <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦5,000</span>
             </label>
           </div>
         </div>
