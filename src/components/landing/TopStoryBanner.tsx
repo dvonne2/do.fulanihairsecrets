@@ -115,7 +115,7 @@ export const TopStoryBanner = () => {
         </p>
         
         {/* Bundle Image */}
-        <div className="mt-6 aspect-square">
+        <div className="mt-6 aspect-[800/395]">
           <img
             src={`${BASE_PATH}assets/hero2.webp`}
             alt="Product Bundle"
@@ -124,7 +124,7 @@ export const TopStoryBanner = () => {
             fetchpriority="high"
             decoding="async"
             width="665"
-            height="665"
+            height="328"
           />
         </div>
 
@@ -254,7 +254,7 @@ export const TopStoryBanner = () => {
             className="block"
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '31px',
               fontWeight: '700',
               textAlign: 'center',
@@ -286,7 +286,7 @@ export const TopStoryBanner = () => {
             <h2 
               className="mb-4"
               style={{
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                 fontSize: '28px',
                 fontWeight: '700',
                 textAlign: 'center',
@@ -307,7 +307,7 @@ export const TopStoryBanner = () => {
               className="mt-4"
               style={{
                 color: '#4A4A4A',
-                fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                 fontSize: '16px',
                 fontWeight: '400',
                 textAlign: 'center',
@@ -474,7 +474,7 @@ export const TopStoryBanner = () => {
             className="block"
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '24px',
               fontWeight: '700',
               textAlign: 'center',
@@ -489,7 +489,7 @@ export const TopStoryBanner = () => {
             className="mt-6 text-left"
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '16px',
               fontWeight: '400',
               textTransform: 'none',
@@ -594,7 +594,7 @@ export const TopStoryBanner = () => {
                   <h3
                     style={{
                       color: '#A1A1AA',
-                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                       fontSize: '26px',
                       fontWeight: '300',
                       textAlign: 'left',
@@ -607,7 +607,7 @@ export const TopStoryBanner = () => {
                   <p
                     style={{
                       color: '#A1A1AA',
-                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                       fontSize: '12px',
                       fontWeight: '400',
                       textAlign: 'left',
@@ -623,7 +623,7 @@ export const TopStoryBanner = () => {
                   <p
                     style={{
                       color: '#A1A1AA',
-                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                       fontSize: '14px',
                       fontWeight: '400',
                       textAlign: 'left',
@@ -639,7 +639,7 @@ export const TopStoryBanner = () => {
                       borderRadius: '9999px',
                       padding: '8px 16px',
                       color: '#6B7280',
-                      fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+                      fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                       fontSize: '13px',
                       fontWeight: '400',
                       backgroundColor: 'transparent',
@@ -763,7 +763,7 @@ export const TopStoryBanner = () => {
             className="block"
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+              fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
               fontSize: '31px',
               fontWeight: '700',
               textAlign: 'center',
@@ -794,7 +794,7 @@ export const TopStoryBanner = () => {
           <p 
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Cinzel, serif',
               fontSize: '16px',
               fontWeight: '300',
               textAlign: 'center',
@@ -811,7 +811,7 @@ export const TopStoryBanner = () => {
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -830,7 +830,7 @@ I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tri
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -856,7 +856,7 @@ I did all that.
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -902,7 +902,7 @@ This thing is not hype.
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -918,7 +918,7 @@ This thing is not hype.
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -934,7 +934,7 @@ This thing is not hype.
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -968,7 +968,7 @@ This thing is not hype.
           className="mt-6 block"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Lato, HelveticaNeue, "Helvetica Neue", sans-serif',
+            fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
             fontSize: '31px',
             fontWeight: '700',
             textAlign: 'center',
@@ -983,7 +983,7 @@ This thing is not hype.
           className="mt-6 block"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '700',
             textAlign: 'left',
@@ -1000,7 +1000,7 @@ This thing is not hype.
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'left',
@@ -1031,7 +1031,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Cinzel, serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1065,7 +1065,7 @@ This thing is not hype.
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Arvo, serif',
+                  fontFamily: 'Cinzel, serif',
                   fontSize: '16px',
                   fontWeight: '300',
                   textAlign: 'center',
@@ -1099,7 +1099,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Cinzel, serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1133,7 +1133,7 @@ This thing is not hype.
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Arvo, serif',
+                  fontFamily: 'Cinzel, serif',
                   fontSize: '16px',
                   fontWeight: '300',
                   textAlign: 'center',
@@ -1167,7 +1167,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Cinzel, serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1208,7 +1208,7 @@ This thing is not hype.
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Arvo, serif',
+                  fontFamily: 'Cinzel, serif',
                   fontSize: '16px',
                   fontWeight: '300',
                   textAlign: 'center',
@@ -1227,7 +1227,7 @@ This thing is not hype.
           className="mt-4 block"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '20px',
             fontWeight: '700',
             textAlign: 'center',
@@ -1242,7 +1242,7 @@ This thing is not hype.
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -1258,7 +1258,7 @@ This thing is not hype.
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -1274,7 +1274,7 @@ This thing is not hype.
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '300',
             textAlign: 'center',
@@ -1292,7 +1292,7 @@ This thing is not hype.
           className="mt-6 block"
           style={{
             color: '#FFFFFF',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '16px',
             fontWeight: '700',
             textAlign: 'center',
@@ -1309,7 +1309,7 @@ This thing is not hype.
             className="text-center mb-4"
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Arvo, serif',
+              fontFamily: 'Cinzel, serif',
               fontSize: '32px',
               fontWeight: '700',
               textAlign: 'center',
@@ -1325,7 +1325,7 @@ This thing is not hype.
             className="text-center"
             style={{
               color: '#666',
-              fontFamily: 'DM Sans, sans-serif',
+              fontFamily: 'Montserrat, sans-serif',
               fontSize: '18px',
               fontWeight: '400',
               textAlign: 'center',
@@ -1362,7 +1362,7 @@ This thing is not hype.
                 />
               </div>
               <h3 style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '18px',
                 fontWeight: '700',
                 color: '#0A0A0A',
@@ -1371,7 +1371,7 @@ This thing is not hype.
                 Customer Video Review
               </h3>
               <p style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '14px',
                 color: '#666',
                 lineHeight: '1.5',
@@ -1404,7 +1404,7 @@ This thing is not hype.
                 />
               </div>
               <h3 style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '18px',
                 fontWeight: '700',
                 color: '#0A0A0A',
@@ -1413,7 +1413,7 @@ This thing is not hype.
                 Customer Success Story
               </h3>
               <p style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '14px',
                 color: '#666',
                 lineHeight: '1.5',
@@ -1446,7 +1446,7 @@ This thing is not hype.
                 />
               </div>
               <h3 style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '18px',
                 fontWeight: '700',
                 color: '#0A0A0A',
@@ -1455,7 +1455,7 @@ This thing is not hype.
                 Customer Transformation
               </h3>
               <p style={{
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
                 fontSize: '14px',
                 color: '#666',
                 lineHeight: '1.5',
@@ -1484,7 +1484,7 @@ This thing is not hype.
         <div style={{ marginTop: '31px', marginBottom: '21px' }}>
           <h2 style={{
             color: '#0A0A0A',
-            fontFamily: 'Arvo, serif',
+            fontFamily: 'Cinzel, serif',
             fontSize: '32px',
             fontWeight: '700',
             textAlign: 'center',

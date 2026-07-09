@@ -10,10 +10,10 @@ export const BundleSelector = () => {
       <style>{`
         :root{--ivory:#FBF6EC;--card:#FFFFFF;--espresso:#2B1D0E;--cocoa:#6B5638;--gold:#C9971C;--gold-deep:#A87A10;--gold-soft:#F3E3BC;--gold-wash:#FFF8E7;--rose:#8E2F3C;--rose-soft:#F9E7EA;--radius:18px}
         .bundle-selector *{margin:0;padding:0;box-sizing:border-box}
-        .bundle-selector body{font-family:'Figtree',system-ui,sans-serif;background:var(--ivory);color:var(--espresso);padding:64px 20px 88px;-webkit-font-smoothing:antialiased}
+        .bundle-selector body{font-family:'Montserrat',system-ui,sans-serif;background:var(--ivory);color:var(--espresso);padding:64px 20px 88px;-webkit-font-smoothing:antialiased}
         .bundle-selector .intro{max-width:640px;margin:0 auto 52px;text-align:center}
         .bundle-selector .intro .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft);padding:8px 18px;margin-bottom:18px}
-        .bundle-selector .intro h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.5vw,44px);line-height:1.12;letter-spacing:-0.01em}
+        .bundle-selector .intro h1{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(30px,4.5vw,44px);line-height:1.12;letter-spacing:-0.01em}
         .bundle-selector .intro p{margin-top:14px;color:var(--cocoa);font-size:16px;line-height:1.6}
         .bundle-selector .grid{max-width:1240px;margin:0 auto;display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));align-items:stretch}
         .bundle-selector .card{position:relative;background:var(--card);border:1px solid #EADFC8;border-radius:var(--radius);padding:34px 26px 28px;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(43,29,14,.04);transition:transform .18s ease, box-shadow .18s ease}
@@ -21,9 +21,9 @@ export const BundleSelector = () => {
         .bundle-selector .card.popular{background:linear-gradient(180deg,var(--gold-wash) 0%,#FFFFFF 62%);border:1.5px solid var(--gold);box-shadow:0 16px 36px rgba(169,122,16,.18)}
         .bundle-selector .badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#B8860B,#D4AF37,#EAC85E);color:#231703;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:7px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 10px rgba(169,122,16,.35)}
         .bundle-selector .tier{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cocoa);text-align:center;margin-bottom:10px}
-        .bundle-selector .pkg{font-family:'Fraunces',serif;font-weight:600;font-size:22px;text-align:center;line-height:1.2;min-height:2.4em;display:flex;align-items:center;justify-content:center}
+        .bundle-selector .pkg{font-family:'Cinzel',serif;font-weight:600;font-size:22px;text-align:center;line-height:1.2;min-height:2.4em;display:flex;align-items:center;justify-content:center}
         .bundle-selector .was{text-align:center;margin-top:12px;color:#A99878;font-size:15px;text-decoration:line-through}
-        .bundle-selector .price{font-family:'Figtree',system-ui,sans-serif;font-weight:800;font-size:clamp(30px,3vw,38px);text-align:center;color:var(--gold-deep);margin-top:2px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+        .bundle-selector .price{font-family:'Montserrat',system-ui,sans-serif;font-weight:800;font-size:clamp(30px,3vw,38px);text-align:center;color:var(--gold-deep);margin-top:2px;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
         .bundle-selector .price .naira{font-size:.62em;vertical-align:baseline;margin-right:1px}
         .bundle-selector .save{display:block;width:max-content;margin:10px auto 0;background:var(--rose-soft);color:var(--rose);font-size:12.5px;font-weight:700;letter-spacing:.04em;padding:5px 12px;border-radius:999px}
         .bundle-selector ul{list-style:none;margin:24px 0 26px;flex:1}

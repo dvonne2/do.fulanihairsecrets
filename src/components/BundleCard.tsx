@@ -34,7 +34,7 @@ export default function BundleCard({ onSelect }: { onSelect?: (bundle: any) => v
           box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.09);
           position: relative;
           overflow: hidden;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Montserrat', sans-serif;
           animation: bc-rise 0.55s cubic-bezier(0.22,1,0.36,1) both;
         }
         @keyframes bc-rise {
@@ -178,7 +178,7 @@ export default function BundleCard({ onSelect }: { onSelect?: (bundle: any) => v
           background: #1f4d34;
           border: none;
           border-radius: 14px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Montserrat', sans-serif;
           font-size: 16px;
           font-weight: 600;
           letter-spacing: 0.04em;
