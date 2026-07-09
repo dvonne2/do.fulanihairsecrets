@@ -12,6 +12,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     sheetId: !!process.env.SHEET_ID
   });
 
+  const s = process.env.ERPNEXT_WEBHOOK_SECRET || "";
+  console.log("secret len:", s.length, "| preview:", s.slice(0,4) + "..." + s.slice(-4), "| hasWhitespace:", /\s/.test(s));
+
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const body = req.body;
