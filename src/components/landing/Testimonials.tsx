@@ -34,7 +34,6 @@ const testimonials = [
   { name: "Zainab O.", location: "Abuja", text: "My hair has never looked this luxurious. The compliments I get at every event are endless!", image: result17 },
   { name: "Nkechi Iweala", location: "Onitsha", text: "I love holding these products! You can feel the quality. My natural hair is thriving!", image: result19 },
   { name: "Ifeoma Chukwu", location: "Enugu", text: "Best investment I've made for my hair. The complete system works wonders!", image: result20 },
-  { name: "Hajia Maryam", location: "Nigeria", text: "Before Fulani Hair Gro, I was always hiding my head under wigs and scarves because my bald edges embarrassed me. After using the full system, my hair started coming back small small. Now I can remove my wig and sit confidently in front of people at the salon. May God bless you real good for this product.", image: result3 },
 ];
 
 export const Testimonials = ({ activeIndex, onSetActive }: TestimonialsProps) => {
