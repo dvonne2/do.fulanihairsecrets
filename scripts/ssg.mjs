@@ -80,8 +80,8 @@ async function ssg() {
   } catch (err) {
     console.error('[ssg] FAILED:', err.message);
     if (err.stack) console.error(err.stack);
-    console.error('[ssg] Skipping SSG — dist/index.html left as-is (SPA fallback).');
-    // Non-fatal: site still works as a normal SPA
+    console.error('[ssg] SSG failed — build cannot proceed without pre-rendered HTML.');
+    process.exit(1);
   } finally {
     await vite.close();
   }

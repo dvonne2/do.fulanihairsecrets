@@ -22,9 +22,6 @@
 
     <link rel="preconnect" href="https://apis.fulanihairsecrets.com" crossorigin />
 
-    <!-- Preload critical hero images for faster LCP -->
-    <link rel="preload" href="/assets/hero2.webp" as="image" type="image/webp" fetchpriority="high" />
-    
     <link rel="icon" type="image/webp" href="/assets/favicon.webp" />
     <link rel="apple-touch-icon" href="/assets/favicon.webp" />
 
@@ -196,48 +193,7 @@
   </head>
 
   <body>
-    <div id="root">
-      <!-- Pre-hydration static content matching HeroSection -->
-      <section class="pt-32 md:pt-44 pb-16 md:pb-32 relative overflow-hidden royal-blue-gradient valentine-pattern">
-        <div class="absolute inset-0 arabian-pattern"></div>
-        <div class="absolute inset-0 moroccan-tile opacity-30"></div>
-        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
-          <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div class="text-center lg:text-left">
-              <p class="inline-block font-sans text-base md:text-lg mb-4 bg-[#B80F66] text-white px-3 py-1.5 rounded">
-                Tired of watching your edges disappear? 😔
-              </p>
-              <h1 class="font-cinzel text-3xl md:text-5xl lg:text-6xl font-semibold mb-6 leading-tight">
-                <span class="text-foreground">STOP HAIR LOSS IN</span>
-                <br />
-                <span class="animate-shimmer">7 DAYS OR LESS</span>
-              </h1>
-              <p class="font-serif text-xl md:text-2xl text-foreground/80 mb-4 italic">
-                Join 5,247 Nigerian women who restored their crowning glory...
-              </p>
-            </div>
-            <div class="block lg:hidden max-w-xs mx-auto">
-              <div class="rounded-3xl mega-glow pomade-glow p-5 bg-background/10">
-                <div class="relative w-full aspect-square">
-                  <img
-                    src="/assets/hero-fulani-small.webp"
-                    srcset="/assets/hero-fulani-small.webp 300w, /assets/hero-mobile.webp 400w, /assets/hero-fulani-700.webp 700w"
-                    sizes="(max-width: 1023px) 300px, 400px"
-                    alt="Fulani Hair Gro Complete 3-Step System"
-                    class="absolute inset-0 w-full h-full object-contain"
-                    width="300"
-                    height="300"
-                    loading="eager"
-                    decoding="async"
-                    fetchpriority="high"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- Facebook Pixel Stub - queues events before analytics-deferred.js loads -->
