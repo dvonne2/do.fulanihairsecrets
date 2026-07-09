@@ -87,9 +87,9 @@ export const TopStoryBanner = () => {
                 { value: Math.floor((timeLeft % 3600) / 60), label: 'Minutes' },
                 { value: timeLeft % 60, label: 'Seconds' },
               ].map((item, i) => (
-                <div key={i} className="text-center">
-                  <div className="bg-gray-100 rounded-lg px-2 py-1 md:px-3 md:py-2 min-w-[44px] md:min-w-[56px]">
-                    <span className="text-black font-bold text-lg md:text-2xl">
+                <div key={i} className="text-center w-[52px] md:w-[64px]">
+                  <div className="bg-gray-100 rounded-lg px-2 py-1 md:px-3 md:py-2">
+                    <span className="text-black font-bold text-lg md:text-2xl tabular-nums">
                       {String(item.value).padStart(2, '0')}
                     </span>
                   </div>
@@ -747,11 +747,11 @@ export const TopStoryBanner = () => {
               
               <div id="order-form">
                 {afterHero ? (
-                  <Suspense fallback={<div className="min-h-[400px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
+                  <Suspense fallback={<div className="h-[700px] md:h-[600px] flex items-center justify-center"><span className="text-gold font-semibold">Loading order form...</span></div>}>
                     <OrderForm />
                   </Suspense>
                 ) : (
-                  <div className="min-h-[400px]" />
+                  <div className="h-[700px] md:h-[600px]" />
                 )}
               </div>
             </section>
