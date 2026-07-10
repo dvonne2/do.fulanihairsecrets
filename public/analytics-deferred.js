@@ -7,14 +7,7 @@ window.addEventListener('load', function() {
   window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
   fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
 
-  // TikTok Pixel initialization - minimal 500ms delay to allow critical rendering
-  // Short delay preserves bounce traffic attribution while reducing reflow impact
-  setTimeout(function() {
-    try {
-      ttq.load('D6I4NQRC77U4M1757710');
-      ttq.page();
-    } catch (e) {
-      // Silently fail if TikTok not available
-    }
-  }, 500);
+  // TikTok Pixel initialization (stub is in index.html)
+  ttq.load('D6I4NQRC77U4M1757710');
+  ttq.page();
 });
