@@ -689,10 +689,10 @@ export const TopStoryBanner = () => {
                         className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-10"
                       >
                         {[
-                          `${BASE_PATH}assets/bukky-4.png`,
-                          `${BASE_PATH}assets/bukky-1.png`,
-                          `${BASE_PATH}assets/bukky-3.png`,
-                          `${BASE_PATH}assets/bukky-2.png`,
+                          `${BASE_PATH}assets/bukky-4.webp`,
+                          `${BASE_PATH}assets/bukky-1.webp`,
+                          `${BASE_PATH}assets/bukky-3.webp`,
+                          `${BASE_PATH}assets/bukky-2.webp`,
                           `${BASE_PATH}assets/mama5.webp`,
                         ].map((src, index) => (
                           <img
