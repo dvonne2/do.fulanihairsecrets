@@ -690,7 +690,7 @@ export const TopStoryBanner = () => {
                       >
                         {[
                           `${BASE_PATH}assets/bukky-4.png`,
-                          `${BASE_PATH}assets/mama2.webp`,
+                          `${BASE_PATH}assets/bukky-1.png`,
                           `${BASE_PATH}assets/mama3.webp`,
                           `${BASE_PATH}assets/mama4.webp`,
                           `${BASE_PATH}assets/mama5.webp`,
