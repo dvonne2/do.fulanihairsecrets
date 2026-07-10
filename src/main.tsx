@@ -1,19 +1,6 @@
-import { createRoot, hydrateRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-
-// Register service worker for caching
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        void registration;
-      })
-      .catch((registrationError) => {
-        void registrationError;
-      });
-  });
-}
 
 const rootEl = document.getElementById("root")!;
 
