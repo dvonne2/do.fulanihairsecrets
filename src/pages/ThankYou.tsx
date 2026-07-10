@@ -246,19 +246,8 @@ const ThankYou = () => {
     }
   }, []);
 
-  // Force GTM + Pixel pageview on SPA navigation to /thank-you
-  useEffect(() => {
-    type WindowWithDataLayer = Window & {
-      dataLayer?: Array<Record<string, unknown>>;
-    };
-
-    const w = window as WindowWithDataLayer;
-    w.dataLayer = w.dataLayer || [];
-    w.dataLayer.push({
-      event: 'virtualPageview',
-      page: '/thank-you',
-    });
-  }, []);
+  // Force Pixel pageview on SPA navigation to /thank-you
+  // Google Analytics removed - no longer used
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(amount);

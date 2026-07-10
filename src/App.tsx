@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-import { AnalyticsLoader } from "@/components/AnalyticsLoader";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
@@ -10,12 +9,6 @@ import RequireAuth from "./components/RequireAuth";
 // import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
 // import { FloatingHearts } from "@/components/FloatingHearts";
 
-declare global {
-  interface Window {
-    dataLayer?: Array<Record<string, unknown>>;
-    gtag?: (...args: any[]) => void;
-  }
-}
 
 // Route-level code splitting for faster initial load
 const Index = React.lazy(() => import("./pages/Index"));
@@ -37,21 +30,6 @@ const queryClient = new QueryClient();
 const App = () => {
   const [uiReady, setUiReady] = useState(false);
 
-  // Load GA4 script dynamically to avoid unsafe redirect errors
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-KC7KTLQW03';
-    script.async = true;
-    script.onerror = () => {
-      console.log('GA4 script failed to load');
-    };
-    document.head.appendChild(script);
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-KC7KTLQW03');
-  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setUiReady(true), 1500);
@@ -68,7 +46,6 @@ const App = () => {
         <Providers>
           <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             {/* Valentine promo ended - components removed */}
-            <AnalyticsLoader />
             <Routes>
               <Route
                 path="/"

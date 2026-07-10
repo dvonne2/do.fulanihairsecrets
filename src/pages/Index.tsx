@@ -245,9 +245,6 @@ const Index = () => {
     if (typeof window === 'undefined') return;
 
     type WindowWithTracking = Window & {
-      dataLayer?: Array<Record<string, unknown>> & {
-        push?: (event: Record<string, unknown>) => number;
-      };
       fbq?: (...args: unknown[]) => unknown;
     };
 
@@ -262,7 +259,7 @@ const Index = () => {
         return; // Don't fire if sessionStorage is unavailable
       }
 
-      (window as WindowWithTracking).dataLayer?.push?.({ event: 'FormStart' });
+      // dataLayer removed - Google Analytics not used
       // trackFormStart(); // Tracking removed
     };
 
