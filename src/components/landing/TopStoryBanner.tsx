@@ -794,9 +794,9 @@ export const TopStoryBanner = () => {
           <p 
             style={{
               color: '#0A0A0A',
-              fontFamily: 'Cinzel, serif',
+              fontFamily: 'Montserrat, sans-serif',
               fontSize: '16px',
-              fontWeight: '300',
+              fontWeight: '400',
               textAlign: 'center',
               lineHeight: '1.6',
               textDecoration: 'none',
@@ -807,13 +807,13 @@ export const TopStoryBanner = () => {
           </p>
           
         {/* Hajara Personal Story */}
-        <p 
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -825,14 +825,14 @@ export const TopStoryBanner = () => {
 I was born and bred in Ogbomosho, Nigeria, but my family comes from the Fula tribe bordering Nigeria and Chad. As a little girl, I watched the women in my family use organic and traditional beauty secrets to care for their hair and skin. But me being a tomboy, I never bothered to learn those secrets (I regret it… lol).
         </p>
 
-                
-        <p 
+
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -851,14 +851,14 @@ I bought premium shampoos. I did treatments. I went to my trichologist friend (y
 
 I did all that.
         </p>
-        
-        <p 
+
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -898,13 +898,13 @@ And we have now refined with proper scientific knowledge.
 This thing is not hype.
         </p>
 
-        <p 
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -914,13 +914,13 @@ This thing is not hype.
           It's heritage with sense.
         </p>
 
-        <p 
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -930,13 +930,13 @@ This thing is not hype.
           And if it brought my edges back from the dead, imagine what it can do for you.
         </p>
 
-        <p 
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -983,7 +983,7 @@ This thing is not hype.
           className="mt-6 block"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
             fontWeight: '700',
             textAlign: 'left',
@@ -995,14 +995,14 @@ This thing is not hype.
           <br />
           (family secret)
         </strong>
-        
-        <p 
+
+        <p
           className="mt-6"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'left',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -1031,7 +1031,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Cinzel, serif',
+              fontFamily: 'Montserrat, sans-serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1061,13 +1061,13 @@ This thing is not hype.
                   height="675"
                 />
               </div>
-              <p 
+              <p
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Cinzel, serif',
+                  fontFamily: 'Montserrat, sans-serif',
                   fontSize: '16px',
-                  fontWeight: '300',
+                  fontWeight: '400',
                   textAlign: 'center',
                   lineHeight: '1.6',
                   textDecoration: 'none',
@@ -1099,7 +1099,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Cinzel, serif',
+              fontFamily: 'Montserrat, sans-serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1129,13 +1129,13 @@ This thing is not hype.
                   height="675"
                 />
               </div>
-              <p 
+              <p
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Cinzel, serif',
+                  fontFamily: 'Montserrat, sans-serif',
                   fontSize: '16px',
-                  fontWeight: '300',
+                  fontWeight: '400',
                   textAlign: 'center',
                   lineHeight: '1.6',
                   textDecoration: 'none',
@@ -1167,7 +1167,7 @@ This thing is not hype.
           >
             <strong style={{
               color: '#0A0A0A',
-              fontFamily: 'Cinzel, serif',
+              fontFamily: 'Montserrat, sans-serif',
               fontSize: '16px',
               fontWeight: '700',
               textTransform: 'none',
@@ -1204,13 +1204,13 @@ This thing is not hype.
                   height="1875"
                 />
               </div>
-              <p 
+              <p
                 className="mt-6"
                 style={{
                   color: '#0A0A0A',
-                  fontFamily: 'Cinzel, serif',
+                  fontFamily: 'Montserrat, sans-serif',
                   fontSize: '16px',
-                  fontWeight: '300',
+                  fontWeight: '400',
                   textAlign: 'center',
                   lineHeight: '1.6',
                   textDecoration: 'none',
@@ -1237,14 +1237,14 @@ This thing is not hype.
         >
           Size
         </strong>
-        
-        <p 
+
+        <p
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -1253,14 +1253,14 @@ This thing is not hype.
         >
           Net Shampoo Content: 500ml
         </p>
-        
-        <p 
+
+        <p
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -1269,14 +1269,14 @@ This thing is not hype.
         >
           Net Conditioner Content: 500ml
         </p>
-        
-        <p 
+
+        <p
           className="mt-4"
           style={{
             color: '#0A0A0A',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
-            fontWeight: '300',
+            fontWeight: '400',
             textAlign: 'center',
             lineHeight: '1.6',
             textDecoration: 'none',
@@ -1292,7 +1292,7 @@ This thing is not hype.
           className="mt-6 block"
           style={{
             color: '#FFFFFF',
-            fontFamily: 'Cinzel, serif',
+            fontFamily: 'Montserrat, sans-serif',
             fontSize: '16px',
             fontWeight: '700',
             textAlign: 'center',
