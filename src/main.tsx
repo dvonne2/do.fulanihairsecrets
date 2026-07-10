@@ -1,6 +1,19 @@
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+
+// Register service worker for caching
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        void registration;
+      })
+      .catch((registrationError) => {
+        void registrationError;
+      });
+  });
+}
 
 const rootEl = document.getElementById("root")!;
 
@@ -11,5 +24,5 @@ if (splash) splash.remove();
 const splashStyle = rootEl.querySelector("style");
 if (splashStyle) splashStyle.remove();
 
-// Always use createRoot for SPA rendering to avoid hydration issues
-createRoot(rootEl).render(<App />);
+// Use hydrateRoot for SSG hydration - preserves pre-rendered HTML
+hydrateRoot(rootEl, <App />);
