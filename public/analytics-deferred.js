@@ -7,7 +7,20 @@ window.addEventListener('load', function() {
   window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
   fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
 
-  // TikTok Pixel initialization (stub is in index.html)
-  ttq.load('D6I4NQRC77U4M1757710');
-  ttq.page();
+  // TikTok Pixel initialization - delayed to prevent forced reflow
+  // Uses requestIdleCallback to run when browser is idle, with setTimeout fallback
+  const loadTikTok = function() {
+    try {
+      ttq.load('D6I4NQRC77U4M1757710');
+      ttq.page();
+    } catch (e) {
+      // Silently fail if TikTok not available
+    }
+  };
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadTikTok, { timeout: 3000 });
+  } else {
+    setTimeout(loadTikTok, 2000);
+  }
 });
