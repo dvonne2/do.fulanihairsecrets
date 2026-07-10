@@ -80,10 +80,20 @@ async function ssg() {
 
     // Re-apply async CSS pattern after SSG (SSG overwrites the plugin's changes)
     html = readFileSync(DIST_INDEX, 'utf-8');
-    html = html.replace(
-      /<link rel="stylesheet" href="(\/assets\/main-[^"]+\.css)">/g,
-      '<link rel="preload" href="$1" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" href="$1"></noscript>'
-    );
+    // Extract the main.css path first before removing anything
+    const mainCssMatch = html.match(/<link[^>]*href="(\/assets\/main-[^"]+\.css)"[^>]*>/);
+    if (mainCssMatch) {
+      const cssPath = mainCssMatch[1];
+      // Remove ALL existing main.css links (both blocking and async) to prevent duplication
+      html = html.replace(
+        /<link[^>]*href="\/assets\/main-[^"]+\.css"[^>]*>.*?(<\/noscript>)?/gs,
+        ''
+      );
+      // Insert a single clean async pattern
+      const asyncCss = `<link rel="preload" href="${cssPath}" as="style" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${cssPath}"></noscript>`;
+      // Insert before </head>
+      html = html.replace('</head>', asyncCss + '\n    </head>');
+    }
     writeFileSync(DIST_INDEX, html, 'utf-8');
     console.log('[ssg] Applied async CSS pattern to main stylesheet');
   } catch (err) {

@@ -72,7 +72,7 @@ export default defineConfig({
     partytownVite({ dest: path.resolve(__dirname, 'dist', '~partytown') }),
     react(),
     copyCriticalFiles(),
-    makeCssAsync(),
+    // makeCssAsync(), // Disabled - SSG script handles async CSS
     visualizer({
       filename: 'dist/stats.html',
       open: false,

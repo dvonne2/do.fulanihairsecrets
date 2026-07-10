@@ -15,7 +15,7 @@ const FatimaStory = () => {
           </h2>
         </div>
 
-        <div className="luxury-card rounded-3xl p-6 md:p-10 space-y-6 font-serif text-foreground/90 leading-relaxed">
+        <div className="luxury-card rounded-3xl p-6 md:p-10 space-y-6 font-sans text-foreground/90 leading-relaxed">
           <p className="uppercase tracking-[0.25em] text-xs text-gold text-center">This Is My Story.</p>
 
           <p>
@@ -65,7 +65,7 @@ const FatimaStory = () => {
 
           <div className="pt-2">
             <a
-              href={ORDER_URL}
+              href="#order-form"
               className="block w-full md:w-auto text-center mx-auto gold-gradient-animated text-background font-sans text-sm md:text-base tracking-widest uppercase py-4 md:py-4 px-8 rounded-xl font-bold btn-luxury animate-glow"
             >
               Order Fulani Hair Gro Now + Same Day Nationwide Delivery
@@ -92,7 +92,7 @@ const FatimaStory = () => {
 
           <div className="pt-2">
             <a
-              href={ORDER_URL}
+              href="#order-form"
               className="block w-full md:w-auto text-center mx-auto gold-gradient-animated text-background font-sans text-sm md:text-base tracking-widest uppercase py-4 md:py-4 px-8 rounded-xl font-bold btn-luxury animate-glow"
             >
               Order Fulani Hair Gro Now + Same Day Nationwide Delivery

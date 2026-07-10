@@ -84,7 +84,7 @@ export const MaiduguriSecret = () => {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-12" />
 
         {/* Story content */}
-        <div className="space-y-6 font-serif text-lg md:text-xl text-foreground/90 leading-relaxed">
+        <div className="space-y-6 font-sans text-lg md:text-xl text-foreground/90 leading-relaxed">
           <p className={`transition-all duration-700 ${visibleParagraphs.includes(0) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             Let me tell you something most people don't know:
           </p>
@@ -126,7 +126,7 @@ export const MaiduguriSecret = () => {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent my-12" />
 
         {/* Second part of story */}
-        <div className={`space-y-6 font-serif text-lg md:text-xl text-foreground/90 leading-relaxed transition-all duration-700 ${visibleParagraphs.includes(6) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className={`space-y-6 font-sans text-lg md:text-xl text-foreground/90 leading-relaxed transition-all duration-700 ${visibleParagraphs.includes(6) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <p>
             For a long time, this recipe wasn't available to anyone outside my home.
           </p>

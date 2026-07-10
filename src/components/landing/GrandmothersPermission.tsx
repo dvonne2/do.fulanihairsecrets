@@ -64,8 +64,8 @@ export const GrandmothersPermission = () => {
           {/* Content card */}
           <div className="bg-white rounded-xl p-8 md:p-12 border border-gray-200 shadow-sm">
             {/* Quote content with typewriter effect */}
-            <div 
-              className="font-serif text-xl md:text-2xl text-foreground/90 leading-relaxed whitespace-pre-line min-h-[400px]"
+            <div
+              className="font-sans text-xl md:text-2xl text-foreground/90 leading-relaxed whitespace-pre-line min-h-[400px]"
               style={{ fontStyle: 'italic' }}
             >
               {isVisible ? (
