@@ -196,8 +196,9 @@ export function ReviewsList() {
                   ))}
                 </div>
                 {review.status === 'featured' && (
-                  <span className="text-xs font-medium bg-yellow-500 text-white px-2 py-0.5 rounded-full">
-                    Verified Purchase
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded" 
+                        style={{ background: '#E7F6EC', color: '#1B7F3B', border: '1px solid #A6E0BC' }}>
+                    ✓ Verified Purchase
                   </span>
                 )}
               </div>
