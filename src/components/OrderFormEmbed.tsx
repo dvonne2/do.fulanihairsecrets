@@ -717,12 +717,12 @@ function OrderFormEmbed() {
           <div style={{ display: 'flex', gap: '12px' }}>
             <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'next_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'next_day' ? '#f0f4ff' : '#fff' }}>
               <input type="radio" name="deliveryType" value="next_day" checked={form.deliveryType === 'next_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
-              <span style={{ fontWeight: '600', color: '#333' }}>Next Day</span>
+              <span style={{ fontWeight: '600', color: '#333' }}>1–3 Days Delivery</span>
               <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦3,000</span>
             </label>
             <label style={{ flex: 1, padding: '12px', border: form.deliveryType === 'same_day' ? '2px solid #244beb' : '1px solid #ddd', borderRadius: '6px', cursor: 'pointer', backgroundColor: form.deliveryType === 'same_day' ? '#f0f4ff' : '#fff' }}>
               <input type="radio" name="deliveryType" value="same_day" checked={form.deliveryType === 'same_day'} onChange={e => setForm(prev => ({ ...prev, deliveryType: e.target.value }))} style={{ marginRight: '8px' }} />
-              <span style={{ fontWeight: '600', color: '#333' }}>Same Day</span>
+              <span style={{ fontWeight: '600', color: '#333' }}>24 Hours Delivery</span>
               <span style={{ display: 'block', fontSize: '14px', color: '#666', marginTop: '4px' }}>₦5,000</span>
             </label>
           </div>
