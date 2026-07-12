@@ -142,7 +142,7 @@ export const TopStoryBanner = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {[
               { img: `${BASE_PATH}assets/Shampoo1.png`, label: 'Fulani Hair Gro™ Shampoo' },
-              { img: `${BASE_PATH}assets/circle-conditioner.webp`, label: 'Fulani Hair Gro™ Conditioner' },
+              { img: `${BASE_PATH}assets/Conditioner2.png`, label: 'Fulani Hair Gro™ Conditioner' },
               { img: `${BASE_PATH}assets/pomade3.png`, label: 'Fulani Hair Gro™ Hair Pomade' },
             ].map((item, i) => (
               <div key={i} className="text-center space-y-3">
