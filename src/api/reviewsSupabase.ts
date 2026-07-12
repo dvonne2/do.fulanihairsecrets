@@ -49,8 +49,7 @@ export const reviewsSupabaseBackend: ReviewsBackend = {
       .from(REVIEWS_TABLE)
       .select('*')
       .in('status', ['approved', 'featured'])
-      .order('status', { ascending: false })
-      .order('approved_at', { ascending: false });
+      .order('created_at', { ascending: false });
     if (error) {
       console.error('Error fetching approved reviews:', error);
       return [];
