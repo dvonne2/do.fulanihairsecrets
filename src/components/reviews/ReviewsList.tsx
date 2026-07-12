@@ -4,18 +4,20 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
 export function ReviewsList() {
+  // Skip rendering during SSG to prevent hydration errors
+  if (typeof window === 'undefined') {
+    return (
+      <div className="py-8 text-center text-gray-500">Loading reviews...</div>
+    );
+  }
+
   const { reviews, loading, error } = useApprovedReviews();
   const [searchQuery, setSearchQuery] = useState('');
   const [ratingFilter, setRatingFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageWindowStart, setPageWindowStart] = useState(1);
-  const [mounted, setMounted] = useState(false);
   const reviewsPerPage = 5;
   const maxVisiblePages = 5;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const filteredReviews = reviews.filter((review) => {
     const query = searchQuery.toLowerCase().trim();
@@ -223,23 +225,6 @@ export function ReviewsList() {
                   <div className="text-xs text-gray-500">
                     <span className="font-medium text-gray-700">{review.name}</span>
                     {review.location && <span> — {review.location}</span>}
-                    {mounted && (
-                      <span className="ml-2">
-                        {(() => {
-                          try {
-                            const date = review.approved_at || review.created_at;
-                            if (!date) return '';
-                            return new Date(date).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                            });
-                          } catch {
-                            return '';
-                          }
-                        })()}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
