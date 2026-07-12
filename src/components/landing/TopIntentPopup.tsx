@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import bundleSystemImg from '@/assets-optimized/products/bundle-system.webp';
 import ebookImg from '@/assets-optimized/products/Screenshot 2025-12-16 at 02.01.44.webp';
@@ -9,10 +9,10 @@ interface TopIntentPopupProps {
 }
 
 export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
-  const todayLabel = new Date().toLocaleDateString('en-NG', {
-    day: 'numeric',
-    month: 'long',
-  });
+  const [todayLabel, setTodayLabel] = useState('');
+  useEffect(() => {
+    setTodayLabel(new Date().toLocaleDateString('en-NG', { day: 'numeric', month: 'long' }));
+  }, []);
 
   const goToOrderForm = () => {
     if (typeof window !== 'undefined') {

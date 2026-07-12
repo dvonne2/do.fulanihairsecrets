@@ -113,7 +113,7 @@ const Index = () => {
   const [viewerCount, setViewerCount] = useState(427);
   const [showPurchaseNotif, setShowPurchaseNotif] = useState(false);
   const [currentNotif, setCurrentNotif] = useState(0);
-  const [countdown, setCountdown] = useState(getCountdownToMidnight());
+  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [showTopIntent, setShowTopIntent] = useState(false);
