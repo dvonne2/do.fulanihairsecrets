@@ -38,6 +38,12 @@ class ErrorBoundary extends Component<Props, State> {
           <button onClick={() => window.location.reload()}>
             Refresh Page
           </button>
+          <details style={{ marginTop: '20px', textAlign: 'left', maxWidth: '800px', margin: '20px auto' }}>
+            <summary style={{ cursor: 'pointer', color: '#666' }}>Error details (for debugging)</summary>
+            <pre style={{ background: '#f5f5f5', padding: '12px', overflow: 'auto', fontSize: '11px', whiteSpace: 'pre-wrap' }}>
+              {this.state.error?.message}{'\n\n'}{this.state.error?.stack}
+            </pre>
+          </details>
         </div>
       );
     }
