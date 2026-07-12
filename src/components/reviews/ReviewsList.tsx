@@ -4,13 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
 export function ReviewsList() {
-  // Skip rendering during SSG to prevent hydration errors
-  if (typeof window === 'undefined') {
-    return (
-      <div className="py-8 text-center text-gray-500">Loading reviews...</div>
-    );
-  }
-
   const { reviews, loading, error } = useApprovedReviews();
   const [searchQuery, setSearchQuery] = useState('');
   const [ratingFilter, setRatingFilter] = useState<string>('all');
