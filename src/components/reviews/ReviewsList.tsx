@@ -3,6 +3,23 @@ import { useApprovedReviews } from '@/hooks/useReviews';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
+const formatReviewDate = (dateString: string): string => {
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-NG', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }) + ' at ' + date.toLocaleTimeString('en-NG', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } catch {
+    return '';
+  }
+};
+
 export function ReviewsList() {
   const { reviews, loading, error } = useApprovedReviews();
   const [searchQuery, setSearchQuery] = useState('');
@@ -218,6 +235,11 @@ export function ReviewsList() {
                   <div className="text-xs text-gray-500">
                     <span className="font-medium text-gray-700">{review.name}</span>
                     {review.location && <span> — {review.location}</span>}
+                    {review.created_at && formatReviewDate(review.created_at) && (
+                      <span className="block mt-0.5 text-gray-400">
+                        {formatReviewDate(review.created_at)}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
