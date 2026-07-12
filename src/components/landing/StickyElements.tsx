@@ -9,23 +9,30 @@ interface StickyElementsProps {
   scrollProgress: number;
 }
 
-export const StickyElements = memo(({ 
-  scrollProgress 
+export const StickyElements = memo(({
+  scrollProgress
 }: StickyElementsProps) => {
   const [visible, setVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    setMounted(true);
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
@@ -50,7 +57,7 @@ export const StickyElements = memo(({
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [mounted]);
 
   const scrollToOrderForm = () => {
     const el = document.getElementById('order-form');

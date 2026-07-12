@@ -43,33 +43,35 @@ const CARD_COLORS: Record<string, { idle: string; hover: string; sel: string; se
 const DEFAULT_COLOR = { idle: "#D1D5DB", hover: "#6B7280", sel: "#111827", selBg: "#F9FAFB", btn: "#111827" };
 
 // ─── Inject keyframes once ────────────────────────────────────────────────────
-if (typeof document !== "undefined" && !document.getElementById("bundle-shake-style")) {
-  const s = document.createElement("style");
-  s.id = "bundle-shake-style";
-  s.textContent = `
-    @keyframes bundleShake {
-      0%,100% { transform: translateX(0); }
-      15%      { transform: translateX(-4px); }
-      30%      { transform: translateX(4px); }
-      45%      { transform: translateX(-3px); }
-      60%      { transform: translateX(3px); }
-      75%      { transform: translateX(-1px); }
-      90%      { transform: translateX(1px); }
-    }
-    @keyframes cardGlow {
-      0%   { box-shadow: 0 0 0px rgba(34,197,94,0); }
-      50%  { box-shadow: 0 0 22px rgba(34,197,94,0.45); }
-      100% { box-shadow: 0 0 0px rgba(34,197,94,0); }
-    }
-    @keyframes badgePulse {
-      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-      25% { opacity: 0.4; transform: scale(1.2) rotate(25deg); }
-      50% { opacity: 0.3; transform: scale(1.25) rotate(-25deg); }
-      75% { opacity: 0.4; transform: scale(1.2) rotate(15deg); }
-    }
-  `;
-  document.head.appendChild(s);
-}
+const injectKeyframes = () => {
+  if (typeof document !== "undefined" && !document.getElementById("bundle-shake-style")) {
+    const s = document.createElement("style");
+    s.id = "bundle-shake-style";
+    s.textContent = `
+      @keyframes bundleShake {
+        0%,100% { transform: translateX(0); }
+        15%      { transform: translateX(-4px); }
+        30%      { transform: translateX(4px); }
+        45%      { transform: translateX(-3px); }
+        60%      { transform: translateX(3px); }
+        75%      { transform: translateX(-1px); }
+        90%      { transform: translateX(1px); }
+      }
+      @keyframes cardGlow {
+        0%   { box-shadow: 0 0 0px rgba(34,197,94,0); }
+        50%  { box-shadow: 0 0 22px rgba(34,197,94,0.45); }
+        100% { box-shadow: 0 0 0px rgba(34,197,94,0); }
+      }
+      @keyframes badgePulse {
+        0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        25% { opacity: 0.4; transform: scale(1.2) rotate(25deg); }
+        50% { opacity: 0.3; transform: scale(1.25) rotate(-25deg); }
+        75% { opacity: 0.4; transform: scale(1.2) rotate(15deg); }
+      }
+    `;
+    document.head.appendChild(s);
+  }
+};
 
 // ─── CornerBadge ──────────────────────────────────────────────────────────────
 function CornerBadge({ badge }: { badge: BundlePackage["badge"] }) {
@@ -368,15 +370,20 @@ interface BundleCardProps {
 function BundleCard({ bundle, isSelected, onSelect, showCTA = true, variant = 'main', isHov, onEnter, onLeave }: BundleCardProps) {
   const discount = Math.round((1 - bundle.price / bundle.originalPrice) * 100);
   const c = CARD_COLORS[bundle.id] ?? DEFAULT_COLOR;
-  
+
   // Local hover state for CTA button when used inline (no parent hover management)
   const [ctaHov, setCtaHov] = React.useState(false);
-  
+
   // Local card hover state for inline usage
   const [cardHov, setCardHov] = React.useState(false);
-  
+
   // Use parent hover if provided, otherwise use local state
   const effectiveHov = isHov !== undefined ? isHov : cardHov;
+
+  // Inject keyframes on mount only (client-side)
+  React.useEffect(() => {
+    injectKeyframes();
+  }, []);
   
   const borderColor = isSelected ? c.sel : effectiveHov ? c.hover : c.idle;
   const bg = isSelected ? c.selBg : effectiveHov ? c.selBg : "#fff";
