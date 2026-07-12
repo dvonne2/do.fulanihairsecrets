@@ -1,4 +1,4 @@
-import { hydrateRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -24,5 +24,6 @@ if (splash) splash.remove();
 const splashStyle = rootEl.querySelector("style");
 if (splashStyle) splashStyle.remove();
 
-// Use hydrateRoot for SSG hydration - preserves pre-rendered HTML
-hydrateRoot(rootEl, <App />);
+// Use createRoot instead of hydrateRoot to fix hydration mismatch
+// SSG HTML doesn't match client Suspense/lazy loading structure
+createRoot(rootEl).render(<App />);
