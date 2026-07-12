@@ -141,9 +141,9 @@ export const TopStoryBanner = () => {
         <div className="w-full max-w-5xl mx-auto mt-10 px-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {[
-              { img: `${BASE_PATH}assets/Shampoo1.png`, label: 'Fulani Hair Gro™ Shampoo' },
-              { img: `${BASE_PATH}assets/Conditioner2.png`, label: 'Fulani Hair Gro™ Conditioner' },
-              { img: `${BASE_PATH}assets/pomade3.png`, label: 'Fulani Hair Gro™ Hair Pomade' },
+              { img: `${BASE_PATH}assets/Shampoo1.webp`, label: 'Fulani Hair Gro™ Shampoo' },
+              { img: `${BASE_PATH}assets/Conditioner2.webp`, label: 'Fulani Hair Gro™ Conditioner' },
+              { img: `${BASE_PATH}assets/pomade3.webp`, label: 'Fulani Hair Gro™ Hair Pomade' },
             ].map((item, i) => (
               <div key={i} className="text-center space-y-3">
                 <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
