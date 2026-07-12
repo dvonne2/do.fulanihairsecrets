@@ -11,8 +11,8 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { ReviewForm } from '@/components/reviews/ReviewForm';
-import { ReviewsList } from '@/components/reviews/ReviewsList';
+const ReviewForm = lazy(() => import('@/components/reviews/ReviewForm'));
+const ReviewsList = lazy(() => import('@/components/reviews/ReviewsList'));
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
@@ -578,7 +578,9 @@ export const TopStoryBanner = () => {
                   <DialogDescription className="text-left">* required fields</DialogDescription>
                 </DialogHeader>
 
-                <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
+                <Suspense fallback={null}>
+                  <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
+                </Suspense>
               </DialogContent>
             </Dialog>
 
@@ -736,7 +738,9 @@ export const TopStoryBanner = () => {
                     </div>
                   
                   {/* Approved Reviews from Supabase */}
-                  <ReviewsList />
+                  <Suspense fallback={null}>
+                    <ReviewsList />
+                  </Suspense>
                 </div>
                 </div>
 
