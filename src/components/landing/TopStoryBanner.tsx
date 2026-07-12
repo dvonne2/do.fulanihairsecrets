@@ -11,8 +11,12 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-const ReviewForm = lazy(() => import('@/components/reviews/ReviewForm'));
-const ReviewsList = lazy(() => import('@/components/reviews/ReviewsList'));
+const ReviewForm = lazy(() =>
+  import('@/components/reviews/ReviewForm').then((m) => ({ default: m.ReviewForm }))
+);
+const ReviewsList = lazy(() =>
+  import('@/components/reviews/ReviewsList').then((m) => ({ default: m.ReviewsList }))
+);
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
