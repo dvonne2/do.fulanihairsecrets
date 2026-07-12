@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
@@ -28,22 +28,10 @@ const ReviewsAdmin = React.lazy(() => import("./pages/ReviewsAdmin"));
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [uiReady, setUiReady] = useState(false);
-
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setUiReady(true), 1500);
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  const Providers = useMemo(() => {
-    return ({ children }: { children: React.ReactNode }) => <>{children}</>;
-  }, []);
-
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Providers>
+        <>
           <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             {/* Valentine promo ended - components removed */}
             <Routes>
@@ -142,7 +130,7 @@ const App = () => {
               />
             </Routes>
           </BrowserRouter>
-        </Providers>
+        </>
       </QueryClientProvider>
     </ErrorBoundary>
   );
