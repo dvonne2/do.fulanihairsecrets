@@ -219,17 +219,19 @@ export function ReviewsList() {
                     <span className="font-medium text-gray-700">{review.name}</span>
                     {review.location && <span> — {review.location}</span>}
                     <span className="ml-2">
-                      {review.approved_at
-                        ? new Date(review.approved_at).toLocaleDateString('en-US', {
+                      {(() => {
+                        try {
+                          const date = review.approved_at || review.created_at;
+                          if (!date) return '';
+                          return new Date(date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric',
-                          })
-                        : new Date(review.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                          })}
+                          });
+                        } catch {
+                          return '';
+                        }
+                      })()}
                     </span>
                   </div>
                 </div>
