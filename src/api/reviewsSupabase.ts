@@ -60,7 +60,7 @@ export const reviewsSupabaseBackend: ReviewsBackend = {
 
   async getPendingReviews(adminPassword: string) {
     if (!supabase) return [];
-    const { data, error } = await supabase.rpc('get_pending_reviews', {
+    const { data, error } = await supabase.rpc('get_all_reviews', {
       admin_password: adminPassword,
     });
     if (error) {
