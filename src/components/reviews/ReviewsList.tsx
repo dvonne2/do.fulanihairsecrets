@@ -218,6 +218,19 @@ export function ReviewsList() {
                   <div className="text-xs text-gray-500">
                     <span className="font-medium text-gray-700">{review.name}</span>
                     {review.location && <span> — {review.location}</span>}
+                    <span className="ml-2">
+                      {review.approved_at
+                        ? new Date(review.approved_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })
+                        : new Date(review.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                    </span>
                   </div>
                 </div>
               </div>
