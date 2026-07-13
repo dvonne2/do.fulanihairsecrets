@@ -33,30 +33,20 @@ export const StickyElements = memo(({
 
   useEffect(() => {
     if (!mounted) return;
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          // Hide when user is near the order form (so it doesn't overlap)
-          const form = document.getElementById('order-form');
-          if (form) {
-            const rect = form.getBoundingClientRect();
-            // Form is visible on screen — hide the bar
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-              setVisible(false);
-              ticking = false;
-              return;
-            }
-          }
-          setVisible(true);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+    const form = document.getElementById('order-form');
+    if (!form) return;
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Use IntersectionObserver to detect when order form enters viewport
+    // instead of querying getBoundingClientRect on every scroll event
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(!entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: '0px' }
+    );
+
+    observer.observe(form);
+    return () => observer.disconnect();
   }, [mounted]);
 
   const scrollToOrderForm = () => {

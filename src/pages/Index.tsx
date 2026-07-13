@@ -190,18 +190,35 @@ const Index = () => {
   }, [afterHero]);
 
   // Scroll progress + sticky bar
+  // Cache max scroll to avoid forcing layout on every scroll event
+  const maxScrollRef = useRef(0);
   useEffect(() => {
     if (!afterHero) return;
+    const updateMaxScroll = () => {
+      maxScrollRef.current = document.documentElement.scrollHeight - window.innerHeight;
+    };
+    updateMaxScroll();
+    window.addEventListener('resize', updateMaxScroll);
+
+    let ticking = false;
     const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
-      setScrollProgress(progress);
-      setShowStickyBar(scrolled > 600);
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const scrolled = window.scrollY;
+        const maxScroll = maxScrollRef.current || 1;
+        const progress = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
+        setScrollProgress(progress);
+        setShowStickyBar(scrolled > 600);
+        ticking = false;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateMaxScroll);
+    };
   }, [afterHero]);
 
   // Transactional popup gating (mobile-first): show only after 8s OR 50% scroll depth
@@ -217,20 +234,25 @@ const Index = () => {
 
     const timer = window.setTimeout(fireTopIntent, 8000);
 
+    let ticking = false;
     const handleScroll = () => {
       if (hasShownTopIntent) return;
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const docHeight = maxScrollRef.current || 1;
+        const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
 
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-
-      if (progress >= 50) {
-        fireTopIntent();
-        window.removeEventListener('scroll', handleScroll);
-      }
+        if (progress >= 50) {
+          fireTopIntent();
+          window.removeEventListener('scroll', handleScroll);
+        }
+        ticking = false;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
