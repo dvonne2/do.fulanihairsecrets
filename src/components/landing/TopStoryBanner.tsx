@@ -803,21 +803,6 @@ export const TopStoryBanner = () => {
             </blockquote>
           </div>
           
-          <p 
-            style={{
-              color: '#0A0A0A',
-              fontFamily: 'Montserrat, sans-serif',
-              fontSize: '16px',
-              fontWeight: '400',
-              textAlign: 'center',
-              lineHeight: '1.6',
-              textDecoration: 'none',
-              textTransform: 'none'
-            }}
-          >
-            Fulani women are known for long hair, right? It's not by luck. It's not by "good genes" only. These women take their hair seriously. Herbs. Oils. Routine. Discipline. It's tradition.
-          </p>
-          
         {/* Hajara Personal Story */}
         <p
           className="mt-6"
