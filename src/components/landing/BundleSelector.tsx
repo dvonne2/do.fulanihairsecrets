@@ -1,5 +1,8 @@
 import React from 'react';
 import { PACKAGES } from '@/config/packages';
+import shampooImg from '@/assets-optimized/products/shampoo.webp';
+import pomadeImg from '@/assets-optimized/products/pomade.webp';
+import conditionerImg from '@/assets-optimized/products/conditioner.webp';
 
 export const BundleSelector = () => {
   const formatPrice = (price: number) => `₦${price.toLocaleString()}`;
@@ -37,6 +40,8 @@ export const BundleSelector = () => {
         .bundle-selector .card.popular .cta{background:linear-gradient(135deg,#B8860B,#D4AF37,#EAC85E);color:#231703;border-color:transparent;box-shadow:0 8px 18px rgba(169,122,16,.32)}
         .bundle-selector .card.popular .cta:hover{filter:brightness(1.05)}
         .bundle-selector .footnote{max-width:640px;margin:40px auto 0;text-align:center;color:var(--cocoa);font-size:13.5px;line-height:1.6}
+        .bundle-selector .product-imgs{display:flex;justify-content:center;gap:8px;margin:18px 0 4px}
+        .bundle-selector .product-imgs img{width:60px;height:60px;object-fit:contain;border-radius:8px;background:#faf9f7;padding:4px}
         @media (prefers-reduced-motion:reduce){.bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}}
       `}</style>
       
@@ -55,6 +60,11 @@ export const BundleSelector = () => {
             <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
+            <div className="product-imgs">
+              {pkg.items.toLowerCase().includes('shampoo') && <img src={shampooImg} alt="Shampoo" width="60" height="60" />}
+              {pkg.items.toLowerCase().includes('pomade') && <img src={pomadeImg} alt="Pomade" width="60" height="60" />}
+              {pkg.items.toLowerCase().includes('conditioner') && <img src={conditionerImg} alt="Conditioner" width="60" height="60" />}
+            </div>
             <ul>
               <li><strong>{pkg.items}</strong></li>
               {pkg.freeItems && <li>{pkg.freeItems}</li>}
