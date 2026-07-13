@@ -583,7 +583,7 @@ export const TopStoryBanner = () => {
                   </p>
                   <p
                     style={{
-                      color: '#A1A1AA',
+                      color: '#333333',
                       fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
                       fontSize: '14px',
                       fontWeight: '400',
