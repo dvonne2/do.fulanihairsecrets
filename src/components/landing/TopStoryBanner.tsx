@@ -477,7 +477,7 @@ export const TopStoryBanner = () => {
 
         {/* Customer Reviews Summary */}
         <div className="mt-12 max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-light text-gray-800 mb-8">Customer Reviews</h2>
+          <h2 className="text-2xl md:text-3xl font-light text-gray-800 mb-8">PROVEN RESULTS</h2>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
             {/* Rating Score */}
