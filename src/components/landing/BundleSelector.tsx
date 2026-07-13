@@ -4,6 +4,11 @@ import shampooImg from '@/assets-optimized/products/shampoo.webp';
 import pomadeImg from '@/assets-optimized/products/pomade.webp';
 import conditionerImg from '@/assets-optimized/products/conditioner.webp';
 
+const getProductQty = (items: string, product: string): number => {
+  const match = items.toLowerCase().match(new RegExp(`(\d+)\s+${product}`));
+  return match ? parseInt(match[1], 10) : 0;
+};
+
 export const BundleSelector = () => {
   const formatPrice = (price: number) => `₦${price.toLocaleString()}`;
   const formatSavings = (original: number, current: number) => `Save ₦${(original - current).toLocaleString()}`;
@@ -41,7 +46,9 @@ export const BundleSelector = () => {
         .bundle-selector .card.popular .cta:hover{filter:brightness(1.05)}
         .bundle-selector .footnote{max-width:640px;margin:40px auto 0;text-align:center;color:var(--cocoa);font-size:13.5px;line-height:1.6}
         .bundle-selector .product-imgs{display:flex;justify-content:center;gap:8px;margin:18px 0 4px}
+        .bundle-selector .product-img-wrap{position:relative;display:inline-block}
         .bundle-selector .product-imgs img{width:60px;height:60px;object-fit:contain;border-radius:8px;background:#faf9f7;padding:4px}
+        .bundle-selector .qty-badge{position:absolute;top:-6px;right:-6px;background:var(--gold-deep);color:#fff;font-size:10px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,.15)}
         @media (prefers-reduced-motion:reduce){.bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}}
       `}</style>
       
@@ -61,9 +68,24 @@ export const BundleSelector = () => {
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
             <div className="product-imgs">
-              {pkg.items.toLowerCase().includes('shampoo') && <img src={shampooImg} alt="Shampoo" width="60" height="60" />}
-              {pkg.items.toLowerCase().includes('pomade') && <img src={pomadeImg} alt="Pomade" width="60" height="60" />}
-              {pkg.items.toLowerCase().includes('conditioner') && <img src={conditionerImg} alt="Conditioner" width="60" height="60" />}
+              {getProductQty(pkg.items, 'shampoo') > 0 && (
+                <span className="product-img-wrap">
+                  <img src={shampooImg} alt="Shampoo" width="60" height="60" />
+                  {getProductQty(pkg.items, 'shampoo') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'shampoo')}</span>}
+                </span>
+              )}
+              {getProductQty(pkg.items, 'pomade') > 0 && (
+                <span className="product-img-wrap">
+                  <img src={pomadeImg} alt="Pomade" width="60" height="60" />
+                  {getProductQty(pkg.items, 'pomade') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'pomade')}</span>}
+                </span>
+              )}
+              {getProductQty(pkg.items, 'conditioner') > 0 && (
+                <span className="product-img-wrap">
+                  <img src={conditionerImg} alt="Conditioner" width="60" height="60" />
+                  {getProductQty(pkg.items, 'conditioner') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'conditioner')}</span>}
+                </span>
+              )}
             </div>
             <ul>
               <li><strong>{pkg.items}</strong></li>
