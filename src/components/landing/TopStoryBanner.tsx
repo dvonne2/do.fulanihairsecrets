@@ -277,53 +277,6 @@ export const TopStoryBanner = () => {
           </strong>
 
           {/* Your Journey Section */}
-          <div 
-            className="mt-8 p-8 rounded-2xl text-center"
-            style={{
-              backgroundColor: '#FFF5F0', // Light cream/blush color
-              border: '1px solid #F3E5D0',
-              borderRadius: '16px',
-              margin: '32px auto',
-              maxWidth: '800px'
-            }}
-          >
-            <h2 
-              className="mb-4"
-              style={{
-                fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '28px',
-                fontWeight: '700',
-                textAlign: 'center',
-                lineHeight: '1.3'
-              }}
-            >
-              <span style={{ color: '#2C1810', fontWeight: '700' }}>Your Journey to</span>{' '}
-              <span style={{ 
-                color: '#DAA520', 
-                fontWeight: '700', 
-                fontStyle: 'italic' 
-              }}>
-                Fuller, Longer and Healthier Hair
-              </span>
-            </h2>
-            
-            <p 
-              className="mt-4"
-              style={{
-                color: '#4A4A4A',
-                fontFamily: 'Montserrat, HelveticaNeue, "Helvetica Neue", sans-serif',
-                fontSize: '16px',
-                fontWeight: '400',
-                textAlign: 'center',
-                lineHeight: '1.6',
-                maxWidth: '600px',
-                margin: '16px auto 0'
-              }}
-            >
-              Experience the Fulani Hair Gro™ difference throughout your hair journey. Watch as your hair transforms, growing thicker, longer, stronger, and healthier with each passing week.
-            </p>
-          </div>
-
           {/* Milestone Cards */}
           <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ 
