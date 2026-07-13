@@ -741,15 +741,20 @@ function OrderFormEmbed() {
 
         {/* Preferred Delivery Date */}
         <div style={{ marginBottom: '30px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
+          <label
+            htmlFor="delivery-date"
+            style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}
+          >
             Preferred Delivery Date (within 48 hours only)
           </label>
           <input
+            id="delivery-date"
             type="date"
-            style={{ 
-              width: '100%', 
-              padding: '12px', 
-              border: '1px solid #ddd', 
+            aria-label="Preferred delivery date (within next 48 hours)"
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ddd',
               borderRadius: '6px',
               fontSize: '16px',
               cursor: 'pointer'

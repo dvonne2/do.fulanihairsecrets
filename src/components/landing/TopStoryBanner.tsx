@@ -582,9 +582,11 @@ export const TopStoryBanner = () => {
                   <DialogDescription className="text-left">* required fields</DialogDescription>
                 </DialogHeader>
 
-                <Suspense fallback={null}>
-                  <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
-                </Suspense>
+                {reviewDialogOpen && (
+                  <Suspense fallback={null}>
+                    <ReviewForm onSuccess={() => setReviewDialogOpen(false)} />
+                  </Suspense>
+                )}
               </DialogContent>
             </Dialog>
 
@@ -742,9 +744,11 @@ export const TopStoryBanner = () => {
                     </div>
                   
                   {/* Approved Reviews from Supabase */}
-                  <Suspense fallback={null}>
-                    <ReviewsList />
-                  </Suspense>
+                  {afterHero && (
+                    <Suspense fallback={null}>
+                      <ReviewsList />
+                    </Suspense>
+                  )}
                 </div>
                 </div>
 
@@ -1367,6 +1371,8 @@ This thing is not hype.
                 <LiteYouTubeEmbed
                   id="myJDa7s6O5w"
                   title="Fulani Hair Gro Results Video"
+                  thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
+                  webp
                 />
               </div>
               <h3 style={{
@@ -1409,6 +1415,8 @@ This thing is not hype.
                 <LiteYouTubeEmbed
                   id="xJ4vGH2i48g"
                   title="Fulani Hair Gro Customer Testimonial"
+                  thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
+                  webp
                 />
               </div>
               <h3 style={{
@@ -1451,6 +1459,8 @@ This thing is not hype.
                 <LiteYouTubeEmbed
                   id="LNkhqS3-Kxo"
                   title="Fulani Hair Gro Before and After"
+                  thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
+                  webp
                 />
               </div>
               <h3 style={{
