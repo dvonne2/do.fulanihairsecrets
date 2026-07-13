@@ -5,7 +5,7 @@ import pomadeImg from '@/assets-optimized/products/pomade.webp';
 import conditionerImg from '@/assets-optimized/products/conditioner.webp';
 
 const getProductQty = (items: string, product: string): number => {
-  const match = items.toLowerCase().match(new RegExp(`(\d+)\s+${product}`));
+  const match = items.toLowerCase().match(new RegExp(`(\\d+)\\s+${product}`));
   return match ? parseInt(match[1], 10) : 0;
 };
 
