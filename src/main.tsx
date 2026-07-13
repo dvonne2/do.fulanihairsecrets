@@ -1,4 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -17,13 +17,12 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
 
 const rootEl = document.getElementById("root")!;
 
-// Remove splash screen before React mounts
+// Remove splash screen before React hydrates
 const splash = document.getElementById("splash");
 if (splash) splash.remove();
 // Also remove the inline <style> for the splash spinner
 const splashStyle = rootEl.querySelector("style");
 if (splashStyle) splashStyle.remove();
 
-// Use createRoot instead of hydrateRoot to fix hydration mismatch
-// SSG HTML doesn't match client Suspense/lazy loading structure
-createRoot(rootEl).render(<App />);
+// Hydrate the SSG pre-rendered HTML
+hydrateRoot(rootEl, <App />);

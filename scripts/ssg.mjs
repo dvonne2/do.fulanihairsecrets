@@ -33,8 +33,8 @@ async function ssg() {
     // Load the SSG entry through Vite's module graph (handles TS, JSX, aliases, etc.)
     const { render } = await vite.ssrLoadModule('/src/entry-ssg.tsx');
 
-    // Render the index route to HTML
-    const appHtml = render('/');
+    // Render the index route to HTML (renderToPipeableStream waits for Suspense boundaries)
+    const appHtml = await render('/');
     console.log(`[ssg] Rendered ${(appHtml.length / 1024).toFixed(1)} KB of HTML`);
 
     // Read the built dist/index.html
