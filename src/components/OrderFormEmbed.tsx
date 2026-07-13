@@ -201,6 +201,17 @@ function OrderFormEmbed() {
     deliveryType: 'next_day'
   });
 
+  // Delivery date constraints must be computed on the client only
+  // to avoid hydration mismatches between server and browser time.
+  const [deliveryDateMin, setDeliveryDateMin] = useState('');
+  const [deliveryDateMax, setDeliveryDateMax] = useState('');
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const max = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString().split('T')[0];
+    setDeliveryDateMin(today);
+    setDeliveryDateMax(max);
+  }, []);
+
   // Auto-select package from URL parameter
   useEffect(() => {
     const extractPackageFromUrl = () => {
@@ -747,8 +758,8 @@ function OrderFormEmbed() {
             onChange={e => setForm(prev => ({ ...prev, deliveryDate: e.target.value }))}
             onFocus={e => e.target.showPicker?.()}
             onClick={e => e.target.showPicker?.()}
-            min={new Date().toISOString().split('T')[0]}
-            max={new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString().split('T')[0]}
+            min={deliveryDateMin}
+            max={deliveryDateMax}
           />
           <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
             Please select a delivery date within the next 48 hours

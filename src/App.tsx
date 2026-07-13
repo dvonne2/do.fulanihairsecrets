@@ -4,14 +4,14 @@ import React, { Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
+import Index from "./pages/Index";
 
 // Valentine promo ended - components hidden
 // import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
 // import { FloatingHearts } from "@/components/FloatingHearts";
 
 
-// Route-level code splitting for faster initial load
-const Index = React.lazy(() => import("./pages/Index"));
+// Non-initial routes stay lazy
 const ThankYou = React.lazy(() => import("./pages/ThankYou"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 
@@ -37,11 +37,7 @@ const App = () => {
             <Routes>
               <Route
                 path="/"
-                element={
-                  <Suspense fallback={<LoadingSpinner label="Loading…" />}>
-                    <Index />
-                  </Suspense>
-                }
+                element={<Index />}
               />
               <Route
                 path="/thank-you"
