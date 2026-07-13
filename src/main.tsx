@@ -25,4 +25,9 @@ const splashStyle = rootEl.querySelector("style");
 if (splashStyle) splashStyle.remove();
 
 // Hydrate the SSG pre-rendered HTML
-hydrateRoot(rootEl, <App />);
+hydrateRoot(rootEl, <App />, {
+  onRecoverableError(error) {
+    // Suppress hydration mismatch warnings in production
+    if (import.meta.env.DEV) console.warn('Hydration error:', error);
+  },
+});

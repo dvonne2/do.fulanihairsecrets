@@ -751,6 +751,7 @@ function OrderFormEmbed() {
             id="delivery-date"
             type="date"
             aria-label="Preferred delivery date (within next 48 hours)"
+            suppressHydrationWarning
             style={{
               width: '100%',
               padding: '12px',
