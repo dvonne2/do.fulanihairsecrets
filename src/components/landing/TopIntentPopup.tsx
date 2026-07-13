@@ -166,6 +166,8 @@ export const TopIntentPopup = ({ show, onClose }: TopIntentPopupProps) => {
                     src={ebookImg}
                     alt="Fulani Hair Gro Hair Growth Ebook cover"
                     loading="lazy"
+                    width="48"
+                    height="64"
                     className="w-full h-full object-cover"
                   />
                 </div>
