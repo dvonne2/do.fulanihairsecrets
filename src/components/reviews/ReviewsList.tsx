@@ -212,12 +212,10 @@ export function ReviewsList() {
                     </svg>
                   ))}
                 </div>
-                {review.status === 'featured' && (
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded" 
-                        style={{ background: '#E7F6EC', color: '#1B7F3B', border: '1px solid #A6E0BC' }}>
-                    ✓ Verified Purchase
-                  </span>
-                )}
+                <span className="text-xs font-semibold px-2 py-0.5 rounded" 
+                      style={{ background: '#E7F6EC', color: '#1B7F3B', border: '1px solid #A6E0BC' }}>
+                  ✓ Verified Purchase
+                </span>
               </div>
 
                   <h4 className="font-semibold text-gray-900 mb-1">{review.headline.replace(/#\d+$/, '').trim()}</h4>
