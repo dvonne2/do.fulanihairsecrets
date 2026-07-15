@@ -861,7 +861,7 @@ This thing is not hype.
             textTransform: 'none'
           }}
         >
-          It's heritage with sense.
+          It's proven heritage.
         </p>
 
         <p
