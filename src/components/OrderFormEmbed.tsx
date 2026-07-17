@@ -338,26 +338,10 @@ function OrderFormEmbed() {
       const result = await response.json();
 
       if (result.ok) {
-        alert('Order submitted successfully!');
-        
-        // Fire conversion events
-        fireInitiateCheckout({
-          content_name: form.package,
-          content_ids: [form.package],
-          value: packagePrice,
-          currency: 'NGN',
-        });
-
-        fireTikTokInitiateCheckout({
-          content_name: form.package,
-          value: packagePrice,
-          currency: 'NGN',
-        });
-
-        // Redirect to thank you page
-        setTimeout(() => {
-          window.location.href = '/thank-you';
-        }, 1500);
+        // Redirect immediately to Thank You page for conversion tracking
+        // Pass order_id for proper attribution
+        const orderId = result.order_id || result.data?.order_id || '';
+        window.location.replace(`/thank-you${orderId ? `?order=${orderId}` : ''}`);
       } else {
         alert(result.error || 'Failed to submit order. Please try again.');
       }
