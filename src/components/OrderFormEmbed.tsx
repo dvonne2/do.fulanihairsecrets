@@ -340,8 +340,25 @@ function OrderFormEmbed() {
       if (result.ok) {
         // Redirect immediately to Thank You page for conversion tracking
         // Pass order_id for proper attribution
-        const orderId = result.order_id || result.data?.order_id || '';
-        window.location.replace(`/thank-you${orderId ? `?order=${orderId}` : ''}`);
+        const responseOrderId = result.orderId || result.order_id || result.data?.order_id || orderId;
+        const thankYouOrderId = responseOrderId || orderId;
+
+        // Persist order data so Thank You page can fire Purchase event
+        sessionStorage.setItem('fhg_order_data', JSON.stringify({
+          orderId: thankYouOrderId,
+          email: payload.email,
+          phone: payload.phone,
+          fullName: payload.name,
+          totalAmount: payload.amount,
+          packageAmount: payload.amount,
+          paymentType: 'PBD',
+          packageName: payload.package,
+          state: payload.state,
+          lga: payload.lga,
+          numItems: 1,
+        }));
+
+        window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
       } else {
         alert(result.error || 'Failed to submit order. Please try again.');
       }
