@@ -14,6 +14,7 @@ const copyCriticalFiles = () => ({
       '.htaccess',
       'favicon.ico',
       'robots.txt',
+      'analytics-deferred.js',
       'proxy/facebook.php',
       'meta-capi.php'
     ];
