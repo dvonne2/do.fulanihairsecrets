@@ -101,6 +101,27 @@ async function sha256(value: string): Promise<string> {
     .join('');
 }
 
+function waitForFbq(maxMs = 5000, interval = 150): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window.fbq === 'function') {
+      resolve(true);
+      return;
+    }
+    const start = Date.now();
+    const timer = setInterval(() => {
+      if (typeof window.fbq === 'function') {
+        clearInterval(timer);
+        resolve(true);
+        return;
+      }
+      if (Date.now() - start > maxMs) {
+        clearInterval(timer);
+        resolve(false);
+      }
+    }, interval);
+  });
+}
+
 function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
   if (digits.startsWith('0')) return '234' + digits.slice(1);
@@ -438,9 +459,12 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   };
 
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
-  if (typeof window.fbq === 'function') {
+  const fbqReady = await waitForFbq();
+  if (fbqReady && typeof window.fbq === 'function') {
     window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
+  } else {
+    console.warn('[Meta] fbq not ready, Purchase browser event skipped for order:', order.orderId);
   }
 
   // Fire CAPI for original pixel only with same payload structure
