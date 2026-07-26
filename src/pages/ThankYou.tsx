@@ -64,10 +64,13 @@ const purchaseFired = { current: false };
 
 const ThankYou = () => {
   // const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel(); // Tracking removed
-  const [orderNumber] = useState(() => {
+  const [orderNumber, setOrderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
-      // Use entry_id from URL (WPForms Entry ID) as the single source of truth
       const params = new URLSearchParams(window.location.search);
+      const order = params.get('order');
+      if (order && order.trim().length > 0) {
+        return order;
+      }
       const orderId = params.get('orderId');
       if (orderId && orderId.trim().length > 0) {
         return orderId;
@@ -76,15 +79,18 @@ const ThankYou = () => {
       if (entryId && entryId.trim().length > 0) {
         return entryId;
       }
-      // Log when entry_id is missing for debugging
-      console.error('Order ID (entry_id) missing from URL:', {
-        url: window.location.href,
-        searchParams: window.location.search
-      });
     }
-    // Fallback when no entry_id is available
     return 'UNKNOWN';
   });
+
+  // Re-read order id after hydration (SSG renders with empty query string)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const order = params.get('order') || params.get('orderId') || params.get('entry_id') || '';
+    if (order && order.trim().length > 1) {
+      setOrderNumber(order.trim());
+    }
+  }, []);
   const [savingsAnimated, setSavingsAnimated] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [deliveryEstimate, setDeliveryEstimate] = useState('');
@@ -195,20 +201,21 @@ const ThankYou = () => {
       metaEventsFired.current = true;
       return;
     }
-    if (orderData) {
+    const resolvedOrderId = orderData?.orderId || orderNumber;
+    if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
       // Fire Meta events
       fireThankYouEvents({
-        orderId: orderData.orderId || orderNumber,
-        email: orderData.email,
-        phone: orderData.phone,
-        fullName: orderData.fullName,
-        totalAmount: orderData.totalAmount,
-        packageAmount: orderData.packageAmount || orderData.totalAmount,
-        paymentType: orderData.paymentType || 'PBD',
-        packageName: orderData.packageName || 'Fulani Hair Gro',
-        state: orderData.state,
-        lga: orderData.lga,
-        numItems: orderData.numItems || 1,
+        orderId: resolvedOrderId,
+        email: orderData?.email,
+        phone: orderData?.phone,
+        fullName: orderData?.fullName,
+        totalAmount: orderData?.totalAmount,
+        packageAmount: orderData?.packageAmount || orderData?.totalAmount,
+        paymentType: orderData?.paymentType || 'PBD',
+        packageName: orderData?.packageName || 'Fulani Hair Gro',
+        state: orderData?.state,
+        lga: orderData?.lga,
+        numItems: orderData?.numItems || 1,
       });
 
       // Fire TikTok Purchase event
@@ -217,12 +224,12 @@ const ThankYou = () => {
         purchaseFired.current = true;
         console.log('[TikTok] Firing regular Purchase event');
         fireTikTokPurchase({
-          content_name: orderData.packageName || 'Fulani Hair Gro',
-          value: orderData.totalAmount,
+          content_name: orderData?.packageName || 'Fulani Hair Gro',
+          value: orderData?.totalAmount || 0,
           currency: 'NGN',
-          email: orderData.email,
-          phone: orderData.phone,
-          orderId: orderData.orderId || orderNumber,
+          email: orderData?.email,
+          phone: orderData?.phone,
+          orderId: resolvedOrderId,
         });
       } else {
         console.log('[TikTok] Regular mode - Purchase already fired, skipping');
