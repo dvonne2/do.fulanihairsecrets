@@ -129,6 +129,7 @@ function waitForFbq(maxMs = 5000, interval = 100): Promise<boolean> {
 
 function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
+  if (!digits) return '';
   if (digits.startsWith('0')) return '234' + digits.slice(1);
   if (digits.startsWith('234')) return digits;
   return '234' + digits;
@@ -229,8 +230,10 @@ export async function reinitPixelWithUserData(data: {
   lastName?: string;
   state?: string;
   city?: string;
+  externalId?: string;
 }): Promise<void> {
-  if (typeof window.fbq !== 'function') {
+  const fbqReady = await waitForFbq();
+  if (!fbqReady || typeof window.fbq !== 'function') {
     console.warn('[Meta] fbq not loaded, cannot re-init with user data');
     return;
   }
@@ -244,6 +247,7 @@ export async function reinitPixelWithUserData(data: {
   if (data.lastName) userData.ln = await sha256(data.lastName);
   if (data.state) userData.st = await sha256(data.state);
   if (data.city) userData.ct = await sha256(data.city);
+  if (data.externalId) userData.external_id = await sha256(data.externalId);
   userData.country = await sha256('ng');
 
   // Re-init all pixels with user data
@@ -351,6 +355,7 @@ async function buildUserData(info: {
   if (info.city) ud.ct = [await sha256(info.city)];
   ud.country = [await sha256('ng')];
   if (info.externalId) ud.external_id = [await sha256(info.externalId)];
+  if (typeof navigator !== 'undefined' && navigator.userAgent) ud.client_user_agent = navigator.userAgent;
   const fbp = getFbp();
   const fbc = getFbc();
   if (fbp) ud.fbp = fbp;
@@ -418,6 +423,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   const nameParts = (order.fullName || '').trim().split(' ');
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
+  const stableCustomerId = normalizePhone(order.phone || '') || order.email?.trim().toLowerCase() || order.orderId;
   const userData = await buildUserData({
     email: order.email,
     phone: order.phone,
@@ -425,7 +431,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     lastName,
     state: order.state,
     city: order.lga,
-    externalId: order.orderId,
+    externalId: stableCustomerId,
   });
   const amount = Number(order.totalAmount) || 0;
   const pkgAmount = Number(order.packageAmount) || amount;
@@ -455,6 +461,16 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     media_buyer: mediaBuyer,
     source: source,
   };
+
+  await reinitPixelWithUserData({
+    email: order.email,
+    phone: order.phone,
+    firstName,
+    lastName,
+    state: order.state,
+    city: order.lga,
+    externalId: stableCustomerId,
+  });
 
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
   const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
@@ -659,8 +675,7 @@ export async function fireInitiateCheckout(data: {
   const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
   const source = typeof localStorage !== 'undefined' ? localStorage.getItem('src') || '' : '';
 
-  const identity = data.phone || data.email || '';
-  const eventId = await makeEventId('InitiateCheckout', identity);
+  const eventId = await makeEventId('InitiateCheckout');
   await fireBrowserEvent('track', 'InitiateCheckout', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
@@ -669,11 +684,22 @@ export async function fireInitiateCheckout(data: {
     media_buyer: mediaBuyer,
     source: source,
   }, eventId);
+  if (!data.email || !data.phone) return;
+
+  const stableCustomerId = normalizePhone(data.phone) || data.email.trim().toLowerCase();
+  await reinitPixelWithUserData({
+    email: data.email,
+    phone: data.phone,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    externalId: stableCustomerId,
+  });
   const userData = await buildUserData({
     email: data.email,
     phone: data.phone,
     firstName: data.firstName,
     lastName: data.lastName,
+    externalId: stableCustomerId,
   });
   await fireCAPIEvent('InitiateCheckout', eventId, userData, {
     value: Number(data.amount) || 0,

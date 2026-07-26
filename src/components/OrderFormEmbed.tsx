@@ -8,6 +8,12 @@ import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
 
+const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim().toLowerCase());
+const isValidPhone = (value: string) => {
+  const digits = value.replace(/\D/g, '');
+  return /^(?:0\d{10}|234\d{10}|\d{10})$/.test(digits);
+};
+
 // Debounce hook for performance optimization
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -202,6 +208,7 @@ function OrderFormEmbed() {
   });
 
   const initiateCheckoutFired = useRef(false);
+  const initiateCheckoutEnrichedFired = useRef(false);
 
   const handleInitiateCheckout = async () => {
     if (initiateCheckoutFired.current) return;
@@ -226,6 +233,27 @@ function OrderFormEmbed() {
       lastName: nameParts.slice(1).join(' '),
     });
   };
+
+  useEffect(() => {
+    if (initiateCheckoutEnrichedFired.current || !isValidEmail(form.email) || !isValidPhone(form.phone)) return;
+    const pkg = PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
+      || PACKAGES.find(p => p.isPopular)
+      || PACKAGES[0];
+    if (!pkg) return;
+
+    initiateCheckoutEnrichedFired.current = true;
+    const nameParts = form.name.trim().split(/\s+/);
+    fireInitiateCheckout({
+      packageName: pkg.name,
+      amount: pkg.price,
+      email: form.email.trim().toLowerCase(),
+      phone: form.phone,
+      firstName: nameParts[0],
+      lastName: nameParts.slice(1).join(' '),
+    }).catch(() => {
+      initiateCheckoutEnrichedFired.current = false;
+    });
+  }, [form.email, form.phone, form.name, form.package]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
@@ -320,6 +348,18 @@ function OrderFormEmbed() {
       alert(`Please fill in all required fields. Missing: ${missing.join(', ')}`);
       return;
     }
+    if (!isValidEmail(form.email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+    if (!isValidPhone(form.phone)) {
+      alert('Please enter a valid Nigerian phone number.');
+      return;
+    }
+    if (!isValidPhone(form.whatsapp)) {
+      alert('Please enter a valid Nigerian WhatsApp number.');
+      return;
+    }
 
     handleInitiateCheckout();
 
@@ -342,7 +382,8 @@ function OrderFormEmbed() {
         orderId,
         name: form.name,
         phone: form.phone,
-        email: form.email || '',
+        whatsapp: form.whatsapp,
+        email: form.email.trim().toLowerCase(),
         address: form.address,
         state: form.state,
         package: pkg?.name || form.package,

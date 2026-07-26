@@ -10,13 +10,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const missing = [];
   if (!body.name) missing.push('name');
   if (!body.phone) missing.push('phone');
+  if (!body.whatsapp) missing.push('whatsapp');
+  if (!body.email) missing.push('email');
   if (!body.address) missing.push('address');
   if (!body.state) missing.push('state');
   if (!body.package) missing.push('package');
   if (!body.amount) missing.push('amount');
+  if (!body.deliveryDate) missing.push('deliveryDate');
   if (missing.length > 0) {
     return res.status(400).json({ ok: false, error: `Missing required fields: ${missing.join(', ')}` });
   }
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(body.email).trim().toLowerCase());
+  const validPhone = (value: unknown) => /^(?:0\d{10}|234\d{10}|\d{10})$/.test(String(value).replace(/\D/g, ''));
+  if (!validEmail) return res.status(400).json({ ok: false, error: 'Invalid email address' });
+  if (!validPhone(body.phone)) return res.status(400).json({ ok: false, error: 'Invalid phone number' });
+  if (!validPhone(body.whatsapp)) return res.status(400).json({ ok: false, error: 'Invalid WhatsApp number' });
 
   const erpnextWrite = (async () => {
     const url = process.env.ERPNEXT_INGEST_URL;

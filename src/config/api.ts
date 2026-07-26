@@ -11,9 +11,7 @@ const API_BASE_URL =
   env.VITE_API_BASE_URL ||
   'https://script.google.com/macros/s/AKfycby8sFH-aveFbad7n2WFv4ByJTiD0s2PnT2EYSPW__C8K-VgP6Tks8l87Fm48SAUYIph/exec';
 
-const CAPI_BASE_URL =
-  env.VITE_CAPI_ENDPOINT ||
-  'https://apis.fulanihairsecrets.com/meta-capi.php';
+const CAPI_BASE_URL = '/api/meta-capi';
 
 // ── Endpoints ───────────────────────────────────────────────────
 export const endpoints = {
