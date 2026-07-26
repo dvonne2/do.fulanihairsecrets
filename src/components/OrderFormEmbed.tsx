@@ -205,7 +205,6 @@ function OrderFormEmbed() {
 
   const handleInitiateCheckout = () => {
     if (initiateCheckoutFired.current) return;
-    if (!form.name.trim() || form.name.trim().length < 2) return;
 
     const selectedPackage = form.package
       ? PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
@@ -316,6 +315,8 @@ function OrderFormEmbed() {
       return;
     }
 
+    handleInitiateCheckout();
+
     setSubmitting(true);
 
     try {
@@ -396,7 +397,7 @@ function OrderFormEmbed() {
 
 
   return (
-    <div id="order-form" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', fontFamily: 'Arial, sans-serif', position: 'relative' }}>
+    <div id="order-form" onInput={handleInitiateCheckout} onChange={handleInitiateCheckout} style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', fontFamily: 'Arial, sans-serif', position: 'relative' }}>
       {/* Close Button */}
       <button 
         onClick={(e) => {

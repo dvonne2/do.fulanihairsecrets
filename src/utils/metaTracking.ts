@@ -5,7 +5,7 @@ import { CAPI_ENDPOINT } from '@/config/api';
 
 declare global {
   interface Window {
-    fbq: (...args: any[]) => void;
+    fbq: ((...args: any[]) => void) & { callMethod?: (...args: any[]) => void; queue?: any[]; loaded?: boolean };
     __pvEventId?: string;
   }
 }
@@ -101,15 +101,19 @@ async function sha256(value: string): Promise<string> {
     .join('');
 }
 
-function waitForFbq(maxMs = 5000, interval = 150): Promise<boolean> {
+function isFbqReady(): boolean {
+  return typeof window.fbq === 'function' && typeof window.fbq.callMethod === 'function';
+}
+
+function waitForFbq(maxMs = 5000, interval = 100): Promise<boolean> {
   return new Promise((resolve) => {
-    if (typeof window.fbq === 'function') {
+    if (isFbqReady()) {
       resolve(true);
       return;
     }
     const start = Date.now();
     const timer = setInterval(() => {
-      if (typeof window.fbq === 'function') {
+      if (isFbqReady()) {
         clearInterval(timer);
         resolve(true);
         return;
@@ -253,21 +257,22 @@ export async function reinitPixelWithUserData(data: {
   console.log('[Meta] Pixel re-initialized with Advanced Matching data:', Object.keys(userData));
 }
 
-function fireBrowserEvent(
+async function fireBrowserEvent(
   type: 'track' | 'trackCustom',
   eventName: string,
   data: Record<string, any>,
   eventId: string
-): void {
+): Promise<boolean> {
   // Use eventId in dedup key so different orders can fire but same order can't double-fire
   const key = `browser_${eventName}_${eventId}`;
   if (hasFired(key)) {
     console.log(`[Meta] Browser skip duplicate (persisted): ${eventName} [${eventId}]`);
-    return;
+    return true;
   }
-  if (typeof window.fbq !== 'function') {
-    console.warn(`[Meta] fbq not loaded, skipping: ${eventName}`);
-    return; // Don't markFired — pixel may load later and event should retry
+  const fbqReady = await waitForFbq();
+  if (!fbqReady || typeof window.fbq !== 'function') {
+    console.warn(`[Meta] fbq not ready, skipping: ${eventName}`);
+    return false; // Don't markFired — pixel may load later and event should retry
   }
   markFired(key);
 
@@ -275,6 +280,7 @@ function fireBrowserEvent(
   window.fbq(type, eventName, data, { eventID: eventId });
 
   console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
+  return true;
 }
 
 async function fireCAPIEvent(
@@ -405,7 +411,6 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
       console.log('[Meta] Thank-you events already fired for order:', order.orderId, '— skipping');
       return;
     }
-    sessionStorage.setItem(thankYouKey, '1');
   } catch {}
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
 
@@ -459,12 +464,12 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   };
 
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
-  const fbqReady = await waitForFbq();
-  if (fbqReady && typeof window.fbq === 'function') {
-    window.fbq('track', 'Purchase', purchaseData, { eventID: purchaseEventId });
+  const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
+  if (browserFired) {
+    try { sessionStorage.setItem(thankYouKey, '1'); } catch {}
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
   } else {
-    console.warn('[Meta] fbq not ready, Purchase browser event skipped for order:', order.orderId);
+    console.warn('[Meta] Purchase browser event skipped for order:', order.orderId);
   }
 
   // Fire CAPI for original pixel only with same payload structure
@@ -523,7 +528,7 @@ export async function fireLeadSync(info: {
   const userData = await buildUserData(info);
   const identity = info.phone || info.email || '';
   const eventId = await makeEventId('LeadSync', identity);
-  fireBrowserEvent('trackCustom', 'LeadSync', {
+  await fireBrowserEvent('trackCustom', 'LeadSync', {
     content_category: 'identity_capture',
     media_buyer: mediaBuyer,
     source: source,
@@ -551,12 +556,12 @@ export async function fireLeadSync(info: {
 }
 
 export async function fireFormStart(): Promise<boolean> {
-  if (typeof window.fbq !== 'function') {
-    console.warn('[Meta] fbq not loaded yet, FormStart will retry on next keystroke');
+  const eventId = await makeEventId('FormStart');
+  const ok = await fireBrowserEvent('trackCustom', 'FormStart', {}, eventId);
+  if (!ok) {
+    console.warn('[Meta] fbq not ready, FormStart skipped');
     return false;
   }
-  const eventId = await makeEventId('FormStart');
-  fireBrowserEvent('trackCustom', 'FormStart', {}, eventId);
   const userData = await getStoredIdentity();
   await fireCAPIEvent('FormStart', eventId, userData, {
     value: 0,
@@ -610,7 +615,7 @@ export async function fireViewContent(data: {
 }): Promise<void> {
   const identity = data.phone || data.email || '';
   const eventId = await makeEventId('ViewContent', identity);
-  fireBrowserEvent('track', 'ViewContent', {
+  await fireBrowserEvent('track', 'ViewContent', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
     content_type: 'product',
@@ -634,7 +639,7 @@ export async function fireAddToCart(data: {
 }): Promise<void> {
   const identity = data.phone || data.email || '';
   const eventId = await makeEventId('AddToCart', identity);
-  fireBrowserEvent('track', 'AddToCart', {
+  await fireBrowserEvent('track', 'AddToCart', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
     content_type: 'product',
@@ -664,7 +669,7 @@ export async function fireInitiateCheckout(data: {
 
   const identity = data.phone || data.email || '';
   const eventId = await makeEventId('InitiateCheckout', identity);
-  fireBrowserEvent('track', 'InitiateCheckout', {
+  await fireBrowserEvent('track', 'InitiateCheckout', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
     content_type: 'product',
@@ -696,7 +701,7 @@ export async function fireCartRecovery(data: {
   amount?: number;
 }): Promise<void> {
   const eventId = await makeEventId('CartRecovery', data.orderId);
-  fireBrowserEvent('trackCustom', 'CartRecovery', {
+  await fireBrowserEvent('trackCustom', 'CartRecovery', {
     value: Number(data.amount) || 0,
     currency: 'NGN',
     content_category: 'abandoned_cart',
