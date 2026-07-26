@@ -307,13 +307,16 @@ function OrderFormEmbed() {
   const submit = async () => {
     // Validate required fields
     console.log('[OrderForm] Form state before validation:', form);
-    if (!form.name || !form.phone || !form.address || !form.state || !form.package) {
+    if (!form.name || !form.phone || !form.whatsapp || !form.email || !form.address || !form.state || !form.package || !form.deliveryDate) {
       const missing = [];
       if (!form.name) missing.push('name');
       if (!form.phone) missing.push('phone');
+      if (!form.whatsapp) missing.push('WhatsApp number');
+      if (!form.email) missing.push('email address');
       if (!form.address) missing.push('address');
       if (!form.state) missing.push('state');
       if (!form.package) missing.push('package');
+      if (!form.deliveryDate) missing.push('preferred delivery date');
       alert(`Please fill in all required fields. Missing: ${missing.join(', ')}`);
       return;
     }
@@ -510,7 +513,7 @@ function OrderFormEmbed() {
         {/* Your WhatsApp Number */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your WhatsApp Number
+            Your WhatsApp Number *
           </label>
           <input
             type="tel"
@@ -524,13 +527,14 @@ function OrderFormEmbed() {
             placeholder="e.g. 08012345678"
             value={form.whatsapp}
             onChange={e => setForm(prev => ({ ...prev, whatsapp: e.target.value }))}
+            required
           />
         </div>
 
         {/* Your Email Address */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}>
-            Your Email Address
+            Your Email Address *
           </label>
           <input
             type="email"
@@ -544,6 +548,7 @@ function OrderFormEmbed() {
             placeholder="e.g. yourname@gmail.com"
             value={form.email}
             onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+            required
           />
         </div>
 
@@ -775,7 +780,7 @@ function OrderFormEmbed() {
             htmlFor="delivery-date"
             style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#333' }}
           >
-            Preferred Delivery Date (within 48 hours only)
+            Preferred Delivery Date * (within 48 hours only)
           </label>
           <input
             id="delivery-date"
@@ -792,6 +797,7 @@ function OrderFormEmbed() {
             }}
             value={form.deliveryDate}
             onChange={e => setForm(prev => ({ ...prev, deliveryDate: e.target.value }))}
+            required
             onFocus={e => e.target.showPicker?.()}
             onClick={e => e.target.showPicker?.()}
             min={deliveryDateMin}
