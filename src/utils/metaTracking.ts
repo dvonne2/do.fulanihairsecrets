@@ -265,7 +265,7 @@ async function fireBrowserEvent(
 ): Promise<boolean> {
   // Use eventId in dedup key so different orders can fire but same order can't double-fire
   const key = `browser_${eventName}_${eventId}`;
-  if (hasFired(key)) {
+  if (eventName !== 'Purchase' && hasFired(key)) {
     console.log(`[Meta] Browser skip duplicate (persisted): ${eventName} [${eventId}]`);
     return true;
   }
@@ -274,7 +274,7 @@ async function fireBrowserEvent(
     console.warn(`[Meta] fbq not ready, skipping: ${eventName}`);
     return false; // Don't markFired — pixel may load later and event should retry
   }
-  markFired(key);
+  if (eventName !== 'Purchase') markFired(key);
 
   // Fire on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
   window.fbq(type, eventName, data, { eventID: eventId });
@@ -404,14 +404,6 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     return;
   }
 
-  // Guard: only fire once per order, even across page refreshes
-  const thankYouKey = `fhg_ty_fired_${order.orderId}`;
-  try {
-    if (sessionStorage.getItem(thankYouKey)) {
-      console.log('[Meta] Thank-you events already fired for order:', order.orderId, '— skipping');
-      return;
-    }
-  } catch {}
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
 
   // Detect test mode from URL
@@ -466,7 +458,6 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
   const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
   if (browserFired) {
-    try { sessionStorage.setItem(thankYouKey, '1'); } catch {}
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
   } else {
     console.warn('[Meta] Purchase browser event skipped for order:', order.orderId);
