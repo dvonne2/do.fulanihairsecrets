@@ -578,6 +578,30 @@ export async function firePageViewCAPI(): Promise<void> {
   }
 }
 
+export async function fireViewContent(data: {
+  packageName: string;
+  amount?: number;
+  email?: string;
+  phone?: string;
+}): Promise<void> {
+  const identity = data.phone || data.email || '';
+  const eventId = await makeEventId('ViewContent', identity);
+  fireBrowserEvent('track', 'ViewContent', {
+    value: Number(data.amount) || 0,
+    currency: 'NGN',
+    content_type: 'product',
+    content_name: data.packageName,
+  }, eventId);
+  const userData = await buildUserData({
+    email: data.email,
+    phone: data.phone,
+  });
+  await fireCAPIEvent('ViewContent', eventId, userData, {
+    value: Number(data.amount) || 0,
+    content_name: data.packageName,
+  });
+}
+
 export async function fireAddToCart(data: {
   packageName: string;
   amount: number;

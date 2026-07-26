@@ -201,6 +201,30 @@ function OrderFormEmbed() {
     deliveryType: 'next_day'
   });
 
+  const initiateCheckoutFired = useRef(false);
+
+  const handleInitiateCheckout = () => {
+    if (initiateCheckoutFired.current) return;
+    if (!form.name.trim() || form.name.trim().length < 2) return;
+
+    const selectedPackage = form.package
+      ? PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
+      : null;
+    const pkg = selectedPackage || PACKAGES.find(p => p.isPopular) || PACKAGES[0];
+    if (!pkg) return;
+
+    const nameParts = form.name.trim().split(' ');
+    fireInitiateCheckout({
+      packageName: pkg.name,
+      amount: pkg.price,
+      email: form.email,
+      phone: form.phone || form.whatsapp,
+      firstName: nameParts[0],
+      lastName: nameParts.slice(1).join(' '),
+    });
+    initiateCheckoutFired.current = true;
+  };
+
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
   const [deliveryDateMin, setDeliveryDateMin] = useState('');
@@ -455,6 +479,7 @@ function OrderFormEmbed() {
             placeholder="e.g. Chidinma Okafor"
             value={form.name}
             onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+            onBlur={handleInitiateCheckout}
           />
         </div>
 

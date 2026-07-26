@@ -11,9 +11,31 @@ import result6 from '@/assets-optimized/results/result-6.webp';
 import result7 from '@/assets-optimized/results/result-7.webp';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { usePrefetch } from '@/hooks/usePrefetch';
+import { fireAddToCart, fireViewContent } from '@/utils/metaTracking';
+import { useEffect, useRef } from 'react';
 
 export const BundleSection = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let fired = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !fired) {
+          fired = true;
+          fireViewContent({ packageName: 'Complete 3-Step Bundle', amount: 66750 });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   const results = [
     { image: result1, caption: "Length retention goals" },
@@ -26,7 +48,7 @@ export const BundleSection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-background relative overflow-hidden">
+    <section ref={sectionRef} className="py-16 md:py-24 bg-background relative overflow-hidden">
       {/* Ambient glow effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/5 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
@@ -205,6 +227,12 @@ export const BundleSection = () => {
               href="#order-form"
               data-form-cta="true"
               {...thankYouPrefetch}
+              onClick={() => {
+                fireAddToCart({
+                  packageName: 'Self Love Plus B2GOF',
+                  amount: 66750,
+                });
+              }}
               className="inline-flex items-center gap-3 gold-gradient text-background font-sans text-base tracking-wider uppercase px-10 py-4 rounded-xl font-bold btn-luxury"
             >
               <span>👑</span>
