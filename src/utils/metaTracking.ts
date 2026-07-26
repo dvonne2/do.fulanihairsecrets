@@ -6,6 +6,7 @@ import { CAPI_ENDPOINT } from '@/config/api';
 declare global {
   interface Window {
     fbq: ((...args: any[]) => void) & { callMethod?: (...args: any[]) => void; queue?: any[]; loaded?: boolean };
+    __metaPixelsInitialized?: boolean;
     __pvEventId?: string;
   }
 }
@@ -102,7 +103,7 @@ async function sha256(value: string): Promise<string> {
 }
 
 function isFbqReady(): boolean {
-  return typeof window.fbq === 'function' && typeof window.fbq.callMethod === 'function';
+  return window.__metaPixelsInitialized === true && typeof window.fbq === 'function' && typeof window.fbq.callMethod === 'function';
 }
 
 function waitForFbq(maxMs = 5000, interval = 100): Promise<boolean> {

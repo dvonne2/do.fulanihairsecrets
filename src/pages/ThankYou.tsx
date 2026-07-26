@@ -158,6 +158,7 @@ const ThankYou = () => {
 
   useEffect(() => {
     const run = async () => {
+      if (loading) return;
       if (metaEventsFired.current) {
         console.log('[Meta] Events already fired, skipping');
         return;
@@ -204,6 +205,7 @@ const ThankYou = () => {
       }
       const resolvedOrderId = orderData?.orderId || orderNumber;
       if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
+        metaEventsFired.current = true;
         // Fire Meta events
         await fireThankYouEvents({
           orderId: resolvedOrderId,
@@ -237,11 +239,10 @@ const ThankYou = () => {
         }
 
         console.log('[Events] Purchase fired for both Meta and TikTok');
-        metaEventsFired.current = true;
       }
     };
     run();
-  }, [orderData, orderNumber]);
+  }, [loading, orderData, orderNumber]);
 
   useEffect(() => {
     try {
