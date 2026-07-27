@@ -5,13 +5,11 @@ import { UrgencyBanner } from '@/components/landing/UrgencyBanner';
 import { TopStoryBanner } from '@/components/landing/TopStoryBanner';
 import { StickyElements } from '@/components/landing/StickyElements';
 import { TopIntentPopup } from '@/components/landing/TopIntentPopup';
+import { Footer } from '@/components/landing/Footer';
 // Valentine promo ended
 // import { ValentineCountdown } from '@/components/ValentineCountdown';
 
 // Lazy load below-fold components
-const Footer = lazy(() =>
-  import('@/components/landing/Footer').then((m) => ({ default: m.Footer }))
-);
 const Guarantee = lazy(() =>
   import('@/components/landing/Guarantee').then((m) => ({ default: m.Guarantee }))
 );
@@ -305,7 +303,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {mounted && afterHero && (
+      {/* Footer sticky bar temporarily hidden */}
+      {false && mounted && afterHero && (
         <StickyElements 
           showStickyBar={showStickyBar}
           viewerCount={viewerCount}
@@ -331,11 +330,7 @@ const Index = () => {
         )}
       </main>
       
-      {mounted && loadNonCritical && (
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
-      )}
+      {mounted && <Footer />}
       
       <TopIntentPopup
         show={showTopIntent}

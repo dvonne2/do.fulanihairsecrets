@@ -45,7 +45,7 @@ export const Footer = () => {
             <span className="arrow-indicator"></span>
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 group-hover:translate-x-full transition-transform duration-1000 ease-out footer-shine-effect"
             ></span>
-            
+
             {/* Text with glow */}
             <span className="relative z-10 drop-shadow-lg footer-glow-text">
               Go To Order Form
