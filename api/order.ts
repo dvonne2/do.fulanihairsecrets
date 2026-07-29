@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           customer_email: body.email || '', package_name: body.package, total: body.amount,
           delivery_fee: body.deliveryFee || 3000, state: body.state, lga: body.lga || '',
           address: body.address, landmark: body.landmark || '', source: 'React-Web',
-          aff_id: cut(body.aff_id), utm_source: cut(body.utm_source),
+          utm_source: cut(body.utm_source),
           payment_method: body.paymentMethod || 'Pay on Delivery',
           click_id: cut(body.click_id), landing_page_url: cut(body.landing_page_url),
         }),

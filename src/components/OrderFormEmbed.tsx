@@ -400,7 +400,6 @@ function OrderFormEmbed() {
         landmark: form.landmark || '',
         deliveryFee: form.deliveryType === 'same_day' ? 5000 : 3000,
         paymentMethod: 'Pay on Delivery',
-        aff_id: localStorage.getItem('vv_aff_id') || localStorage.getItem('mb') || '',
         utm_source: localStorage.getItem('src') || '',
         click_id: '',
         landing_page_url: window.location.href,
