@@ -1469,6 +1469,7 @@ This thing is not hype.
                   alt="Before and After Results 6"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
+                  decoding="async"
                   width="600"
                   height="400"
                 />

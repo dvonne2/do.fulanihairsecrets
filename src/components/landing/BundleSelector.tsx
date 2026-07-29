@@ -70,19 +70,19 @@ export const BundleSelector = () => {
             <div className="product-imgs">
               {getProductQty(pkg.items, 'shampoo') > 0 && (
                 <span className="product-img-wrap">
-                  <img src={shampooImg} alt="Shampoo" width="60" height="60" />
+                  <img src={shampooImg} alt="Shampoo" width="60" height="60" loading="lazy" decoding="async" />
                   {getProductQty(pkg.items, 'shampoo') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'shampoo')}</span>}
                 </span>
               )}
               {getProductQty(pkg.items, 'pomade') > 0 && (
                 <span className="product-img-wrap">
-                  <img src={pomadeImg} alt="Pomade" width="60" height="60" />
+                  <img src={pomadeImg} alt="Pomade" width="60" height="60" loading="lazy" decoding="async" />
                   {getProductQty(pkg.items, 'pomade') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'pomade')}</span>}
                 </span>
               )}
               {getProductQty(pkg.items, 'conditioner') > 0 && (
                 <span className="product-img-wrap">
-                  <img src={conditionerImg} alt="Conditioner" width="60" height="60" />
+                  <img src={conditionerImg} alt="Conditioner" width="60" height="60" loading="lazy" decoding="async" />
                   {getProductQty(pkg.items, 'conditioner') > 1 && <span className="qty-badge">×{getProductQty(pkg.items, 'conditioner')}</span>}
                 </span>
               )}

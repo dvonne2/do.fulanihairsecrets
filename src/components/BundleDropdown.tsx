@@ -143,6 +143,8 @@ function ItemRow({ item, bundleId }: { item: BundleItem; bundleId: string }) {
                   key={i}
                   src={item.image}
                   alt={item.freeName}
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: 32, height: 32, borderRadius: 6, objectFit: "cover", background: "#F3F4F6" }}
                 />
               ))}
