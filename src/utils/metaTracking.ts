@@ -160,6 +160,22 @@ function getFbc(): string | null {
   return null;
 }
 
+function getExternalId(): string {
+  try {
+    let id = localStorage.getItem('fhg_external_id');
+    if (id) return id;
+    id = [...Array(16)]
+      .map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)])
+      .join('');
+    localStorage.setItem('fhg_external_id', id);
+    return id;
+  } catch {
+    return [...Array(16)]
+      .map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)])
+      .join('');
+  }
+}
+
 function captureFbclid(): void {
   try {
     // Capture fbclid from URL and create _fbc cookie
@@ -247,7 +263,8 @@ export async function reinitPixelWithUserData(data: {
   if (data.lastName) userData.ln = await sha256(data.lastName);
   if (data.state) userData.st = await sha256(data.state);
   if (data.city) userData.ct = await sha256(data.city);
-  if (data.externalId) userData.external_id = await sha256(data.externalId);
+  const externalId = data.externalId || getExternalId();
+  if (externalId) userData.external_id = externalId;
   userData.country = await sha256('ng');
 
   // Re-init all pixels with user data
@@ -354,7 +371,8 @@ async function buildUserData(info: {
   if (info.state) ud.st = [await sha256(info.state)];
   if (info.city) ud.ct = [await sha256(info.city)];
   ud.country = [await sha256('ng')];
-  if (info.externalId) ud.external_id = [await sha256(info.externalId)];
+  const externalId = info.externalId || getExternalId();
+  if (externalId) ud.external_id = [externalId];
   if (typeof navigator !== 'undefined' && navigator.userAgent) ud.client_user_agent = navigator.userAgent;
   const fbp = getFbp();
   const fbc = getFbc();
