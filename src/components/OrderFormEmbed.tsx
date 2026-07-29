@@ -331,8 +331,12 @@ function OrderFormEmbed() {
   }, []);
   
   const [submitting, setSubmitting] = useState(false);
+  const submitStarted = useRef(false);
 
   const submit = async () => {
+    if (submitting || submitStarted.current) return;
+    submitStarted.current = true;
+
     // Validate required fields
     console.log('[OrderForm] Form state before validation:', form);
     if (!form.name || !form.phone || !form.whatsapp || !form.email || !form.address || !form.state || !form.package || !form.deliveryDate) {
@@ -346,18 +350,22 @@ function OrderFormEmbed() {
       if (!form.package) missing.push('package');
       if (!form.deliveryDate) missing.push('preferred delivery date');
       alert(`Please fill in all required fields. Missing: ${missing.join(', ')}`);
+      submitStarted.current = false;
       return;
     }
     if (!isValidEmail(form.email)) {
       alert('Please enter a valid email address.');
+      submitStarted.current = false;
       return;
     }
     if (!isValidPhone(form.phone)) {
       alert('Please enter a valid Nigerian phone number.');
+      submitStarted.current = false;
       return;
     }
     if (!isValidPhone(form.whatsapp)) {
       alert('Please enter a valid Nigerian WhatsApp number.');
+      submitStarted.current = false;
       return;
     }
 
@@ -366,14 +374,13 @@ function OrderFormEmbed() {
     setSubmitting(true);
 
     try {
-      const orderId = String(
-        (Date.now() % 100000) * 100000 + Math.floor(Math.random() * 100000)
-      ).padStart(10, "0");
+      const orderId = getOrCreateOrderId();
       const pkg = PACKAGES.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
 
       if (packagePrice === 0) {
         alert('Please select a package');
+        submitStarted.current = false;
         setSubmitting(false);
         return;
       }
@@ -439,6 +446,7 @@ function OrderFormEmbed() {
       alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
+      submitStarted.current = false;
     }
   };
 
