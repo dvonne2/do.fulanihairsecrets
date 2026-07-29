@@ -2,6 +2,15 @@ import { google } from 'googleapis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const cut = (v: any, n = 140) => (v == null ? "" : String(v)).slice(0, n);
+const TIMEOUT_MS = 5000;
+
+const timeout = <T>(promise: Promise<T>, label: string) =>
+  Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${TIMEOUT_MS}ms`)), TIMEOUT_MS)
+    ),
+  ]);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -31,8 +40,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
     if (!url || !secret) { console.error('[ERPNext] Missing env vars'); return { ok: false, error: 'Missing env vars' }; }
     try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
       const response = await fetch(url, {
         method: 'POST',
+        signal: controller.signal,
         headers: { 'Content-Type': 'application/json', 'X-Webhook-Secret': secret },
         body: JSON.stringify({
           order_id: body.orderId, customer_name: body.name, customer_phone: body.phone,
@@ -44,6 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           click_id: cut(body.click_id), landing_page_url: cut(body.landing_page_url),
         }),
       });
+      clearTimeout(timer);
       if (!response.ok) { 
         const text = await response.text();
         console.error(`[ERPNext] ${response.status}: ${text}`); 
@@ -69,7 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         scopes: ['https://www.googleapis.com/auth/spreadsheets']
       });
       const sheets = google.sheets({ version: 'v4', auth });
-      await sheets.spreadsheets.values.append({
+      await timeout(sheets.spreadsheets.values.append({
         spreadsheetId: sheetId, range: 'Orders!A:K', valueInputOption: 'USER_ENTERED',
         requestBody: { values: [[
           new Date().toLocaleString('sv-SE', { timeZone: 'Africa/Lagos' }),
@@ -77,7 +90,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           body.address, body.state, body.package, Number(body.amount),
           body.deliveryDate || '', 'website'
         ]] },
-      });
+      }), '[Sheets]');
       console.log('[Sheets] Success');
       return { ok: true };
     } catch (e: any) { 
