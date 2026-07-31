@@ -254,7 +254,7 @@ export async function reinitPixelWithUserData(data: {
     return;
   }
 
-  const pixelIds = ['220381209723501', '2709676702727852', '964049967992063', '1481974843635740'];
+  const pixelIds = ['220381209723501', '2709676702727852'];
   const userData: Record<string, any> = {};
 
   if (data.email) userData.em = await sha256(data.email);
@@ -298,7 +298,7 @@ async function fireBrowserEvent(
   }
   if (eventName !== 'Purchase') markFired(key);
 
-  // Fire on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
+  // Fire on all initialized pixels (220381209723501, 2709676702727852)
   window.fbq(type, eventName, data, { eventID: eventId });
 
   console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
@@ -490,7 +490,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     externalId: stableCustomerId,
   });
 
-  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
+  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852)
   const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
   if (browserFired) {
     console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
