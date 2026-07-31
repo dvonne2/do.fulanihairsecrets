@@ -12,6 +12,12 @@ declare global {
 }
 
 // ============================================
+// PIXEL ROUTING
+// ============================================
+const PIXEL_1 = '220381209723501';
+const SINGLE_PIXEL_EVENTS = new Set(['Purchase', 'InitiateCheckout']);
+
+// ============================================
 // PERSISTENT DEDUP — survives page reloads
 // ============================================
 const DEDUP_STORAGE_KEY = 'fhg_meta_dedup';
@@ -254,7 +260,7 @@ export async function reinitPixelWithUserData(data: {
     return;
   }
 
-  const pixelIds = ['220381209723501', '2709676702727852'];
+  const pixelIds = [PIXEL_1];
   const userData: Record<string, any> = {};
 
   if (data.email) userData.em = await sha256(data.email);
@@ -298,10 +304,19 @@ async function fireBrowserEvent(
   }
   if (eventName !== 'Purchase') markFired(key);
 
-  // Fire on all initialized pixels (220381209723501, 2709676702727852)
-  window.fbq(type, eventName, data, { eventID: eventId });
-
-  console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
+  if (SINGLE_PIXEL_EVENTS.has(eventName)) {
+    // Conversion events route to Pixel 1 only
+    if (type === 'trackCustom') {
+      window.fbq('trackSingleCustom', '220381209723501', eventName, data, { eventID: eventId });
+    } else {
+      window.fbq('trackSingle', '220381209723501', eventName, data, { eventID: eventId });
+    }
+    console.log(`[Meta] Browser trackSingle (220381209723501): ${eventName}`, data, `eventID=${eventId}`);
+  } else {
+    // PageView and ViewContent reach all initialized pixels for audience building
+    window.fbq(type, eventName, data, { eventID: eventId });
+    console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
+  }
   return true;
 }
 
@@ -318,6 +333,7 @@ async function fireCAPIEvent(
     console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
+
   const fbp = getFbp();
   const fbc = getFbc();
   if (fbp) userData.fbp = fbp;
@@ -490,10 +506,10 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
     externalId: stableCustomerId,
   });
 
-  // Fire Purchase on all initialized pixels (220381209723501, 2709676702727852)
+  // Fire Purchase on Pixel 1 only
   const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
   if (browserFired) {
-    console.log('[Meta] Purchase fired on all pixels:', purchaseData, `eventID=${purchaseEventId}`);
+    console.log('[Meta] Purchase fired on Pixel 1:', purchaseData, `eventID=${purchaseEventId}`);
   } else {
     console.warn('[Meta] Purchase browser event skipped for order:', order.orderId);
   }
