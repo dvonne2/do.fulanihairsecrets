@@ -8,41 +8,7 @@ declare global {
     fbq: ((...args: any[]) => void) & { callMethod?: (...args: any[]) => void; queue?: any[]; loaded?: boolean };
     __metaPixelsInitialized?: boolean;
     __pvEventId?: string;
-    __fhgSelectedPixelId?: string;
   }
-}
-
-// ============================================
-// PIXEL ROUTING
-// ============================================
-const PIXEL_1 = '220381209723501';
-const PIXEL_IDS = [
-  '220381209723501',
-  '2709676702727852',
-  '964049967992063',
-  '1481974843635740',
-];
-const SINGLE_PIXEL_EVENTS = new Set([
-  'AddToCart',
-  'FormStart',
-  'LeadSync',
-  'InitiateCheckout',
-  'CartRecovery',
-  'Purchase',
-]);
-
-export function getSelectedPixelId(): string {
-  if (typeof window === 'undefined') return PIXEL_1;
-  let stored: string | null = null;
-  try {
-    stored = localStorage.getItem('fhg_pixel');
-  } catch {
-    stored = null;
-  }
-  if (stored && PIXEL_IDS.includes(stored)) return stored;
-  const fromWindow = window.__fhgSelectedPixelId;
-  if (fromWindow && PIXEL_IDS.includes(fromWindow)) return fromWindow;
-  return PIXEL_1;
 }
 
 // ============================================
@@ -332,20 +298,10 @@ async function fireBrowserEvent(
   }
   if (eventName !== 'Purchase') markFired(key);
 
-  if (SINGLE_PIXEL_EVENTS.has(eventName)) {
-    // Conversion / intent events go only to the selected pixel
-    const selectedPixelId = getSelectedPixelId();
-    if (type === 'trackCustom') {
-      window.fbq('trackSingleCustom', selectedPixelId, eventName, data, { eventID: eventId });
-    } else {
-      window.fbq('trackSingle', selectedPixelId, eventName, data, { eventID: eventId });
-    }
-    console.log(`[Meta] Browser trackSingle (${selectedPixelId}): ${eventName}`, data, `eventID=${eventId}`);
-  } else {
-    // PageView and ViewContent remain on all four pixels for audience building
-    window.fbq(type, eventName, data, { eventID: eventId });
-    console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
-  }
+  // Fire on all initialized pixels (220381209723501, 2709676702727852, 964049967992063, 1481974843635740)
+  window.fbq(type, eventName, data, { eventID: eventId });
+
+  console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
   return true;
 }
 
@@ -362,17 +318,6 @@ async function fireCAPIEvent(
     console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName} [${eventId}]`);
     return;
   }
-
-  // The current CAPI endpoint/credentials are Pixel 1 only.
-  // PageView and ViewContent are still sent to Pixel 1 for audience building.
-  // All other conversion CAPI events are sent only when Pixel 1 is selected.
-  const selectedPixelId = getSelectedPixelId();
-  const alwaysToPixel1 = eventName === 'PageView' || eventName === 'ViewContent';
-  if (selectedPixelId !== PIXEL_1 && !alwaysToPixel1) {
-    console.log(`[Meta] CAPI skip for ${eventName}: selected pixel is ${selectedPixelId}, not Pixel 1`);
-    return;
-  }
-
   const fbp = getFbp();
   const fbc = getFbc();
   if (fbp) userData.fbp = fbp;
