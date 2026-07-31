@@ -350,7 +350,7 @@ const ThankYou = () => {
           <p className="text-sm mb-3">Events are being sent to Meta. Check your browser console (F12) for details.</p>
           <div className="flex flex-wrap justify-center gap-3 text-sm">
             <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">FormStart</span>
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">AddToCart</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">ViewContent</span>
             <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">InitiateCheckout</span>
             <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">Purchase</span>
             <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">HighValuePurchase</span>

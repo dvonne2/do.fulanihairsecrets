@@ -657,30 +657,6 @@ export async function fireViewContent(data: {
   });
 }
 
-export async function fireAddToCart(data: {
-  packageName: string;
-  amount: number;
-  email?: string;
-  phone?: string;
-}): Promise<void> {
-  const identity = data.phone || data.email || '';
-  const eventId = await makeEventId('AddToCart', identity);
-  await fireBrowserEvent('track', 'AddToCart', {
-    value: Number(data.amount) || 0,
-    currency: 'NGN',
-    content_type: 'product',
-    content_name: data.packageName,
-  }, eventId);
-  const userData = await buildUserData({
-    email: data.email,
-    phone: data.phone,
-  });
-  await fireCAPIEvent('AddToCart', eventId, userData, {
-    value: Number(data.amount) || 0,
-    content_name: data.packageName,
-  });
-}
-
 export async function fireInitiateCheckout(data: {
   packageName: string;
   amount: number;
@@ -762,7 +738,7 @@ export async function fireCartRecovery(data: {
 
 /**
  * Pre-mark events as already fired so recovery sessions don't duplicate them.
- * Call this when restoring a recovery link to prevent FormStart/LeadSync/AddToCart
+ * Call this when restoring a recovery link to prevent FormStart/LeadSync
  * from re-firing with the pre-filled data.
  */
 export function markEventsAsFired(events: string[]): void {

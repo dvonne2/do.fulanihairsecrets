@@ -21,7 +21,7 @@ export const ATTRIBUTION_SYSTEM_CHECKLIST = {
     sessionEnrichment: {
       thirtyDayBridge: 'localStorage persistence ✅',
       piiReuse: 'Email, phone, location across events ✅',
-      midFunnelEvents: 'AddToCart with full identity ✅',
+      midFunnelEvents: 'ViewContent with full identity ✅',
       priority: 'High Priority - Consistency'
     },
     deterministicDeduplication: {

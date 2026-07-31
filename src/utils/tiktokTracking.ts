@@ -104,27 +104,6 @@ async function fireTikTokEvent(event: string, parameters?: Record<string, any>, 
 // ==============================
 
 /**
- * AddToCart - fires when user clicks into the Step 1 form (first interaction/focus)
- */
-export async function fireTikTokAddToCart(data?: {
-  content_name?: string;
-  content_id?: string;
-  value?: number;
-  currency?: string;
-  email?: string;
-  phone?: string;
-}): Promise<void> {
-  const identity = data?.phone || data?.email || '';
-  await fireTikTokEvent('AddToCart', {
-    content_type: 'product',
-    content_name: data?.content_name || 'Fulani Hair Gro',
-    content_id: data?.content_id || 'PKG-001', // Required for VSA
-    value: data?.value || 0,
-    currency: data?.currency || 'NGN',
-  }, identity);
-}
-
-/**
  * LeadSync / CompleteRegistration - fires after email AND phone number are captured in Step 1's form
  */
 export async function fireTikTokLeadSync(data?: {

@@ -11,7 +11,7 @@ import result6 from '@/assets-optimized/results/result-6.webp';
 import result7 from '@/assets-optimized/results/result-7.webp';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { usePrefetch } from '@/hooks/usePrefetch';
-import { fireAddToCart, fireViewContent } from '@/utils/metaTracking';
+import { fireViewContent } from '@/utils/metaTracking';
 import { useEffect, useRef } from 'react';
 
 export const BundleSection = () => {
@@ -227,12 +227,6 @@ export const BundleSection = () => {
               href="#order-form"
               data-form-cta="true"
               {...thankYouPrefetch}
-              onClick={() => {
-                fireAddToCart({
-                  packageName: 'Self Love Plus B2GOF',
-                  amount: 66750,
-                });
-              }}
               className="inline-flex items-center gap-3 gold-gradient text-background font-sans text-base tracking-wider uppercase px-10 py-4 rounded-xl font-bold btn-luxury"
             >
               <span>👑</span>
