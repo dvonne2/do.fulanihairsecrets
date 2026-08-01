@@ -63,7 +63,6 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
 const purchaseFired = { current: false };
 
 const ThankYou = () => {
-  // const { trackPurchase, trackHighValuePurchase, trackFormStart, trackAddToCart, trackInitiateCheckout, trackCompleteRegistration, trackPageView, isEventFired } = useMetaPixel(); // Tracking removed
   const [orderNumber, setOrderNumber] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
