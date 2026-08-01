@@ -146,8 +146,14 @@ function getCookie(name: string): string | null {
   return match ? decodeURIComponent(match[2]) : null;
 }
 
+function isValidFbp(value: string | unknown): value is string {
+  return typeof value === 'string' && value.startsWith('fb.');
+}
+
 function getFbp(): string | null {
-  return getCookie('_fbp');
+  const cookie = getCookie('_fbp');
+  if (isValidFbp(cookie)) return cookie;
+  return getPersistedFbp();
 }
 
 function getFbc(): string | null {
@@ -235,7 +241,7 @@ export function getPersistedFbp(): string | null {
     const raw = localStorage.getItem('meta_fbp_persist');
     if (raw) {
       const data = JSON.parse(raw);
-      if (Date.now() < data.expiresAt) return data.fbp;
+      if (Date.now() < data.expiresAt && isValidFbp(data.fbp)) return data.fbp;
     }
   } catch {}
   return null;

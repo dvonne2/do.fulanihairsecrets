@@ -33,9 +33,17 @@ $parsedUrl = parse_url($sourceUrl);
 $normalizedUrl = ($parsedUrl['scheme'] ?? 'https') . '://' . ($parsedUrl['host'] ?? 'fulanihairsecrets.com') . ($parsedUrl['path'] ?? '/');
 
 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
-if (isset($input['user_data'])) {
-    $input['user_data']['client_ip_address'] = $ip;
-    $input['user_data']['client_user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if (strpos($ip, ',') !== false) {
+    $ip = trim(explode(',', $ip)[0]);
+}
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if (isset($input['user_data']) && is_array($input['user_data'])) {
+    if (empty($input['user_data']['client_ip_address'])) {
+        $input['user_data']['client_ip_address'] = $ip;
+    }
+    if (empty($input['user_data']['client_user_agent'])) {
+        $input['user_data']['client_user_agent'] = $userAgent;
+    }
 }
 
 $payload = json_encode([
