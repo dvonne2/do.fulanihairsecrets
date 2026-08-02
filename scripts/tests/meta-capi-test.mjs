@@ -581,11 +581,9 @@ async function run() {
     if (out.trim()) throw new Error(`fireAddToCart references:\n${out}`);
   }
 
-  // 46. api/order.ts unchanged
-  // 47. src/components/OrderFormEmbed.tsx unchanged
-  // 48. src/utils/metaTracking.ts is expected to be modified for EMQ improvements
+  // 46. api/order.ts unchanged; 47. OrderFormEmbed.tsx may be modified to fix InitiateCheckout trigger
   {
-    const unchanged = ['api/order.ts', 'src/components/OrderFormEmbed.tsx'];
+    const unchanged = ['api/order.ts'];
     for (const file of unchanged) {
       try {
         execSync(`git diff --quiet -- ${file}`, { cwd: repoRoot });
@@ -593,6 +591,13 @@ async function run() {
         throw new Error(`${file} has been modified`);
       }
     }
+
+    const orderForm = readFileSync(resolve(repoRoot, 'src/components/OrderFormEmbed.tsx'), 'utf-8');
+    if (orderForm.includes('onInput={handleInitiateCheckout}')) throw new Error('OrderFormEmbed should not trigger InitiateCheckout on parent onInput');
+    if (orderForm.includes('onChange={handleInitiateCheckout}')) throw new Error('OrderFormEmbed should not trigger InitiateCheckout on parent onChange');
+    if (orderForm.includes('onBlur={handleInitiateCheckout}')) throw new Error('OrderFormEmbed should not trigger InitiateCheckout on name blur');
+    if (!orderForm.includes('handleInitiateCheckout();')) throw new Error('OrderFormEmbed useEffect should call handleInitiateCheckout()');
+    if (!orderForm.includes('await Promise.race([')) throw new Error('Submit should await InitiateCheckout fallback with Promise.race timeout');
   }
 
   // Current Google Sheet recording intact

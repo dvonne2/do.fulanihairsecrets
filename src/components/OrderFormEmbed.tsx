@@ -2,6 +2,7 @@ import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
+import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { PHONE_DISPLAY } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
@@ -67,54 +68,6 @@ const lgasByState: { [key: string]: string[] } = {
   'Kaduna': ['Kaduna North', 'Kaduna South', 'Chikun', 'Igabi', 'Zaria', 'Sabon Gari'],
 };
 
-// Generate unique Order ID - YYMMDDHHmm format
-const generateOrderId = (): string => {
-  const now = new Date();
-  const yy = String(now.getFullYear()).slice(-2);  // 26
-  const mm = String(now.getMonth() + 1).padStart(2, '0');  // 01
-  const dd = String(now.getDate()).padStart(2, '0');     // 09
-  const hh = String(now.getHours()).padStart(2, '0');    // 19
-  const min = String(now.getMinutes()).padStart(2, '0'); // 36
-  return `${yy}${mm}${dd}${hh}${min}`; // 2602091936
-};
-
-// Single source of truth for Order ID - generate once, persist everywhere
-const getOrCreateOrderId = (formOrderId?: string): string => {
-  // Priority 1: URL parameter (for recovery links)
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlOrderId = urlParams.get('orderId');
-    if (urlOrderId?.trim()) {
-      localStorage.setItem('fhg_persistent_order_id', urlOrderId.trim());
-      return urlOrderId.trim();
-    }
-  }
-
-  // Priority 2: Already in form state
-  if (formOrderId) return formOrderId;
-
-  // Priority 3: Already in localStorage
-  const stored = localStorage.getItem('fhg_persistent_order_id');
-  if (stored?.trim()) return stored.trim();
-
-  // Priority 4: Generate new, persist immediately
-  const newOrderId = generateOrderId();
-  localStorage.setItem('fhg_persistent_order_id', newOrderId);
-  return newOrderId;
-};
-
-// Get orderId from URL or generate new one
-const getOrderIdFromURL = (): string => {
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search);
-    const existingOrderId = urlParams.get('orderId');
-    if (existingOrderId && existingOrderId.trim().length > 0) {
-      console.log('🔄 Recovery link detected - using existing orderId:', existingOrderId);
-      return existingOrderId.trim();
-    }
-  }
-  return generateOrderId();
-};
 
 // All styles as objects
 const S: { [key: string]: CSSProperties } = {
@@ -207,52 +160,63 @@ function OrderFormEmbed() {
     deliveryType: 'next_day'
   });
 
-  const initiateCheckoutFired = useRef(false);
-  const initiateCheckoutEnrichedFired = useRef(false);
+  const initiateCheckoutRef = useRef<{ fired: boolean; inFlight: boolean; promise: Promise<void> | null }>({
+    fired: false,
+    inFlight: false,
+    promise: null,
+  });
 
-  const handleInitiateCheckout = async () => {
-    if (initiateCheckoutFired.current) return;
-    initiateCheckoutFired.current = true;
+  const handleInitiateCheckout = async (): Promise<void> => {
+    const ref = initiateCheckoutRef.current;
+
+    // Already done — nothing to wait for
+    if (ref.fired) return;
+
+    // A call is already running; await that same promise so the redirect waits for it
+    if (ref.inFlight && ref.promise) return ref.promise;
+
+    ref.inFlight = true;
 
     const selectedPackage = form.package
       ? PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
       : null;
     const pkg = selectedPackage || PACKAGES.find(p => p.isPopular) || PACKAGES[0];
     if (!pkg) {
-      initiateCheckoutFired.current = false;
+      ref.inFlight = false;
       return;
     }
 
-    const nameParts = form.name.trim().split(' ');
-    await fireInitiateCheckout({
-      packageName: pkg.name,
-      amount: pkg.price,
-      email: form.email,
-      phone: form.phone || form.whatsapp,
-      firstName: nameParts[0],
-      lastName: nameParts.slice(1).join(' '),
-    });
-  };
+    // Only fire when we have useful matching data
+    if (!form.name.trim() || !isValidPhone(form.phone) || !isValidEmail(form.email)) {
+      ref.inFlight = false;
+      return;
+    }
 
-  useEffect(() => {
-    if (initiateCheckoutEnrichedFired.current || !isValidEmail(form.email) || !isValidPhone(form.phone)) return;
-    const pkg = PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
-      || PACKAGES.find(p => p.isPopular)
-      || PACKAGES[0];
-    if (!pkg) return;
-
-    initiateCheckoutEnrichedFired.current = true;
+    // Lock before any await so no second handleInitiateCheckout can run concurrently
+    ref.fired = true;
     const nameParts = form.name.trim().split(/\s+/);
-    fireInitiateCheckout({
+    ref.promise = fireInitiateCheckout({
       packageName: pkg.name,
       amount: pkg.price,
       email: form.email.trim().toLowerCase(),
       phone: form.phone,
       firstName: nameParts[0],
       lastName: nameParts.slice(1).join(' '),
-    }).catch(() => {
-      initiateCheckoutEnrichedFired.current = false;
     });
+
+    try {
+      await ref.promise;
+    } catch {
+      // Reset the fired flag only on error so a later valid attempt can retry
+      ref.fired = false;
+    } finally {
+      ref.inFlight = false;
+      ref.promise = null;
+    }
+  };
+
+  useEffect(() => {
+    handleInitiateCheckout();
   }, [form.email, form.phone, form.name, form.package]);
 
   // Delivery date constraints must be computed on the client only
@@ -369,12 +333,21 @@ function OrderFormEmbed() {
       return;
     }
 
-    handleInitiateCheckout();
+    // Wait for the single InitiateCheckout call to finish or time out before redirecting.
+    // If the useEffect already started it, handleInitiateCheckout returns the in-flight promise.
+    try {
+      await Promise.race([
+        handleInitiateCheckout(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('InitiateCheckout timeout')), 1200)),
+      ]);
+    } catch {
+      // Order submission continues even if tracking fails or times out
+    }
 
     setSubmitting(true);
 
     try {
-      const orderId = getOrCreateOrderId();
+      const checkoutAttemptId = getCheckoutAttemptId();
       const pkg = PACKAGES.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
 
@@ -386,7 +359,7 @@ function OrderFormEmbed() {
       }
 
       const payload = {
-        orderId,
+        checkoutAttemptId,
         name: form.name,
         phone: form.phone,
         whatsapp: form.whatsapp,
@@ -416,12 +389,14 @@ function OrderFormEmbed() {
       const result = await response.json();
 
       if (result.ok) {
-        // Redirect immediately to Thank You page for conversion tracking
-        // Pass order_id for proper attribution
-        const responseOrderId = result.orderId || result.order_id || result.data?.order_id || orderId;
-        const thankYouOrderId = responseOrderId || orderId;
+        // Server is the authority on the final confirmed order ID.
+        const confirmedOrderId = result.orderId;
+        const thankYouOrderId = confirmedOrderId;
 
-        // Persist order data so Thank You page can fire Purchase event
+        // The checkout attempt ID is consumed; a future checkout must generate a new one.
+        clearCheckoutAttemptId();
+
+        // Persist confirmed order data so Thank You page can fire Purchase event
         sessionStorage.setItem('fhg_order_data', JSON.stringify({
           orderId: thankYouOrderId,
           email: payload.email,
@@ -451,7 +426,7 @@ function OrderFormEmbed() {
 
 
   return (
-    <div id="order-form" onInput={handleInitiateCheckout} onChange={handleInitiateCheckout} style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', fontFamily: 'Arial, sans-serif', position: 'relative' }}>
+    <div id="order-form" style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', fontFamily: 'Arial, sans-serif', position: 'relative' }}>
       {/* Close Button */}
       <button 
         onClick={(e) => {
@@ -534,7 +509,6 @@ function OrderFormEmbed() {
             placeholder="e.g. Chidinma Okafor"
             value={form.name}
             onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-            onBlur={handleInitiateCheckout}
           />
         </div>
 

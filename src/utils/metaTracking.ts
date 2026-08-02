@@ -343,12 +343,12 @@ async function fireCAPIEvent(
   userData: Record<string, any>,
   customData: Record<string, any>,
   testEventCode?: string
-): Promise<void> {
+): Promise<boolean> {
   // Use eventId in dedup key so different orders can fire but same order can't double-fire
   const key = `capi_${eventName}_${eventId}`;
   if (hasFired(key)) {
     console.log(`[Meta] CAPI skip duplicate (persisted): ${eventName} [${eventId}]`);
-    return;
+    return true;
   }
 
   const fbp = getFbp();
@@ -382,8 +382,10 @@ async function fireCAPIEvent(
     const result = await res.json();
     markFired(key);
     console.log(`[Meta] CAPI sent: ${eventName}`, result);
+    return true;
   } catch (err) {
     console.error(`[Meta] CAPI error: ${eventName}`, err);
+    return false;
   }
 }
 
@@ -456,11 +458,11 @@ export interface OrderData {
   numItems?: number;
 }
 
-export async function fireThankYouEvents(order: OrderData): Promise<void> {
+export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
   // Guard: skip test orders to prevent leaking to production
   if (order.orderId?.startsWith('TEST_') || order.orderId === 'TEST_ORDER_123') {
     console.log('[META] Test order detected, skipping all Pixel/CAPI events', order.orderId);
-    return;
+    return true;
   }
 
   console.log('[Meta] Firing thank-you events for order:', order.orderId);
@@ -534,7 +536,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   }
 
   // Fire CAPI for original pixel only with same payload structure
-  await fireCAPIEvent('Purchase', purchaseEventId, userData, {
+  const capiFired = await fireCAPIEvent('Purchase', purchaseEventId, userData, {
     value: amount,  // Product price ONLY (no delivery fee) - standardized
     content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',
@@ -558,6 +560,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<void> {
   // CompleteRegistration removed - belongs on signup/lead pages, not order confirmation
 
   console.log('[Meta] Thank-you events complete (Purchase only)');
+  return browserFired && capiFired;
 }
 
 let leadSyncFired = false;

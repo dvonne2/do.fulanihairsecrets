@@ -163,12 +163,36 @@ const ThankYou = () => {
         return;
       }
 
-      console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
       const isTestMode = window.location.search.includes('test=1');
+      const resolvedOrderId = isTestMode ? 'TEST_ORDER_123' : (orderData?.orderId || orderNumber);
+      const inFlightKey = resolvedOrderId ? `fhg_purchase_in_flight_${resolvedOrderId}` : '';
+      const completedKey = resolvedOrderId ? `fhg_purchase_completed_${resolvedOrderId}` : '';
+
+      if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
+        if (sessionStorage.getItem(completedKey)) {
+          console.log('[Meta] Events already fired for this order, skipping');
+          metaEventsFired.current = true;
+          return;
+        }
+        if (sessionStorage.getItem(inFlightKey)) {
+          console.log('[Meta] Purchase already in flight, skipping');
+          metaEventsFired.current = true;
+          return;
+        }
+        sessionStorage.setItem(inFlightKey, Date.now().toString());
+      } else {
+        // No usable order ID; nothing to fire.
+        return;
+      }
+
+      let eventsOk = false;
+      try {
+      metaEventsFired.current = true;
+      console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
       if (isTestMode) {
         resetTracking();
-        await fireThankYouEvents({
-          orderId: 'TEST_ORDER_123',
+        eventsOk = await fireThankYouEvents({
+          orderId: resolvedOrderId,
           email: 'test@fulanihairsecrets.com',
           phone: '08012345678',
           fullName: 'Test User',
@@ -192,7 +216,7 @@ const ThankYou = () => {
             currency: 'NGN',
             email: 'test@fulanihairsecrets.com',
             phone: '08012345678',
-            orderId: 'TEST_ORDER_123',
+            orderId: resolvedOrderId,
           });
         } else {
           console.log('[TikTok] Test mode - Purchase already fired, skipping');
@@ -202,11 +226,8 @@ const ThankYou = () => {
         metaEventsFired.current = true;
         return;
       }
-      const resolvedOrderId = orderData?.orderId || orderNumber;
-      if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
-        metaEventsFired.current = true;
-        // Fire Meta events
-        await fireThankYouEvents({
+      // Fire Meta events
+      eventsOk = await fireThankYouEvents({
           orderId: resolvedOrderId,
           email: orderData?.email,
           phone: orderData?.phone,
@@ -238,9 +259,13 @@ const ThankYou = () => {
         }
 
         console.log('[Events] Purchase fired for both Meta and TikTok');
+      } finally {
+        if (eventsOk) {
+          sessionStorage.setItem(completedKey, '1');
+        }
+        sessionStorage.removeItem(inFlightKey);
       }
     };
-    run();
   }, [loading, orderData, orderNumber]);
 
   useEffect(() => {
@@ -555,7 +580,6 @@ const ThankYou = () => {
             <h3 className="text-lg font-bold text-green-400 mb-4">🎁 YOUR FREE BONUSES:</h3>
             <div className="space-y-3">
               {[
-                { icon: '🎀', name: '3x Luxury Silk Bonnets', value: '₦15,000' },
                 { icon: '📖', name: 'Hair Growth Secrets Ebook', value: '₦10,000' },
                 { icon: '📱', name: 'VIP WhatsApp Support', value: '₦20,000' },
                 { icon: '💆', name: 'Scalp Massage Guide', value: '₦5,000' },

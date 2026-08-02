@@ -181,12 +181,51 @@ async function run() {
   assert.equal(normalizePhone('2348012345678'), '2348012345678', 'Phone 234... stays as is');
   assert.equal(normalizePhone('+234 801 234 5678'), '2348012345678', 'Phone with +/spaces normalizes to 234...');
 
-  // Verify OrderFormEmbed.tsx and api/order.ts were not modified by these changes
+  // Verify api/order.ts was not modified by these changes
   try {
-    execSync('git diff --quiet -- src/components/OrderFormEmbed.tsx', { cwd: repoRoot });
     execSync('git diff --quiet -- api/order.ts', { cwd: repoRoot });
   } catch {
-    throw new Error('OrderFormEmbed.tsx or api/order.ts should not be modified');
+    throw new Error('api/order.ts should not be modified');
+  }
+
+  // fireInitiateCheckout produces one browser + CAPI event with shared event_id
+  {
+    compiledFbqCalls = [];
+    compiledFetch.body = null;
+    await metaTracking.fireInitiateCheckout({
+      packageName: 'Self Love Plus',
+      amount: 32750,
+      email: 'test@example.com',
+      phone: '08012345678',
+      firstName: 'Amina',
+      lastName: 'Queen B',
+    });
+    const trackCall = compiledFbqCalls.find((args) => args[0] === 'trackSingle' && args[2] === 'InitiateCheckout');
+    assert(trackCall, 'Browser InitiateCheckout trackSingle should fire');
+    assert.equal(trackCall[1], '220381209723501', 'InitiateCheckout should route to Pixel 1 only');
+    assert.equal(trackCall[3].value, 32750, 'Browser InitiateCheckout should carry package value');
+    assert.equal(trackCall[3].currency, 'NGN', 'Browser InitiateCheckout should use NGN');
+    assert.ok(trackCall[4] && trackCall[4].eventID, 'Browser InitiateCheckout should have eventID');
+    assert(compiledFetch.body, 'CAPI InitiateCheckout request should be sent');
+    assert.equal(compiledFetch.body.event_name, 'InitiateCheckout', 'CAPI event_name should be InitiateCheckout');
+    assert.equal(compiledFetch.body.custom_data.value, 32750, 'CAPI value should match package amount');
+    assert.equal(compiledFetch.body.custom_data.currency, 'NGN', 'CAPI currency should be NGN');
+    assert.equal(trackCall[4].eventID, compiledFetch.body.event_id, 'Browser and CAPI should share the same event_id');
+
+    // Second call with the same data must be deduplicated by persistent 24h key
+    compiledFbqCalls = [];
+    compiledFetch.body = null;
+    await metaTracking.fireInitiateCheckout({
+      packageName: 'Self Love Plus',
+      amount: 32750,
+      email: 'test@example.com',
+      phone: '08012345678',
+      firstName: 'Amina',
+      lastName: 'Queen B',
+    });
+    const secondTrack = compiledFbqCalls.find((args) => args[0] === 'trackSingle' && args[2] === 'InitiateCheckout');
+    assert(!secondTrack, 'Second InitiateCheckout should be deduplicated at browser layer');
+    assert(!compiledFetch.body, 'Second InitiateCheckout should not send CAPI again');
   }
 
   process.stdout.write('All meta-tracking tests passed.\n');
