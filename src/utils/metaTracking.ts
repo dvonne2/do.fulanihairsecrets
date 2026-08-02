@@ -141,6 +141,15 @@ function normalizePhone(phone: string): string {
   return '234' + digits;
 }
 
+function normalizeName(value: string): string {
+  return value
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   return match ? decodeURIComponent(match[2]) : null;
@@ -271,13 +280,15 @@ export async function reinitPixelWithUserData(data: {
 
   if (data.email) userData.em = await sha256(data.email);
   if (data.phone) userData.ph = await sha256(normalizePhone(data.phone));
-  if (data.firstName) userData.fn = await sha256(data.firstName);
-  if (data.lastName) userData.ln = await sha256(data.lastName);
+  const firstName = data.firstName ? normalizeName(data.firstName) : '';
+  const lastName = data.lastName ? normalizeName(data.lastName) : '';
+  if (firstName) userData.fn = await sha256(firstName);
+  if (lastName) userData.ln = await sha256(lastName);
   if (data.state) userData.st = await sha256(data.state);
   if (data.city) userData.ct = await sha256(data.city);
   const externalId = data.externalId || getExternalId();
   if (externalId) userData.external_id = externalId;
-  userData.country = await sha256('ng');
+  userData.country = 'ng';
 
   // Re-init all pixels with user data
   pixelIds.forEach((pixelId) => {
@@ -388,8 +399,10 @@ async function buildUserData(info: {
   const ud: Record<string, any> = {};
   if (info.email) ud.em = [await sha256(info.email)];
   if (info.phone) ud.ph = [await sha256(normalizePhone(info.phone))];
-  if (info.firstName) ud.fn = [await sha256(info.firstName)];
-  if (info.lastName) ud.ln = [await sha256(info.lastName)];
+  const firstName = info.firstName ? normalizeName(info.firstName) : '';
+  const lastName = info.lastName ? normalizeName(info.lastName) : '';
+  if (firstName) ud.fn = [await sha256(firstName)];
+  if (lastName) ud.ln = [await sha256(lastName)];
   if (info.state) ud.st = [await sha256(info.state)];
   if (info.city) ud.ct = [await sha256(info.city)];
   ud.country = [await sha256('ng')];

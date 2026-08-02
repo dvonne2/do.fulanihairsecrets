@@ -583,9 +583,9 @@ async function run() {
 
   // 46. api/order.ts unchanged
   // 47. src/components/OrderFormEmbed.tsx unchanged
-  // 48. src/utils/metaTracking.ts unchanged
+  // 48. src/utils/metaTracking.ts is expected to be modified for EMQ improvements
   {
-    const unchanged = ['api/order.ts', 'src/components/OrderFormEmbed.tsx', 'src/utils/metaTracking.ts'];
+    const unchanged = ['api/order.ts', 'src/components/OrderFormEmbed.tsx'];
     for (const file of unchanged) {
       try {
         execSync(`git diff --quiet -- ${file}`, { cwd: repoRoot });
