@@ -1,7 +1,7 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import nigeriaLGAs from '@/data/nigeriaLGAs.json';
-import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired } from '@/utils/metaTracking';
+import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { PHONE_DISPLAY } from '@/config/api';
@@ -218,6 +218,22 @@ function OrderFormEmbed() {
   useEffect(() => {
     handleInitiateCheckout();
   }, [form.email, form.phone, form.name, form.package]);
+
+  const pixelReinited = useRef(false);
+  useEffect(() => {
+    if (pixelReinited.current) return;
+    const email = form.email.trim().toLowerCase();
+    const phone = form.phone;
+    if (!isValidEmail(email) && !isValidPhone(phone)) return;
+    const nameParts = form.name.trim().split(/\s+/);
+    reinitPixelWithUserData({
+      email: isValidEmail(email) ? email : undefined,
+      phone: isValidPhone(phone) ? phone : undefined,
+      firstName: nameParts[0] || undefined,
+      lastName: nameParts.slice(1).join(' ') || undefined,
+    });
+    pixelReinited.current = true;
+  }, [form.email, form.phone, form.name]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
