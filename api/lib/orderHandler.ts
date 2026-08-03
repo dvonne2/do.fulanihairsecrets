@@ -89,6 +89,10 @@ async function sheetsWrite(
     console.log('[Idempotency] sheet side already in progress, skipping');
     return { ok: false };
   }
+  if (!sheets) {
+    await store.releaseSideLock(attemptId, 'sheet');
+    return { ok: false, error: 'Google Sheets not configured' } as any;
+  }
   const spreadsheetId = process.env.SHEET_ID;
   if (!spreadsheetId) {
     await store.releaseSideLock(attemptId, 'sheet');
