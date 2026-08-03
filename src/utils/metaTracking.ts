@@ -426,6 +426,16 @@ async function buildUserData(info: {
   gender?: string;
   externalId?: string;
 }): Promise<Record<string, any>> {
+  const stored = getStoredIdentityRaw();
+  if (stored) {
+    if (!info.email) info.email = stored.email;
+    if (!info.phone) info.phone = stored.phone;
+    if (!info.firstName) info.firstName = stored.firstName;
+    if (!info.lastName) info.lastName = stored.lastName;
+    if (!info.state) info.state = stored.state;
+    if (!info.city) info.city = stored.city;
+    if (!info.gender) info.gender = stored.gender;
+  }
   const ud: Record<string, any> = {};
   if (info.email) ud.em = [await sha256(info.email)];
   const normalizedPhone = info.phone ? normalizePhone(info.phone) : '';
@@ -462,25 +472,19 @@ function delay(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function getStoredIdentity(): Promise<Record<string, any>> {
+function getStoredIdentityRaw(): Record<string, any> | null {
   try {
     const stored = localStorage.getItem('fhg_identity');
     if (stored) {
       const data = JSON.parse(stored);
-      if (Date.now() < data.expiresAt) {
-        return buildUserData({
-          email: data.email,
-          phone: data.phone,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          state: data.state,
-          city: data.city,
-          gender: data.gender,
-        });
-      }
+      if (Date.now() < data.expiresAt) return data;
     }
   } catch {}
-  return {};
+  return null;
+}
+
+async function getStoredIdentity(): Promise<Record<string, any>> {
+  return buildUserData({});
 }
 
 // ============================================
