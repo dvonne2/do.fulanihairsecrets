@@ -5,6 +5,7 @@ declare global {
   interface Window {
     ttq: {
       track: (event: string, parameters?: Record<string, any>) => void;
+      identify: (data: Record<string, string>) => void;
       page: () => void;
     };
   }
@@ -76,8 +77,43 @@ function waitForTikTok(): Promise<boolean> {
   });
 }
 
+// TikTok only reads email/phone from ttq.identify(), never from event properties.
+// Values must be normalized (lowercase email, E.164 phone) and SHA-256 hashed.
+function normalizePhoneE164(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.startsWith('234')) return `+${digits}`;
+  if (digits.startsWith('0')) return `+234${digits.slice(1)}`;
+  return `+234${digits}`;
+}
+
+async function identifyTikTokUser(pii?: { email?: string; phone?: string }): Promise<void> {
+  if (!pii?.email && !pii?.phone) return;
+  if (typeof window.ttq?.identify !== 'function') return;
+
+  const payload: Record<string, string> = {};
+  if (pii.email) payload.email = await sha256raw(pii.email);
+  const e164 = pii.phone ? normalizePhoneE164(pii.phone) : '';
+  if (e164) payload.phone_number = await sha256raw(e164);
+  if (pii.email) payload.external_id = await sha256raw(pii.email);
+
+  if (Object.keys(payload).length === 0) return;
+
+  try {
+    window.ttq.identify(payload);
+    console.log('[TikTok] identify sent:', Object.keys(payload));
+  } catch (error) {
+    console.error('[TikTok] identify failed:', error);
+  }
+}
+
 // Generic TikTok event firing function
-async function fireTikTokEvent(event: string, parameters?: Record<string, any>, identity?: string): Promise<void> {
+async function fireTikTokEvent(
+  event: string,
+  parameters?: Record<string, any>,
+  identity?: string,
+  pii?: { email?: string; phone?: string }
+): Promise<void> {
   const tikTokReady = await waitForTikTok();
   
   if (!tikTokReady) {
@@ -86,6 +122,9 @@ async function fireTikTokEvent(event: string, parameters?: Record<string, any>, 
   }
 
   try {
+    // Must run before track() so the event carries the identity.
+    await identifyTikTokUser(pii);
+
     const eventId = await makeTikTokEventId(event, identity);
     const eventParams = {
       ...parameters,
@@ -116,7 +155,7 @@ export async function fireTikTokLeadSync(data?: {
   await fireTikTokEvent('LeadSync', {
     content_category: 'identity_capture',
     value: 0,
-  }, identity);
+  }, identity, { email: data?.email, phone: data?.phone });
 }
 
 /**
@@ -132,7 +171,7 @@ export async function fireTikTokCompleteRegistration(data?: {
   await fireTikTokEvent('CompleteRegistration', {
     content_category: 'identity_capture',
     value: 0,
-  }, identity);
+  }, identity, { email: data?.email, phone: data?.phone });
 }
 
 /**
@@ -153,7 +192,7 @@ export async function fireTikTokInitiateCheckout(data: {
     content_id: data.content_id || 'PKG-001', // Required for VSA
     value: data.value,
     currency: data.currency || 'NGN',
-  }, identity);
+  }, identity, { email: data.email, phone: data.phone });
 }
 
 /**
@@ -176,9 +215,7 @@ export async function fireTikTokPurchase(data: {
     value: data.value,
     currency: data.currency || 'NGN',
     order_id: data.orderId,
-    email: data.email,
-    phone: data.phone,
-  }, identity);
+  }, identity, { email: data.email, phone: data.phone });
 }
 
 // ==============================
