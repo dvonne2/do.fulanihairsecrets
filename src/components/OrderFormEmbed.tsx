@@ -429,6 +429,7 @@ function OrderFormEmbed() {
 
         window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
       } else {
+        console.error('[OrderForm] Order failed:', result);
         alert(result.error || 'Failed to submit order. Please try again.');
       }
     } catch (error) {
