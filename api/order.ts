@@ -123,9 +123,12 @@ class RedisIdempotencyStore implements IdempotencyStore {
   }
 
   async claim(attemptId: string, orderId: string, createdAt: number, payload: Record<string, any>): Promise<boolean> {
-    const created = await this.command<number>('HSETNX', this.key(attemptId), 'created_at', String(createdAt));
-    if (created !== 1) return false;
+    // If a complete record already exists, do not overwrite it.
+    const hash = await this.command<Record<string, string> | null>('HGETALL', this.key(attemptId));
+    if (hash && hash.order_id) return false;
+    // Create or repair an incomplete record (e.g. a previous request crashed after HSETNX).
     await this.command('HSET', this.key(attemptId),
+      'created_at', String(createdAt),
       'order_id', orderId,
       'erpnext_ok', 'false',
       'sheet_ok', 'false',

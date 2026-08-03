@@ -363,6 +363,7 @@ function OrderFormEmbed() {
     setSubmitting(true);
 
     try {
+      clearCheckoutAttemptId();
       const checkoutAttemptId = getCheckoutAttemptId();
       const pkg = PACKAGES.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
@@ -430,10 +431,12 @@ function OrderFormEmbed() {
         window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
       } else {
         console.error('[OrderForm] Order failed:', result);
+        clearCheckoutAttemptId();
         alert(result.error || 'Failed to submit order. Please try again.');
       }
     } catch (error) {
       console.error('Submit error:', error);
+      clearCheckoutAttemptId();
       alert('An error occurred. Please try again.');
     } finally {
       setSubmitting(false);
