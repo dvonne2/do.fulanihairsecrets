@@ -245,6 +245,20 @@ export function captureFbclid(): void {
         setCookie('_fbp', fbp, 90);
       }
     }
+
+    // Re-set the cookies server-side (HTTP Set-Cookie). Safari ITP caps
+    // JS-written cookies at 7 days; server-set cookies keep the full 30/90 days.
+    if ((fbc || fbp) && !sessionStorage.getItem('fhg_attribution_synced')) {
+      sessionStorage.setItem('fhg_attribution_synced', '1');
+      fetch('/api/set-attribution', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fbc: fbc || undefined, fbp: fbp || undefined }),
+        keepalive: true,
+      }).catch(() => {
+        sessionStorage.removeItem('fhg_attribution_synced');
+      });
+    }
   } catch {}
 }
 
