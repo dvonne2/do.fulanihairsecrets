@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { handleOrder } from './lib/orderHandler';
-import { RedisIdempotencyStore } from './lib/idempotency';
+import { RedisIdempotencyStore, MemoryIdempotencyStore } from './lib/idempotency';
 
 async function getSheets() {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -24,7 +24,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const store = new RedisIdempotencyStore();
     return await handleOrder(req, res, sheets, fetch, store);
   } catch (e: any) {
-    console.error('[api/order] Idempotency store error:', e.message);
-    return res.status(500).json({ ok: false, error: 'Idempotency store not configured' });
+    console.warn('[api/order] Redis not configured, falling back to memory store:', e.message);
+    const store = new MemoryIdempotencyStore();
+    return await handleOrder(req, res, sheets, fetch, store);
   }
 }
