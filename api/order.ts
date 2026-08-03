@@ -187,6 +187,12 @@ async function erpnextWrite(
   if (!acquired) {
     console.log('[Idempotency] erpnext side already in progress, skipping');
     return { ok: false };
+
+  // Temporarily disabled — ERPNext write paused
+  await store.complete(attemptId, 'erpnextOk', true);
+  await store.releaseSideLock(attemptId, 'erpnext');
+  console.log('[ERPNext] Skipped (disabled)');
+  return { ok: true };
   }
   try {
     const url = process.env.ERPNEXT_INGEST_URL;
