@@ -297,9 +297,14 @@ async function recordOrder(
   store: IdempotencyStore,
   attemptId: string,
 ): Promise<{ erpnextOk: boolean; sheetOk: boolean }> {
-  const erpnextRes = status.erpnextOk ? { ok: true } : await erpnextWrite(body, status.orderId, fetchFn, store, attemptId);
-  const sheetRes = status.sheetOk ? { ok: true } : await sheetsWrite(body, status.orderId, sheets, store, attemptId);
-  return { erpnextOk: erpnextRes.ok, sheetOk: sheetRes.ok };
+  const erpnextRes = status.erpnextOk ? { ok: true, error: undefined } : await erpnextWrite(body, status.orderId, fetchFn, store, attemptId);
+  const sheetRes = status.sheetOk ? { ok: true, error: undefined } : await sheetsWrite(body, status.orderId, sheets, store, attemptId);
+  return {
+    erpnextOk: erpnextRes.ok,
+    sheetOk: sheetRes.ok,
+    erpnextError: erpnextRes.error,
+    sheetError: sheetRes.error,
+  };
 }
 
 async function handleOrder(
@@ -353,7 +358,7 @@ async function handleOrder(
     }
   }
 
-  await recordOrder(payload, status, sheets, fetchFn, store, attemptId);
+  const record = await recordOrder(payload, status, sheets, fetchFn, store, attemptId);
 
   const current = await store.get(attemptId) || status;
   const erpnext = Boolean(current.erpnextOk);
@@ -371,12 +376,17 @@ async function handleOrder(
       sheet,
     });
   }
+  const diagnostic = [
+    record.erpnextError ? `ERPNext: ${record.erpnextError}` : '',
+    record.sheetError ? `Sheets: ${record.sheetError}` : '',
+  ].filter(Boolean).join('; ') || 'No diagnostic';
   return res.status(502).json({
     ok: false,
     orderId,
     erpnext,
     sheet,
     error: 'Order could not be recorded',
+    diagnostic,
   });
 }
 
