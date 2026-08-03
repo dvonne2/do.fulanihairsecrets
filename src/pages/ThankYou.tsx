@@ -142,7 +142,7 @@ const ThankYou = () => {
 
   // Read order data from sessionStorage
   useEffect(() => {
-    const stored = sessionStorage.getItem('fhg_order_data');
+    const stored = localStorage.getItem('fhg_order_data');
     if (stored) {
       try {
         setOrderData(JSON.parse(stored));
@@ -167,6 +167,11 @@ const ThankYou = () => {
       const resolvedOrderId = isTestMode ? 'TEST_ORDER_123' : (orderData?.orderId || orderNumber);
       const inFlightKey = resolvedOrderId ? `fhg_purchase_in_flight_${resolvedOrderId}` : '';
       const completedKey = resolvedOrderId ? `fhg_purchase_completed_${resolvedOrderId}` : '';
+
+      if (!isTestMode && (!orderData?.email || !orderData?.phone)) {
+        console.warn('[Meta] No customer PII available, skipping Purchase to protect EMQ');
+        return;
+      }
 
       if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
         if (sessionStorage.getItem(completedKey)) {
@@ -334,7 +339,7 @@ const ThankYou = () => {
 
   // No sessionStorage data — show a reassuring confirmation with orderId from URL
   if (!orderData && !window.location.search.includes('test=1')) {
-    const isKlumpPayment = sessionStorage.getItem('fhg_order_data') ? JSON.parse(sessionStorage.getItem('fhg_order_data') || '{}').paymentMethod === 'KLUMP' : false;
+    const isKlumpPayment = localStorage.getItem('fhg_order_data') ? JSON.parse(localStorage.getItem('fhg_order_data') || '{}').paymentMethod === 'KLUMP' : false;
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
         <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center mb-6">

@@ -122,6 +122,7 @@ export function getAutoInjectedPostalCode(
   ].filter(Boolean);
   
   for (const locationStr of locationStrings) {
+    if (!locationStr) continue;
     for (const [stateKey, postalMap] of Object.entries(POSTAL_CODE_MAP)) {
       if (normalizedState.includes(stateKey) || stateKey.includes(normalizedState)) {
         for (const [area, postalCode] of Object.entries(postalMap)) {

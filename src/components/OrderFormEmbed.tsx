@@ -397,7 +397,7 @@ function OrderFormEmbed() {
         clearCheckoutAttemptId();
 
         // Persist confirmed order data so Thank You page can fire Purchase event
-        sessionStorage.setItem('fhg_order_data', JSON.stringify({
+        localStorage.setItem('fhg_order_data', JSON.stringify({
           orderId: thankYouOrderId,
           email: payload.email,
           phone: payload.phone,

@@ -2,6 +2,8 @@
 // Complete Meta Pixel + CAPI tracking — single file, zero dependencies
 
 import { CAPI_ENDPOINT } from '@/config/api';
+import { getExternalId } from './externalIdMirroring';
+import { getAutoInjectedPostalCode, getGranularCityWithPostal } from './postalCodeMapping';
 
 declare global {
   interface Window {
@@ -136,9 +138,11 @@ function waitForFbq(maxMs = 5000, interval = 100): Promise<boolean> {
 function normalizePhone(phone: string): string {
   const digits = phone.replace(/\D/g, '');
   if (!digits) return '';
-  if (digits.startsWith('0')) return '234' + digits.slice(1);
-  if (digits.startsWith('234')) return digits;
-  return '234' + digits;
+  let normalized = digits;
+  if (digits.startsWith('0')) normalized = '234' + digits.slice(1);
+  else if (!digits.startsWith('234')) normalized = '234' + digits;
+  if (normalized.length === 13 && normalized.startsWith('234')) return normalized;
+  return '';
 }
 
 function normalizeName(value: string): string {
@@ -181,21 +185,6 @@ function getFbc(): string | null {
   return null;
 }
 
-function getExternalId(): string {
-  try {
-    let id = localStorage.getItem('fhg_external_id');
-    if (id) return id;
-    id = [...Array(16)]
-      .map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)])
-      .join('');
-    localStorage.setItem('fhg_external_id', id);
-    return id;
-  } catch {
-    return [...Array(16)]
-      .map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)])
-      .join('');
-  }
-}
 
 function captureFbclid(): void {
   try {
@@ -267,6 +256,7 @@ export async function reinitPixelWithUserData(data: {
   lastName?: string;
   state?: string;
   city?: string;
+  gender?: string;
   externalId?: string;
 }): Promise<void> {
   const fbqReady = await waitForFbq();
@@ -279,13 +269,24 @@ export async function reinitPixelWithUserData(data: {
   const userData: Record<string, any> = {};
 
   if (data.email) userData.em = await sha256(data.email);
-  if (data.phone) userData.ph = await sha256(normalizePhone(data.phone));
+  const normalizedPhone = data.phone ? normalizePhone(data.phone) : '';
+  if (normalizedPhone) userData.ph = await sha256(normalizedPhone);
   const firstName = data.firstName ? normalizeName(data.firstName) : '';
   const lastName = data.lastName ? normalizeName(data.lastName) : '';
   if (firstName) userData.fn = await sha256(firstName);
   if (lastName) userData.ln = await sha256(lastName);
   if (data.state) userData.st = await sha256(data.state);
-  if (data.city) userData.ct = await sha256(data.city);
+  if (data.city || data.state) {
+    const { city: granularCity, postalCode } = getGranularCityWithPostal(data.state, data.city, undefined, undefined);
+    if (granularCity) userData.ct = await sha256(granularCity);
+    if (postalCode) userData.zp = await sha256(postalCode);
+    else {
+      const autoPostal = getAutoInjectedPostalCode(data.state, data.city, undefined, undefined);
+      if (autoPostal) userData.zp = await sha256(autoPostal);
+    }
+  }
+  const gender = data.gender?.toLowerCase() === 'm' ? 'm' : (data.gender ? 'f' : undefined);
+  if (gender) userData.ge = gender;
   const externalId = data.externalId || getExternalId();
   if (externalId) userData.external_id = externalId;
   userData.country = 'ng';
@@ -360,7 +361,7 @@ async function fireCAPIEvent(
       event_name: eventName,
       event_id: eventId,
       event_time: Math.floor(Date.now() / 1000),
-      event_source_url: window.location.origin + window.location.pathname,
+      event_source_url: window.location.href,
       user_data: userData,
       custom_data: {
         ...customData,
@@ -396,17 +397,30 @@ async function buildUserData(info: {
   lastName?: string;
   state?: string;
   city?: string;
+  gender?: string;
   externalId?: string;
 }): Promise<Record<string, any>> {
   const ud: Record<string, any> = {};
   if (info.email) ud.em = [await sha256(info.email)];
-  if (info.phone) ud.ph = [await sha256(normalizePhone(info.phone))];
+  const normalizedPhone = info.phone ? normalizePhone(info.phone) : '';
+  if (normalizedPhone) ud.ph = [await sha256(normalizedPhone)];
   const firstName = info.firstName ? normalizeName(info.firstName) : '';
   const lastName = info.lastName ? normalizeName(info.lastName) : '';
   if (firstName) ud.fn = [await sha256(firstName)];
   if (lastName) ud.ln = [await sha256(lastName)];
   if (info.state) ud.st = [await sha256(info.state)];
-  if (info.city) ud.ct = [await sha256(info.city)];
+  if (info.city || info.state) {
+    const { city: granularCity, postalCode } = getGranularCityWithPostal(info.state, info.city, undefined, undefined);
+    if (granularCity) ud.ct = [await sha256(granularCity)];
+    else if (info.city) ud.ct = [await sha256(info.city)];
+    if (postalCode) ud.zp = [await sha256(postalCode)];
+    else {
+      const autoPostal = getAutoInjectedPostalCode(info.state, info.city, undefined, undefined);
+      if (autoPostal) ud.zp = [await sha256(autoPostal)];
+    }
+  }
+  const gender = info.gender?.toLowerCase() === 'm' ? 'm' : (info.gender ? 'f' : undefined);
+  if (gender) ud.ge = [await sha256(gender)];
   ud.country = [await sha256('ng')];
   const externalId = info.externalId || getExternalId();
   if (externalId) ud.external_id = [externalId];
@@ -478,7 +492,6 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
   const nameParts = (order.fullName || '').trim().split(' ');
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
-  const stableCustomerId = normalizePhone(order.phone || '') || order.email?.trim().toLowerCase() || order.orderId;
   const userData = await buildUserData({
     email: order.email,
     phone: order.phone,
@@ -486,7 +499,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
     lastName,
     state: order.state,
     city: order.lga,
-    externalId: stableCustomerId,
+    gender: 'f',
   });
   const amount = Number(order.totalAmount) || 0;
   const pkgAmount = Number(order.packageAmount) || amount;
@@ -524,7 +537,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
     lastName,
     state: order.state,
     city: order.lga,
-    externalId: stableCustomerId,
+    gender: 'f',
   });
 
   // Fire Purchase on Pixel 1 only
@@ -537,7 +550,8 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
 
   // Fire CAPI for original pixel only with same payload structure
   const capiFired = await fireCAPIEvent('Purchase', purchaseEventId, userData, {
-    value: amount,  // Product price ONLY (no delivery fee) - standardized
+    value: amount > 0 ? amount : undefined,  // Product price ONLY (no delivery fee) - standardized
+    currency: amount > 0 ? 'NGN' : undefined,
     content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
@@ -658,7 +672,7 @@ export async function firePageViewCAPI(): Promise<void> {
         event_name: 'PageView',
         event_id: eventId,
         event_time: Math.floor(Date.now() / 1000),
-        event_source_url: window.location.origin + window.location.pathname,
+        event_source_url: window.location.href,
         user_data: userData,
         custom_data: { currency: 'NGN' },
       }),
@@ -689,9 +703,14 @@ export async function fireViewContent(data: {
     email: data.email,
     phone: data.phone,
   });
+  const viewContentSku = data.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
   await fireCAPIEvent('ViewContent', eventId, userData, {
     value: Number(data.amount) || 0,
+    currency: 'NGN',
+    content_type: 'product',
+    content_ids: [viewContentSku],
     content_name: data.packageName,
+    contents: [{ id: viewContentSku, quantity: 1, item_price: Number(data.amount) || 0 }],
   });
 }
 
@@ -718,24 +737,29 @@ export async function fireInitiateCheckout(data: {
   }, eventId);
   if (!data.email || !data.phone) return;
 
-  const stableCustomerId = normalizePhone(data.phone) || data.email.trim().toLowerCase();
   await reinitPixelWithUserData({
     email: data.email,
     phone: data.phone,
     firstName: data.firstName,
     lastName: data.lastName,
-    externalId: stableCustomerId,
+    gender: 'f',
   });
   const userData = await buildUserData({
     email: data.email,
     phone: data.phone,
     firstName: data.firstName,
     lastName: data.lastName,
-    externalId: stableCustomerId,
+    gender: 'f',
   });
+  const checkoutSku = data.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
   await fireCAPIEvent('InitiateCheckout', eventId, userData, {
     value: Number(data.amount) || 0,
+    currency: 'NGN',
+    content_type: 'product',
+    content_ids: [checkoutSku],
     content_name: data.packageName,
+    contents: [{ id: checkoutSku, quantity: 1, item_price: Number(data.amount) || 0 }],
+    num_items: 1,
     media_buyer: mediaBuyer,
     source: source,
   });
@@ -767,6 +791,7 @@ export async function fireCartRecovery(data: {
   });
   await fireCAPIEvent('CartRecovery', eventId, userData, {
     value: Number(data.amount) || 0,
+    currency: 'NGN',
     content_category: 'abandoned_cart',
     content_name: data.packageName || 'Fulani Hair Gro',
     order_id: data.orderId,
