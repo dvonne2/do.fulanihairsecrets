@@ -280,6 +280,8 @@ const ThankYou = () => {
         metaEventsFired.current = eventsOk;
       }
     };
+
+    void run();
   }, [loading, orderData, orderNumber]);
 
   useEffect(() => {
