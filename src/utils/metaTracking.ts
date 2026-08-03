@@ -159,6 +159,13 @@ function getCookie(name: string): string | null {
   return match ? decodeURIComponent(match[2]) : null;
 }
 
+function setCookie(name: string, value: string, maxAgeDays: number): void {
+  try {
+    const maxAge = maxAgeDays * 24 * 60 * 60;
+    document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; SameSite=Lax`;
+  } catch {}
+}
+
 function isValidFbp(value: string | unknown): value is string {
   return typeof value === 'string' && value.startsWith('fb.');
 }
@@ -200,6 +207,11 @@ export function captureFbclid(): void {
       fbc = cookieFbc;
     }
 
+    // Fall back to the persisted fbc so returning visitors keep their click ID
+    if (!fbc) {
+      fbc = getPersistedFbc();
+    }
+
     if (fbc) {
       localStorage.setItem(
         'meta_fbc_data',
@@ -210,6 +222,11 @@ export function captureFbclid(): void {
           expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
         })
       );
+      // Write the real _fbc cookie so the browser pixel picks it up natively.
+      // Only overwrite when the URL carries a fresh fbclid or the cookie is missing.
+      if (urlFbclid || !cookieFbc) {
+        setCookie('_fbc', fbc, 30);
+      }
     }
 
     // Capture and persist _fbp cookie for click attribution
@@ -223,6 +240,10 @@ export function captureFbclid(): void {
           expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000, // 90 days
         })
       );
+      // Restore the _fbp cookie if it was cleared so browser events keep the device ID
+      if (!getCookie('_fbp')) {
+        setCookie('_fbp', fbp, 90);
+      }
     }
   } catch {}
 }
@@ -295,7 +316,10 @@ export async function reinitPixelWithUserData(data: {
   }
   const gender = data.gender?.toLowerCase() === 'm' ? 'm' : (data.gender ? 'f' : undefined);
   if (gender) userData.ge = gender;
-  const externalId = data.externalId || getExternalId();
+  // Prefer an email-derived external_id: it is identical on every device the
+  // customer uses, which strengthens Meta's cross-device identity graph.
+  const emailExternalId = data.email ? await sha256(data.email) : null;
+  const externalId = emailExternalId || data.externalId || getExternalId();
   if (externalId) userData.external_id = externalId;
   userData.country = 'ng';
 
@@ -458,8 +482,13 @@ async function buildUserData(info: {
   const gender = info.gender?.toLowerCase() === 'm' ? 'm' : (info.gender ? 'f' : undefined);
   if (gender) ud.ge = [await sha256(gender)];
   ud.country = [await sha256('ng')];
-  const externalId = info.externalId || getExternalId();
-  if (externalId) ud.external_id = [externalId];
+  // Send both external_ids: the email hash (cross-device stable) and the
+  // browser-scoped ref code (continuity with past events and magic links).
+  const externalIds: string[] = [];
+  if (info.email) externalIds.push(await sha256(info.email));
+  const browserExternalId = info.externalId || getExternalId();
+  if (browserExternalId && !externalIds.includes(browserExternalId)) externalIds.push(browserExternalId);
+  if (externalIds.length) ud.external_id = externalIds;
   if (typeof navigator !== 'undefined' && navigator.userAgent) ud.client_user_agent = navigator.userAgent;
   const fbp = getFbp();
   const fbc = getFbc();
