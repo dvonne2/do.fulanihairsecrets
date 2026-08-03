@@ -34,8 +34,12 @@ try {
   fhgInitParams = { external_id: window.__fhgExternalId || '' };
 }
 
-fbq('init', '220381209723501', fhgInitParams);
-window.__metaPixelsInitialized = true;
+if (window.__metaPixelsInitialized) {
+  // Pixel was already initialized by the React bundle (reinitPixelWithUserData)
+} else {
+  fbq('init', '220381209723501', fhgInitParams);
+  window.__metaPixelsInitialized = true;
+}
 window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();
 fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
 

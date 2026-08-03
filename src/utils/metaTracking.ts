@@ -337,16 +337,22 @@ export async function reinitPixelWithUserData(data: {
   if (externalId) userData.external_id = externalId;
   userData.country = 'ng';
 
-  // Re-init all pixels with user data
-  pixelIds.forEach((pixelId) => {
-    try {
-      window.fbq('init', pixelId, userData);
-    } catch (err) {
-      console.error(`[Meta] Failed to re-init pixel ${pixelId}:`, err);
-    }
-  });
-
-  console.log('[Meta] Pixel re-initialized with Advanced Matching data:', Object.keys(userData));
+  // If the pixel was already initialized by analytics-deferred.js, do not
+  // call fbq('init') again to avoid the 'Duplicate Pixel ID' console warning.
+  // The user data is still persisted to fhg_identity for the next page load.
+  if (window.__metaPixelsInitialized) {
+    console.log('[Meta] Pixel already initialized; updating identity only');
+  } else {
+    pixelIds.forEach((pixelId) => {
+      try {
+        window.fbq('init', pixelId, userData);
+      } catch (err) {
+        console.error(`[Meta] Failed to init pixel ${pixelId}:`, err);
+      }
+    });
+    window.__metaPixelsInitialized = true;
+    console.log('[Meta] Pixel initialized with Advanced Matching data:', Object.keys(userData));
+  }
 
   // Persist identity so future page views and top-of-funnel events can reuse the same match keys
   try {
@@ -427,10 +433,18 @@ async function fireCAPIEvent(
       event_time: Math.floor(Date.now() / 1000),
       event_source_url: window.location.href,
       user_data: userData,
-      custom_data: {
-        ...customData,
-        currency: 'NGN',
-      },
+      custom_data: (() => {
+        const capiCustomData = { ...customData };
+        const numericValue = Number(capiCustomData.value);
+        if (numericValue > 0) {
+          capiCustomData.value = numericValue;
+          capiCustomData.currency = 'NGN';
+        } else {
+          delete capiCustomData.value;
+          delete capiCustomData.currency;
+        }
+        return capiCustomData;
+      })(),
     };
     // Add test_event_code for test mode routing
     if (testEventCode) {
