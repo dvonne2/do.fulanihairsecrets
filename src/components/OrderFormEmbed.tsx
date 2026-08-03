@@ -414,19 +414,23 @@ function OrderFormEmbed() {
         clearCheckoutAttemptId();
 
         // Persist confirmed order data so Thank You page can fire Purchase event
-        localStorage.setItem('fhg_order_data', JSON.stringify({
-          orderId: thankYouOrderId,
-          email: payload.email,
-          phone: payload.phone,
-          fullName: payload.name,
-          totalAmount: payload.amount,
-          packageAmount: payload.amount,
-          paymentType: 'PBD',
-          packageName: payload.package,
-          state: payload.state,
-          lga: payload.lga,
-          numItems: 1,
-        }));
+        try {
+          localStorage.setItem('fhg_order_data', JSON.stringify({
+            orderId: thankYouOrderId,
+            email: payload.email,
+            phone: payload.phone,
+            fullName: payload.name,
+            totalAmount: payload.amount,
+            packageAmount: payload.amount,
+            paymentType: 'PBD',
+            packageName: payload.package,
+            state: payload.state,
+            lga: payload.lga,
+            numItems: 1,
+          }));
+        } catch (e) {
+          console.error('[OrderForm] Failed to persist order data:', e);
+        }
 
         window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
       } else {

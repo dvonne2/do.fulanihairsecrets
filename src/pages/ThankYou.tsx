@@ -192,47 +192,45 @@ const ThankYou = () => {
 
       let eventsOk = false;
       try {
-      metaEventsFired.current = true;
-      console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
-      if (isTestMode) {
-        resetTracking();
-        eventsOk = await fireThankYouEvents({
-          orderId: resolvedOrderId,
-          email: 'test@fulanihairsecrets.com',
-          phone: '08012345678',
-          fullName: 'Test User',
-          totalAmount: 71750,
-          packageAmount: 66750,
-          paymentType: 'PBD',
-          packageName: 'Self Love Plus',
-          state: 'Lagos',
-          lga: 'Eti-Osa',
-          numItems: 3,
-        });
-
-        // Fire TikTok test events
-        console.log('[TikTok] Test mode - purchaseFired.current:', purchaseFired.current);
-        if (!purchaseFired.current) {
-          purchaseFired.current = true;
-          console.log('[TikTok] Firing test Purchase event');
-          fireTikTokPurchase({
-            content_name: 'Self Love Plus',
-            value: 71750,
-            currency: 'NGN',
+        console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
+        if (isTestMode) {
+          resetTracking();
+          eventsOk = await fireThankYouEvents({
+            orderId: resolvedOrderId,
             email: 'test@fulanihairsecrets.com',
             phone: '08012345678',
-            orderId: resolvedOrderId,
+            fullName: 'Test User',
+            totalAmount: 71750,
+            packageAmount: 66750,
+            paymentType: 'PBD',
+            packageName: 'Self Love Plus',
+            state: 'Lagos',
+            lga: 'Eti-Osa',
+            numItems: 3,
           });
-        } else {
-          console.log('[TikTok] Test mode - Purchase already fired, skipping');
-        }
 
-        console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
-        metaEventsFired.current = true;
-        return;
-      }
-      // Fire Meta events
-      eventsOk = await fireThankYouEvents({
+          // Fire TikTok test events
+          console.log('[TikTok] Test mode - purchaseFired.current:', purchaseFired.current);
+          if (!purchaseFired.current) {
+            purchaseFired.current = true;
+            console.log('[TikTok] Firing test Purchase event');
+            fireTikTokPurchase({
+              content_name: 'Self Love Plus',
+              value: 71750,
+              currency: 'NGN',
+              email: 'test@fulanihairsecrets.com',
+              phone: '08012345678',
+              orderId: resolvedOrderId,
+            });
+          } else {
+            console.log('[TikTok] Test mode - Purchase already fired, skipping');
+          }
+
+          console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
+          return;
+        }
+        // Fire Meta events
+        eventsOk = await fireThankYouEvents({
           orderId: resolvedOrderId,
           email: orderData?.email,
           phone: orderData?.phone,
@@ -264,11 +262,14 @@ const ThankYou = () => {
         }
 
         console.log('[Events] Purchase fired for both Meta and TikTok');
+      } catch (err: any) {
+        console.error('[ThankYou] Purchase event firing error:', err?.message || err);
       } finally {
         if (eventsOk) {
           sessionStorage.setItem(completedKey, '1');
         }
         sessionStorage.removeItem(inFlightKey);
+        metaEventsFired.current = eventsOk;
       }
     };
   }, [loading, orderData, orderNumber]);
