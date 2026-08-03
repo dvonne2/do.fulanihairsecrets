@@ -301,6 +301,24 @@ export async function reinitPixelWithUserData(data: {
   });
 
   console.log('[Meta] Pixel re-initialized with Advanced Matching data:', Object.keys(userData));
+
+  // Persist identity so future page views and top-of-funnel events can reuse the same match keys
+  try {
+    localStorage.setItem(
+      'fhg_identity',
+      JSON.stringify({
+        email: data.email,
+        phone: data.phone,
+        firstName,
+        lastName,
+        state: data.state,
+        city: data.city,
+        gender,
+        capturedAt: Date.now(),
+        expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      })
+    );
+  } catch {}
 }
 
 async function fireBrowserEvent(
@@ -447,6 +465,9 @@ async function getStoredIdentity(): Promise<Record<string, any>> {
           phone: data.phone,
           firstName: data.firstName,
           lastName: data.lastName,
+          state: data.state,
+          city: data.city,
+          gender: data.gender,
         });
       }
     }
