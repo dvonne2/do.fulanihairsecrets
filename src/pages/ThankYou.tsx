@@ -168,6 +168,8 @@ const ThankYou = () => {
       const inFlightKey = resolvedOrderId ? `fhg_purchase_in_flight_${resolvedOrderId}` : '';
       const completedKey = resolvedOrderId ? `fhg_purchase_completed_${resolvedOrderId}` : '';
 
+      console.log('[ThankYou] run() called', { resolvedOrderId, hasOrderData: !!orderData, hasEmail: !!orderData?.email, hasPhone: !!orderData?.phone });
+
       if (!isTestMode && (!orderData?.email || !orderData?.phone)) {
         console.warn('[Meta] No customer PII available, skipping Purchase to protect EMQ');
         return;
@@ -179,14 +181,20 @@ const ThankYou = () => {
           metaEventsFired.current = true;
           return;
         }
-        if (sessionStorage.getItem(inFlightKey)) {
-          console.log('[Meta] Purchase already in flight, skipping');
-          metaEventsFired.current = true;
-          return;
+        const inFlightAtRaw = sessionStorage.getItem(inFlightKey);
+        if (inFlightAtRaw) {
+          const inFlightAt = Number(inFlightAtRaw);
+          if (Number.isFinite(inFlightAt) && Date.now() - inFlightAt < 60_000) {
+            console.log('[Meta] Purchase already in flight, skipping');
+            return;
+          }
+          console.warn('[ThankYou] Stale inFlight key cleared for order:', resolvedOrderId);
+          sessionStorage.removeItem(inFlightKey);
         }
         sessionStorage.setItem(inFlightKey, Date.now().toString());
       } else {
         // No usable order ID; nothing to fire.
+        console.warn('[ThankYou] No usable order ID for Purchase');
         return;
       }
 
