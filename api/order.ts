@@ -229,8 +229,10 @@ async function erpnextWrite(
     console.log('[ERPNext] Success');
     return { ok: true };
   } catch (e: any) {
-    console.error('[ERPNext]', e.message);
-    return { ok: false, error: e.message } as any;
+    const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
+    const msg = String(e.message || 'unknown error') + cause;
+    console.error('[ERPNext]', msg, e);
+    return { ok: false, error: msg } as any;
   } finally {
     await store.releaseSideLock(attemptId, 'erpnext');
   }
@@ -285,8 +287,10 @@ async function sheetsWrite(
     console.log('[Sheets] Success');
     return { ok: true };
   } catch (e: any) {
-    console.error('[Sheets]', e.message);
-    return { ok: false, error: e.message } as any;
+    const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
+    const msg = String(e.message || 'unknown error') + cause;
+    console.error('[Sheets]', msg, e);
+    return { ok: false, error: msg } as any;
   } finally {
     await store.releaseSideLock(attemptId, 'sheet');
   }
