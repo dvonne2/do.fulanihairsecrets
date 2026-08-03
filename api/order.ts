@@ -182,7 +182,7 @@ async function erpnextWrite(
   fetchFn: typeof fetch,
   store: IdempotencyStore,
   attemptId: string,
-): Promise<{ ok: boolean }> {
+): Promise<{ ok: boolean; error?: string }> {
   const acquired = await store.acquireSideLock(attemptId, 'erpnext');
   if (!acquired) {
     console.log('[Idempotency] erpnext side already in progress, skipping');
@@ -193,7 +193,7 @@ async function erpnextWrite(
     const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
     if (!url || !secret) {
       console.error('[ERPNext] missing env');
-      return { ok: false, error: 'missing env' } as any;
+      return { ok: false, error: 'missing env' };
     }
     const response = await timeout(
       fetchFn(url, {
@@ -223,7 +223,7 @@ async function erpnextWrite(
     if (!response.ok) {
       const text = await response.text();
       console.error(`[ERPNext] ${response.status}: ${text}`);
-      return { ok: false, error: `${response.status}: ${text}` } as any;
+      return { ok: false, error: `${response.status}: ${text}` };
     }
     await store.complete(attemptId, 'erpnextOk', true);
     console.log('[ERPNext] Success');
@@ -232,7 +232,7 @@ async function erpnextWrite(
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;
     console.error('[ERPNext]', msg, e);
-    return { ok: false, error: msg } as any;
+    return { ok: false, error: msg };
   } finally {
     await store.releaseSideLock(attemptId, 'erpnext');
   }
@@ -244,7 +244,7 @@ async function sheetsWrite(
   sheets: any,
   store: IdempotencyStore,
   attemptId: string,
-): Promise<{ ok: boolean }> {
+): Promise<{ ok: boolean; error?: string }> {
   const acquired = await store.acquireSideLock(attemptId, 'sheet');
   if (!acquired) {
     console.log('[Idempotency] sheet side already in progress, skipping');
@@ -252,12 +252,12 @@ async function sheetsWrite(
   }
   if (!sheets) {
     await store.releaseSideLock(attemptId, 'sheet');
-    return { ok: false, error: 'Google Sheets not configured' } as any;
+    return { ok: false, error: 'Google Sheets not configured' };
   }
   const spreadsheetId = process.env.SHEET_ID;
   if (!spreadsheetId) {
     await store.releaseSideLock(attemptId, 'sheet');
-    return { ok: false, error: 'missing SHEET_ID' } as any;
+    return { ok: false, error: 'missing SHEET_ID' };
   }
   try {
     await timeout(
@@ -290,7 +290,7 @@ async function sheetsWrite(
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;
     console.error('[Sheets]', msg, e);
-    return { ok: false, error: msg } as any;
+    return { ok: false, error: msg };
   } finally {
     await store.releaseSideLock(attemptId, 'sheet');
   }
@@ -303,7 +303,7 @@ async function recordOrder(
   fetchFn: typeof fetch,
   store: IdempotencyStore,
   attemptId: string,
-): Promise<{ erpnextOk: boolean; sheetOk: boolean }> {
+): Promise<{ erpnextOk: boolean; sheetOk: boolean; erpnextError?: string; sheetError?: string }> {
   const erpnextRes = status.erpnextOk ? { ok: true, error: undefined } : await erpnextWrite(body, status.orderId, fetchFn, store, attemptId);
   const sheetRes = status.sheetOk ? { ok: true, error: undefined } : await sheetsWrite(body, status.orderId, sheets, store, attemptId);
   return {
