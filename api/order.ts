@@ -188,6 +188,12 @@ async function erpnextWrite(
     console.log('[Idempotency] erpnext side already in progress, skipping');
     return { ok: false };
   }
+  // Temporarily disabled — ERPNext write paused
+  await store.complete(attemptId, 'erpnextOk', true);
+  await store.releaseSideLock(attemptId, 'erpnext');
+  console.log('[ERPNext] Skipped (disabled)');
+  return { ok: true };
+
   try {
     const url = process.env.ERPNEXT_INGEST_URL;
     const secret = process.env.ERPNEXT_WEBHOOK_SECRET;
@@ -259,6 +265,12 @@ async function sheetsWrite(
     await store.releaseSideLock(attemptId, 'sheet');
     return { ok: false, error: 'missing SHEET_ID' };
   }
+  // Temporarily disabled — ERPNext write paused
+  await store.complete(attemptId, 'erpnextOk', true);
+  await store.releaseSideLock(attemptId, 'erpnext');
+  console.log('[ERPNext] Skipped (disabled)');
+  return { ok: true };
+
   try {
     await timeout(
       sheets.spreadsheets.values.append({
@@ -411,6 +423,12 @@ async function getSheets() {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const sheets = await getSheets();
+  // Temporarily disabled — ERPNext write paused
+  await store.complete(attemptId, 'erpnextOk', true);
+  await store.releaseSideLock(attemptId, 'erpnext');
+  console.log('[ERPNext] Skipped (disabled)');
+  return { ok: true };
+
   try {
     const store = new RedisIdempotencyStore();
     return await handleOrder(req, res, sheets, fetch, store);
