@@ -5,7 +5,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
 import Index from "./pages/Index";
-import { firePageViewCAPI } from "@/utils/metaTracking";
+import { firePageViewCAPI, captureFbclid } from "@/utils/metaTracking";
 
 // Valentine promo ended - components hidden
 // import { ValentineAnnouncement } from "@/components/ValentineAnnouncement";
@@ -30,6 +30,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
+    captureFbclid();   // persist _fbc cookie / fbclid so it survives to /thank-you
     firePageViewCAPI();
   }, []);
   return (

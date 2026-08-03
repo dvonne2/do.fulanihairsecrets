@@ -186,18 +186,26 @@ function getFbc(): string | null {
 }
 
 
-function captureFbclid(): void {
+export function captureFbclid(): void {
   try {
-    // Capture fbclid from URL and create _fbc cookie
     const params = new URLSearchParams(window.location.search);
-    const fbclid = params.get('fbclid');
-    if (fbclid) {
-      const fbc = `fb.1.${Date.now()}.${fbclid}`;
+    const urlFbclid = params.get('fbclid');
+    const cookieFbc = getCookie('_fbc');
+
+    // Prefer the current URL fbclid, then the _fbc cookie the Meta pixel already set
+    let fbc: string | null = null;
+    if (urlFbclid) {
+      fbc = `fb.1.${Date.now()}.${urlFbclid}`;
+    } else if (cookieFbc) {
+      fbc = cookieFbc;
+    }
+
+    if (fbc) {
       localStorage.setItem(
         'meta_fbc_data',
         JSON.stringify({
           fbc,
-          fbclid,
+          fbclid: urlFbclid || '',
           timestamp: Date.now(),
           expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
         })
