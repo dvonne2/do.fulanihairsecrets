@@ -112,6 +112,31 @@ function validateEventSourceUrl(
   }
 }
 
+function getRequestHost(req: VercelRequest): string {
+  return (
+    getHeaderValue(req.headers['x-forwarded-host']) ||
+    getHeaderValue(req.headers.host)
+  )
+    .split(':')[0]
+    .toLowerCase();
+}
+
+function isOriginAllowed(
+  origin: string,
+  req: VercelRequest,
+  allowedOrigins: string[],
+): boolean {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+
+  // Same-origin requests are always safe (e.g. Vercel preview deployments).
+  try {
+    return new URL(origin).hostname.toLowerCase() === getRequestHost(req);
+  } catch {
+    return false;
+  }
+}
+
 function setCorsHeaders(res: VercelResponse, origin: string) {
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
@@ -148,7 +173,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const config = getConfig();
 
   if (method === 'OPTIONS') {
-    if (origin && !config.allowedOrigins.includes(origin)) {
+    if (!isOriginAllowed(origin, req, config.allowedOrigins)) {
       return res.status(403).json({ ok: false, error: 'Origin not allowed' });
     }
     setCorsHeaders(res, origin || config.allowedOrigins[0] || 'https://fulanihairsecrets.com');
@@ -159,7 +184,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  if (origin && !config.allowedOrigins.includes(origin)) {
+  if (!isOriginAllowed(origin, req, config.allowedOrigins)) {
     return res.status(403).json({ ok: false, error: 'Origin not allowed' });
   }
 
@@ -208,9 +233,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ ok: false, error: 'Invalid action_source' });
   }
 
+  const requestHost = getRequestHost(req);
   const validSourceUrl = validateEventSourceUrl(
     event_source_url,
-    config.allowedSourceHosts,
+    requestHost
+      ? [...config.allowedSourceHosts, requestHost]
+      : config.allowedSourceHosts,
   );
   if (!validSourceUrl) {
     return res.status(400).json({ ok: false, error: 'Invalid event_source_url' });
