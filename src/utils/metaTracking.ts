@@ -603,12 +603,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
   const packageSku = order.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
   const contentIds = [packageSku];
 
-  // fbq treats an explicitly-undefined key as an invalid parameter, so value and
-  // currency are only spread in when there is a real amount to report.
-  const monetaryData = amount > 0 ? { value: amount, currency: 'NGN' } : {};
-
   const purchaseData = {
-    ...monetaryData,
     content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',
     content_type: 'product',
