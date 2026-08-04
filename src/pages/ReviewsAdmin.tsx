@@ -273,6 +273,8 @@ export default function ReviewsAdmin() {
                       src={review.photo_url}
                       alt="Review photo"
                       className="mt-3 w-full max-w-xs h-auto rounded-lg object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
 

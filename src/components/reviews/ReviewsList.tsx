@@ -117,6 +117,8 @@ export function ReviewsList() {
                 src={review.photo_url}
                 alt={`Photo from ${review.name}`}
                 className="w-32 h-32 object-cover rounded-lg flex-shrink-0 bg-gray-100"
+                loading="lazy"
+                decoding="async"
               />
             ))}
           </div>
@@ -183,6 +185,8 @@ export function ReviewsList() {
                       src={review.photo_url}
                       alt={`${review.name}'s avatar`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
@@ -227,6 +231,8 @@ export function ReviewsList() {
                       src={review.photo_url}
                       alt="Review photo"
                       className="w-full max-w-xs h-auto rounded-lg mb-3 object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
 

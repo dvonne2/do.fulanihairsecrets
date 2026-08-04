@@ -672,6 +672,8 @@ const ThankYou = () => {
                 src={founderImg}
                 alt="Hajiya Hajara - Founder, Fulani Hair Gro"
                 className="w-32 h-32 rounded-full border-4 border-gold object-cover" 
+                loading="lazy"
+                decoding="async"
               />
               <div>
                 <p className="text-2xl text-gold mb-4">"Welcome, Queen! 👑</p>
