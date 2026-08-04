@@ -15,6 +15,30 @@ const isValidPhone = (value: string) => {
   return /^(?:0\d{10}|234\d{10}|\d{10})$/.test(digits);
 };
 
+function extractCityFromAddress(state: string, address: string): string | undefined {
+  if (!state || !address) return undefined;
+  const lower = address.toLowerCase();
+  const lgas = (nigeriaLGAs as Record<string, string[]>)[state];
+  if (lgas) {
+    for (const lga of lgas) {
+      const area = lga.toLowerCase();
+      if (area.length > 2 && lower.includes(area)) {
+        return area;
+      }
+    }
+  }
+  // Fallback to the last comma/line segment, skipping if it equals the state name
+  const parts = address.split(/,|\n/).map(p => p.trim()).filter(Boolean);
+  if (parts.length === 0) return undefined;
+  const last = parts[parts.length - 1].toLowerCase();
+  if (last !== state.toLowerCase() && last.length > 2) return last;
+  if (parts.length > 1) {
+    const prev = parts[parts.length - 2].toLowerCase();
+    if (prev !== state.toLowerCase() && prev.length > 2) return prev;
+  }
+  return undefined;
+}
+
 // Debounce hook for performance optimization
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -205,6 +229,8 @@ function OrderFormEmbed() {
       phone: phone || undefined,
       firstName: nameParts[0],
       lastName: nameParts.slice(1).join(' '),
+      state: form.state || undefined,
+      city: extractCityFromAddress(form.state, form.address),
     });
 
     try {
@@ -229,16 +255,19 @@ function OrderFormEmbed() {
     const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
     if (!isValidEmail(email) && !phone) return;
     const nameParts = form.name.trim().split(/\s+/);
+    const city = extractCityFromAddress(form.state, form.address);
     const handler = setTimeout(() => {
       reinitPixelWithUserData({
         email: isValidEmail(email) ? email : undefined,
         phone: phone || undefined,
         firstName: nameParts[0] || undefined,
         lastName: nameParts.slice(1).join(' ') || undefined,
+        state: form.state || undefined,
+        city,
       });
     }, 500);
     return () => clearTimeout(handler);
-  }, [form.email, form.phone, form.whatsapp, form.name]);
+  }, [form.email, form.phone, form.whatsapp, form.name, form.state, form.address]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.

@@ -791,6 +791,8 @@ export async function fireInitiateCheckout(data: {
   phone?: string;
   firstName?: string;
   lastName?: string;
+  state?: string;
+  city?: string;
 }): Promise<void> {
   // Get attribution data from localStorage
   const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
@@ -816,6 +818,8 @@ export async function fireInitiateCheckout(data: {
     phone: data.phone,
     firstName: data.firstName,
     lastName: data.lastName,
+    state: data.state,
+    city: data.city,
     gender: 'f',
   });
   const userData = await buildUserData({
@@ -823,6 +827,8 @@ export async function fireInitiateCheckout(data: {
     phone: data.phone,
     firstName: data.firstName,
     lastName: data.lastName,
+    state: data.state,
+    city: data.city,
     gender: 'f',
   });
   const checkoutSku = data.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
