@@ -593,31 +593,16 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
   });
   const amount = Number(order.totalAmount) || 0;
   const pkgAmount = Number(order.packageAmount) || amount;
-  const prefix = (order.paymentType || 'PBD').toUpperCase() === 'PBD' ? 'pbd' : 'pod';
-  const valueEventName = `${prefix}${pkgAmount}`;
-
-  // 1. PURCHASE — Fire separately on each pixel to avoid duplication
+  // 1. PURCHASE — Fire only via CAPI to avoid fbevents NGN/value warnings
   const purchaseEventId = await makeEventId('Purchase', order.orderId);
 
   // Derive package SKU from package name (simple mapping)
   const packageSku = order.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
   const contentIds = [packageSku];
 
-  const purchaseData = {
-    content_ids: contentIds,
-    content_name: order.packageName || 'Fulani Hair Gro',
-    content_type: 'product',
-    contents: [{
-      id: packageSku,
-      quantity: order.numItems || 1,
-      item_price: pkgAmount,
-    }],
-    num_items: order.numItems || 1,
-    order_id: order.orderId,
-    media_buyer: mediaBuyer,
-    source: source,
-  };
-
+  // Re-initialize the browser pixel with Advanced Matching so it can still
+  // contribute to identity and matching, even though we are not firing the
+  // browser Purchase event from this build.
   await reinitPixelWithUserData({
     email: order.email,
     phone: order.phone,
@@ -628,15 +613,9 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
     gender: 'f',
   });
 
-  // Fire Purchase on Pixel 1 only
-  const browserFired = await fireBrowserEvent('track', 'Purchase', purchaseData, purchaseEventId);
-  if (browserFired) {
-    console.log('[Meta] Purchase fired on Pixel 1:', purchaseData, `eventID=${purchaseEventId}`);
-  } else {
-    console.warn('[Meta] Purchase browser event skipped for order:', order.orderId);
-  }
-
-  // Fire CAPI for original pixel only with same payload structure
+  // Fire Purchase via CAPI only. The browser fbq build currently loaded does
+  // not accept NGN as a valid Purchase currency, and CAPI already carries the
+  // correct value/currency for Meta attribution.
   const capiFired = await fireCAPIEvent('Purchase', purchaseEventId, userData, {
     value: amount > 0 ? amount : undefined,  // Product price ONLY (no delivery fee) - standardized
     currency: amount > 0 ? 'NGN' : undefined,
@@ -653,16 +632,8 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
     source: source,
   }, testEventCode);
 
-  // 2. VALUE-BASED EVENT — fires ONLY from Apps Script CAPI
-  console.log('[Meta] Value event handled by Apps Script CAPI');
-
-  // 3. HIGH VALUE PURCHASE — fires ONLY from Apps Script CAPI
-  console.log('[Meta] High Value Purchase handled by Apps Script CAPI');
-
-  // CompleteRegistration removed - belongs on signup/lead pages, not order confirmation
-
-  console.log('[Meta] Thank-you events complete (Purchase only)');
-  return browserFired && capiFired;
+  console.log('[Meta] Thank-you events complete (CAPI Purchase only)');
+  return capiFired;
 }
 
 let leadSyncFired = false;
