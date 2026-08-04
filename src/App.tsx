@@ -30,6 +30,11 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
+    // Generate a shared PageView event ID if analytics-deferred.js has not run yet.
+    // analytics-deferred.js will use the same ID so browser and CAPI PageView dedup.
+    if (!window.__pvEventId) {
+      window.__pvEventId = Math.random().toString(36).slice(2, 18);
+    }
     captureFbclid();   // persist _fbc cookie / fbclid so it survives to /thank-you
     firePageViewCAPI();
   }, []);

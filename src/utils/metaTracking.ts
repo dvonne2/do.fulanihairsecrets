@@ -737,7 +737,7 @@ export async function firePageViewCAPI(): Promise<void> {
         event_time: Math.floor(Date.now() / 1000),
         event_source_url: window.location.href,
         user_data: userData,
-        custom_data: { currency: 'NGN' },
+        custom_data: {},
       }),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
