@@ -337,6 +337,13 @@ export async function reinitPixelWithUserData(data: {
   if (externalId) userData.external_id = externalId;
   userData.country = 'ng';
 
+  // Add browser identifiers so the pixel connects browser and click IDs
+  // with every event, improving attribution and match quality.
+  const fbp = getFbp();
+  const fbc = getFbc();
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+
   // If the pixel was already initialized by analytics-deferred.js, do not
   // call fbq('init') again to avoid the 'Duplicate Pixel ID' console warning.
   // The user data is still persisted to fhg_identity for the next page load.

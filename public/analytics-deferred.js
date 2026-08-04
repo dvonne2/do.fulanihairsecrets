@@ -34,6 +34,28 @@ try {
   fhgInitParams = { external_id: window.__fhgExternalId || '' };
 }
 
+// Restore persisted click/browser IDs into init params so the pixel has them
+// even when cookies are blocked by Safari ITP.
+try {
+  var fbcPersisted = localStorage.getItem('meta_fbc_data');
+  if (fbcPersisted) {
+    var fbcObj = JSON.parse(fbcPersisted);
+    if (fbcObj && fbcObj.fbc && Date.now() < (fbcObj.expiresAt || 0)) {
+      fhgInitParams.fbc = fbcObj.fbc;
+    }
+  }
+} catch (e) {}
+
+try {
+  var fbpPersisted = localStorage.getItem('meta_fbp_persist');
+  if (fbpPersisted) {
+    var fbpObj = JSON.parse(fbpPersisted);
+    if (fbpObj && fbpObj.fbp && Date.now() < (fbpObj.expiresAt || 0) && String(fbpObj.fbp).indexOf('fb.') === 0) {
+      fhgInitParams.fbp = fbpObj.fbp;
+    }
+  }
+} catch (e) {}
+
 if (window.__metaPixelsInitialized) {
   // Pixel was already initialized by the React bundle (reinitPixelWithUserData)
 } else {
