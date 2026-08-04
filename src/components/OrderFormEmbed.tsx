@@ -186,8 +186,11 @@ function OrderFormEmbed() {
       return;
     }
 
-    // Only fire when we have useful matching data
-    if (!form.name.trim() || !isValidPhone(form.phone) || !isValidEmail(form.email)) {
+    // Fire InitiateCheckout as soon as we have an email or a phone number
+    // (main or WhatsApp) so Meta gets contact data immediately.
+    const email = form.email.trim().toLowerCase();
+    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
+    if (!isValidEmail(email) && !phone) {
       ref.inFlight = false;
       return;
     }
@@ -198,8 +201,8 @@ function OrderFormEmbed() {
     ref.promise = fireInitiateCheckout({
       packageName: pkg.name,
       amount: pkg.price,
-      email: form.email.trim().toLowerCase(),
-      phone: form.phone,
+      email: isValidEmail(email) ? email : undefined,
+      phone: phone || undefined,
       firstName: nameParts[0],
       lastName: nameParts.slice(1).join(' '),
     });
@@ -217,23 +220,25 @@ function OrderFormEmbed() {
 
   useEffect(() => {
     handleInitiateCheckout();
-  }, [form.email, form.phone, form.name, form.package]);
+  }, [form.email, form.phone, form.whatsapp, form.name, form.package]);
 
-  const pixelReinited = useRef(false);
+  // Send any valid contact info to Meta immediately (debounced) so Advanced
+  // Matching and CAPI user_data are kept up to date as the user types.
   useEffect(() => {
-    if (pixelReinited.current) return;
     const email = form.email.trim().toLowerCase();
-    const phone = form.phone;
-    if (!isValidEmail(email) && !isValidPhone(phone)) return;
+    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
+    if (!isValidEmail(email) && !phone) return;
     const nameParts = form.name.trim().split(/\s+/);
-    reinitPixelWithUserData({
-      email: isValidEmail(email) ? email : undefined,
-      phone: isValidPhone(phone) ? phone : undefined,
-      firstName: nameParts[0] || undefined,
-      lastName: nameParts.slice(1).join(' ') || undefined,
-    });
-    pixelReinited.current = true;
-  }, [form.email, form.phone, form.name]);
+    const handler = setTimeout(() => {
+      reinitPixelWithUserData({
+        email: isValidEmail(email) ? email : undefined,
+        phone: phone || undefined,
+        firstName: nameParts[0] || undefined,
+        lastName: nameParts.slice(1).join(' ') || undefined,
+      });
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [form.email, form.phone, form.whatsapp, form.name]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.

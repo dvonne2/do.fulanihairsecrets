@@ -794,7 +794,9 @@ export async function fireInitiateCheckout(data: {
     media_buyer: mediaBuyer,
     source: source,
   }, eventId);
-  if (!data.email || !data.phone) return;
+  // Fire the CAPI event and re-init as soon as we have at least one piece of
+  // contact info, so Meta gets email/phone immediately.
+  if (!data.email && !data.phone) return;
 
   await reinitPixelWithUserData({
     email: data.email,
