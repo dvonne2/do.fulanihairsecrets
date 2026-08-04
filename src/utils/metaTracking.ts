@@ -390,22 +390,26 @@ async function fireBrowserEvent(
     console.warn(`[Meta] fbq not ready, skipping: ${eventName}`);
     return false; // Don't markFired — pixel may load later and event should retry
   }
-  if (eventName !== 'Purchase') markFired(key);
-
-  if (SINGLE_PIXEL_EVENTS.has(eventName)) {
-    // Conversion events route to Pixel 1 only
-    if (type === 'trackCustom') {
-      window.fbq('trackSingleCustom', '220381209723501', eventName, data, { eventID: eventId });
+  try {
+    if (SINGLE_PIXEL_EVENTS.has(eventName)) {
+      // Conversion events route to Pixel 1 only
+      if (type === 'trackCustom') {
+        window.fbq('trackSingleCustom', '220381209723501', eventName, data, { eventID: eventId });
+      } else {
+        window.fbq('trackSingle', '220381209723501', eventName, data, { eventID: eventId });
+      }
+      console.log(`[Meta] Browser trackSingle (220381209723501): ${eventName}`, data, `eventID=${eventId}`);
     } else {
-      window.fbq('trackSingle', '220381209723501', eventName, data, { eventID: eventId });
+      // PageView and ViewContent reach all initialized pixels for audience building
+      window.fbq(type, eventName, data, { eventID: eventId });
+      console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
     }
-    console.log(`[Meta] Browser trackSingle (220381209723501): ${eventName}`, data, `eventID=${eventId}`);
-  } else {
-    // PageView and ViewContent reach all initialized pixels for audience building
-    window.fbq(type, eventName, data, { eventID: eventId });
-    console.log(`[Meta] Browser ${type}: ${eventName}`, data, `eventID=${eventId}`);
+    if (eventName !== 'Purchase') markFired(key);
+    return true;
+  } catch (err) {
+    console.warn(`[Meta] Browser ${type} failed for ${eventName}:`, err);
+    return false;
   }
-  return true;
 }
 
 async function fireCAPIEvent(
@@ -785,10 +789,12 @@ export async function fireInitiateCheckout(data: {
   const mediaBuyer = typeof localStorage !== 'undefined' ? localStorage.getItem('mb') || '' : '';
   const source = typeof localStorage !== 'undefined' ? localStorage.getItem('src') || '' : '';
 
-  const eventId = await makeEventId('InitiateCheckout');
+  // Unique event ID per form start so a new checkout attempt is never blocked
+  // by a stale dedup from a previous session.
+  const eventId = await makeEventId('InitiateCheckout', Date.now().toString());
+  // Browser InitiateCheckout only carries content data; value/currency go
+  // through CAPI to avoid fbevents NGN validation issues.
   await fireBrowserEvent('track', 'InitiateCheckout', {
-    value: Number(data.amount) || 0,
-    currency: 'NGN',
     content_type: 'product',
     content_name: data.packageName,
     media_buyer: mediaBuyer,
