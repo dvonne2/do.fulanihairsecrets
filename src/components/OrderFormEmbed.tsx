@@ -1,6 +1,5 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
-import nigeriaLGAs from '@/data/nigeriaLGAs.json';
 import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
@@ -15,10 +14,14 @@ const isValidPhone = (value: string) => {
   return /^(?:0\d{10}|234\d{10}|\d{10})$/.test(digits);
 };
 
-function extractCityFromAddress(state: string, address: string): string | undefined {
+function extractCityFromAddress(
+  state: string,
+  address: string,
+  lgasData?: Record<string, string[]> | null
+): string | undefined {
   if (!state || !address) return undefined;
   const lower = address.toLowerCase();
-  const lgas = (nigeriaLGAs as Record<string, string[]>)[state];
+  const lgas = lgasData?.[state];
   if (lgas) {
     for (const lga of lgas) {
       const area = lga.toLowerCase();
@@ -184,6 +187,16 @@ function OrderFormEmbed() {
     deliveryType: 'next_day'
   });
 
+  // Load LGA data lazily so it does not end up in the main JS bundle.
+  const nigeriaLgasRef = useRef<Record<string, string[]> | null>(null);
+  useEffect(() => {
+    import('@/data/nigeriaLGAs.json')
+      .then((mod: any) => {
+        nigeriaLgasRef.current = mod.default as Record<string, string[]>;
+      })
+      .catch(() => {});
+  }, []);
+
   const initiateCheckoutRef = useRef<{ fired: boolean; inFlight: boolean; promise: Promise<void> | null }>({
     fired: false,
     inFlight: false,
@@ -230,7 +243,7 @@ function OrderFormEmbed() {
       firstName: nameParts[0],
       lastName: nameParts.slice(1).join(' '),
       state: form.state || undefined,
-      city: extractCityFromAddress(form.state, form.address),
+      city: extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current),
     });
 
     try {
@@ -255,7 +268,7 @@ function OrderFormEmbed() {
     const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
     if (!isValidEmail(email) && !phone) return;
     const nameParts = form.name.trim().split(/\s+/);
-    const city = extractCityFromAddress(form.state, form.address);
+    const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
     const handler = setTimeout(() => {
       reinitPixelWithUserData({
         email: isValidEmail(email) ? email : undefined,
