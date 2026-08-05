@@ -54,7 +54,7 @@ export const BundleSelector = () => {
       
       <header className="intro">
         <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
-        <h1>Choose the bundle that fits your hair journey</h1>
+        <h1>Choose the bundle that fits your hair grow journey</h1>
         <p>Every bundle ships nationwide with payment on delivery. The more you commit, the more you save.</p>
       </header>
 
