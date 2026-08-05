@@ -297,6 +297,7 @@ export async function reinitPixelWithUserData(data: {
   state?: string;
   city?: string;
   gender?: string;
+  fbLoginId?: string;
   externalId?: string;
 }): Promise<void> {
   const fbqReady = await waitForFbq();
@@ -370,6 +371,7 @@ export async function reinitPixelWithUserData(data: {
         state: data.state,
         city: data.city,
         gender,
+        fbLoginId: data.fbLoginId,
         capturedAt: Date.now(),
         expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
       })
@@ -484,6 +486,7 @@ async function buildUserData(info: {
   state?: string;
   city?: string;
   gender?: string;
+  fbLoginId?: string;
   externalId?: string;
 }): Promise<Record<string, any>> {
   const stored = getStoredIdentityRaw();
@@ -495,6 +498,7 @@ async function buildUserData(info: {
     if (!info.state) info.state = stored.state;
     if (!info.city) info.city = stored.city;
     if (!info.gender) info.gender = stored.gender;
+    if (!info.fbLoginId) info.fbLoginId = stored.fbLoginId;
   }
   const ud: Record<string, any> = {};
   if (info.email) ud.em = [await sha256(info.email)];
@@ -530,6 +534,9 @@ async function buildUserData(info: {
   const fbc = getFbc();
   if (fbp) ud.fbp = fbp;
   if (fbc) ud.fbc = fbc;
+  // Facebook Login ID is an App-Scoped ID; Meta docs say do NOT hash it.
+  const fbLoginId = info.fbLoginId || getFbLoginId();
+  if (fbLoginId) ud.fb_login_id = String(fbLoginId);
   return ud;
 }
 
@@ -544,6 +551,14 @@ function getStoredIdentityRaw(): Record<string, any> | null {
       const data = JSON.parse(stored);
       if (Date.now() < data.expiresAt) return data;
     }
+  } catch {}
+  return null;
+}
+
+function getFbLoginId(): string | null {
+  try {
+    const raw = localStorage.getItem('fhg_fb_login_id');
+    if (raw) return raw;
   } catch {}
   return null;
 }
