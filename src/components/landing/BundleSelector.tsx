@@ -5,7 +5,7 @@ import pomadeImg from '@/assets-optimized/products/pomade.webp';
 import conditionerImg from '@/assets-optimized/products/conditioner.webp';
 
 const getProductQty = (items: string, product: string): number => {
-  const match = items.toLowerCase().match(new RegExp(`(\\d+)\\s+${product}`));
+  const match = items.toLowerCase().match(new RegExp(`(\\d+)[^+]*?${product}`));
   return match ? parseInt(match[1], 10) : 0;
 };
 
@@ -62,10 +62,15 @@ export const BundleSelector = () => {
         {PACKAGES.map((pkg) => (
           <section key={pkg.id} className={`card ${pkg.isPopular ? 'popular' : ''}`}>
             {pkg.isPopular && <span className="badge">★ Best Deal</span>}
-            {pkg.isPopular && <p className="tier">Best Value</p>}
+            {pkg.label && <p className="tier">{pkg.label}</p>}
             <h2 className="pkg">{pkg.name}</h2>
             <p className="was"><span className="naira">₦</span>{formatPrice(pkg.originalPrice).replace('₦', '')}</p>
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
+            {pkg.deliveryFee > 0 && (
+              <p style={{ textAlign: 'center', fontSize: '13px', color: '#6B5638', marginTop: '4px' }}>
+                + ₦{pkg.deliveryFee.toLocaleString()} delivery · Total payable ₦{(pkg.price + pkg.deliveryFee).toLocaleString()}
+              </p>
+            )}
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
             <div className="product-imgs">
               {getProductQty(pkg.items, 'shampoo') > 0 && (

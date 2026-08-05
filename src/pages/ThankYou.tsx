@@ -591,13 +591,13 @@ const ThankYou = () => {
           <div className="bg-[#111] border border-gold/30 rounded-2xl p-6 mb-6">
             <h3 className="text-lg font-bold text-gold mb-4">
               {(() => {
-                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Self Love Plus'];
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Complete Hair Growth System'];
                 return currentPackage.title;
               })()}:
             </h3>
             <div className="space-y-4">
               {(() => {
-                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Self Love Plus'];
+                const currentPackage = packageProducts[orderData?.packageName || ''] || packageProducts['Complete Hair Growth System'];
                 return currentPackage.items.map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg" loading="lazy" decoding="async" width="64" height="64" />
