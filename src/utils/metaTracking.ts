@@ -179,16 +179,13 @@ function getFbp(): string | null {
 function getFbc(): string | null {
   const cookieFbc = getCookie('_fbc');
   if (cookieFbc) return cookieFbc;
+  // Use the persisted fbc before generating a new one from the URL fbclid,
+  // so the creation timestamp and exact formatting are preserved.
+  const persisted = getPersistedFbc();
+  if (persisted) return persisted;
   const params = new URLSearchParams(window.location.search);
   const fbclid = params.get('fbclid');
   if (fbclid) return `fb.1.${Date.now()}.${fbclid}`;
-  try {
-    const stored = localStorage.getItem('meta_fbc_data');
-    if (stored) {
-      const data = JSON.parse(stored);
-      if (Date.now() < data.expiresAt) return data.fbc;
-    }
-  } catch {}
   return null;
 }
 

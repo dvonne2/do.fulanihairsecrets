@@ -1,8 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const FBC_PATTERN = /^fb\.1\.\d+\.[\w-]+$/;
-const FBP_PATTERN = /^fb\.1\.\d+\.\d+$/;
-const MAX_LEN = 500;
+const FBC_PATTERN = /^fb\.1\.\d+\.[^\s]+$/;
+const FBP_PATTERN = /^fb\.1\.\d+\.[^\s]+$/;
 
 function cookie(name: string, value: string, maxAgeDays: number): string {
   const maxAge = maxAgeDays * 24 * 60 * 60;
@@ -15,8 +14,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = (req.body as Record<string, any>) || {};
-  const fbc = typeof body.fbc === 'string' ? body.fbc.slice(0, MAX_LEN) : '';
-  const fbp = typeof body.fbp === 'string' ? body.fbp.slice(0, MAX_LEN) : '';
+  const fbc = typeof body.fbc === 'string' ? body.fbc : '';
+  const fbp = typeof body.fbp === 'string' ? body.fbp : '';
 
   const cookies: string[] = [];
   if (fbc && FBC_PATTERN.test(fbc)) {
