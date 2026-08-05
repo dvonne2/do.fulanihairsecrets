@@ -145,9 +145,9 @@ export const TopStoryBanner = () => {
         <div className="w-full max-w-5xl mx-auto mt-10 px-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {[
-              { img: `${BASE_PATH}assets/Shampoo1.webp`, label: 'Fulani Hair Gro™ Shampoo' },
-              { img: `${BASE_PATH}assets/Conditioner2.webp`, label: 'Fulani Hair Gro™ Conditioner' },
-              { img: `${BASE_PATH}assets/pomade3.webp`, label: 'Fulani Hair Gro™ Hair Pomade' },
+              { img: `${BASE_PATH}assets/Shampoo1.webp`, label: 'Fulani Hair Gro™ Shampoo', price: 14999 },
+              { img: `${BASE_PATH}assets/Conditioner2.webp`, label: 'Fulani Hair Gro™ Conditioner', price: 14999 },
+              { img: `${BASE_PATH}assets/pomade3.webp`, label: 'Fulani Hair Gro™ Hair Pomade', price: 17999 },
             ].map((item, i) => (
               <div key={i} className="text-center space-y-3">
                 <div className="mx-auto w-40 h-40 md:w-52 md:h-52 rounded-full overflow-hidden bg-gray-50 shadow-md">
@@ -162,6 +162,7 @@ export const TopStoryBanner = () => {
                   />
                 </div>
                 <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
+                <p className="text-lg md:text-xl font-bold text-[#B80F66]">₦{item.price.toLocaleString('en-NG')}</p>
               </div>
             ))}
           </div>
