@@ -173,6 +173,15 @@ export const TopStoryBanner = () => {
                     Order Now
                   </a>
                 )}
+                {item.label === 'Fulani Hair Gro™ Conditioner' && (
+                  <a
+                    href="#order-form"
+                    data-form-cta="true"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                  >
+                    Order Now
+                  </a>
+                )}
                 {item.label === 'Fulani Hair Gro™ Shampoo' && (
                   <div className="mt-3 text-left">
                     <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
