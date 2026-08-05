@@ -17,7 +17,7 @@ import blessing from '@/assets-optimized/testimonials/blessing.webp';
 
 // Dynamic package mapping based on actual package names from OrderFormEmbed
 const packageProducts: Record<string, { title: string; items: { name: string; qty: number; image: string }[] }> = {
-  "Self Love Plus": {
+  "Complete Hair Growth System": {
     title: "YOUR 1-MONTH TRIAL SUPPLY",
     items: [
       { name: "Heritage Shampoo (500ml)", qty: 1, image: shampoo },
@@ -55,6 +55,24 @@ const packageProducts: Record<string, { title: string; items: { name: string; qt
       { name: "🎁 FREE: Heritage Shampoo (500ml)", qty: 4, image: shampoo },
       { name: "🎁 FREE: Voluminous Conditioner (500ml)", qty: 4, image: conditioner },
       { name: "🎁 FREE: Growth Pomade (150g)", qty: 4, image: pomade },
+    ]
+  },
+  "Fulani Hair Gro Shampoo — 500 ml": {
+    title: "YOUR HERITAGE SHAMPOO",
+    items: [
+      { name: "Heritage Shampoo (500ml)", qty: 1, image: shampoo },
+    ]
+  },
+  "Fulani Hair Gro Conditioner — 500 ml": {
+    title: "YOUR VOLUMINOUS CONDITIONER",
+    items: [
+      { name: "Voluminous Conditioner (500ml)", qty: 1, image: conditioner },
+    ]
+  },
+  "Fulani Hair Gro Pomade — 150 ml": {
+    title: "YOUR GROWTH POMADE",
+    items: [
+      { name: "Growth Pomade (150g)", qty: 1, image: pomade },
     ]
   },
 };
@@ -613,12 +631,18 @@ const ThankYou = () => {
 
           <div className="bg-[#111] rounded-2xl p-6 text-center">
             <div className="flex justify-between mb-2">
-              <span className="text-gray-400">Total Value:</span>
-              <span className="text-gray-400">₦246,000</span>
+              <span className="text-gray-400">Product:</span>
+              <span className="text-gray-400">{formatCurrency(orderData?.packageAmount || 0)}</span>
             </div>
+            {orderData?.deliveryFee > 0 && (
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-400">Delivery Fee:</span>
+                <span className="text-gray-400">{formatCurrency(orderData.deliveryFee)}</span>
+              </div>
+            )}
             <div className="flex justify-between mb-4">
-              <span className="text-white">You Paid:</span>
-              <span className="text-white">{formatCurrency(orderData?.totalAmount || 0)}</span>
+              <span className="text-white font-bold">Total Payable:</span>
+              <span className="text-white font-bold">{formatCurrency(orderData?.totalAmount || 0)}</span>
             </div>
             <div className="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span className="text-xl font-bold text-green-400">YOU SAVED:</span>

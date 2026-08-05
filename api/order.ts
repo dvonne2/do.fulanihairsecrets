@@ -20,7 +20,7 @@ function getSheets() {
   return google.sheets({ version: 'v4', auth });
 }
 
-const SHEET_RANGE = 'Orders!A:K';
+const SHEET_RANGE = 'Orders!A:O';
 
 // In-memory idempotency cache for the lifetime of this serverless container.
 // It prevents the same checkout attempt from being written twice if the
@@ -35,6 +35,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const body = (req.body as Record<string, any>) || {};
   const required = ['name', 'phone', 'package', 'state', 'address', 'amount'];
+  const productAmount = Number(body.productAmount) || 0;
+  const deliveryFee = Number(body.deliveryFee) || 0;
+  const quantity = Number(body.quantity) || 1;
+  const sku = String(body.sku || '');
   const missing = required.filter((k) => !body[k]);
   if (missing.length) {
     return res.status(400).json({ ok: false, error: `Missing: ${missing.join(', ')}` });
@@ -79,6 +83,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           Number(body.amount),
           body.deliveryDate || '',
           'website',
+          productAmount,
+          deliveryFee,
+          quantity,
+          sku,
         ]],
       },
     });

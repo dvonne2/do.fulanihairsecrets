@@ -1,16 +1,16 @@
 import { useState } from "react";
 
 const bundle = {
-  name: "Self Love Plus",
+  name: "Complete Hair Growth System",
   subtitle: "The 30-Day Test",
-  priceWas: "₦55,000",
-  priceNow: "₦55,000",
-  discount: "0% OFF",
-  tag: "Best for: Testing the system",
+  priceWas: "₦65,500",
+  priceNow: "₦32,750",
+  discount: "50% OFF",
+  tag: "Best Value / Recommended",
   items: [
-    { qty: "1×", name: "500ml Shampoo" },
-    { qty: "1×", name: "150g Pomade" },
-    { qty: "1×", name: "500ml Conditioner" },
+    { qty: "1×", name: "500ml Heritage Shampoo" },
+    { qty: "1×", name: "150g Growth Pomade" },
+    { qty: "1×", name: "500ml Voluminous Conditioner" },
   ],
 };
 
@@ -255,7 +255,7 @@ export default function BundleCard({ onSelect }: { onSelect?: (bundle: any) => v
           {selected ? "Bundle Selected ✓" : "Select This Bundle"}
           {!selected && <span className="bc-cta-arrow">→</span>}
         </button>
-        <p className="bc-micro">Free delivery · Easy returns</p>
+        <p className="bc-micro">Pay on Delivery · Easy returns</p>
       </div>
     </>
   );

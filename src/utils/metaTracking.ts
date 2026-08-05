@@ -625,7 +625,7 @@ export async function fireThankYouEvents(order: OrderData): Promise<boolean> {
   // not accept NGN as a valid Purchase currency, and CAPI already carries the
   // correct value/currency for Meta attribution.
   const capiFired = await fireCAPIEvent('Purchase', purchaseEventId, userData, {
-    value: amount > 0 ? amount : undefined,  // Product price ONLY (no delivery fee) - standardized
+    value: amount > 0 ? amount : undefined,  // Full amount payable (product + delivery)
     currency: amount > 0 ? 'NGN' : undefined,
     content_ids: contentIds,
     content_name: order.packageName || 'Fulani Hair Gro',

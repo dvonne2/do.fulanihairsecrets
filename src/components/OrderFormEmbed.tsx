@@ -237,7 +237,7 @@ function OrderFormEmbed() {
     const nameParts = form.name.trim().split(/\s+/);
     ref.promise = fireInitiateCheckout({
       packageName: pkg.name,
-      amount: pkg.price,
+      amount: pkg.price + pkg.deliveryFee,
       email: isValidEmail(email) ? email : undefined,
       phone: phone || undefined,
       firstName: nameParts[0],
@@ -423,6 +423,11 @@ function OrderFormEmbed() {
         return;
       }
 
+      const currentDeliveryFee = pkg
+        ? (pkg.deliveryFee > 0 ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee) : 0)
+        : 0;
+      const total = packagePrice + currentDeliveryFee;
+
       const payload = {
         checkoutAttemptId,
         name: form.name,
@@ -432,11 +437,14 @@ function OrderFormEmbed() {
         address: form.address,
         state: form.state,
         package: pkg?.name || form.package,
-        amount: packagePrice,
+        amount: total,
+        productAmount: packagePrice,
+        deliveryFee: currentDeliveryFee,
+        quantity: pkg?.quantity || 1,
+        sku: pkg?.sku || '',
         deliveryDate: form.deliveryDate || '',
         lga: form.lga || '',
         landmark: form.landmark || '',
-        deliveryFee: form.deliveryType === 'same_day' ? 5000 : 3000,
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
         click_id: '',
@@ -471,13 +479,14 @@ function OrderFormEmbed() {
           email: payload.email,
           phone: payload.phone,
           fullName: payload.name,
-          totalAmount: payload.amount,
-          packageAmount: payload.amount,
+          totalAmount: total,
+          packageAmount: packagePrice,
+          deliveryFee: currentDeliveryFee,
           paymentType: 'PBD',
           packageName: payload.package,
           state: payload.state,
           lga: payload.lga,
-          numItems: 1,
+          numItems: pkg?.quantity || 1,
         }));
       } catch (e) {
         console.error('[OrderForm] Failed to persist order data:', e);
@@ -725,123 +734,72 @@ function OrderFormEmbed() {
         {/* Select Your Package */}
         <div style={{ marginBottom: '20px' }}>
           <label style={{ display: 'block', marginBottom: '12px', fontWeight: '600', color: '#333' }}>
-            Our Packages
+            Select Your Product
           </label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: form.package === 'self_love_plus' ? '#f0f8ff' : '#fff',
-              borderColor: form.package === 'self_love_plus' ? '#d82726' : '#ddd',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="radio"
-                name="package"
-                value="self_love_plus"
-                checked={form.package === 'self_love_plus'}
-                onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                style={{ cursor: 'pointer' }}
-              />
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Self Love Plus - ₦32,750 (1 shampoo, 1 pomade, 1 conditioner)</span>
-            </label>
-
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: form.package === 'self_love_return' ? '#f0f8ff' : '#fff',
-              borderColor: form.package === 'self_love_return' ? '#d82726' : '#ddd',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="radio"
-                name="package"
-                value="self_love_return"
-                checked={form.package === 'self_love_return'}
-                onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                style={{ cursor: 'pointer' }}
-              />
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Self Love Return - ₦42,750 (3 pomade)</span>
-            </label>
-
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: form.package === 'self_love_b2gof' ? '#f0f8ff' : '#fff',
-              borderColor: form.package === 'self_love_b2gof' ? '#d82726' : '#ddd',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="radio"
-                name="package"
-                value="self_love_b2gof"
-                checked={form.package === 'self_love_b2gof'}
-                onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                style={{ cursor: 'pointer' }}
-              />
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Self Love B2GOF - ₦52,750 (2 shampoo, 2 pomade + 1 free each)</span>
-            </label>
-
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: form.package === 'self_love_plus_b2gof' ? '#f0f8ff' : '#fff',
-              borderColor: form.package === 'self_love_plus_b2gof' ? '#d82726' : '#ddd',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="radio"
-                name="package"
-                value="self_love_plus_b2gof"
-                checked={form.package === 'self_love_plus_b2gof'}
-                onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                style={{ cursor: 'pointer' }}
-              />
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Self Love Plus B2GOF - ₦66,750 (2 shampoo, 2 pomade, 2 conditioner + 1 free each)</span>
-            </label>
-
-            <label style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              padding: '8px', 
-              border: '1px solid #ddd', 
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: form.package === 'family_saves' ? '#f0f8ff' : '#fff',
-              borderColor: form.package === 'family_saves' ? '#d82726' : '#ddd',
-              transition: 'all 0.2s ease'
-            }}>
-              <input
-                type="radio"
-                name="package"
-                value="family_saves"
-                checked={form.package === 'family_saves'}
-                onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
-                style={{ cursor: 'pointer' }}
-              />
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Family Saves - ₦215,000 (6 shampoo, 6 pomade, 6 conditioner + 4 free each)</span>
-            </label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {PACKAGES.map((pkg) => {
+              const isSelected = form.package === pkg.slug;
+              const currentDeliveryFee = pkg.deliveryFee > 0
+                ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee)
+                : 0;
+              const total = pkg.price + currentDeliveryFee;
+              return (
+                <label
+                  key={pkg.slug}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    padding: '12px',
+                    border: `2px solid ${isSelected ? '#d82726' : '#ddd'}`,
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    backgroundColor: isSelected ? '#f0f8ff' : '#fff',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="package"
+                    value={pkg.slug}
+                    checked={isSelected}
+                    onChange={e => setForm(prev => ({ ...prev, package: e.target.value }))}
+                    style={{ cursor: 'pointer', marginTop: '3px' }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+                        {pkg.name}
+                        {pkg.label && (
+                          <span style={{
+                            marginLeft: '8px',
+                            fontSize: '10px',
+                            fontWeight: '700',
+                            color: '#fff',
+                            backgroundColor: pkg.isPopular ? '#d82726' : '#059669',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            textTransform: 'uppercase',
+                          }}>
+                            {pkg.label}
+                          </span>
+                        )}
+                      </span>
+                      <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
+                        ₦{total.toLocaleString('en-NG')}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                      {pkg.deliveryFee > 0 ? (
+                        <>Product: ₦{pkg.price.toLocaleString('en-NG')} + Delivery: ₦{currentDeliveryFee.toLocaleString('en-NG')} · Total payable: ₦{total.toLocaleString('en-NG')}</>
+                      ) : (
+                        <>₦{pkg.price.toLocaleString('en-NG')} · {pkg.items}</>
+                      )}
+                    </div>
+                  </div>
+                </label>
+              );
+            })}
           </div>
         </div>
 
@@ -896,6 +854,28 @@ function OrderFormEmbed() {
           <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
             Please select a delivery date within the next 48 hours
           </div>
+        </div>
+
+        {/* Order Summary */}
+        <div style={S.sum}>
+          {(() => {
+            const pkg = PACKAGES.find(p => p.slug === form.package);
+            const currentDeliveryFee = pkg
+              ? (pkg.deliveryFee > 0 ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee) : 0)
+              : 0;
+            const total = (pkg?.price || 0) + currentDeliveryFee;
+            return (
+              <>
+                <div style={S.sr}><span>Product</span><span>{pkg?.name || '—'}</span></div>
+                <div style={S.sr}><span>Quantity</span><span>{pkg?.quantity || 1}</span></div>
+                <div style={S.sr}><span>Product amount</span><span>₦{(pkg?.price || 0).toLocaleString('en-NG')}</span></div>
+                {currentDeliveryFee > 0 && (
+                  <div style={S.sr}><span>Delivery fee</span><span>₦{currentDeliveryFee.toLocaleString('en-NG')}</span></div>
+                )}
+                <div style={S.tot}><span>Total payable</span><span>₦{total.toLocaleString('en-NG')}</span></div>
+              </>
+            );
+          })()}
         </div>
 
         {/* Order Button */}
