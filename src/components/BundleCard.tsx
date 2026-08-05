@@ -6,7 +6,7 @@ const bundle = {
   priceWas: "₦65,500",
   priceNow: "₦32,750",
   discount: "50% OFF",
-  tag: "Best Value / Recommended",
+  tag: "New Customer Trial",
   items: [
     { qty: "1×", name: "500ml Heritage Shampoo" },
     { qty: "1×", name: "150g Growth Pomade" },
