@@ -30,6 +30,7 @@ const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
 import { BundleSelector } from './BundleSelector';
+import { PreFormStockWarning } from './PreFormStockWarning';
 
 const PROMO_DURATION_MINUTES = 58;
 
@@ -711,6 +712,8 @@ export const TopStoryBanner = () => {
               </div>
 
               <BundleSelector />
+              
+              <PreFormStockWarning />
               
               <div id="order-form">
                 {afterHero ? (
