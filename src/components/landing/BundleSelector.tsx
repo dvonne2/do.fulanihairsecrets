@@ -68,7 +68,7 @@ export const BundleSelector = () => {
             <p className="price"><span className="naira">₦</span>{formatPrice(pkg.price).replace('₦', '')}</p>
             {pkg.deliveryFee > 0 && (
               <p style={{ textAlign: 'center', fontSize: '13px', color: '#6B5638', marginTop: '4px' }}>
-                + delivery from ₦{pkg.deliveryFee.toLocaleString()} (selected at checkout)
+                Product: ₦{pkg.price.toLocaleString()} + Delivery: ₦{pkg.deliveryFee.toLocaleString()} · Total payable: ₦{(pkg.price + pkg.deliveryFee).toLocaleString()}
               </p>
             )}
             <span className="save">{formatSavings(pkg.originalPrice, pkg.price)}{pkg.isPopular ? ' 🔥' : ''}</span>
