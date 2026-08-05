@@ -180,6 +180,26 @@ export const TopStoryBanner = () => {
                     </p>
                   </div>
                 )}
+
+                {item.label === 'Fulani Hair Gro™ Conditioner' && (
+                  <div className="mt-3 text-left">
+                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
+                      Why Your Hair Needs Our Conditioner
+                    </h3>
+                    <h4 className="font-sans font-bold text-sm text-gray-800 mb-1">
+                      Hair Doesn&apos;t Stop Growing...
+                    </h4>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      <strong>It Breaks.</strong>
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      If your hair snaps every time you comb, wash or style it, you&apos;ll never enjoy the length you&apos;ve worked so hard to grow.
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      That&apos;s why Fulani Hair Gro Conditioner helps soften, nourish and strengthen your hair—helping reduce breakage so you can retain more of your natural length.
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
