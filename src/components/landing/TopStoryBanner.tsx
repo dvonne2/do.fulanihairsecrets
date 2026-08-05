@@ -200,6 +200,29 @@ export const TopStoryBanner = () => {
                     </p>
                   </div>
                 )}
+
+                {item.label === 'Fulani Hair Gro™ Hair Pomade' && (
+                  <div className="mt-3 text-left">
+                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
+                      Why Your Hair Needs Our Pomade
+                    </h3>
+                    <h4 className="font-sans font-bold text-sm text-gray-800 mb-1">
+                      Hair Needs To Be Fed
+                    </h4>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      A clean scalp is only the beginning.
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      Strong, healthy-looking hair needs daily nourishment to help support healthy growth.
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      Without the right nourishment, hair can become dry, weak and prone to breakage.
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      That&apos;s why Fulani Hair Gro Pomade is carefully formulated to nourish your scalp and hair follicle, helping support longer, fuller, healthier-looking hair.
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
