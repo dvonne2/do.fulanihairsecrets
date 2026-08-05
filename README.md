@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://fulanihairgro.com
+**URL**: https://fulanihairsecrets.com
 
 ## About This Project
 
