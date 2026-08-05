@@ -122,7 +122,7 @@ export const TopStoryBanner = () => {
         {/* Bundle Image */}
         <div className="mt-6 aspect-[800/395]">
           <img
-            src={`${BASE_PATH}assets/hero2.webp`}
+            src={`${BASE_PATH}assets/newhero.webp`}
             alt="Product Bundle"
             className="w-full h-full object-contain"
             loading="eager"
