@@ -32,20 +32,10 @@ const OrderForm = lazy(() => import('../OrderFormEmbed'));
 import { BundleSelector } from './BundleSelector';
 import { PreFormStockWarning } from './PreFormStockWarning';
 
-const PROMO_DURATION_MINUTES = 58;
-
-const formatTime = (totalSeconds: number) => {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-};
-
 export const TopStoryBanner = () => {
   const thankYouPrefetch = usePrefetch(() => import('@/pages/ThankYou'));
   const afterHero = useAfterHeroLoad();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState(PROMO_DURATION_MINUTES * 60);
-  const [showBanner, setShowBanner] = useState(true);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
   const customerReviewImagesRef = useRef<HTMLDivElement>(null);
 
@@ -58,67 +48,13 @@ export const TopStoryBanner = () => {
     }
   }, [afterHero]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          setShowBanner(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <section
       id="hero"
       className="bg-white px-4 pt-2 pb-4 mt-0 md:pt-3 md:pb-6 md:mt-0"
       {...thankYouPrefetch}
     >
-      {showBanner && (
-        <div className="sticky top-0 z-50 w-full bg-[#FF0000] py-2 px-4 overflow-hidden">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
-            <span className="text-white font-bold text-[25px] text-center md:text-left leading-tight">
-              90-DAY GROWTH DEAL: Buy 2 Complete Systems & Get the 3rd Entirely FREE!
-            </span>
-
-            <div className="flex items-center gap-2">
-              {[
-                { value: Math.floor(timeLeft / 86400), label: 'Days' },
-                { value: Math.floor((timeLeft % 86400) / 3600), label: 'Hours' },
-                { value: Math.floor((timeLeft % 3600) / 60), label: 'Minutes' },
-                { value: timeLeft % 60, label: 'Seconds' },
-              ].map((item, i) => (
-                <div key={i} className="text-center w-[52px] md:w-[64px]">
-                  <div className="bg-gray-100 rounded-lg px-2 py-1 md:px-3 md:py-2">
-                    <span className="text-black font-bold text-lg md:text-2xl tabular-nums">
-                      {String(item.value).padStart(2, '0')}
-                    </span>
-                  </div>
-                  <span className="text-white text-[9px] md:text-[10px] uppercase">{item.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <a
-              href="#order-form"
-              data-form-cta="true"
-              className="inline-flex items-center justify-center bg-white text-[#FF0000] font-bold px-5 py-2 rounded-lg text-sm md:text-base hover:bg-gray-100 transition-colors shadow-sm whitespace-nowrap"
-            >
-              Get Promo Now
-            </a>
-          </div>
-        </div>
-      )}
-
       <div className="mx-auto text-center">
-        <p className="jandes-eyebrow text-black mb-6">
-          GROW FuLLER, LONGER, THICKER HAIR WITH FULANI HAIR GRO
-        </p>
-        
         {/* Bundle Image */}
         <div className="mt-6 aspect-[800/395]">
           <img
