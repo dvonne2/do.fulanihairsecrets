@@ -199,6 +199,30 @@ export const TopStoryBanner = () => {
           </span>
         </div>
 
+        {/* Complete System Explainer */}
+        <div className="mt-20 max-w-4xl mx-auto px-4 text-center">
+          <h2 className="font-black text-2xl md:text-3xl text-black uppercase tracking-tight mb-6">
+            See ehn!! Healthy Hair Needs More Than One Miracle Product
+          </h2>
+          <ul className="text-left max-w-2xl mx-auto space-y-3 mb-6 text-lg text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-[#5ec239] text-xl">✔</span>
+              <span>Oil will not cleanse your scalp.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-[#5ec239] text-xl">✔</span>
+              <span>Shampoo will not nourish and protect your hair</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-[#5ec239] text-xl">✔</span>
+              <span>One cream can&apos;t solve every cause of hair breakage.</span>
+            </li>
+          </ul>
+          <p className="text-lg md:text-xl text-gray-700">
+            You need a complete combination. That&apos;s why Fulani Hair Gro is a complete hair growth system. Each product has a unique purpose, and together they help support longer, fuller, stronger, healthier-looking hair.
+          </p>
+        </div>
+
         {/* Hair Concerns Cards */}
         <div className="mt-20 max-w-4xl mx-auto px-4 text-center">
           <h2 className="font-black text-2xl md:text-3xl text-black uppercase tracking-tight mb-3">
