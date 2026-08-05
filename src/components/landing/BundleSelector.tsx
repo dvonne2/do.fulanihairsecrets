@@ -59,7 +59,7 @@ export const BundleSelector = () => {
           {['1', '2', '3', '4', '5', '6'].map((n) => (
             <div key={n} className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white">
               <img
-                src={`${BASE_PATH}assets/${n}.png`}
+                src={`${BASE_PATH}assets/${n}.webp`}
                 alt={`Fulani Hair Gro result ${n}`}
                 className="w-full h-auto object-cover"
                 loading="lazy"
