@@ -388,6 +388,25 @@ export const TopStoryBanner = () => {
             HOW IT WORKS
           </strong>
 
+          <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', padding: '0 16px' }}>
+              <img
+                src={`${BASE_PATH}assets/7.webp`}
+                alt="Before Fulani Hair Gro"
+                style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={`${BASE_PATH}assets/8.webp`}
+                alt="After Fulani Hair Gro"
+                style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+
           {/* Your Journey Section */}
           {/* Milestone Cards */}
           <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
