@@ -164,6 +164,22 @@ export const TopStoryBanner = () => {
                 </div>
                 <p className="text-base md:text-lg font-semibold text-gray-900">{item.label}</p>
                 <p className="text-lg md:text-xl font-bold text-[#B80F66]">₦{item.price.toLocaleString('en-NG')}</p>
+                {item.label === 'Fulani Hair Gro™ Shampoo' && (
+                  <div className="mt-3 text-left">
+                    <h3 className="font-sans font-bold text-sm md:text-base text-gray-900 mb-2">
+                      Why Your Hair Needs Our Shampoo
+                    </h3>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      You can pour oil on your hair every single day...
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                      If your scalp is unhealthy, don&apos;t expect healthy hair growth.
+                    </p>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      Your hair grows from your scalp. That&apos;s why the first step to healthier, longer-looking hair is keeping your scalp clean and healthy.
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
