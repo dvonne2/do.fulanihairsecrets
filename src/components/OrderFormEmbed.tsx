@@ -423,9 +423,7 @@ function OrderFormEmbed() {
         return;
       }
 
-      const currentDeliveryFee = pkg
-        ? (pkg.deliveryFee > 0 ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee) : 0)
-        : 0;
+      const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
       const total = packagePrice + currentDeliveryFee;
 
       const payload = {
@@ -739,10 +737,6 @@ function OrderFormEmbed() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {PACKAGES.map((pkg) => {
               const isSelected = form.package === pkg.slug;
-              const currentDeliveryFee = pkg.deliveryFee > 0
-                ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee)
-                : 0;
-              const total = pkg.price + currentDeliveryFee;
               return (
                 <label
                   key={pkg.slug}
@@ -786,15 +780,11 @@ function OrderFormEmbed() {
                         )}
                       </span>
                       <span style={{ fontSize: '16px', fontWeight: '800', color: '#059669' }}>
-                        ₦{total.toLocaleString('en-NG')}
+                        ₦{pkg.price.toLocaleString('en-NG')}
                       </span>
                     </div>
                     <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                      {pkg.deliveryFee > 0 ? (
-                        <>Product: ₦{pkg.price.toLocaleString('en-NG')} + Delivery: ₦{currentDeliveryFee.toLocaleString('en-NG')} · Total payable: ₦{total.toLocaleString('en-NG')}</>
-                      ) : (
-                        <>₦{pkg.price.toLocaleString('en-NG')} · {pkg.items}</>
-                      )}
+                      {pkg.items} · + delivery fee (select below)
                     </div>
                   </div>
                 </label>
@@ -860,18 +850,14 @@ function OrderFormEmbed() {
         <div style={S.sum}>
           {(() => {
             const pkg = PACKAGES.find(p => p.slug === form.package);
-            const currentDeliveryFee = pkg
-              ? (pkg.deliveryFee > 0 ? (form.deliveryType === 'same_day' ? 5000 : pkg.deliveryFee) : 0)
-              : 0;
+            const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
             const total = (pkg?.price || 0) + currentDeliveryFee;
             return (
               <>
                 <div style={S.sr}><span>Product</span><span>{pkg?.name || '—'}</span></div>
                 <div style={S.sr}><span>Quantity</span><span>{pkg?.quantity || 1}</span></div>
                 <div style={S.sr}><span>Product amount</span><span>₦{(pkg?.price || 0).toLocaleString('en-NG')}</span></div>
-                {currentDeliveryFee > 0 && (
-                  <div style={S.sr}><span>Delivery fee</span><span>₦{currentDeliveryFee.toLocaleString('en-NG')}</span></div>
-                )}
+                <div style={S.sr}><span>Delivery fee</span><span>₦{currentDeliveryFee.toLocaleString('en-NG')}</span></div>
                 <div style={S.tot}><span>Total payable</span><span>₦{total.toLocaleString('en-NG')}</span></div>
               </>
             );
