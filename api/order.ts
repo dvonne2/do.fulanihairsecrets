@@ -22,6 +22,12 @@ function getSheets() {
 
 const SHEET_RANGE = 'Orders!A:K';
 
+// In-memory idempotency cache for the lifetime of this serverless container.
+// It prevents the same checkout attempt from being written twice if the
+// browser sends rapid duplicate requests before the redirect unloads the page.
+const recentOrderIds = new Map<string, string>();
+const MAX_RECENT_CACHE = 1000;
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -35,6 +41,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const orderId = generateServerOrderId();
+  const checkoutAttemptId =
+    typeof body.checkoutAttemptId === 'string' ? body.checkoutAttemptId : '';
+
+  // If this exact checkout attempt was already processed in this container,
+  // return the original order ID instead of creating a duplicate.
+  if (checkoutAttemptId && recentOrderIds.has(checkoutAttemptId)) {
+    const existingOrderId = recentOrderIds.get(checkoutAttemptId) as string;
+    console.log('[Sheets] Duplicate checkout attempt detected:', checkoutAttemptId);
+    return res.status(200).json({ ok: true, orderId: existingOrderId });
+  }
 
   const sheets = getSheets();
   if (!sheets) {
@@ -66,6 +82,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ]],
       },
     });
+    if (checkoutAttemptId) {
+      recentOrderIds.set(checkoutAttemptId, orderId);
+      if (recentOrderIds.size > MAX_RECENT_CACHE) {
+        const first = recentOrderIds.keys().next().value;
+        if (first !== undefined) recentOrderIds.delete(first);
+      }
+    }
     return res.status(200).json({ ok: true, orderId });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';

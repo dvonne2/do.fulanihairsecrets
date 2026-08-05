@@ -410,7 +410,8 @@ function OrderFormEmbed() {
     setSubmitting(true);
 
     try {
-      clearCheckoutAttemptId();
+      // Reuse the same checkout attempt ID for this submission (and any
+      // immediate retry) so the backend can deduplicate accidental double-clicks.
       const checkoutAttemptId = getCheckoutAttemptId();
       const pkg = PACKAGES.find(p => p.slug === form.package);
       const packagePrice = pkg?.price || 0;
@@ -452,44 +453,40 @@ function OrderFormEmbed() {
 
       const result = await response.json();
 
-      if (result.ok) {
-        // Server is the authority on the final confirmed order ID.
-        const confirmedOrderId = result.orderId;
-        const thankYouOrderId = confirmedOrderId;
-
-        // The checkout attempt ID is consumed; a future checkout must generate a new one.
-        clearCheckoutAttemptId();
-
-        // Persist confirmed order data so Thank You page can fire Purchase event
-        try {
-          localStorage.setItem('fhg_order_data', JSON.stringify({
-            orderId: thankYouOrderId,
-            email: payload.email,
-            phone: payload.phone,
-            fullName: payload.name,
-            totalAmount: payload.amount,
-            packageAmount: payload.amount,
-            paymentType: 'PBD',
-            packageName: payload.package,
-            state: payload.state,
-            lga: payload.lga,
-            numItems: 1,
-          }));
-        } catch (e) {
-          console.error('[OrderForm] Failed to persist order data:', e);
-        }
-
-        window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
-      } else {
-        console.error('[OrderForm] Order failed:', result);
-        clearCheckoutAttemptId();
-        alert(result.error || 'Failed to submit order. Please try again.');
+      if (!result.ok) {
+        throw new Error(result.error || 'Failed to submit order. Please try again.');
       }
-    } catch (error) {
-      console.error('Submit error:', error);
+
+      // Server is the authority on the final confirmed order ID.
+      const confirmedOrderId = result.orderId;
+      const thankYouOrderId = confirmedOrderId;
+
+      // The checkout attempt ID is consumed; a future checkout must generate a new one.
       clearCheckoutAttemptId();
-      alert('An error occurred. Please try again.');
-    } finally {
+
+      // Persist confirmed order data so Thank You page can fire Purchase event
+      try {
+        localStorage.setItem('fhg_order_data', JSON.stringify({
+          orderId: thankYouOrderId,
+          email: payload.email,
+          phone: payload.phone,
+          fullName: payload.name,
+          totalAmount: payload.amount,
+          packageAmount: payload.amount,
+          paymentType: 'PBD',
+          packageName: payload.package,
+          state: payload.state,
+          lga: payload.lga,
+          numItems: 1,
+        }));
+      } catch (e) {
+        console.error('[OrderForm] Failed to persist order data:', e);
+      }
+
+      window.location.replace(`/thank-you${thankYouOrderId ? `?order=${thankYouOrderId}` : ''}`);
+    } catch (error: any) {
+      console.error('[OrderForm] Order failed:', error);
+      alert(error?.message || 'An error occurred. Please try again.');
       setSubmitting(false);
       submitStarted.current = false;
     }
