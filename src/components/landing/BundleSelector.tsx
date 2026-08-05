@@ -9,6 +9,8 @@ const getProductQty = (items: string, product: string): number => {
   return match ? parseInt(match[1], 10) : 0;
 };
 
+const BASE_PATH = import.meta.env.BASE_URL || '/';
+
 export const BundleSelector = () => {
   const formatPrice = (price: number) => `₦${price.toLocaleString()}`;
   const formatSavings = (original: number, current: number) => `Save ₦${(original - current).toLocaleString()}`;
@@ -52,6 +54,22 @@ export const BundleSelector = () => {
         @media (prefers-reduced-motion:reduce){.bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}}
       `}</style>
       
+      <div className="max-w-6xl mx-auto px-4 mb-12">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+          {['1', '2', '3', '4', '5', '6'].map((n) => (
+            <div key={n} className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white">
+              <img
+                src={`${BASE_PATH}assets/${n}.png`}
+                alt={`Fulani Hair Gro result ${n}`}
+                className="w-full h-auto object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
       <header className="intro">
         <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
         <h1>Choose the bundle that fits your hair grow journey</h1>
