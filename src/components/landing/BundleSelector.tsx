@@ -64,7 +64,12 @@ export const BundleSelector = () => {
             { n: '5', w: 600, h: 131 },
             { n: '6', w: 600, h: 386 },
           ].map(({ n, w, h }) => (
-            <div key={n} className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white">
+            <div
+              key={n}
+              className={`rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white ${
+                n === '1' || n === '2' ? 'col-span-3 md:col-span-6' : ''
+              }`}
+            >
               <img
                 src={`${BASE_PATH}assets/${n}.webp`}
                 alt={`Fulani Hair Gro result ${n}`}
