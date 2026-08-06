@@ -7,9 +7,6 @@ export const PreFormStockWarning: React.FC = () => {
         <h2 className="font-sans text-3xl md:text-4xl font-extrabold text-black mb-4">
           Warning: Limited Stock Available
         </h2>
-        <p className="font-sans text-base md:text-lg text-gray-700 mb-6">
-          Due to overwhelming demand, we&apos;re running low on inventory. Order now to secure yours before we sell out again.
-        </p>
         <h3 className="font-sans text-2xl md:text-3xl font-black text-black mb-8">
           Order in the next 2 hours for same-day dispatch
         </h3>
