@@ -160,7 +160,6 @@ export const BundleSelector = () => {
         ))}
       </main>
 
-      <p className="footnote">All prices in Nigerian Naira. 50% launch discount applied to every bundle. Every bundle is covered by our 90-day money-back guarantee. We deliver nationwide — you pay when your order arrives.</p>
     </div>
   );
 };
