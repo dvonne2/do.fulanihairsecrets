@@ -56,12 +56,21 @@ export const BundleSelector = () => {
       
       <div className="max-w-6xl mx-auto px-4 mb-12">
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-          {['1', '2', '3', '4', '5', '6'].map((n) => (
+          {[
+            { n: '1', w: 600, h: 396 },
+            { n: '2', w: 600, h: 96 },
+            { n: '3', w: 600, h: 227 },
+            { n: '4', w: 600, h: 163 },
+            { n: '5', w: 600, h: 131 },
+            { n: '6', w: 600, h: 386 },
+          ].map(({ n, w, h }) => (
             <div key={n} className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white">
               <img
                 src={`${BASE_PATH}assets/${n}.webp`}
                 alt={`Fulani Hair Gro result ${n}`}
                 className="w-full h-auto object-cover"
+                width={w}
+                height={h}
                 loading="lazy"
                 decoding="async"
               />
@@ -76,6 +85,8 @@ export const BundleSelector = () => {
             src={`${BASE_PATH}assets/9.webp`}
             alt="Result 9"
             className="w-full h-auto rounded-xl border border-[#EADFC8] shadow-sm"
+            width="600"
+            height="600"
             loading="lazy"
             decoding="async"
           />
@@ -83,6 +94,8 @@ export const BundleSelector = () => {
             src={`${BASE_PATH}assets/10.webp`}
             alt="Result 10"
             className="w-full h-auto rounded-xl border border-[#EADFC8] shadow-sm"
+            width="600"
+            height="600"
             loading="lazy"
             decoding="async"
           />

@@ -57,16 +57,23 @@ export const TopStoryBanner = () => {
       <div className="mx-auto text-center">
         {/* Bundle Image */}
         <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl">
-          <img
-            src={`${BASE_PATH}assets/newhero.webp`}
-            alt="Product Bundle"
-            className="w-full h-auto object-contain"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-            width="1055"
-            height="1491"
-          />
+          <picture>
+            <source
+              media="(max-width: 767px)"
+              srcSet={`${BASE_PATH}assets/newhero-665.webp`}
+              type="image/webp"
+            />
+            <img
+              src={`${BASE_PATH}assets/newhero.webp`}
+              alt="Product Bundle"
+              className="w-full h-auto object-contain"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              width="1055"
+              height="1491"
+            />
+          </picture>
         </div>
 
         <div className="mt-6 max-w-3xl mx-auto text-center space-y-4">
@@ -329,14 +336,20 @@ export const TopStoryBanner = () => {
               <img
                 src={`${BASE_PATH}assets/7.webp`}
                 alt="Before Fulani Hair Gro"
-                style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                className="w-full h-auto"
+                style={{ borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                width="600"
+                height="900"
                 loading="lazy"
                 decoding="async"
               />
               <img
                 src={`${BASE_PATH}assets/8.webp`}
                 alt="After Fulani Hair Gro"
-                style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                className="w-full h-auto"
+                style={{ borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                width="600"
+                height="600"
                 loading="lazy"
                 decoding="async"
               />
