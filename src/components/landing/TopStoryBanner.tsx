@@ -37,7 +37,6 @@ export const TopStoryBanner = () => {
   const afterHero = useAfterHeroLoad();
   const [expandedIngredient, setExpandedIngredient] = useState<string | null>(null);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
-  const customerReviewImagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!afterHero) return;
@@ -693,86 +692,6 @@ export const TopStoryBanner = () => {
                     Read summary by topics
                   </button>
 
-                  {/* Customer review images — add JPGs to public/asset */}
-                  <div className="mt-6">
-                    <p className="text-sm font-medium text-gray-500 mb-3">
-                      Reviews with media
-                    </p>
-                    <div className="relative group">
-                      <button
-                        type="button"
-                        aria-label="Scroll left"
-                        onClick={() =>
-                          customerReviewImagesRef.current?.scrollBy({
-                            left: -150,
-                            behavior: 'smooth'
-                          })
-                        }
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white/90 border border-gray-200 rounded-full shadow-sm hover:bg-white transition-colors opacity-80 group-hover:opacity-100"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="15 18 9 12 15 6" />
-                        </svg>
-                      </button>
-
-                      <div
-                        ref={customerReviewImagesRef}
-                        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory"
-                      >
-                        {[
-                          `${BASE_PATH}assets/bukky-4.webp`,
-                          `${BASE_PATH}assets/bukky-1.webp`,
-                          `${BASE_PATH}assets/bukky-3.webp`,
-                          `${BASE_PATH}assets/bukky-2.webp`,
-                          `${BASE_PATH}assets/mama5.webp`,
-                        ].map((src, index) => (
-                          <img
-                            key={src}
-                            src={src}
-                            alt={`Customer review ${index + 1}`}
-                            className="w-full h-auto rounded-lg flex-shrink-0 snap-start bg-gray-100"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        ))}
-                      </div>
-
-                      <button
-                        type="button"
-                        aria-label="Scroll right"
-                        onClick={() =>
-                          customerReviewImagesRef.current?.scrollBy({
-                            left: 150,
-                            behavior: 'smooth'
-                          })
-                        }
-                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white/90 border border-gray-200 rounded-full shadow-sm hover:bg-white transition-colors opacity-80 group-hover:opacity-100"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="9 18 15 12 9 6" />
-                        </svg>
-                      </button>
-                    </div>
                   
                   {/* Approved Reviews from Supabase */}
                   {afterHero && (
