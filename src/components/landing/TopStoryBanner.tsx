@@ -727,7 +727,7 @@ export const TopStoryBanner = () => {
 
                       <div
                         ref={customerReviewImagesRef}
-                        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-10"
+                        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory"
                       >
                         {[
                           `${BASE_PATH}assets/bukky-4.webp`,
@@ -740,11 +740,9 @@ export const TopStoryBanner = () => {
                             key={src}
                             src={src}
                             alt={`Customer review ${index + 1}`}
-                            className="w-32 h-32 object-cover rounded-lg flex-shrink-0 bg-gray-100"
+                            className="w-full h-auto rounded-lg flex-shrink-0 snap-start bg-gray-100"
                             loading="lazy"
                             decoding="async"
-                            width="128"
-                            height="128"
                           />
                         ))}
                       </div>
