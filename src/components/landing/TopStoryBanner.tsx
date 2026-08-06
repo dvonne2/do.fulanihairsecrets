@@ -53,6 +53,32 @@ export const TopStoryBanner = () => {
       className="bg-white px-4 pt-2 pb-4 mt-0 md:pt-3 md:pb-6 md:mt-0"
       {...thankYouPrefetch}
     >
+      <style>{`
+        @keyframes aggressiveBurst {
+          0%, 5%, 45%, 100% { transform: translateX(0) scale(1); }
+          7% { transform: translateX(-8px) rotate(-4deg) scale(1.03); }
+          10% { transform: translateX(8px) rotate(4deg) scale(1.03); }
+          13% { transform: translateX(-8px) rotate(-4deg) scale(1.03); }
+          16% { transform: translateX(8px) rotate(4deg) scale(1.03); }
+          19% { transform: translateX(-6px) rotate(-3deg) scale(1.02); }
+          22% { transform: translateX(6px) rotate(3deg) scale(1.02); }
+          25% { transform: translateX(-4px) rotate(-2deg) scale(1.02); }
+          28% { transform: translateX(4px) rotate(2deg) scale(1.02); }
+          31% { transform: translateY(-6px) scale(1.05); }
+          34% { transform: translateY(3px) scale(1.03); }
+          37% { transform: translateY(-3px) scale(1.04); }
+          40% { transform: translateY(1px) scale(1); }
+        }
+        .aggressive-cta {
+          animation: aggressiveBurst 5s ease-in-out infinite;
+          will-change: transform;
+          transform: translateZ(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .aggressive-cta { animation: none; }
+        }
+      `}</style>
+
       <div className="mx-auto text-center">
         {/* Bundle Image */}
         <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl">
@@ -79,7 +105,7 @@ export const TopStoryBanner = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#FF0000] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow"
+            className="flex items-center justify-center gap-2 bg-[#FF0000] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full cta-with-arrow aggressive-cta"
             style={{ fontSize: '20px' }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> TAKE ACTION NOW
