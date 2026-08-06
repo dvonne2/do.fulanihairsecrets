@@ -259,10 +259,6 @@ export function captureFbclid(): void {
   } catch {}
 }
 
-if (typeof window !== 'undefined') {
-  captureFbclid();
-}
-
 export function getPersistedFbc(): string | null {
   try {
     const raw = localStorage.getItem('meta_fbc_data');

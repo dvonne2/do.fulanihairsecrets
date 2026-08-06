@@ -35,8 +35,18 @@ const App = () => {
     if (!window.__pvEventId) {
       window.__pvEventId = Math.random().toString(36).slice(2, 18);
     }
-    captureFbclid();   // persist _fbc cookie / fbclid so it survives to /thank-you
-    firePageViewCAPI();
+    const runAfterPaint = () => {
+      // Defer attribution persistence and CAPI call until after React hydration/FCP.
+      setTimeout(() => {
+        captureFbclid();   // persist _fbc cookie / fbclid so it survives to /thank-you
+        firePageViewCAPI();
+      }, 0);
+    };
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(runAfterPaint);
+    } else {
+      runAfterPaint();
+    }
   }, []);
   return (
     <ErrorBoundary>
