@@ -76,6 +76,7 @@ export const BundleSelector = () => {
                 height={h}
                 loading="lazy"
                 decoding="async"
+                fetchpriority="low"
               />
             </div>
           ))}
@@ -92,6 +93,7 @@ export const BundleSelector = () => {
             height="600"
             loading="lazy"
             decoding="async"
+            fetchpriority="low"
           />
           <img
             src={`${BASE_PATH}assets/10.webp`}
@@ -101,6 +103,7 @@ export const BundleSelector = () => {
             height="600"
             loading="lazy"
             decoding="async"
+            fetchpriority="low"
           />
         </div>
       </div>
