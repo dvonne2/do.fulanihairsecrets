@@ -332,7 +332,7 @@ export const TopStoryBanner = () => {
           </strong>
 
           <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', padding: '0 16px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
               <img
                 src={`${BASE_PATH}assets/7.webp`}
                 alt="Before Fulani Hair Gro"
