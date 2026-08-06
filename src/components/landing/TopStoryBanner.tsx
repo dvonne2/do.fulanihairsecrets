@@ -108,7 +108,7 @@ export const TopStoryBanner = () => {
                 <p className="text-lg md:text-xl font-bold text-[#B80F66]">₦{item.price.toLocaleString('en-NG')}</p>
                 {item.label === 'Fulani Hair Gro™ Shampoo' && (
                   <a
-                    href="#order-form"
+                    href="#bundle-selector"
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
@@ -117,7 +117,7 @@ export const TopStoryBanner = () => {
                 )}
                 {item.label === 'Fulani Hair Gro™ Conditioner' && (
                   <a
-                    href="#order-form"
+                    href="#bundle-selector"
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
@@ -126,7 +126,7 @@ export const TopStoryBanner = () => {
                 )}
                 {item.label === 'Fulani Hair Gro™ Hair Pomade' && (
                   <a
-                    href="#order-form"
+                    href="#bundle-selector"
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
