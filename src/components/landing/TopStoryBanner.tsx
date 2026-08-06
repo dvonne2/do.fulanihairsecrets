@@ -56,16 +56,16 @@ export const TopStoryBanner = () => {
     >
       <div className="mx-auto text-center">
         {/* Bundle Image */}
-        <div className="mt-6 aspect-[800/395]">
+        <div className="mt-6 w-full max-w-4xl mx-auto px-4">
           <img
             src={`${BASE_PATH}assets/newhero.webp`}
             alt="Product Bundle"
-            className="w-full h-full object-contain"
+            className="w-full h-auto object-contain"
             loading="eager"
             fetchpriority="high"
             decoding="async"
-            width="665"
-            height="328"
+            width="1055"
+            height="1491"
           />
         </div>
 
