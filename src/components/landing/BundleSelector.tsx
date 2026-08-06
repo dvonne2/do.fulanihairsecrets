@@ -16,7 +16,7 @@ export const BundleSelector = () => {
   const formatSavings = (original: number, current: number) => `Save ₦${(original - current).toLocaleString()}`;
 
   return (
-    <div id="bundle-selector" className="bundle-selector">
+    <div className="bundle-selector">
       <style>{`
         :root{--ivory:#FBF6EC;--card:#FFFFFF;--espresso:#2B1D0E;--cocoa:#6B5638;--gold:#C9971C;--gold-deep:#A87A10;--gold-soft:#F3E3BC;--gold-wash:#FFF8E7;--rose:#8E2F3C;--rose-soft:#F9E7EA;--radius:18px}
         .bundle-selector *{margin:0;padding:0;box-sizing:border-box}
@@ -108,7 +108,7 @@ export const BundleSelector = () => {
         </div>
       </div>
 
-      <header className="intro">
+      <header id="bundle-selector" className="intro">
         <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
         <h1>Choose the bundle that fits your hair grow journey</h1>
         <p>Every bundle ships nationwide with payment on delivery. The more you commit, the more you save.</p>

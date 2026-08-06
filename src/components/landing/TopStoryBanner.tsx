@@ -109,6 +109,7 @@ export const TopStoryBanner = () => {
                 {item.label === 'Fulani Hair Gro™ Shampoo' && (
                   <a
                     href="#bundle-selector"
+                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
@@ -118,6 +119,7 @@ export const TopStoryBanner = () => {
                 {item.label === 'Fulani Hair Gro™ Conditioner' && (
                   <a
                     href="#bundle-selector"
+                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
@@ -127,6 +129,7 @@ export const TopStoryBanner = () => {
                 {item.label === 'Fulani Hair Gro™ Hair Pomade' && (
                   <a
                     href="#bundle-selector"
+                    onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
                     className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
                   >
