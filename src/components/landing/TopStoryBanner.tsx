@@ -331,8 +331,8 @@ export const TopStoryBanner = () => {
             HOW IT WORKS
           </strong>
 
-          <div className="mt-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+          <div className="mt-8 -mx-4 md:mx-auto" style={{ maxWidth: '1000px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <img
                 src={`${BASE_PATH}assets/7.webp`}
                 alt="Before Fulani Hair Gro"
