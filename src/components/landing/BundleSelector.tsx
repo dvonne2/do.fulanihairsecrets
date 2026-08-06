@@ -54,8 +54,8 @@ export const BundleSelector = () => {
         @media (prefers-reduced-motion:reduce){.bundle-selector .card,.bundle-selector .card:hover{transition:none;transform:none}}
       `}</style>
       
-      <div className="max-w-6xl mx-auto px-4 mb-12">
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+      <div className="mb-12">
+        <div className="grid grid-cols-1 gap-4">
           {[
             { n: '1', w: 600, h: 396 },
             { n: '2', w: 600, h: 96 },
@@ -66,7 +66,7 @@ export const BundleSelector = () => {
           ].map(({ n, w, h }) => (
             <div
               key={n}
-              className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white col-span-3 md:col-span-6"
+              className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white w-full"
             >
               <img
                 src={`${BASE_PATH}assets/${n}.webp`}
