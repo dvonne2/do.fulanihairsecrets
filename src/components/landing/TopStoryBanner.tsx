@@ -71,7 +71,7 @@ export const TopStoryBanner = () => {
 
         <div className="mt-6 max-w-3xl mx-auto text-center space-y-4">
           <h2 className="font-black text-2xl md:text-4xl text-black uppercase tracking-tight leading-tight">
-            THE COMPLETE GROWTH SYSTEM THAT WORKS WITH YOUR HAIR
+            INTRODUCING THE COMPLETE GROWTH SYSTEM THAT WORKS WITH YOUR HAIR
           </h2>
           <p className="text-base md:text-lg text-black leading-relaxed">
             Made from my grandmother's special blend of traditional herbs from Maiduguri, Northern Nigeria. For years, thousands of women and men across Nigeria have trusted Fulani Hair Gro to help keep their <strong>scalp clean</strong>, <strong>fight dandruff</strong>, <strong>reduce hair breakage</strong>, and <strong>enjoy fuller, longer, healthier hair</strong>. That's because every product in the Fulani Hair Gro System has a unique purpose. <strong>Together,</strong> they work in harmony to <strong>deliver better results</strong> than using a single product alone.
