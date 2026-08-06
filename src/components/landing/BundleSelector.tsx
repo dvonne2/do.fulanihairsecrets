@@ -66,9 +66,7 @@ export const BundleSelector = () => {
           ].map(({ n, w, h }) => (
             <div
               key={n}
-              className={`rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white ${
-                n === '1' || n === '2' ? 'col-span-3 md:col-span-6' : ''
-              }`}
+              className="rounded-xl overflow-hidden shadow-sm border border-[#EADFC8] bg-white col-span-3 md:col-span-6"
             >
               <img
                 src={`${BASE_PATH}assets/${n}.webp`}
