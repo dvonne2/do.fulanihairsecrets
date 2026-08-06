@@ -70,6 +70,25 @@ export const BundleSelector = () => {
         </div>
       </div>
 
+      <div className="max-w-5xl mx-auto px-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <img
+            src={`${BASE_PATH}assets/9.webp`}
+            alt="Result 9"
+            className="w-full h-auto rounded-xl border border-[#EADFC8] shadow-sm"
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            src={`${BASE_PATH}assets/10.webp`}
+            alt="Result 10"
+            className="w-full h-auto rounded-xl border border-[#EADFC8] shadow-sm"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+
       <header className="intro">
         <span className="kicker">Fulani Hair Gro · 50% Off Bundles</span>
         <h1>Choose the bundle that fits your hair grow journey</h1>
