@@ -190,39 +190,76 @@ function getFbc(): string | null {
 }
 
 
+function getFbclidFromFbc(value: string): string | null {
+  const match = value.match(/^fb\.1\.\d+\.(.+)$/);
+  return match ? match[1] : null;
+}
+
+function getPersistedFbcData(): { fbc: string; fbclid: string; timestamp: number; expiresAt: number } | null {
+  try {
+    const raw = localStorage.getItem('meta_fbc_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Date.now() < data.expiresAt) {
+        return {
+          fbc: data.fbc,
+          fbclid: data.fbclid || '',
+          timestamp: data.timestamp || Date.now(),
+          expiresAt: data.expiresAt,
+        };
+      }
+      localStorage.removeItem('meta_fbc_data');
+    }
+  } catch {}
+  return null;
+}
+
 export function captureFbclid(): void {
   try {
     const params = new URLSearchParams(window.location.search);
     const urlFbclid = params.get('fbclid');
     const cookieFbc = getCookie('_fbc');
 
-    // Prefer the current URL fbclid, then the _fbc cookie the Meta pixel already set
+    // Use an existing fbc that matches the current URL fbclid to preserve the
+    // original creation timestamp. Only build a fresh fbc when no valid match exists.
+    const persistedData = getPersistedFbcData();
     let fbc: string | null = null;
-    if (urlFbclid) {
+    let matchedFbclid = '';
+
+    if (cookieFbc && getFbclidFromFbc(cookieFbc) === urlFbclid) {
+      fbc = cookieFbc;
+      matchedFbclid = getFbclidFromFbc(cookieFbc) || '';
+    } else if (urlFbclid && persistedData?.fbclid === urlFbclid) {
+      fbc = persistedData.fbc;
+      matchedFbclid = persistedData.fbclid;
+    } else if (urlFbclid) {
       fbc = `fb.1.${Date.now()}.${urlFbclid}`;
+      matchedFbclid = urlFbclid;
     } else if (cookieFbc) {
       fbc = cookieFbc;
-    }
-
-    // Fall back to the persisted fbc so returning visitors keep their click ID
-    if (!fbc) {
-      fbc = getPersistedFbc();
+      matchedFbclid = getFbclidFromFbc(cookieFbc) || '';
+    } else if (persistedData) {
+      fbc = persistedData.fbc;
+      matchedFbclid = persistedData.fbclid;
     }
 
     if (fbc) {
+      const fbcToStore = fbc;
+      const fbclidToStore = matchedFbclid || urlFbclid || '';
+      const storedTimestamp = persistedData?.fbc === fbcToStore ? persistedData.timestamp : Date.now();
       localStorage.setItem(
         'meta_fbc_data',
         JSON.stringify({
-          fbc,
-          fbclid: urlFbclid || '',
-          timestamp: Date.now(),
+          fbc: fbcToStore,
+          fbclid: fbclidToStore,
+          timestamp: storedTimestamp,
           expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
         })
       );
       // Write the real _fbc cookie so the browser pixel picks it up natively.
       // Only overwrite when the URL carries a fresh fbclid or the cookie is missing.
       if (urlFbclid || !cookieFbc) {
-        setCookie('_fbc', fbc, 30);
+        setCookie('_fbc', fbcToStore, 30);
       }
     }
 
