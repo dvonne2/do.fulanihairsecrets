@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo 
 import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
-import { PHONE_DISPLAY } from '@/config/api';
+import { PHONE_DISPLAY, WEBHOOK_URL } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
