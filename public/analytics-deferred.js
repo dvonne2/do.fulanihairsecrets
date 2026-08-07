@@ -71,7 +71,11 @@ ttq.load('D6I4NQRC77U4M1757710');
   ttq.page();
 }
 
-var _schedule = (typeof requestAnimationFrame === 'function') ? requestAnimationFrame : function(cb) { setTimeout(cb, 0); };
-_schedule(function() {
-  setTimeout(runDeferredTracking, 0);
-});
+function scheduleDeferredTracking() {
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(function() { runDeferredTracking(); }, { timeout: 2000 });
+  } else {
+    setTimeout(runDeferredTracking, 2000);
+  }
+}
+scheduleDeferredTracking();

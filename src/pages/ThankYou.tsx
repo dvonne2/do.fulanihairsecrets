@@ -134,14 +134,14 @@ const ThankYou = () => {
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ['#DAA520', '#FFD700', '#ffffff']
+          colors: ['#B8860B', '#FFD700', '#ffffff']
         });
         confetti({
           particleCount,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ['#DAA520', '#FFD700', '#ffffff']
+          colors: ['#B8860B', '#FFD700', '#ffffff']
         });
 
         if (Date.now() < end) {
@@ -376,7 +376,7 @@ const ThankYou = () => {
         </div>
         <h1 className="text-3xl font-bold text-white mb-2">Order Confirmed! 🎉</h1>
         {orderNumber && orderNumber !== 'UNKNOWN' && (
-          <p className="text-[#DAA520] font-semibold text-lg mb-4">Order #{orderNumber}</p>
+          <p className="text-[#B8860B] font-semibold text-lg mb-4">Order #{orderNumber}</p>
         )}
         <p className="text-gray-300 mb-2 max-w-md">
           {isKlumpPayment ? 'Your order has been received. Your Klump payment request has been submitted successfully.' : 'Your order has been received and is being processed.'}
@@ -393,7 +393,7 @@ const ThankYou = () => {
           Chat on WhatsApp for Updates
         </a>
         <p className="text-gray-500 text-xs mt-4">
-          Questions? Call us at <a href={PHONE_TEL} className="text-[#DAA520] underline">{PHONE_DISPLAY}</a>
+          Questions? Call us at <a href={PHONE_TEL} className="text-[#B8860B] underline">{PHONE_DISPLAY}</a>
         </p>
       </div>
     );

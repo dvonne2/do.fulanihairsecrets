@@ -172,7 +172,7 @@ export const PricingSection = ({ countdown, stockCount, commitmentChecks, onComm
                 data-form-cta="true"
                 className={`block w-full py-3 px-6 rounded-lg font-bold text-center transition-all ${
                   bundle.popular
-                    ? 'bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white hover:scale-105'
+                    ? 'bg-gradient-to-r from-[#15803d] to-[#4cae4e] text-white hover:scale-105'
                     : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                 }`}
               >

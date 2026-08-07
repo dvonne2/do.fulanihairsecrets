@@ -168,6 +168,7 @@ function sanitizeMetaResponse(raw: any) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  try {
   const method = req.method || '';
   const origin = getHeaderValue(req.headers.origin);
   const config = getConfig();
@@ -191,7 +192,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (origin) setCorsHeaders(res, origin);
 
   if (!config.pixelId || !config.accessToken || !config.apiVersion) {
-    return res.status(500).json({ ok: false, error: 'CAPI not configured' });
+    console.warn('[meta-capi] Missing configuration. pixelId:', !!config.pixelId, 'accessToken:', !!config.accessToken, 'apiVersion:', !!config.apiVersion);
+    return res.status(200).json({ ok: false, error: 'CAPI not configured' });
   }
 
   const body = req.body;
@@ -286,13 +288,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       let metaBody: any;
       try {
         metaBody = JSON.parse(text);
-      } catch {
-        return res.status(metaRes.status).json({
+      } catch (parseErr) {
+        console.warn('[meta-capi] Could not parse Meta error response', parseErr);
+        return res.status(200).json({
           ok: false,
           error: 'Meta CAPI request failed',
         });
       }
-      return res.status(metaRes.status).json(sanitizeMetaResponse(metaBody));
+      return res.status(200).json(sanitizeMetaResponse(metaBody));
     }
 
     let metaBody: any;
@@ -313,7 +316,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ? metaBody.messages
           : undefined,
     });
-  } catch {
-    return res.status(502).json({ ok: false, error: 'Meta CAPI request failed' });
+  } catch (networkErr) {
+    console.warn('[meta-capi] Meta network request failed', networkErr);
+    return res.status(200).json({ ok: false, error: 'Meta CAPI request failed' });
   }
+} catch (err) {
+  console.error('[meta-capi] Unhandled error', err);
+  return res.status(200).json({ ok: false, error: 'Meta CAPI handler error' });
+}
 }

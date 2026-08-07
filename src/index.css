@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 .footer-green {
-  background-color: #5ec239 !important;
+  background-color: #15803d !important;
 }
 
 .branding-container {
@@ -36,7 +36,7 @@
 }
 
 .cta-button-right {
-  background-color: #5DC238;
+  background-color: #15803d;
   color: #FFFFFF;
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 12px;
@@ -60,21 +60,21 @@
 }
 
 .cta-button-right,
-[class*="bg-[#5ec239]"],
-[class*="bg-[#5DC238]"],
+[class*="bg-[#15803d]"],
+[class*="bg-[#15803d]"],
 [class*="bg-[#4cae4e]"],
-[class*="from-[#5ec239]"],
-[class*="from-[#5DC238]"],
+[class*="from-[#15803d]"],
+[class*="from-[#15803d]"],
 [class*="from-[#4cae4e]"] {
   animation: subtle-pulse 3s ease-in-out infinite;
 }
 
 .cta-button-right:hover,
-[class*="bg-[#5ec239]"]:hover,
-[class*="bg-[#5DC238]"]:hover,
+[class*="bg-[#15803d]"]:hover,
+[class*="bg-[#15803d]"]:hover,
 [class*="bg-[#4cae4e]"]:hover,
-[class*="from-[#5ec239]"]:hover,
-[class*="from-[#5DC238]"]:hover,
+[class*="from-[#15803d]"]:hover,
+[class*="from-[#15803d]"]:hover,
 [class*="from-[#4cae4e]"]:hover {
   color: #000000 !important;
 }
@@ -323,12 +323,12 @@
 
 /* Gradient Backgrounds */
 .gold-gradient {
-  background: linear-gradient(135deg, #5ec239 0%, #4cae4e 25%, #3d9e3d 50%, #4cae4e 75%, #5ec239 100%);
+  background: linear-gradient(135deg, #15803d 0%, #4cae4e 25%, #3d9e3d 50%, #4cae4e 75%, #15803d 100%);
 }
 
 /* Simplified gradient - no animation for performance */
 .gold-gradient-animated {
-  background: linear-gradient(90deg, #5ec239, #4cae4e, #3d9e3d, #4cae4e, #5ec239);
+  background: linear-gradient(90deg, #15803d, #4cae4e, #3d9e3d, #4cae4e, #15803d);
   background-size: 100% 100%;
 }
 

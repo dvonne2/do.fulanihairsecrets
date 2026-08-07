@@ -107,7 +107,8 @@ export default defineConfig({
       },
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
+          'react': ['react'],
+          'react-dom': ['react-dom'],
           'router': ['react-router-dom'],
           'query': ['@tanstack/react-query'],
           'icons': ['lucide-react'],
