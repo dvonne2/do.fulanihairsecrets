@@ -1,4 +1,10 @@
-function runDeferredTracking() {
+function yieldToMain() {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, 0);
+  });
+}
+
+async function runDeferredTracking() {
 // Facebook Pixel initialization (stub is in index.html)
 (function() {
   try {
@@ -14,6 +20,7 @@ function runDeferredTracking() {
     window.__fhgExternalId = '';
   }
 })();
+  await yieldToMain();
 
 var fhgInitParams;
 try {
@@ -31,8 +38,10 @@ try {
     if (identity.gender) fhgInitParams.ge = String(identity.gender).trim().toLowerCase();
     fhgInitParams.country = 'ng';
   }
+  await yieldToMain();
 } catch (e) {
   fhgInitParams = { external_id: window.__fhgExternalId || '' };
+  await yieldToMain();
 }
 
 // Restore persisted click/browser IDs into init params so the pixel has them
@@ -46,6 +55,7 @@ try {
     }
   }
 } catch (e) {}
+  await yieldToMain();
 
 try {
   var fbpPersisted = localStorage.getItem('meta_fbp_persist');
@@ -56,6 +66,7 @@ try {
     }
   }
 } catch (e) {}
+  await yieldToMain();
 
 if (window.__metaPixelsInitialized) {
   // Pixel was already initialized by the React bundle (reinitPixelWithUserData)
@@ -64,11 +75,19 @@ if (window.__metaPixelsInitialized) {
   window.__metaPixelsInitialized = true;
 }
 if(!window.__pvEventId){window.__pvEventId=(function(){for(var s='',i=0;i<16;i++)s+='0123456789abcdef'[Math.random()*16|0];return s})();}
+  await yieldToMain();
 fbq('track', 'PageView', {}, {eventID: window.__pvEventId});
 
 // TikTok Pixel initialization (stub is in index.html)
 ttq.load('D6I4NQRC77U4M1757710');
+  await yieldToMain();
   ttq.page();
+  await yieldToMain();
+  var fbevents = document.createElement('script');
+  fbevents.src = 'https://connect.facebook.net/en_US/fbevents.js';
+  fbevents.async = true;
+  fbevents.crossOrigin = 'anonymous';
+  (document.head || document.body).appendChild(fbevents);
 }
 
 function scheduleDeferredTracking() {
