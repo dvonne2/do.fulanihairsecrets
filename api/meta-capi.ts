@@ -138,10 +138,10 @@ function isOriginAllowed(
 }
 
 function setCorsHeaders(res: VercelResponse, origin: string) {
-  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, meta-capi-origin, Authorization, x-requested-with');
 }
 
 function sanitizeMetaResponse(raw: any) {
@@ -170,26 +170,24 @@ function sanitizeMetaResponse(raw: any) {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
   const method = req.method || '';
-  const origin = getHeaderValue(req.headers.origin);
+  const requestOrigin = getHeaderValue(req.headers.origin);
+  const capiOrigin = getHeaderValue(req.headers['meta-capi-origin']) || requestOrigin || 'https://do.fulanihairsecrets.com';
   const config = getConfig();
 
   if (method === 'OPTIONS') {
-    if (!isOriginAllowed(origin, req, config.allowedOrigins)) {
-      return res.status(403).json({ ok: false, error: 'Origin not allowed' });
-    }
-    setCorsHeaders(res, origin || config.allowedOrigins[0] || 'https://fulanihairsecrets.com');
-    return res.status(204).end();
+    setCorsHeaders(res, requestOrigin);
+    return res.status(200).end();
   }
 
   if (method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  if (!isOriginAllowed(origin, req, config.allowedOrigins)) {
+  if (!isOriginAllowed(requestOrigin, req, config.allowedOrigins)) {
     return res.status(403).json({ ok: false, error: 'Origin not allowed' });
   }
 
-  if (origin) setCorsHeaders(res, origin);
+  setCorsHeaders(res, requestOrigin);
 
   if (!config.pixelId || !config.accessToken || !config.apiVersion) {
     console.warn('[meta-capi] Missing configuration. pixelId:', !!config.pixelId, 'accessToken:', !!config.accessToken, 'apiVersion:', !!config.apiVersion);
@@ -235,12 +233,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ ok: false, error: 'Invalid action_source' });
   }
 
+  const effectiveSourceUrl = typeof event_source_url === 'string' && event_source_url.trim()
+    ? event_source_url
+    : capiOrigin;
+  let capiOriginHost = '';
+  try {
+    capiOriginHost = new URL(capiOrigin).hostname.toLowerCase();
+  } catch {}
   const requestHost = getRequestHost(req);
   const validSourceUrl = validateEventSourceUrl(
-    event_source_url,
-    requestHost
-      ? [...config.allowedSourceHosts, requestHost]
-      : config.allowedSourceHosts,
+    effectiveSourceUrl,
+    [...config.allowedSourceHosts, requestHost, capiOriginHost].filter(Boolean),
   );
   if (!validSourceUrl) {
     return res.status(400).json({ ok: false, error: 'Invalid event_source_url' });
