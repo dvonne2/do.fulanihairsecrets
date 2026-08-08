@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="dns-prefetch" href="//connect.facebook.net">
+    <link rel="dns-prefetch" href="//www.facebook.com">
     <link rel="preload" as="image" href="/assets/newhero-665.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high" />
     <link rel="preload" as="image" href="/assets/newhero.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
     <title>Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO | #1 Hair Growth Solution in Nigeria | Est. 1625</title>
@@ -52,6 +54,16 @@
       .animate-shimmer{background:linear-gradient(90deg,hsl(var(--gold-dark)) 0%,hsl(var(--gold)) 20%,hsl(var(--gold-bright)) 40%,hsl(var(--gold-light)) 50%,hsl(var(--gold-bright)) 60%,hsl(var(--gold)) 80%,hsl(var(--gold-dark)) 100%);background-size:200% auto;animation:shimmer 3s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
       .animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
       @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    </style>
+
+    <style>
+      /* IAB critical hero splash */
+      .iab-hero { display:flex; flex-direction:column; align-items:center; text-align:center; padding:1.5rem 1rem; background:#fff; color:#111; font-family:Montserrat,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+      .iab-hero picture, .iab-hero img { width:100%; height:auto; max-width:640px; display:block; }
+      .iab-hero-title { font-family:Cinzel,Georgia,serif; font-weight:600; font-size:1.25rem; line-height:1.2; margin:1rem 0 .75rem; color:#B80F66; text-transform:uppercase; }
+      .iab-hero-price { font-size:1.125rem; color:#000; margin:0 0 .75rem; }
+      .iab-price { color:#B8860B; font-weight:700; }
+      @media(min-width:768px){ .iab-hero-title{font-size:2rem} .iab-hero-price{font-size:1.25rem} }
     </style>
 
     <link rel="manifest" href="/manifest.json" />
@@ -185,10 +197,19 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="iab-hero" class="iab-hero">
+        <picture>
+          <source media="(max-width: 767px)" srcset="/assets/newhero-665.webp" type="image/webp">
+          <img src="/assets/newhero.webp" alt="Fulani Hair Gro bundle" width="1055" height="1491" fetchpriority="high" loading="eager" decoding="async">
+        </picture>
+        <h1 class="iab-hero-title">Trusted by Thousands of Women Who Successfully Regrew Their Hair Edges with FULANI HAIR GRO</h1>
+        <p class="iab-hero-price">Complete 3-Step Bundle — <span class="iab-price">₦66,750</span></p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- Pixel stubs - queue events until visitor interacts or 3.5s passes -->
+    <!-- Non-essential third-party scripts: TikTok, Clarity, analytics listeners -->
     <script>
       !function(f){
         if(f.fbq)return;
@@ -209,24 +230,27 @@
         ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
       }(window, document, 'ttq');
 
-      window.__analyticsLoaded = false;
-      function loadAnalytics() {
-        if (window.__analyticsLoaded) return;
-        window.__analyticsLoaded = true;
-        ['touchstart','scroll','click','mousemove'].forEach(function(event){
-          window.removeEventListener(event, loadAnalytics);
-        });
-        if (window.__analyticsFallback) clearTimeout(window.__analyticsFallback);
-        var d = document;
-        var s = d.createElement('script');
-        s.src = '/analytics-deferred.js';
-        s.async = true;
-        (d.head || d.body).appendChild(s);
-      }
-      ['touchstart','scroll','click','mousemove'].forEach(function(event){
-        window.addEventListener(event, loadAnalytics, { once: true });
-      });
-      window.__analyticsFallback = setTimeout(loadAnalytics, 3500);
+      // Client-safe browser pixel ID
+      window.__metaPixelId = '220381209723501';
+
+      // Load the Meta pixel library immediately so Meta can detect it.
+      // analytics-deferred.js will call fbq('init') and fire PageView once fbevents.js is ready.
+      var fbevents = document.createElement('script');
+      fbevents.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      fbevents.async = true;
+      fbevents.crossOrigin = 'anonymous';
+      fbevents.onload = function() {
+        window.__fbeventsLoaded = true;
+        if (typeof window.__onFbeventsLoaded === 'function') window.__onFbeventsLoaded();
+      };
+      (document.head || document.body).appendChild(fbevents);
+
+      // Deferred script handles fbq init/PageView, TikTok, and advanced matching
+      var d = document;
+      var s = d.createElement('script');
+      s.src = '/analytics-deferred.js';
+      s.async = true;
+      (d.head || d.body).appendChild(s);
     </script>
   </body>
 </html>

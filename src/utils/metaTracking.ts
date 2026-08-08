@@ -1,7 +1,7 @@
 // src/utils/metaTracking.ts
 // Complete Meta Pixel + CAPI tracking — single file, zero dependencies
 
-import { CAPI_ENDPOINT } from '@/config/api';
+import { CAPI_ENDPOINT, META_PIXEL_ID } from '@/config/api';
 import { getExternalId } from './externalIdMirroring';
 import { getAutoInjectedPostalCode, getGranularCityWithPostal } from './postalCodeMapping';
 
@@ -16,7 +16,7 @@ declare global {
 // ============================================
 // PIXEL ROUTING
 // ============================================
-const PIXEL_1 = '220381209723501';
+const PIXEL_1 = META_PIXEL_ID;
 const SINGLE_PIXEL_EVENTS = new Set(['Purchase', 'InitiateCheckout']);
 
 // ============================================
@@ -246,52 +246,104 @@ export function captureFbclid(): void {
     if (fbc) {
       const fbcToStore = fbc;
       const fbclidToStore = matchedFbclid || urlFbclid || '';
-      const storedTimestamp = persistedData?.fbc === fbcToStore ? persistedData.timestamp : Date.now();
-      localStorage.setItem(
-        'meta_fbc_data',
-        JSON.stringify({
-          fbc: fbcToStore,
-          fbclid: fbclidToStore,
-          timestamp: storedTimestamp,
-          expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
-        })
-      );
-      // Write the real _fbc cookie so the browser pixel picks it up natively.
-      // Only overwrite when the URL carries a fresh fbclid or the cookie is missing.
+
+      // Make the click id available to the CAPI PageView immediately
+      // without waiting for the idle persistence pass.
       if (urlFbclid || !cookieFbc) {
         setCookie('_fbc', fbcToStore, 30);
       }
+
+      // Persist the heavy state writes and attribution sync off the main thread.
+      const persistAttribution = () => {
+        try {
+          const storedTimestamp =
+            persistedData?.fbc === fbcToStore ? persistedData.timestamp : Date.now();
+          localStorage.setItem(
+            'meta_fbc_data',
+            JSON.stringify({
+              fbc: fbcToStore,
+              fbclid: fbclidToStore,
+              timestamp: storedTimestamp,
+              expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+            })
+          );
+          if (fbclidToStore) {
+            sessionStorage.setItem('fhg_fbclid', fbclidToStore);
+          }
+        } catch {}
+      };
+
+      const scheduleIdle = (cb: () => void) => {
+        const w = window as any;
+        if (typeof w.requestIdleCallback === 'function') {
+          w.requestIdleCallback(cb, { timeout: 2000 });
+        } else {
+          setTimeout(cb, 0);
+        }
+      };
+      scheduleIdle(persistAttribution);
     }
 
     // Capture and persist _fbp cookie for click attribution
     const fbp = getFbp();
     if (fbp) {
-      localStorage.setItem(
-        'meta_fbp_persist',
-        JSON.stringify({
-          fbp,
-          timestamp: Date.now(),
-          expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000, // 90 days
-        })
-      );
-      // Restore the _fbp cookie if it was cleared so browser events keep the device ID
+      // Restore the _fbp cookie so browser events keep the device ID
       if (!getCookie('_fbp')) {
         setCookie('_fbp', fbp, 90);
       }
+
+      // Keep the persisted backup fresh, but don't block initial render.
+      const persistFbp = () => {
+        try {
+          localStorage.setItem(
+            'meta_fbp_persist',
+            JSON.stringify({
+              fbp,
+              timestamp: Date.now(),
+              expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000, // 90 days
+            })
+          );
+        } catch {}
+      };
+
+      const scheduleIdle = (cb: () => void) => {
+        const w = window as any;
+        if (typeof w.requestIdleCallback === 'function') {
+          w.requestIdleCallback(cb, { timeout: 2000 });
+        } else {
+          setTimeout(cb, 0);
+        }
+      };
+      scheduleIdle(persistFbp);
     }
 
     // Re-set the cookies server-side (HTTP Set-Cookie). Safari ITP caps
     // JS-written cookies at 7 days; server-set cookies keep the full 30/90 days.
     if ((fbc || fbp) && !sessionStorage.getItem('fhg_attribution_synced')) {
-      sessionStorage.setItem('fhg_attribution_synced', '1');
-      fetch('/api/set-attribution', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fbc: fbc || undefined, fbp: fbp || undefined }),
-        keepalive: true,
-      }).catch(() => {
-        sessionStorage.removeItem('fhg_attribution_synced');
-      });
+      const syncAttribution = () => {
+        try {
+          if (sessionStorage.getItem('fhg_attribution_synced') === '1') return;
+          sessionStorage.setItem('fhg_attribution_synced', '1');
+          fetch('/api/set-attribution', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fbc: fbc || undefined, fbp: fbp || undefined }),
+            keepalive: true,
+          }).catch(() => {
+            sessionStorage.removeItem('fhg_attribution_synced');
+          });
+        } catch {}
+      };
+
+      const scheduleIdle = (cb: () => void) => {
+        const w = window as any;
+        if (typeof w.requestIdleCallback === 'function') {
+          w.requestIdleCallback(cb, { timeout: 2000 });
+        } else {
+          setTimeout(cb, 0);
+        }
+      };
+      scheduleIdle(syncAttribution);
     }
   } catch {}
 }
@@ -431,9 +483,9 @@ async function fireBrowserEvent(
     if (SINGLE_PIXEL_EVENTS.has(eventName)) {
       // Conversion events route to Pixel 1 only
       if (type === 'trackCustom') {
-        window.fbq('trackSingleCustom', '220381209723501', eventName, data, { eventID: eventId });
+        window.fbq('trackSingleCustom', PIXEL_1, eventName, data, { eventID: eventId });
       } else {
-        window.fbq('trackSingle', '220381209723501', eventName, data, { eventID: eventId });
+        window.fbq('trackSingle', PIXEL_1, eventName, data, { eventID: eventId });
       }
       console.log(`[Meta] Browser trackSingle (220381209723501): ${eventName}`, data, `eventID=${eventId}`);
     } else {
@@ -790,6 +842,7 @@ export async function fireViewContent(data: {
   amount?: number;
   email?: string;
   phone?: string;
+  sku?: string;
 }): Promise<void> {
   const identity = data.phone || data.email || '';
   const eventId = await makeEventId('ViewContent', identity);
@@ -803,7 +856,7 @@ export async function fireViewContent(data: {
     email: data.email,
     phone: data.phone,
   });
-  const viewContentSku = data.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
+  const viewContentSku = data.sku || data.packageName?.replace(/\s+/g, '_').toUpperCase() || 'FULANI_HAIR_GRO';
   await fireCAPIEvent('ViewContent', eventId, userData, {
     value: Number(data.amount) || 0,
     currency: 'NGN',

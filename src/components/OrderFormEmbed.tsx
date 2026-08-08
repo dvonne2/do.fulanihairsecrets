@@ -1,6 +1,6 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
-import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
+import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireViewContent, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
 import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
 import { PHONE_DISPLAY, WEBHOOK_URL } from '@/config/api';
@@ -174,6 +174,55 @@ const postOrderToFulani = (bodyString: string) => {
   });
 };
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+function getFbcFromStorage(): string | null {
+  try {
+    const raw = localStorage.getItem('meta_fbc_data');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Date.now() < (data.expiresAt || 0)) return data.fbc || null;
+    }
+  } catch {}
+  return null;
+}
+
+function getFbc(): string | null {
+  const cookie = getCookie('_fbc');
+  if (cookie) return cookie;
+  const stored = getFbcFromStorage();
+  if (stored) return stored;
+  const params = new URLSearchParams(window.location.search);
+  const fbclid = params.get('fbclid');
+  if (fbclid) return `fb.1.${Date.now()}.${fbclid}`;
+  return null;
+}
+
+function getFbpFromStorage(): string | null {
+  try {
+    const raw = localStorage.getItem('meta_fbp_persist');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Date.now() < (data.expiresAt || 0) && String(data.fbp).startsWith('fb.')) return data.fbp;
+    }
+  } catch {}
+  return null;
+}
+
+function getFbp(): string | null {
+  const cookie = getCookie('_fbp');
+  if (cookie) return cookie;
+  return getFbpFromStorage();
+}
+
+function getFbclidFromUrl(): string | null {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('fbclid');
+}
+
 function OrderFormEmbed() {
   const [form, setForm] = useState({
     name: '',
@@ -260,6 +309,19 @@ function OrderFormEmbed() {
   useEffect(() => {
     handleInitiateCheckout();
   }, [form.email, form.phone, form.whatsapp, form.name, form.package]);
+
+  useEffect(() => {
+    if (!form.package) return;
+    const pkg = PACKAGES.find(p => p.slug === form.package);
+    if (!pkg) return;
+    fireViewContent({
+      packageName: pkg.name,
+      amount: pkg.price,
+      sku: pkg.sku,
+      email: isValidEmail(form.email.trim().toLowerCase()) ? form.email.trim().toLowerCase() : undefined,
+      phone: isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : undefined,
+    });
+  }, [form.package]);
 
   // Send any valid contact info to Meta immediately (debounced) so Advanced
   // Matching and CAPI user_data are kept up to date as the user types.
@@ -426,6 +488,8 @@ function OrderFormEmbed() {
       const currentDeliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
       const total = packagePrice + currentDeliveryFee;
 
+      const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
+
       const payload = {
         checkoutAttemptId,
         name: form.name,
@@ -442,10 +506,14 @@ function OrderFormEmbed() {
         sku: pkg?.sku || '',
         deliveryDate: form.deliveryDate || '',
         lga: form.lga || '',
+        city: city || '',
         landmark: form.landmark || '',
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
-        click_id: '',
+        click_id: getFbclidFromUrl() || '',
+        fbclid: getFbclidFromUrl() || '',
+        fbc: getFbc() || '',
+        fbp: getFbp() || '',
         landing_page_url: window.location.href,
       };
 
@@ -453,7 +521,10 @@ function OrderFormEmbed() {
 
       const response = await fetch('/api/order', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'meta-capi-origin': window.location.origin,
+        },
         body: JSON.stringify(payload),
       });
 

@@ -24,6 +24,7 @@ export const WEBHOOK_URL = env.VITE_WEBHOOK_URL || API_BASE_URL;
 export const WEBHOOK_SECRET = env.VITE_WEBHOOK_SECRET || 'fhg_orders_2024_secret';
 export const FULANI_API_URL = API_BASE_URL;
 export const CAPI_ENDPOINT = CAPI_BASE_URL;
+export const META_PIXEL_ID = env.VITE_META_PIXEL_ID || '220381209723501';
 
 // ── Contact / WhatsApp ──────────────────────────────────────────
 export const WHATSAPP_NUMBER = '2348101594734';

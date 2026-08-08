@@ -16,9 +16,9 @@ const MAX_EVENT_FUTURE = 5 * 60; // 5 minutes
 
 function getConfig() {
   return {
-    pixelId: process.env.META_PIXEL_ID?.trim() || '',
-    accessToken: process.env.META_ACCESS_TOKEN?.trim() || '',
-    apiVersion: process.env.META_API_VERSION?.trim() || '',
+    pixelId: (process.env.META_PIXEL_ID || process.env.FB_PIXEL_ID || '220381209723501').trim(),
+    accessToken: (process.env.META_ACCESS_TOKEN || process.env.FB_CAPI_ACCESS_TOKEN || '').trim(),
+    apiVersion: (process.env.META_API_VERSION || process.env.FB_CAPI_VERSION || 'v19.0').trim(),
     allowedOrigins: (process.env.META_CAPI_ALLOWED_ORIGINS || '')
       .split(',')
       .map((value) => value.trim())
