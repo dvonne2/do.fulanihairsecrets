@@ -186,7 +186,7 @@
       @media(min-width:1024px){.lg\:text-6xl{font-size:3.75rem}}
     </style>
 
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+    <link rel="preconnect" href="https://connect.facebook.net">
     <link rel="dns-prefetch" href="https://connect.facebook.net">
     <link rel="preconnect" href="https://analytics.tiktok.com" crossorigin>
     <link rel="dns-prefetch" href="https://analytics.tiktok.com">
@@ -238,7 +238,6 @@
       var fbevents = document.createElement('script');
       fbevents.src = 'https://connect.facebook.net/en_US/fbevents.js';
       fbevents.async = true;
-      fbevents.crossOrigin = 'anonymous';
       fbevents.onload = function() {
         window.__fbeventsLoaded = true;
         if (typeof window.__onFbeventsLoaded === 'function') window.__onFbeventsLoaded();
