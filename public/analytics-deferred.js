@@ -71,6 +71,7 @@ try {
 if (window.__metaPixelsInitialized) {
   // Pixel was already initialized by the React bundle (reinitPixelWithUserData)
 } else {
+  fbq.disablePushState = true;
   fbq('init', (window.__metaPixelId || '220381209723501'), fhgInitParams);
   window.__metaPixelsInitialized = true;
 }
