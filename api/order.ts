@@ -244,9 +244,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (first !== undefined) recentOrderIds.delete(first);
       }
     }
-    sendMetaCapiPurchase(body, orderId, req).catch((err) =>
-      console.error('[Meta] background Purchase dispatch failed', err)
-    );
+    try {
+      await sendMetaCapiPurchase(body, orderId, req);
+    } catch (err: any) {
+      console.error('[Meta] server Purchase dispatch failed:', err?.message || err);
+    }
     return res.status(200).json({ ok: true, orderId });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
