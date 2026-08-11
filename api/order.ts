@@ -74,10 +74,10 @@ async function sendMetaCapiPurchase(
   body: Record<string, any>,
   orderId: string,
   req: VercelRequest
-): Promise<void> {
+): Promise<any> {
   if (!META_PIXEL_ID || !META_ACCESS_TOKEN) {
     console.warn('[Meta] CAPI not configured, skipping server Purchase');
-    return;
+    return null;
   }
 
   try {
@@ -153,11 +153,14 @@ async function sendMetaCapiPurchase(
     if (!metaRes.ok) {
       const text = await metaRes.text();
       console.warn('[Meta] server Purchase CAPI error:', metaRes.status, text.slice(0, 500));
-    } else {
-      console.log('[Meta] server Purchase CAPI dispatched for order:', orderId);
+      return null;
     }
+    const metaBody = await metaRes.json();
+    console.log('[Meta] server Purchase CAPI dispatched for order:', orderId, 'events_received:', metaBody?.events_received);
+    return metaBody;
   } catch (err: any) {
     console.error('[Meta] server Purchase CAPI exception:', err?.message || err);
+    return null;
   }
 }
 
@@ -244,12 +247,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (first !== undefined) recentOrderIds.delete(first);
       }
     }
-    try {
-      await sendMetaCapiPurchase(body, orderId, req);
-    } catch (err: any) {
-      console.error('[Meta] server Purchase dispatch failed:', err?.message || err);
-    }
-    return res.status(200).json({ ok: true, orderId });
+    const capiResult = await sendMetaCapiPurchase(body, orderId, req);
+    return res.status(200).json({ ok: true, orderId, capi: capiResult });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;
