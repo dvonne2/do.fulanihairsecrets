@@ -1,6 +1,7 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
+import { meta } from '@/utils/metaTracking';
 
 import { WEBHOOK_URL } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
@@ -196,6 +197,28 @@ function OrderFormEmbed() {
       .catch(() => {});
   }, []);
 
+  // Feed form state into the module's InitiateCheckout lifecycle.
+  // The module fires once name + valid Nigerian phone are present.
+  useEffect(() => {
+    const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
+    const pkg = form.package ? PACKAGES.find(p => p.slug === form.package) : undefined;
+    const deliveryFee = form.deliveryType === 'same_day' ? 5000 : 3000;
+    const value = pkg ? pkg.price + deliveryFee : undefined;
+    meta.updateCheckout({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      state: form.state,
+      city,
+      contentName: pkg?.name,
+      contentIds: pkg ? [pkg.sku || pkg.id] : undefined,
+      contentType: 'product',
+      value,
+      currency: 'NGN',
+      numItems: pkg?.quantity,
+    }).catch(() => {});
+  }, [form.name, form.phone, form.email, form.state, form.address, form.package, form.deliveryType]);
+
 
 
 
@@ -334,6 +357,8 @@ function OrderFormEmbed() {
 
       const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
 
+      const trackingContext = meta.getTrackingContext();
+
       const payload = {
         checkoutAttemptId,
         name: form.name,
@@ -354,7 +379,11 @@ function OrderFormEmbed() {
         landmark: form.landmark || '',
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
+        click_id: '',
         landing_page_url: window.location.href,
+        metaExternalId: trackingContext.externalId,
+        fbp: trackingContext.fbp ?? undefined,
+        fbc: trackingContext.fbc ?? undefined,
       };
 
       console.log('[OrderForm] Sending payload to /api/order:', payload);

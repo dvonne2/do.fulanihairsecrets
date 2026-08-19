@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomBytes } from 'crypto';
+import { metaCapi } from './lib/metaCapi.js';
 
 function generateServerOrderId(): string {
   const ts = Date.now().toString(36).toUpperCase();
@@ -22,6 +23,50 @@ function getSheets() {
 
 const SHEET_TAB = process.env.SHEET_TAB_NAME || 'DO Orders';
 const SHEET_RANGE = `${SHEET_TAB}!A:O`;
+
+async function sendMetaPurchase(
+  orderId: string,
+  body: Record<string, any>,
+  headers: VercelRequest['headers']
+): Promise<void> {
+  if (!metaCapi) return;
+
+  const customData: Record<string, any> = {
+    value: Number(body.amount),
+    currency: 'NGN',
+    order_id: orderId,
+    content_name: body.package,
+    content_type: 'product',
+  };
+  if (body.sku) customData.content_ids = [String(body.sku)];
+  if (typeof body.quantity === 'number') customData.num_items = body.quantity;
+
+  const payload = {
+    event_name: 'Purchase' as const,
+    event_id: orderId,
+    event_time: Math.floor(Date.now() / 1000),
+    action_source: 'website' as const,
+    event_source_url: typeof body.landing_page_url === 'string' ? body.landing_page_url : '',
+    user_data: {
+      external_id: String(body.metaExternalId || ''),
+      name: body.name,
+      phone: body.phone,
+      email: body.email || '',
+      state: body.state,
+      city: body.city || '',
+      country: 'ng',
+      fbp: body.fbp || undefined,
+      fbc: body.fbc || undefined,
+    },
+    custom_data: customData,
+  };
+
+  try {
+    await metaCapi.sendPurchase({ body: payload, headers });
+  } catch (err) {
+    console.error('[Meta Purchase] failed:', err);
+  }
+}
 
 function getFirstHeader(value: string | string[] | undefined): string {
   if (Array.isArray(value)) return value[0] || '';
@@ -112,6 +157,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (first !== undefined) recentOrderIds.delete(first);
       }
     }
+
+    // Fire server-side Meta Purchase only after the order is recorded in Sheets.
+    await sendMetaPurchase(orderId, body, req.headers);
+
     return res.status(200).json({ ok: true, orderId });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
