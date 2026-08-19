@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { resetTracking } from '@/utils/metaTracking';
+
 import { fireTikTokPurchase } from '@/utils/tiktokTracking';
 import { WHATSAPP_ORDER_HELP_LINK, WHATSAPP_LINK, PHONE_DISPLAY, PHONE_TEL } from '@/config/api';
 
@@ -171,111 +171,30 @@ const ThankYou = () => {
     setLoading(false);
   }, []);
 
-  const metaEventsFired = useRef(false);
-
   useEffect(() => {
-    const run = async () => {
-      if (loading) return;
-      if (metaEventsFired.current) {
-        console.log('[Meta] Events already fired, skipping');
-        return;
-      }
+    if (loading || !orderData || purchaseFired.current) return;
 
-      const isTestMode = window.location.search.includes('test=1');
-      const resolvedOrderId = isTestMode ? 'TEST_ORDER_123' : (orderData?.orderId || orderNumber);
-      const inFlightKey = resolvedOrderId ? `fhg_purchase_in_flight_${resolvedOrderId}` : '';
-      const completedKey = resolvedOrderId ? `fhg_purchase_completed_${resolvedOrderId}` : '';
+    const resolvedOrderId = orderData?.orderId || orderNumber;
+    if (!resolvedOrderId || resolvedOrderId === 'UNKNOWN') {
+      console.warn('[ThankYou] No usable order ID for TikTok Purchase');
+      return;
+    }
 
-      console.log('[ThankYou] run() called', { resolvedOrderId, hasOrderData: !!orderData, hasEmail: !!orderData?.email, hasPhone: !!orderData?.phone });
-
-      if (!isTestMode && (!orderData?.email || !orderData?.phone)) {
-        console.warn('[Meta] No customer PII available, skipping Purchase to protect EMQ');
-        return;
-      }
-
-      if (resolvedOrderId && resolvedOrderId !== 'UNKNOWN') {
-        if (sessionStorage.getItem(completedKey)) {
-          console.log('[Meta] Events already fired for this order, skipping');
-          metaEventsFired.current = true;
-          return;
-        }
-        const inFlightAtRaw = sessionStorage.getItem(inFlightKey);
-        if (inFlightAtRaw) {
-          const inFlightAt = Number(inFlightAtRaw);
-          if (Number.isFinite(inFlightAt) && Date.now() - inFlightAt < 60_000) {
-            console.log('[Meta] Purchase already in flight, skipping');
-            return;
-          }
-          console.warn('[ThankYou] Stale inFlight key cleared for order:', resolvedOrderId);
-          sessionStorage.removeItem(inFlightKey);
-        }
-        sessionStorage.setItem(inFlightKey, Date.now().toString());
-      } else {
-        // No usable order ID; nothing to fire.
-        console.warn('[ThankYou] No usable order ID for Purchase');
-        return;
-      }
-
-      let eventsOk = false;
-      try {
-        console.log('[TikTok] useEffect triggered - orderData:', !!orderData, 'orderNumber:', orderNumber, 'purchaseFired.current:', purchaseFired.current);
-        if (isTestMode) {
-          resetTracking();
-          eventsOk = true; // Meta Purchase now dispatched server-side in /api/order
-
-          // Fire TikTok test events
-          console.log('[TikTok] Test mode - purchaseFired.current:', purchaseFired.current);
-          if (!purchaseFired.current) {
-            purchaseFired.current = true;
-            console.log('[TikTok] Firing test Purchase event');
-            fireTikTokPurchase({
-              content_name: 'Self Love Plus',
-              value: 71750,
-              currency: 'NGN',
-              email: 'test@fulanihairsecrets.com',
-              phone: '08012345678',
-              orderId: resolvedOrderId,
-            });
-          } else {
-            console.log('[TikTok] Test mode - Purchase already fired, skipping');
-          }
-
-          console.log('[Events] TEST MODE - All events fired for both Meta and TikTok');
-          return;
-        }
-        // Meta Purchase is now dispatched server-side in /api/order
-        eventsOk = true;
-
-        // Fire TikTok Purchase event
-        console.log('[TikTok] Regular mode - purchaseFired.current:', purchaseFired.current);
-        if (!purchaseFired.current) {
-          purchaseFired.current = true;
-          console.log('[TikTok] Firing regular Purchase event');
-          fireTikTokPurchase({
-            content_name: orderData?.packageName || 'Fulani Hair Gro',
-            value: orderData?.totalAmount || 0,
-            currency: 'NGN',
-            email: orderData?.email,
-            phone: orderData?.phone,
-            orderId: resolvedOrderId,
-          });
-        } else {
-          console.log('[TikTok] Regular mode - Purchase already fired, skipping');
-        }
-
-        console.log('[Events] Purchase fired for both Meta and TikTok');
-      } catch (err: any) {
-        console.error('[ThankYou] Purchase event firing error:', err?.message || err);
-      } finally {
-        if (eventsOk) {
-          sessionStorage.setItem(completedKey, '1');
-        }
-        sessionStorage.removeItem(inFlightKey);
-        metaEventsFired.current = eventsOk;
-      }
-    };
-
-    void run();
+    try {
+      purchaseFired.current = true;
+      fireTikTokPurchase({
+        content_name: orderData?.packageName || 'Fulani Hair Gro',
+        value: orderData?.totalAmount || 0,
+        currency: 'NGN',
+        email: orderData?.email,
+        phone: orderData?.phone,
+        orderId: resolvedOrderId,
+      });
+      console.log('[TikTok] Purchase fired for order:', resolvedOrderId);
+    } catch (err: any) {
+      console.error('[ThankYou] TikTok Purchase firing error:', err?.message || err);
+      purchaseFired.current = false;
+    }
   }, [loading, orderData, orderNumber]);
 
   useEffect(() => {
@@ -333,8 +252,6 @@ const ThankYou = () => {
     { q: "When will I see results?", a: "Most women notice reduced shedding Week 1, baby hairs Week 3, visible transformation Month 2-3. Check the timeline above!" }
   ];
 
-  const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
-
   // Loading state
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -343,7 +260,7 @@ const ThankYou = () => {
   }
 
   // No sessionStorage data — show a reassuring confirmation with orderId from URL
-  if (!orderData && !window.location.search.includes('test=1')) {
+  if (!orderData) {
     const isKlumpPayment = localStorage.getItem('fhg_order_data') ? JSON.parse(localStorage.getItem('fhg_order_data') || '{}').paymentMethod === 'KLUMP' : false;
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
@@ -377,21 +294,6 @@ const ThankYou = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
-      {/* Test Mode Banner */}
-      {isTestMode && (
-        <div className="bg-yellow-500 text-black p-6 text-center">
-          <h2 className="text-2xl font-bold mb-2">CAPI TEST MODE ACTIVE</h2>
-          <p className="text-sm mb-3">Events are being sent to Meta. Check your browser console (F12) for details.</p>
-          <div className="flex flex-wrap justify-center gap-3 text-sm">
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">FormStart</span>
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">ViewContent</span>
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">InitiateCheckout</span>
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">Purchase</span>
-            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">HighValuePurchase</span>
-          </div>
-          <p className="text-xs mt-3 opacity-75">Go to Meta Events Manager → Test Events tab to verify server events</p>
-        </div>
-      )}
       {/* Floating gold particles background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {[...Array(20)].map((_, i) => (

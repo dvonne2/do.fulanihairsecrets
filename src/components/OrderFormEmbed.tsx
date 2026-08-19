@@ -1,9 +1,8 @@
 import { PACKAGES } from '@/config/packages';
 import { useState, useEffect, useCallback, useMemo, useRef, CSSProperties, memo } from 'react';
-import { fireLeadSync, fireFormStart, fireInitiateCheckout, fireViewContent, fireCartRecovery, markEventsAsFired, reinitPixelWithUserData } from '@/utils/metaTracking';
 import { getCheckoutAttemptId, clearCheckoutAttemptId } from '@/utils/orderId';
-import { fireTikTokLeadSync, fireTikTokInitiateCheckout } from '@/utils/tiktokTracking';
-import { PHONE_DISPLAY, WEBHOOK_URL } from '@/config/api';
+
+import { WEBHOOK_URL } from '@/config/api';
 import { BundleCard, BundlePackage } from "./BundleDropdown";
 
 const BASE_PATH = import.meta.env.BASE_URL || '/';
@@ -174,55 +173,6 @@ const postOrderToFulani = (bodyString: string) => {
   });
 };
 
-function getCookie(name: string): string | null {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
-function getFbcFromStorage(): string | null {
-  try {
-    const raw = localStorage.getItem('meta_fbc_data');
-    if (raw) {
-      const data = JSON.parse(raw);
-      if (Date.now() < (data.expiresAt || 0)) return data.fbc || null;
-    }
-  } catch {}
-  return null;
-}
-
-function getFbc(): string | null {
-  const cookie = getCookie('_fbc');
-  if (cookie) return cookie;
-  const stored = getFbcFromStorage();
-  if (stored) return stored;
-  const params = new URLSearchParams(window.location.search);
-  const fbclid = params.get('fbclid');
-  if (fbclid) return `fb.1.${Date.now()}.${fbclid}`;
-  return null;
-}
-
-function getFbpFromStorage(): string | null {
-  try {
-    const raw = localStorage.getItem('meta_fbp_persist');
-    if (raw) {
-      const data = JSON.parse(raw);
-      if (Date.now() < (data.expiresAt || 0) && String(data.fbp).startsWith('fb.')) return data.fbp;
-    }
-  } catch {}
-  return null;
-}
-
-function getFbp(): string | null {
-  const cookie = getCookie('_fbp');
-  if (cookie) return cookie;
-  return getFbpFromStorage();
-}
-
-function getFbclidFromUrl(): string | null {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('fbclid');
-}
-
 function OrderFormEmbed() {
   const [form, setForm] = useState({
     name: '',
@@ -246,103 +196,8 @@ function OrderFormEmbed() {
       .catch(() => {});
   }, []);
 
-  const initiateCheckoutRef = useRef<{ fired: boolean; inFlight: boolean; promise: Promise<void> | null }>({
-    fired: false,
-    inFlight: false,
-    promise: null,
-  });
 
-  const handleInitiateCheckout = async (): Promise<void> => {
-    const ref = initiateCheckoutRef.current;
 
-    // Already done — nothing to wait for
-    if (ref.fired) return;
-
-    // A call is already running; await that same promise so the redirect waits for it
-    if (ref.inFlight && ref.promise) return ref.promise;
-
-    ref.inFlight = true;
-
-    const selectedPackage = form.package
-      ? PACKAGES.find(p => p.slug === form.package || p.name === form.package || p.id === form.package)
-      : null;
-    const pkg = selectedPackage || PACKAGES.find(p => p.isPopular) || PACKAGES[0];
-    if (!pkg) {
-      ref.inFlight = false;
-      return;
-    }
-
-    // Fire InitiateCheckout as soon as we have an email or a phone number
-    // (main or WhatsApp) so Meta gets contact data immediately.
-    const email = form.email.trim().toLowerCase();
-    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
-    if (!isValidEmail(email) && !phone) {
-      ref.inFlight = false;
-      return;
-    }
-
-    // Lock before any await so no second handleInitiateCheckout can run concurrently
-    ref.fired = true;
-    const nameParts = form.name.trim().split(/\s+/);
-    ref.promise = fireInitiateCheckout({
-      packageName: pkg.name,
-      amount: pkg.price + pkg.deliveryFee,
-      email: isValidEmail(email) ? email : undefined,
-      phone: phone || undefined,
-      firstName: nameParts[0],
-      lastName: nameParts.slice(1).join(' '),
-      state: form.state || undefined,
-      city: extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current),
-    });
-
-    try {
-      await ref.promise;
-    } catch {
-      // Reset the fired flag only on error so a later valid attempt can retry
-      ref.fired = false;
-    } finally {
-      ref.inFlight = false;
-      ref.promise = null;
-    }
-  };
-
-  useEffect(() => {
-    handleInitiateCheckout();
-  }, [form.email, form.phone, form.whatsapp, form.name, form.package]);
-
-  useEffect(() => {
-    if (!form.package) return;
-    const pkg = PACKAGES.find(p => p.slug === form.package);
-    if (!pkg) return;
-    fireViewContent({
-      packageName: pkg.name,
-      amount: pkg.price,
-      sku: pkg.sku,
-      email: isValidEmail(form.email.trim().toLowerCase()) ? form.email.trim().toLowerCase() : undefined,
-      phone: isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : undefined,
-    });
-  }, [form.package]);
-
-  // Send any valid contact info to Meta immediately (debounced) so Advanced
-  // Matching and CAPI user_data are kept up to date as the user types.
-  useEffect(() => {
-    const email = form.email.trim().toLowerCase();
-    const phone = isValidPhone(form.phone) ? form.phone : isValidPhone(form.whatsapp) ? form.whatsapp : '';
-    if (!isValidEmail(email) && !phone) return;
-    const nameParts = form.name.trim().split(/\s+/);
-    const city = extractCityFromAddress(form.state, form.address, nigeriaLgasRef.current);
-    const handler = setTimeout(() => {
-      reinitPixelWithUserData({
-        email: isValidEmail(email) ? email : undefined,
-        phone: phone || undefined,
-        firstName: nameParts[0] || undefined,
-        lastName: nameParts.slice(1).join(' ') || undefined,
-        state: form.state || undefined,
-        city,
-      });
-    }, 500);
-    return () => clearTimeout(handler);
-  }, [form.email, form.phone, form.whatsapp, form.name, form.state, form.address]);
 
   // Delivery date constraints must be computed on the client only
   // to avoid hydration mismatches between server and browser time.
@@ -458,17 +313,6 @@ function OrderFormEmbed() {
       return;
     }
 
-    // Wait for the single InitiateCheckout call to finish or time out before redirecting.
-    // If the useEffect already started it, handleInitiateCheckout returns the in-flight promise.
-    try {
-      await Promise.race([
-        handleInitiateCheckout(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('InitiateCheckout timeout')), 1200)),
-      ]);
-    } catch {
-      // Order submission continues even if tracking fails or times out
-    }
-
     setSubmitting(true);
 
     try {
@@ -510,10 +354,6 @@ function OrderFormEmbed() {
         landmark: form.landmark || '',
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
-        click_id: getFbclidFromUrl() || '',
-        fbclid: getFbclidFromUrl() || '',
-        fbc: getFbc() || '',
-        fbp: getFbp() || '',
         landing_page_url: window.location.href,
       };
 
@@ -523,7 +363,6 @@ function OrderFormEmbed() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'meta-capi-origin': window.location.origin,
         },
         body: JSON.stringify(payload),
       });

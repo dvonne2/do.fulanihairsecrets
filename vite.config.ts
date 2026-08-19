@@ -13,10 +13,7 @@ const copyCriticalFiles = () => ({
       'sw.js',
       '.htaccess',
       'favicon.ico',
-      'robots.txt',
-      'analytics-deferred.js',
-      'proxy/facebook.php',
-      'meta-capi.php'
+      'robots.txt'
     ];
 
     criticalFiles.forEach(file => {
