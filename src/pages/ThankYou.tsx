@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Package, Truck, Phone, CreditCard, Crown, Download, Play, Target, MessageCircle, Mail, PhoneCall, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 import { fireTikTokPurchase } from '@/utils/tiktokTracking';
 import { WHATSAPP_ORDER_HELP_LINK, WHATSAPP_LINK, PHONE_DISPLAY, PHONE_TEL } from '@/config/api';
 
@@ -134,14 +133,14 @@ const ThankYou = () => {
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ['#B8860B', '#FFD700', '#ffffff']
+          colors: ['#DAA520', '#FFD700', '#ffffff']
         });
         confetti({
           particleCount,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ['#B8860B', '#FFD700', '#ffffff']
+          colors: ['#DAA520', '#FFD700', '#ffffff']
         });
 
         if (Date.now() < end) {
@@ -172,29 +171,35 @@ const ThankYou = () => {
   }, []);
 
   useEffect(() => {
-    if (loading || !orderData || purchaseFired.current) return;
-
-    const resolvedOrderId = orderData?.orderId || orderNumber;
-    if (!resolvedOrderId || resolvedOrderId === 'UNKNOWN') {
-      console.warn('[ThankYou] No usable order ID for TikTok Purchase');
-      return;
-    }
-
-    try {
+    const run = () => {
+      if (loading || purchaseFired.current) return;
+      const isTestMode = window.location.search.includes('test=1');
+      if (isTestMode) {
+        purchaseFired.current = true;
+        fireTikTokPurchase({
+          content_name: 'Self Love Plus',
+          value: 71750,
+          currency: 'NGN',
+          email: 'test@fulanihairsecrets.com',
+          phone: '08012345678',
+          orderId: 'TEST_ORDER_123',
+        });
+        console.log('[TikTok] Test Purchase event fired');
+        return;
+      }
+      if (!orderData || !orderNumber) return;
       purchaseFired.current = true;
       fireTikTokPurchase({
-        content_name: orderData?.packageName || 'Fulani Hair Gro',
-        value: orderData?.totalAmount || 0,
+        content_name: orderData.packageName || 'Fulani Hair Gro',
+        value: orderData.totalAmount || 0,
         currency: 'NGN',
-        email: orderData?.email,
-        phone: orderData?.phone,
-        orderId: resolvedOrderId,
+        email: orderData.email,
+        phone: orderData.phone,
+        orderId: orderData.orderId || orderNumber,
       });
-      console.log('[TikTok] Purchase fired for order:', resolvedOrderId);
-    } catch (err: any) {
-      console.error('[ThankYou] TikTok Purchase firing error:', err?.message || err);
-      purchaseFired.current = false;
-    }
+      console.log('[TikTok] Purchase event fired');
+    };
+    void run();
   }, [loading, orderData, orderNumber]);
 
   useEffect(() => {
@@ -252,6 +257,8 @@ const ThankYou = () => {
     { q: "When will I see results?", a: "Most women notice reduced shedding Week 1, baby hairs Week 3, visible transformation Month 2-3. Check the timeline above!" }
   ];
 
+  const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=1');
+
   // Loading state
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -260,7 +267,7 @@ const ThankYou = () => {
   }
 
   // No sessionStorage data — show a reassuring confirmation with orderId from URL
-  if (!orderData) {
+  if (!orderData && !window.location.search.includes('test=1')) {
     const isKlumpPayment = localStorage.getItem('fhg_order_data') ? JSON.parse(localStorage.getItem('fhg_order_data') || '{}').paymentMethod === 'KLUMP' : false;
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] px-4 text-center">
@@ -269,7 +276,7 @@ const ThankYou = () => {
         </div>
         <h1 className="text-3xl font-bold text-white mb-2">Order Confirmed! 🎉</h1>
         {orderNumber && orderNumber !== 'UNKNOWN' && (
-          <p className="text-[#B8860B] font-semibold text-lg mb-4">Order #{orderNumber}</p>
+          <p className="text-[#DAA520] font-semibold text-lg mb-4">Order #{orderNumber}</p>
         )}
         <p className="text-gray-300 mb-2 max-w-md">
           {isKlumpPayment ? 'Your order has been received. Your Klump payment request has been submitted successfully.' : 'Your order has been received and is being processed.'}
@@ -286,7 +293,7 @@ const ThankYou = () => {
           Chat on WhatsApp for Updates
         </a>
         <p className="text-gray-500 text-xs mt-4">
-          Questions? Call us at <a href={PHONE_TEL} className="text-[#B8860B] underline">{PHONE_DISPLAY}</a>
+          Questions? Call us at <a href={PHONE_TEL} className="text-[#DAA520] underline">{PHONE_DISPLAY}</a>
         </p>
       </div>
     );
@@ -294,6 +301,21 @@ const ThankYou = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-x-hidden">
+      {/* Test Mode Banner */}
+      {isTestMode && (
+        <div className="bg-yellow-500 text-black p-6 text-center">
+          <h2 className="text-2xl font-bold mb-2">CAPI TEST MODE ACTIVE</h2>
+          <p className="text-sm mb-3">Events are being sent to Meta. Check your browser console (F12) for details.</p>
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">FormStart</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">ViewContent</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">InitiateCheckout</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">Purchase</span>
+            <span className="bg-black text-yellow-400 px-3 py-1 rounded-full">HighValuePurchase</span>
+          </div>
+          <p className="text-xs mt-3 opacity-75">Go to Meta Events Manager → Test Events tab to verify server events</p>
+        </div>
+      )}
       {/* Floating gold particles background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {[...Array(20)].map((_, i) => (

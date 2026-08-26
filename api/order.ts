@@ -21,8 +21,7 @@ function getSheets() {
   return google.sheets({ version: 'v4', auth });
 }
 
-const SHEET_TAB = process.env.SHEET_TAB_NAME || 'DO Orders';
-const SHEET_RANGE = `${SHEET_TAB}!A:O`;
+const SHEET_RANGE = 'Orders!A:O';
 
 async function sendMetaPurchase(
   orderId: string,
@@ -30,7 +29,6 @@ async function sendMetaPurchase(
   headers: VercelRequest['headers']
 ): Promise<void> {
   if (!metaCapi) return;
-
   const customData: Record<string, any> = {
     value: Number(body.amount),
     currency: 'NGN',
@@ -68,12 +66,6 @@ async function sendMetaPurchase(
   }
 }
 
-function getFirstHeader(value: string | string[] | undefined): string {
-  if (Array.isArray(value)) return value[0] || '';
-  return value || '';
-}
-
-
 // In-memory idempotency cache for the lifetime of this serverless container.
 // It prevents the same checkout attempt from being written twice if the
 // browser sends rapid duplicate requests before the redirect unloads the page.
@@ -81,14 +73,6 @@ const recentOrderIds = new Map<string, string>();
 const MAX_RECENT_CACHE = 1000;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', getFirstHeader(req.headers.origin) || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
@@ -125,8 +109,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ ok: false, error: 'SHEET_ID not set' });
   }
 
+  let appendedRow = '';
   try {
-    await sheets.spreadsheets.values.append({
+    const appendRes = await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: SHEET_RANGE,
       valueInputOption: 'USER_ENTERED',
@@ -150,6 +135,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ]],
       },
     });
+    appendedRow = appendRes.data.updates?.updatedRange || '';
     if (checkoutAttemptId) {
       recentOrderIds.set(checkoutAttemptId, orderId);
       if (recentOrderIds.size > MAX_RECENT_CACHE) {
@@ -161,7 +147,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Fire server-side Meta Purchase only after the order is recorded in Sheets.
     await sendMetaPurchase(orderId, body, req.headers);
 
-    return res.status(200).json({ ok: true, orderId });
+    return res.status(200).json({
+      ok: true,
+      orderId,
+    });
   } catch (e: any) {
     const cause = e.cause ? ` (${e.cause.message || e.cause})` : '';
     const msg = String(e.message || 'unknown error') + cause;

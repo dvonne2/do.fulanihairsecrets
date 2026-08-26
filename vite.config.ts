@@ -13,7 +13,8 @@ const copyCriticalFiles = () => ({
       'sw.js',
       '.htaccess',
       'favicon.ico',
-      'robots.txt'
+      'robots.txt',
+      'analytics-deferred.js'
     ];
 
     criticalFiles.forEach(file => {
@@ -107,8 +108,7 @@ export default defineConfig({
       },
       output: {
         manualChunks: {
-          'react': ['react'],
-          'react-dom': ['react-dom'],
+          'react-vendor': ['react', 'react-dom'],
           'router': ['react-router-dom'],
           'query': ['@tanstack/react-query'],
           'icons': ['lucide-react'],

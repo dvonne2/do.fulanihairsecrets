@@ -227,7 +227,7 @@ export const HairLossTypesGuide = () => {
           <a
             href="#order-form"
             data-form-cta="true"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-[#15803d] to-[#4cae4e] text-white fhg-helvetica text-sm md:text-base tracking-widest uppercase px-8 py-6 rounded-md hover:scale-105 transition-transform duration-300 border border-[#4cae4e]"
+            className="inline-flex items-center justify-center bg-gradient-to-r from-[#5ec239] to-[#4cae4e] text-white fhg-helvetica text-sm md:text-base tracking-widest uppercase px-8 py-6 rounded-md hover:scale-105 transition-transform duration-300 border border-[#4cae4e]"
           >
             <span className="mr-2">📸</span>
             Continue To Order Form

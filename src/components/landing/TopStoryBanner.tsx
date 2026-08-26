@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { useAfterHeroLoad } from '@/hooks/useIdleLoad';
-const LiteYouTubeEmbed = lazy(() => import('react-lite-youtube-embed'));
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import {
   Dialog,
@@ -29,12 +29,9 @@ const mamaTiti2 = `${BASE_PATH}assets/Mama%20Titi%202.webp`;
 
 // Lazy load OrderForm - 38KB component, preload after hero renders
 const OrderForm = lazy(() => import('../OrderFormEmbed'));
-const LazyYouTube = (props: any) => (
-  <Suspense fallback={null}>
-    <LiteYouTubeEmbed {...props} />
-  </Suspense>
+const BundleSelector = lazy(() =>
+  import('./BundleSelector').then((m) => ({ default: m.BundleSelector }))
 );
-import { BundleSelector } from './BundleSelector';
 import { PreFormStockWarning } from './PreFormStockWarning';
 
 export const TopStoryBanner = () => {
@@ -86,8 +83,8 @@ export const TopStoryBanner = () => {
 
       <div className="mx-auto text-center">
         {/* Bundle Image */}
-        <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl">
-          <picture>
+        <div className="mt-6 w-full -mx-4 md:mx-auto md:max-w-4xl aspect-[1055/1491] bg-gray-50">
+          <picture className="block w-full">
             <source
               media="(max-width: 767px)"
               srcSet={`${BASE_PATH}assets/newhero-665.webp`}
@@ -118,19 +115,19 @@ export const TopStoryBanner = () => {
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 px-2">
           <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#15803d" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             100% Genuine Product — Not Sold In Stores
           </span>
           <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#15803d" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             Pay On Delivery Available
           </span>
           <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#15803d" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             1–3 Day Nationwide Delivery
           </span>
           <span className="flex items-center gap-1 text-sm font-semibold text-gray-700 whitespace-nowrap">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#15803d" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5ec239" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             30-Day Money-Back Guarantee
           </span>
         </div>
@@ -171,7 +168,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#15803d] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -181,7 +178,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#15803d] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -191,7 +188,7 @@ export const TopStoryBanner = () => {
                     href="#bundle-selector"
                     onClick={(e) => { e.preventDefault(); const el = document.getElementById('bundle-selector'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
                     data-form-cta="true"
-                    className="inline-block bg-[#15803d] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:bg-[#4da52e] transition-colors mt-1"
+                    className="inline-block bg-[#5ec239] text-white font-semibold px-6 py-2 rounded-lg text-sm hover:scale-105 transition-transform mt-1"
                   >
                     Order Now
                   </a>
@@ -269,15 +266,15 @@ export const TopStoryBanner = () => {
           </h2>
           <ul className="text-left max-w-2xl mx-auto space-y-3 mb-6 text-lg text-gray-700">
             <li className="flex items-start gap-3">
-              <span className="text-[#15803d] text-xl">✔</span>
+              <span className="text-[#5ec239] text-xl">✔</span>
               <span>Oil will not cleanse your scalp.</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-[#15803d] text-xl">✔</span>
+              <span className="text-[#5ec239] text-xl">✔</span>
               <span>Shampoo will not nourish and protect your hair</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-[#15803d] text-xl">✔</span>
+              <span className="text-[#5ec239] text-xl">✔</span>
               <span>One cream can&apos;t solve every cause of hair breakage.</span>
             </li>
           </ul>
@@ -353,7 +350,7 @@ export const TopStoryBanner = () => {
               textAlign: 'center',
               textTransform: 'uppercase',
               textDecoration: 'none',
-              border: '3px solid #B8860B',
+              border: '3px solid #DAA520',
               padding: '12px 24px',
               borderRadius: '8px',
               backgroundColor: '#FFF8DC',
@@ -412,7 +409,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#B8860B', 
+                  color: '#DAA520', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -457,7 +454,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#B8860B', 
+                  color: '#DAA520', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -503,7 +500,7 @@ export const TopStoryBanner = () => {
                 }}
               >
                 <div style={{ 
-                  color: '#B8860B', 
+                  color: '#DAA520', 
                   fontSize: '18px', 
                   fontWeight: '700',
                   marginBottom: '8px',
@@ -638,7 +635,7 @@ export const TopStoryBanner = () => {
               <DialogTrigger asChild>
                 <button
                   data-review-trigger
-                  className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
+                  className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform"
                 >
                   Write A Review
                 </button>
@@ -733,7 +730,13 @@ export const TopStoryBanner = () => {
                 </div>
               </div>
 
-              <BundleSelector />
+              {afterHero ? (
+                <Suspense fallback={<div className="min-h-[200px]" />}>
+                  <BundleSelector />
+                </Suspense>
+              ) : (
+                <div className="min-h-[200px]" />
+              )}
               
               <PreFormStockWarning />
               
@@ -760,7 +763,7 @@ export const TopStoryBanner = () => {
               textAlign: 'center',
               textTransform: 'uppercase',
               textDecoration: 'none',
-              border: '3px solid #B8860B',
+              border: '3px solid #DAA520',
               padding: '12px 24px',
               borderRadius: '8px',
               backgroundColor: '#FFF8DC',
@@ -927,7 +930,7 @@ This thing is not hype.
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#15803d] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
+            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
@@ -995,7 +998,7 @@ This thing is not hype.
             style={{
               width: '100%',
               background: '#F5F5F5',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '8px',
               padding: '16px',
               cursor: 'pointer',
@@ -1017,7 +1020,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#B8860B',
+              color: '#DAA520',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'mung' ? '▲' : '▼'}
@@ -1063,7 +1066,7 @@ This thing is not hype.
             style={{
               width: '100%',
               background: '#F5F5F5',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '8px',
               padding: '16px',
               cursor: 'pointer',
@@ -1085,7 +1088,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#B8860B',
+              color: '#DAA520',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'curcumin' ? '▲' : '▼'}
@@ -1131,7 +1134,7 @@ This thing is not hype.
             style={{
               width: '100%',
               background: '#F5F5F5',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '8px',
               padding: '16px',
               cursor: 'pointer',
@@ -1153,7 +1156,7 @@ This thing is not hype.
             </strong>
             <span style={{
               fontSize: '20px',
-              color: '#B8860B',
+              color: '#DAA520',
               fontWeight: '700'
             }}>
               {expandedIngredient === 'nicotiana' ? '▲' : '▼'}
@@ -1318,7 +1321,7 @@ This thing is not hype.
             {/* Customer Box 1 - Video */}
             <div style={{
               background: '#fff',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '12px',
               padding: '16px',
               textAlign: 'center',
@@ -1332,7 +1335,7 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LazyYouTube
+                <LiteYouTubeEmbed
                   id="myJDa7s6O5w"
                   title="Fulani Hair Gro Results Video"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-myJDa7s6O5w.webp`}
@@ -1362,7 +1365,7 @@ This thing is not hype.
             {/* Customer Box 2 - Video */}
             <div style={{
               background: '#fff',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '12px',
               padding: '16px',
               textAlign: 'center',
@@ -1376,7 +1379,7 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LazyYouTube
+                <LiteYouTubeEmbed
                   id="xJ4vGH2i48g"
                   title="Fulani Hair Gro Customer Testimonial"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-xJ4vGH2i48g.webp`}
@@ -1406,7 +1409,7 @@ This thing is not hype.
             {/* Customer Box 3 - Video */}
             <div style={{
               background: '#fff',
-              border: '2px solid #B8860B',
+              border: '2px solid #DAA520',
               borderRadius: '12px',
               padding: '16px',
               textAlign: 'center',
@@ -1420,7 +1423,7 @@ This thing is not hype.
                 borderRadius: '8px',
                 marginBottom: '16px'
               }}>
-                <LazyYouTube
+                <LiteYouTubeEmbed
                   id="LNkhqS3-Kxo"
                   title="Fulani Hair Gro Before and After"
                   thumbnail={`${BASE_PATH}assets/yt-thumb-LNkhqS3-Kxo.webp`}
@@ -1454,7 +1457,7 @@ This thing is not hype.
           <a
             href="#order-form"
             data-form-cta="true"
-            className="flex items-center justify-center gap-2 bg-[#15803d] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
+            className="flex items-center justify-center gap-2 bg-[#5ec239] text-white font-semibold px-10 md:px-14 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform w-full"
             style={{ fontSize: '20px' }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ORDER NOW
@@ -1521,7 +1524,7 @@ This thing is not hype.
                   </div>
                   <div style={{
                     flex: '1',
-                    background: '#B8860B',
+                    background: '#DAA520',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1574,7 +1577,7 @@ This thing is not hype.
                   </div>
                   <div style={{
                     flex: '1',
-                    background: '#B8860B',
+                    background: '#DAA520',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1627,7 +1630,7 @@ This thing is not hype.
                   </div>
                   <div style={{
                     flex: '1',
-                    background: '#B8860B',
+                    background: '#DAA520',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1652,7 +1655,7 @@ This thing is not hype.
                 orderForm.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg"
+            className="bg-green-600 text-white font-bold py-4 px-8 rounded-lg transition-transform duration-300 hover:scale-105 shadow-lg text-lg"
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontWeight: '600',
