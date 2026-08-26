@@ -21,7 +21,8 @@ function getSheets() {
   return google.sheets({ version: 'v4', auth });
 }
 
-const SHEET_RANGE = 'Orders!A:O';
+const SHEET_TAB = process.env.SHEET_TAB_NAME || 'DO Orders';
+const SHEET_RANGE = `${SHEET_TAB}!A:O`;
 
 async function sendMetaPurchase(
   orderId: string,
