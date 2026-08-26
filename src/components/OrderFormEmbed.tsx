@@ -152,28 +152,6 @@ const S: { [key: string]: CSSProperties } = {
   sucIcon: { width: 60, height: 60, background: '#36CA37', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, color: '#fff', margin: '0 auto 20px' },
 };
 
-const postOrderToFulani = (bodyString: string) => {
-  try {
-    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-      const blob = new Blob([bodyString], { type: 'application/x-www-form-urlencoded;charset=UTF-8' });
-      const ok = navigator.sendBeacon(WEBHOOK_URL, blob);
-      if (ok) return;
-    }
-  } catch {
-    // ignore
-  }
-
-  fetch(WEBHOOK_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    keepalive: true,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-    body: bodyString
-  }).catch((error) => {
-    console.error('postOrderToFulani fallback fetch failed:', error);
-  });
-};
-
 function OrderFormEmbed() {
   const [form, setForm] = useState({
     name: '',
@@ -371,9 +349,7 @@ function OrderFormEmbed() {
         quantity: pkg?.quantity || 1,
         sku: pkg?.sku || '',
         deliveryDate: form.deliveryDate || '',
-        lga: form.lga || '',
         city: city || undefined,
-        landmark: form.landmark || '',
         paymentMethod: 'Pay on Delivery',
         utm_source: localStorage.getItem('src') || '',
         click_id: '',
@@ -417,7 +393,7 @@ function OrderFormEmbed() {
           paymentType: 'PBD',
           packageName: payload.package,
           state: payload.state,
-          lga: payload.lga,
+          lga: '',
           numItems: pkg?.quantity || 1,
         }));
       } catch (e) {
@@ -466,10 +442,10 @@ function OrderFormEmbed() {
           zIndex: 1000 // Ensure it's above other elements
         }}
         onMouseOver={(e) => {
-          e.target.style.background = '#f5f5f5';
+          (e.target as HTMLElement).style.background = '#f5f5f5';
         }}
         onMouseOut={(e) => {
-          e.target.style.background = 'transparent';
+          (e.target as HTMLElement).style.background = 'transparent';
         }}
       >
         ×
@@ -770,8 +746,8 @@ function OrderFormEmbed() {
             value={form.deliveryDate}
             onChange={e => setForm(prev => ({ ...prev, deliveryDate: e.target.value }))}
             required
-            onFocus={e => e.target.showPicker?.()}
-            onClick={e => e.target.showPicker?.()}
+            onFocus={e => (e.target as HTMLInputElement).showPicker?.()}
+            onClick={e => (e.target as HTMLInputElement).showPicker?.()}
             min={deliveryDateMin}
             max={deliveryDateMax}
           />

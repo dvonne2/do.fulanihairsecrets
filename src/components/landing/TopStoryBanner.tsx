@@ -95,7 +95,7 @@ export const TopStoryBanner = () => {
               alt="Product Bundle"
               className="w-full h-auto object-contain"
               loading="eager"
-              fetchpriority="high"
+              {...({ fetchpriority: "high" } as any)}
               decoding="async"
               width="1055"
               height="1491"

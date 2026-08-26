@@ -173,7 +173,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                       height={300}
                       loading="eager"
                       decoding="async"
-                      fetchpriority="high"
+                      {...({ fetchpriority: "high" } as any)}
                     />
                   )}
 
@@ -214,7 +214,7 @@ export const HeroSection = ({ countdown, stockCount, viewerCount }: HeroSectionP
                       height={400}
                       loading="eager"
                       decoding="async"
-                      fetchpriority="high"
+                      {...({ fetchpriority: "high" } as any)}
                     />
                   )}
 
