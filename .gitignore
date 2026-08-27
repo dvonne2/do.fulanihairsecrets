@@ -15,6 +15,8 @@ dist-ssr
 # Build artifacts and distributions
 DIST*/
 dist*/
+untitled\ folder/
+DIST\ BUNDL/
 build/
 coverage/
 *.tgz
@@ -72,3 +74,4 @@ assets-backup/
 /favicon.ico
 /placeholder.svg
 /test-loading.html
+.env*
