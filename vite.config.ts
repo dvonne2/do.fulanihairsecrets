@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+imort { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from 'fs';
@@ -56,7 +56,7 @@ const makeCssAsync = () => ({
 export default defineConfig({
   base: '/',
   define: {
-    __META_PIXEL_ID__: JSON.stringify(process.env.META_PIXEL_ID || '220381209723501'),
+    __META_PIXEL_ID__: JSON.stringify(process.env.META_PIXEL_ID || '1292827546217195'),
   },
   server: {
     proxy: {
