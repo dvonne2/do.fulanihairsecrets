@@ -103,9 +103,9 @@ export const PACKAGES: Package[] = [
     ],
     referencePrice: 107250,
     valueBreakdown: [
-      { label: '3 complete sets worth', amount: 107250 },
-      { label: 'You pay only', amount: 69750 },
-      { label: 'You save', amount: 37500, strong: true },
+      { label: '2 complete sets', amount: 68500 },
+      { label: 'Add just', amount: 1250 },
+      { label: 'Get 3rd complete set FREE — Worth', amount: 35750, strong: true },
     ],
     tagline: 'FREE DELIVERY TODAY ONLY',
   },
