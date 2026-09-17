@@ -7,7 +7,7 @@ export interface PackageValueRow {
   label: string;
   amount: number;
   strong?: boolean;
-
+}
 
 export interface Package {
   id: string;
