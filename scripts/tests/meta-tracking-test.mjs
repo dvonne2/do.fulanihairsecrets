@@ -113,7 +113,7 @@ async function run() {
   // Find the fbq('init', ...) call for Advanced Matching
   const initCall = compiledFbqCalls.find((args) => args[0] === 'init');
   assert(initCall, 'fbq init call should be present');
-  assert.equal(initCall[1], '1292827546217195', 'Pixel ID for init should be 1292827546217195');
+  assert.equal(initCall[1], '859233603847033', 'Pixel ID for init should be 859233603847033');
   const browserUserData = initCall[2];
 
   // Verify browser Advanced Matching hashes and country
@@ -202,7 +202,7 @@ async function run() {
     });
     const trackCall = compiledFbqCalls.find((args) => args[0] === 'trackSingle' && args[2] === 'InitiateCheckout');
     assert(trackCall, 'Browser InitiateCheckout trackSingle should fire');
-    assert.equal(trackCall[1], '1292827546217195', 'InitiateCheckout should route to Pixel 1 only');
+    assert.equal(trackCall[1], '859233603847033', 'InitiateCheckout should route to Pixel 1 only');
     assert.equal(trackCall[3].value, 32750, 'Browser InitiateCheckout should carry package value');
     assert.equal(trackCall[3].currency, 'NGN', 'Browser InitiateCheckout should use NGN');
     assert.ok(trackCall[4] && trackCall[4].eventID, 'Browser InitiateCheckout should have eventID');
