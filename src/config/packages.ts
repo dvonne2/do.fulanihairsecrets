@@ -99,13 +99,13 @@ export const PACKAGES: Package[] = [
     ],
     badges: [
       { text: 'Best deal', tone: 'accent' },
-      { text: 'Save ₦26,400', tone: 'success' },
+      { text: 'Save ₦37,500', tone: 'success' },
     ],
-    referencePrice: 82350,
+    referencePrice: 107250,
     valueBreakdown: [
-      { label: '2 complete sets', amount: 54900 },
-      { label: 'Add just', amount: 1050 },
-      { label: 'Get 3rd complete set FREE — Worth', amount: 35750, strong: true },
+      { label: '3 complete sets worth', amount: 107250 },
+      { label: 'You pay only', amount: 69750 },
+      { label: 'You save', amount: 37500, strong: true },
     ],
     tagline: 'FREE DELIVERY TODAY ONLY',
   },
