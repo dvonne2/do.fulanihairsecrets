@@ -107,7 +107,7 @@ function setEnv() {
     META_CAPI_ALLOWED_ORIGINS: process.env.META_CAPI_ALLOWED_ORIGINS,
     META_CAPI_ALLOWED_SOURCE_HOSTS: process.env.META_CAPI_ALLOWED_SOURCE_HOSTS,
   };
-  process.env.META_PIXEL_ID = '1292827546217195';
+  process.env.META_PIXEL_ID = '859233603847033';
   process.env.META_ACCESS_TOKEN = 'TEST_TOKEN';
   process.env.META_API_VERSION = 'v26.0';
   process.env.META_CAPI_ALLOWED_ORIGINS = `${allowedOrigin},https://www.fulanihairsecrets.com`;
@@ -129,7 +129,7 @@ function setMissingConfig() {
 }
 
 function setMissingApiVersion() {
-  process.env.META_PIXEL_ID = '1292827546217195';
+  process.env.META_PIXEL_ID = '859233603847033';
   process.env.META_ACCESS_TOKEN = 'TEST_TOKEN';
   process.env.META_API_VERSION = '';
 }
@@ -489,7 +489,7 @@ async function run() {
     await handler(req(baseBody()), res);
     assert(captured.url, 'Meta API should have been called');
     const parsedUrl = new URL(captured.url);
-    assert(parsedUrl.origin + parsedUrl.pathname === 'https://graph.facebook.com/v26.0/1292827546217195/events', 'URL should use v26.0 and pixel ID from env');
+    assert(parsedUrl.origin + parsedUrl.pathname === 'https://graph.facebook.com/v26.0/859233603847033/events', 'URL should use v26.0 and pixel ID from env');
     assert(parsedUrl.searchParams.get('access_token') === 'TEST_TOKEN', 'URL should contain access token as query param');
     assert(!('access_token' in captured.body), 'token must not be in JSON event body');
   }
